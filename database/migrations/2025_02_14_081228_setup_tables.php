@@ -13,21 +13,21 @@ return new class extends Migration {
             $table->timestamps();
         });
 
-        Schema::create('college', function (Blueprint $table) {
+        Schema::create('colleges', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('acronym', 50);
             $table->timestamps();
         });
 
-        Schema::create('team_composition', function (Blueprint $table) {
+        Schema::create('team_compositions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('college_id')->constrained('college')->onDelete('cascade');
+            $table->foreignId('college_id')->constrained('colleges')->onDelete('cascade');
             $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
             $table->timestamps();
         });
 
-        Schema::create('medal_weight_category', function (Blueprint $table) {
+        Schema::create('medal_weight_categories', function (Blueprint $table) {
             $table->id();
             $table->integer('category_no');
             $table->string('name');
@@ -43,21 +43,23 @@ return new class extends Migration {
             $table->timestamps();
         });
 
-        Schema::create('event_category', function (Blueprint $table) {
+        Schema::create('event_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->boolean('is_double_bronze');
             $table->foreignId('sport_id')->constrained('sports')->onDelete('cascade');
-            $table->foreignId('medal_weight_category_id')->constrained('medal_weight_category')->onDelete('cascade');
+            $table->foreignId('medal_weight_category_id')->constrained('medal_weight_categories')->onDelete('cascade');
             $table->timestamps();
         });
 
-        Schema::create('medal_record', function (Blueprint $table) {
+        Schema::create('medal_records', function (Blueprint $table) {
             $table->id();
             $table->integer('year');
             $table->integer('gold_tally')->default(0);
             $table->integer('silver_tally')->default(0);
             $table->integer('bronze_tally')->default(0);
+            $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
+            $table->foreignId('event_category_id')->constrained('event_categories')->onDelete('cascade');
             $table->foreignId('entry_by')->constrained('users')->onDelete('cascade');
             $table->foreignId('posted_by')->constrained('users')->onDelete('cascade');
             $table->boolean('is_posted')->default(false);

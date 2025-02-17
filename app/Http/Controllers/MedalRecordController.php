@@ -14,7 +14,7 @@ class MedalRecordController extends Controller
     public function index()
     {
         $medalRecords = MedalRecord::all();
-        return view('medal_records.index', compact('medalRecords'));
+        return view('admin.medal_records.index', compact('medalRecords'));
     }
 
     /**

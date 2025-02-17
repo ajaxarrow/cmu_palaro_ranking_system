@@ -14,7 +14,7 @@ class EventCategoryController extends Controller
     public function index()
     {
         $eventCategories = EventCategory::all();
-        return view('event_categories.index', compact('eventCategories'));
+        return view('admin.event_categories.index', compact('eventCategories'));
     }
 
     /**

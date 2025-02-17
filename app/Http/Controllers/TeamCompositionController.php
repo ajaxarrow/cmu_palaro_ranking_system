@@ -16,7 +16,7 @@ class TeamCompositionController extends Controller
     public function index()
     {
         $teamCompositions = TeamComposition::with(['college', 'team'])->get();
-        return view('team_compositions.index', compact('teamCompositions'));
+        return view('admin.team_compositions.index', compact('teamCompositions'));
     }
 
     /**

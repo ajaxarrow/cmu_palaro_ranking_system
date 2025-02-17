@@ -14,7 +14,7 @@ class MedalWeightCategoryController extends Controller
     public function index()
     {
         $categories = MedalWeightCategory::all();
-        return view('medal_weight_categories.index', compact('categories'));
+        return view('admin.medal_weight_categories.index', compact('categories'));
     }
 
     /**
