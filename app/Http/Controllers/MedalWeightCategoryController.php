@@ -16,7 +16,7 @@ class MedalWeightCategoryController extends Controller
         $categories = MedalWeightCategory::all();
         return view('admin.medal_weight_categories.index', compact('categories'));
     }
-
+ 
     /**
      * Show the form for creating a new resource.
      */
@@ -30,16 +30,20 @@ class MedalWeightCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'category_no' => 'required|integer',
-            'name' => 'required|string|max:255',
-            'gold_weight' => 'required|numeric',
-            'silver_weight' => 'required|numeric',
-            'bronze_weight' => 'required|numeric',
-        ]);
+        try {
+            $request->validate([
+                'category_no' => 'required|integer',
+                'name' => 'required|string|max:255',
+                'gold_weight' => 'required|numeric',
+                'silver_weight' => 'required|numeric',
+                'bronze_weight' => 'required|numeric',
+            ]);
 
-        MedalWeightCategory::create($request->all());
-        return redirect()->route('medal_weight_categories.index');
+            MedalWeightCategory::create($request->all());
+            return redirect()->route('medal_weight_categories.index')->with('success', 'Category created successfully!');
+        } catch (\Exception $e) {
+            return redirect()->route('medal_weight_categories.create')->with('error', 'An error occurred while creating the category.');
+        }
     }
 
     /**
@@ -63,25 +67,33 @@ class MedalWeightCategoryController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $medalWeightCategory = MedalWeightCategory::findOrFail($id);
-        $formFields = $request->validate([
-            'category_no' => 'required|integer',
-            'name' => 'required|string|max:255',
-            'gold_weight' => 'required|numeric',
-            'silver_weight' => 'required|numeric',
-            'bronze_weight' => 'required|numeric',
-        ]);
+        try {
+            $medalWeightCategory = MedalWeightCategory::findOrFail($id);
+            $formFields = $request->validate([
+                'category_no' => 'required|integer',
+                'name' => 'required|string|max:255',
+                'gold_weight' => 'required|numeric',
+                'silver_weight' => 'required|numeric',
+                'bronze_weight' => 'required|numeric',
+            ]);
 
-        $medalWeightCategory->update($formFields);
-        return redirect()->route('medal_weight_categories.index');
+            $medalWeightCategory->update($formFields);
+            return redirect()->route('medal_weight_categories.index')->with('success', 'Category updated successfully!');
+        } catch (\Exception $e) {
+            return redirect()->route('medal_weight_categories.index', $id)->with('error', 'An error occurred while updating the category.');
+        }
     }
-
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(MedalWeightCategory $medalWeightCategory)
+    public function destroy(int $id)
     {
-        $medalWeightCategory->delete();
-        return redirect()->route('medal_weight_categories.index');
+        try {
+            $medalWeightCategory = MedalWeightCategory::findOrFail($id);
+            $medalWeightCategory->delete();
+            return redirect()->route('medal_weight_categories.index')->with('success', 'Category deleted successfully!');
+        } catch (\Exception $e) {
+            return redirect()->route('medal_weight_categories.index')->with('error', 'An error occurred while deleting the category.');
+        }
     }
 }

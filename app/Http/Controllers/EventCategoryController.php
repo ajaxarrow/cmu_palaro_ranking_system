@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\EventCategory;
+use App\Models\Sport;
+use App\Models\MedalWeightCategory;
 
 class EventCategoryController extends Controller
 {
@@ -13,8 +15,10 @@ class EventCategoryController extends Controller
      */
     public function index()
     {
-        $eventCategories = EventCategory::all();
-        return view('admin.event_categories.index', compact('eventCategories'));
+        $eventCategories = EventCategory::with('sport', 'medalWeightCategory')->get();
+        $sports = Sport::all();
+        $medalWeightCategories = MedalWeightCategory::all();
+        return view('admin.event_categories.index', compact('eventCategories', 'sports', 'medalWeightCategories'));
     }
 
     /**
@@ -30,15 +34,18 @@ class EventCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'is_double_bronze' => 'required|boolean',
+            'is_double_bronze' => 'nullable|boolean',
             'sport_id' => 'required|exists:sports,id',
             'medal_weight_category_id' => 'required|exists:medal_weight_categories,id',
         ]);
-
-        EventCategory::create($request->all());
-
+    
+        // If checkbox is not in request, set it to false
+        $validatedData['is_double_bronze'] = $request->boolean('is_double_bronze', false);
+    
+        EventCategory::create($validatedData);
+    
         return redirect()->route('event_categories.index')->with('success', 'Event Category created successfully.');
     }
 
@@ -64,19 +71,24 @@ class EventCategoryController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, int $id)
-    {
-        $formFields = $request->validate([
-            'name' => 'required|string|max:255',
-            'is_double_bronze' => 'required|boolean',
-            'sport_id' => 'required|exists:sports,id',
-            'medal_weight_category_id' => 'required|exists:medal_weight_categories,id',
-        ]);
+{
+  
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:255',
+        'is_double_bronze' => 'nullable|boolean',
+        'sport_id' => 'required|exists:sports,id',
+        'medal_weight_category_id' => 'required|exists:medal_weight_categories,id',
+    ]);
 
-        $eventCategory = EventCategory::findOrFail($id);
-        $eventCategory->update($formFields);
+    // If checkbox is not in request, set it to false
+    $validatedData['is_double_bronze'] = $request->boolean('is_double_bronze', false);
 
-        return redirect()->route('event_categories.index')->with('success', 'Event Category updated successfully.');
-    }
+    $eventCategory = EventCategory::findOrFail($id);
+    $eventCategory->update($validatedData);
+
+    return redirect()->route('event_categories.index')->with('success', 'Event Category updated successfully.');
+}
+    
 
     /**
      * Remove the specified resource from storage.

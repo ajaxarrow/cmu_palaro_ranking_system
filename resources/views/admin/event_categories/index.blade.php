@@ -3,21 +3,88 @@
 @section('css')
 @vite(['node_modules/simple-datatables/dist/style.css'])
 @endsection
+
 @section('content')
 
 <!-- Start Content-->
 <div class="container-fluid">
 
+    <!-- Display Success Message -->
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <!-- Display Error Message -->
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
         <div class="flex-grow-1">
             <h4 class="fs-18 fw-semibold m-0">Event Categories</h4>
         </div>
+        <div class="text-end">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEventCategoryModal">
+                Add Event Category
+            </button>
+        </div>
+    </div>
 
-        {{-- <div class="text-end">
-            <button type="button" class="btn btn-primary"
-                onclick="location.href='{{ route('activity.create', ['event_id' => $event->id])}}'">Add</button>
-
-        </div> --}}
+    <!-- Add Event Category Modal -->
+    <div class="modal fade" id="addEventCategoryModal" tabindex="-1" aria-labelledby="addEventCategoryModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addEventCategoryModalLabel">Add Event Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('event_categories.store') }}" method="POST" onsubmit="disableSubmitButton(this)">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" name="name" class="form-control" id="name" required>
+                        </div>
+                        <div class="mb-3">
+                        
+                        <input type="hidden" name="is_double_bronze" value="0">
+                        <input type="checkbox" name="is_double_bronze" value="1" id="isDoubleBronze" >
+                            <label for="isDoubleBronze">Double Bronze</label>
+                        </div>
+                        <div class="mb-3">
+                            <label for="sport_id" class="form-label">Sport</label>
+                            <select name="sport_id" class="form-select" id="sport_id" required>
+                                @foreach ($sports as $sport)
+                                    <option value="{{ $sport->id }}">{{ $sport->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="medal_weight_category_id" class="form-label">Medal Weight Category</label>
+                            <select name="medal_weight_category_id" class="form-select" id="medal_weight_category_id" required>
+                                @foreach ($medalWeightCategories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="hstack gap-2 justify-content-end">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="row">
@@ -30,66 +97,116 @@
                             <thead>
                                 <tr>
                                     <th class="ps-0">Name</th>
-                                    <th>Sports</th>
-                                    <th>Medal Weight Category</th>
                                     <th>Double Bronze</th>
-                                    <th>Actions</th>
+                                    <th>Sport</th>
+                                    <th>Medal Weight Category</th>
+                                    <th class="text-end">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($eventCategories as $event_category)
+                                @foreach ($eventCategories as $eventCategory)
                                     <tr>
                                         <td class="ps-0">
                                             <p class="d-inline-block align-middle mb-0">
-                                                <span class="font-13 fw-medium">{{$event_category->name}}</span>
+                                                <span class="font-13 fw-medium">{{ $eventCategory->name }}</span>
                                             </p>
                                         </td>
-                                        <td>
-                                            <p class="d-inline-block align-middle mb-0 text-body">{{ $event_category->sport_id }}</p>
+                                        <td class="">
+                                            <i class="fe  fs-14"></i>
+                                            <span class=" {{ $eventCategory->is_double_bronze ? 'mdi mdi-check-bold text-primary' : 'mdi mdi-close-thick text-danger' }}"> </span>
+                                            
+                                            
                                         </td>
                                         <td>
-                                            <p class="d-inline-block align-middle mb-0 text-body">{{$event_category->medal_weight_category_id }}</p>
+                                            <p class="d-inline-block align-middle mb-0 text-body">{{ $eventCategory->sport->name }}</p>
                                         </td>
                                         <td>
-                                            <p class="d-inline-block align-middle mb-0 text-body">{{ $event_category->is_double_bronze }}</p>
+                                            <p class="d-inline-block align-middle mb-0 text-body">{{ $eventCategory->medalWeightCategory->name }}</p>
                                         </td>
                                         <td class="text-end">
-                                            <button type="button" class="btn btn-primary">Edit</button>
-                                            <a aria-label="anchor" class="btn btn-sm bg-danger-subtle"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#delete-event-modal-{{$event_category->id}}">
+                                        
+
+                                            <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editModal{{ $eventCategory->id }}">
+                                                <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
+                                            </a>
+                                            <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $eventCategory->id }}">
                                                 <i class="mdi mdi-delete fs-14 text-danger"></i>
                                             </a>
                                         </td>
                                     </tr>
-                                    {{-- Delete Modal Confirmation --}}
-                                    <div class="modal fade"  tabindex="-1"
-                                        aria-labelledby="standard-modalLabel" aria-hidden="true">
+
+                                    <!-- Edit Modal for each event category -->
+                                    <div class="modal fade" id="editModal{{ $eventCategory->id }}" tabindex="-1" aria-labelledby="editModalLabel{{ $eventCategory->id }}">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="standard-modalLabel">Delete Event Category?
-                                                    </h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
+                                                    <h5 class="modal-title" id="editModalLabel{{ $eventCategory->id }}">Edit Event Category</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p>Confirm deletion of {{$event_category->name}} ?</p>
-                                                    <form
-
-                                                        method="POST">
+                                                    <form action="{{ route('event_categories.update', $eventCategory->id) }}" method="POST" onsubmit="disableSubmitButton(this)">
                                                         @csrf
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-light"
-                                                                data-bs-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-primary">Confirm
-                                                                Delete</button>
+                                                        @method('PUT')
+                                                        <div class="mb-3">
+                                                            <label for="name" class="form-label">Name</label>
+                                                            <input type="text" name="name" class="form-control" id="name" value="{{ $eventCategory->name }}" required>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                      
+                                                        <input type="checkbox" name="is_double_bronze" id="isDoubleBronze" {{ $eventCategory->is_double_bronze ? 'checked' : '' }}>
+                                                        <label for="isDoubleBronze">Double Bronze</label>
+
+                                                        
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="sport_id" class="form-label">Sport</label>
+                                                            <select name="sport_id" class="form-select" id="sport_id" required>
+                                                                @foreach ($sports as $sport)
+                                                                    <option value="{{ $sport->id }}" {{ $eventCategory->sport_id == $sport->id ? 'selected' : '' }}>{{ $sport->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="medal_weight_category_id" class="form-label">Medal Weight Category</label>
+                                                            <select name="medal_weight_category_id" class="form-select" id="medal_weight_category_id" required>
+                                                                @foreach ($medalWeightCategories as $category)
+                                                                    <option value="{{ $category->id }}" {{ $eventCategory->medal_weight_category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="hstack gap-2 justify-content-end">
+                                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary">Update</button>
                                                         </div>
                                                     </form>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
+                                    <!-- Delete Modal for each event category -->
+                                    <div class="modal fade" id="deleteModal{{ $eventCategory->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $eventCategory->id }}">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="deleteModalLabel{{ $eventCategory->id }}">Delete Event Category</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Are you sure you want to delete {{ $eventCategory->name }}?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                                    <form action="{{ route('event_categories.destroy', $eventCategory->id) }}" method="POST" style="display:inline;" onsubmit="disableSubmitButton(this)">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 @endforeach
                             </tbody>
                         </table>
@@ -105,6 +222,13 @@
 
 @section('script')
 @vite(['resources/js/pages/simple-datatables.init.js',])
+<script>
+    function disableSubmitButton(form) {
+        const submitButton = form.querySelector('button[type="submit"]');
+        submitButton.disabled = true; // Disable the button
+        submitButton.innerText = 'Submitting...'; // Optional: Change button text
+    }
+</script>
 @endsection
 
 @section('script-bottom')

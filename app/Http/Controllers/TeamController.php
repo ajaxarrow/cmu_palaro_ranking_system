@@ -36,28 +36,32 @@ class TeamController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'desc' => 'nullable|string',
-            'college_ids' => 'required|array',
-            'college_ids.*' => 'exists:colleges,id',
-        ]);
-
-        // Create the team
-        $team = Team::create([
-            'name' => $request->name,
-            'desc' => $request->desc,
-        ]);
-
-        // Loop through college_ids and insert into team_compositions
-        foreach ($request->college_ids as $college_id) {
-            TeamComposition::create([
-                'team_id' => $team->id,
-                'college_id' => $college_id,
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'desc' => 'nullable|string',
+                'college_ids' => 'required|array',
+                'college_ids.*' => 'exists:colleges,id',
             ]);
-        }
 
-        return redirect()->route('teams.index')->with('success', 'Team created successfully!');
+            // Create the team
+            $team = Team::create([
+                'name' => $request->name,
+                'desc' => $request->desc,
+            ]);
+
+            // Loop through college_ids and insert into team_compositions
+            foreach ($request->college_ids as $college_id) {
+                TeamComposition::create([
+                    'team_id' => $team->id,
+                    'college_id' => $college_id,
+                ]);
+            }
+
+            return redirect()->route('teams.index')->with('success', 'Team created successfully!');
+        } catch (\Exception $e) {
+            return redirect()->route('teams.inex')->with('error', 'An error occurred while creating the team.');
+        }
     }
     /**
      * Display the specified resource.
@@ -80,32 +84,36 @@ class TeamController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $team = Team::findOrFail($id);
+        try {
+            $team = Team::findOrFail($id);
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'desc' => 'nullable|string',
-            'college_ids' => 'required|array',
-            'college_ids.*' => 'exists:colleges,id',
-        ]);
-
-        // Update team info
-        $team->update([
-            'name' => $request->name,
-            'desc' => $request->desc,
-        ]);
-
-        // Delete old compositions and insert new ones
-        TeamComposition::where('team_id', $team->id)->delete();
-
-        foreach ($request->college_ids as $college_id) {
-            TeamComposition::create([
-                'team_id' => $team->id,
-                'college_id' => $college_id,
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'desc' => 'nullable|string',
+                'college_ids' => 'required|array',
+                'college_ids.*' => 'exists:colleges,id',
             ]);
-        }
 
-        return redirect()->route('teams.index')->with('success', 'Team updated successfully!');
+            // Update team info
+            $team->update([
+                'name' => $request->name,
+                'desc' => $request->desc,
+            ]);
+
+            // Delete old compositions and insert new ones
+            TeamComposition::where('team_id', $team->id)->delete();
+
+            foreach ($request->college_ids as $college_id) {
+                TeamComposition::create([
+                    'team_id' => $team->id,
+                    'college_id' => $college_id,
+                ]);
+            }
+
+            return redirect()->route('teams.index')->with('success', 'Team updated successfully!');
+        } catch (\Exception $e) {
+            return redirect()->route('teams.index', $id)->with('error', 'An error occurred while updating the team.');
+        }
     }
 
     /**
@@ -113,7 +121,11 @@ class TeamController extends Controller
      */
     public function destroy(Team $team)
     {
-        $team->delete();
-        return redirect()->route('teams.index');
+        try {
+            $team->delete();
+            return redirect()->route('teams.index');
+        } catch (\Exception $e) {
+            return redirect()->route('teams.index')->with('error', 'An error occurred while deleting the team.');
+        }
     }
 }
