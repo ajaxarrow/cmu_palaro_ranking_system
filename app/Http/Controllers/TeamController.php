@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Team;
+use App\Models\College;
 use App\Models\TeamComposition;
 
 class TeamController extends Controller
@@ -14,10 +15,12 @@ class TeamController extends Controller
      */
     public function index()
     {
-        $teams = Team::with('colleges')->get();
+        $teams = Team::with('colleges')->get(); // Fetch teams with related colleges
+        $colleges = College::all(); // Fetch all colleges
 
-        return view('admin.teams.index', compact('teams'));
+        return view('admin.teams.index', compact('teams', 'colleges'));
     }
+
 
 
     /**
