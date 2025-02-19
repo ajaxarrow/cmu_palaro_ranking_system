@@ -14,9 +14,11 @@ class TeamController extends Controller
      */
     public function index()
     {
-        $teams = Team::all();
+        $teams = Team::with('colleges')->get();
+
         return view('admin.teams.index', compact('teams'));
     }
+
 
     /**
      * Show the form for creating a new resource.
