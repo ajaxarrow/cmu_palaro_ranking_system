@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Team;
+use App\Models\TeamComposition;
 
 class TeamController extends Controller
 {
@@ -32,12 +33,27 @@ class TeamController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'desc' => 'nullable|string',
+            'college_ids' => 'required|array',
+            'college_ids.*' => 'exists:colleges,id',
         ]);
 
-        Team::create($request->all());
-        return redirect()->route('teams.index');
-    }
+        // Create the team
+        $team = Team::create([
+            'name' => $request->name,
+            'desc' => $request->desc,
+        ]);
 
+        // Loop through college_ids and insert into team_compositions
+        foreach ($request->college_ids as $college_id) {
+            TeamComposition::create([
+                'team_id' => $team->id,
+                'college_id' => $college_id,
+            ]);
+        }
+
+        return redirect()->route('teams.index')->with('success', 'Team created successfully!');
+    }
     /**
      * Display the specified resource.
      */
@@ -60,12 +76,31 @@ class TeamController extends Controller
     public function update(Request $request, int $id)
     {
         $team = Team::findOrFail($id);
-        $formFields = $request->validate([
+
+        $request->validate([
             'name' => 'required|string|max:255',
+            'desc' => 'nullable|string',
+            'college_ids' => 'required|array',
+            'college_ids.*' => 'exists:colleges,id',
         ]);
 
-        $team->update($formFields);
-        return redirect()->route('teams.index');
+        // Update team info
+        $team->update([
+            'name' => $request->name,
+            'desc' => $request->desc,
+        ]);
+
+        // Delete old compositions and insert new ones
+        TeamComposition::where('team_id', $team->id)->delete();
+
+        foreach ($request->college_ids as $college_id) {
+            TeamComposition::create([
+                'team_id' => $team->id,
+                'college_id' => $college_id,
+            ]);
+        }
+
+        return redirect()->route('teams.index')->with('success', 'Team updated successfully!');
     }
 
     /**
