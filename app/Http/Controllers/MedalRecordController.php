@@ -64,9 +64,10 @@ class MedalRecordController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, MedalRecord $medalRecord)
+    public function update(Request $request, int $id)
     {
-        $request->validate([
+        $medalRecord = MedalRecord::findOrFail($id);
+        $formFields = $request->validate([
             'year' => 'required|integer',
             'gold_tally' => 'required|integer',
             'silver_tally' => 'required|integer',
@@ -77,7 +78,7 @@ class MedalRecordController extends Controller
             'number_of_participant' => 'required|integer',
         ]);
 
-        $medalRecord->update($request->all());
+        $medalRecord->update($formFields);
         return redirect()->route('medal_records.index')->with('success', 'Medal record updated successfully.');
     }
 

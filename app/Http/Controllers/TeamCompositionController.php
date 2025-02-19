@@ -64,14 +64,15 @@ class TeamCompositionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, TeamComposition $teamComposition)
+    public function update(Request $request, int $id)
     {
-        $request->validate([
+        $teamComposition = TeamComposition::findOrFail($id);
+        $formFields = $request->validate([
             'college_id' => 'required|exists:colleges,id',
             'team_id' => 'required|exists:teams,id',
         ]);
 
-        $teamComposition->update($request->all());
+        $teamComposition->update($formFields);
         return redirect()->route('team_compositions.index');
     }
 

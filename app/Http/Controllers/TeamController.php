@@ -57,13 +57,14 @@ class TeamController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Team $team)
+    public function update(Request $request, int $id)
     {
-        $request->validate([
+        $team = Team::findOrFail($id);
+        $formFields = $request->validate([
             'name' => 'required|string|max:255',
         ]);
 
-        $team->update($request->all());
+        $team->update($formFields);
         return redirect()->route('teams.index');
     }
 

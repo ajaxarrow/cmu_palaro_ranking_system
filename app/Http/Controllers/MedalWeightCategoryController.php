@@ -61,9 +61,10 @@ class MedalWeightCategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, MedalWeightCategory $medalWeightCategory)
+    public function update(Request $request, int $id)
     {
-        $request->validate([
+        $medalWeightCategory = MedalWeightCategory::findOrFail($id);
+        $formFields = $request->validate([
             'category_no' => 'required|integer',
             'name' => 'required|string|max:255',
             'gold_weight' => 'required|numeric',
@@ -71,7 +72,7 @@ class MedalWeightCategoryController extends Controller
             'bronze_weight' => 'required|numeric',
         ]);
 
-        $medalWeightCategory->update($request->all());
+        $medalWeightCategory->update($formFields);
         return redirect()->route('medal_weight_categories.index');
     }
 

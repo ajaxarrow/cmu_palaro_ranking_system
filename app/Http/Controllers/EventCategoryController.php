@@ -63,9 +63,9 @@ class EventCategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, int $id)
     {
-        $request->validate([
+        $formFields = $request->validate([
             'name' => 'required|string|max:255',
             'is_double_bronze' => 'required|boolean',
             'sport_id' => 'required|exists:sports,id',
@@ -73,7 +73,7 @@ class EventCategoryController extends Controller
         ]);
 
         $eventCategory = EventCategory::findOrFail($id);
-        $eventCategory->update($request->all());
+        $eventCategory->update($formFields);
 
         return redirect()->route('event_categories.index')->with('success', 'Event Category updated successfully.');
     }

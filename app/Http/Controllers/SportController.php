@@ -35,7 +35,7 @@ class SportController extends Controller
         ]);
 
         Sport::create($request->all());
-        return redirect()->route('sports.index');
+        return redirect()->route('sports.index')->with('success', 'Sport added successfully!');
     }
 
     /**
@@ -64,15 +64,17 @@ class SportController extends Controller
         ]);
 
         $sport->update($request->all());
-        return redirect()->route('sports.index');
+        return redirect()->route('sports.index')->with('success', 'Sport updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Sport $sport)
+    public function destroy(int $id)
     {
+        $sport = Sport::findOrFail($id);
         $sport->delete();
-        return redirect()->route('sports.index');
+        return redirect()->route('sports.index')->with('success', 'Sport deleted successfully!');
+
     }
 }

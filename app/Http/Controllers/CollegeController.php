@@ -62,13 +62,13 @@ class CollegeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request->validate([
+        $formFields = $request->validate([
             'name' => 'required|string|max:255',
             'acronym' => 'required|string|max:10',
         ]);
 
         $college = College::findOrFail($id);
-        $college->update($request->all());
+        $college->update($formFields);
         return redirect()->route('colleges.index')->with('success', 'College updated successfully.');
     }
 
