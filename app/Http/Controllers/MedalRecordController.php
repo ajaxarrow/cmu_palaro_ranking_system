@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\MedalRecord;
+use App\Models\Team;
+use App\Models\EventCategory;
+use Carbon\Carbon;
 
 class MedalRecordController extends Controller
 {
@@ -13,8 +16,10 @@ class MedalRecordController extends Controller
      */
     public function index()
     {
-        $medalRecords = MedalRecord::all();
-        return view('admin.medal_records.index', compact('medalRecords'));
+        $medalRecords = MedalRecord::with(['team', 'event'])->get();
+        $teams = Team::all();
+        $events = EventCategory::all();
+        return view('admin.medal_records.index', compact('medalRecords', 'teams', 'events'));
     }
 
     /**
@@ -22,7 +27,10 @@ class MedalRecordController extends Controller
      */
     public function create()
     {
-        return view('medal_records.create');
+        $teams = Team::all();
+        $events = EventCategory::all();
+        $year = Carbon::now()->year;
+        return view('admin.medal_records.create', compact('teams', 'events', 'year'));
     }
 
     /**
@@ -30,18 +38,20 @@ class MedalRecordController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'year' => 'required|integer',
+        $validatedData = $request->validate([
+            'team_id' => 'required|exists:teams,id',
+            'event_category_id' => 'required|exists:event_categories,id',
             'gold_tally' => 'required|integer',
             'silver_tally' => 'required|integer',
             'bronze_tally' => 'required|integer',
-            'entry_by' => 'required|exists:users,id',
-            'posted_by' => 'nullable|exists:users,id',
-            'is_posted' => 'boolean',
-            'number_of_participant' => 'required|integer',
+            'number_of_participant' => 'required|numeric',
+            'year' => 'required|integer'
         ]);
 
-        MedalRecord::create($request->all());
+        $validatedData['entry_by'] = auth()->id();
+        $validatedData['posted_by'] = auth()->id();
+
+        MedalRecord::create($validatedData);
         return redirect()->route('medal_records.index')->with('success', 'Medal record created successfully.');
     }
 
@@ -58,7 +68,9 @@ class MedalRecordController extends Controller
      */
     public function edit(MedalRecord $medalRecord)
     {
-        return view('medal_records.edit', compact('medalRecord'));
+        $teams = Team::all();
+        $events = EventCategory::all();
+        return view('admin.medal_records.edit', compact('medalRecord', 'teams', 'events'));
     }
 
     /**
@@ -66,27 +78,31 @@ class MedalRecordController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $medalRecord = MedalRecord::findOrFail($id);
-        $formFields = $request->validate([
-            'year' => 'required|integer',
+        $validatedData = $request->validate([
+            'team_id' => 'required|exists:teams,id',
+            'event_category_id' => 'required|exists:event_categories,id',
             'gold_tally' => 'required|integer',
             'silver_tally' => 'required|integer',
             'bronze_tally' => 'required|integer',
-            'entry_by' => 'required|exists:users,id',
-            'posted_by' => 'nullable|exists:users,id',
-            'is_posted' => 'boolean',
-            'number_of_participant' => 'required|integer',
+            'number_of_participant' => 'required|numeric',
+            'year' =>  'required|numeric'
         ]);
 
-        $medalRecord->update($formFields);
+
+        $medalRecord = MedalRecord::findOrFail($id);
+        $medalRecord->update($validatedData);
         return redirect()->route('medal_records.index')->with('success', 'Medal record updated successfully.');
     }
 
     /**
+
      * Remove the specified resource from storage.
      */
-    public function destroy(MedalRecord $medalRecord)
+    public function destroy(Request $request, int $id)
     {
+
+        $medalRecord = MedalRecord::findOrFail($id);
+    
         $medalRecord->delete();
         return redirect()->route('medal_records.index')->with('success', 'Medal record deleted successfully.');
     }
