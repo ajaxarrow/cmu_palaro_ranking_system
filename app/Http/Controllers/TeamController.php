@@ -60,15 +60,16 @@ class TeamController extends Controller
 
             return redirect()->route('teams.index')->with('success', 'Team created successfully!');
         } catch (\Exception $e) {
-            return redirect()->route('teams.inex')->with('error', 'An error occurred while creating the team.');
+            return redirect()->route('teams.index')->with('error', 'An error occurred while creating the team.');
         }
     }
     /**
      * Display the specified resource.
      */
-    public function show(Team $team)
+    public function show(int $id)
     {
-        return view('teams.show', compact('team'));
+        $team = Team::findOrFail($id);
+        return view('admin.teams.show', compact('team'));
     }
 
     /**

@@ -114,6 +114,10 @@
                                             </p>
                                         </td>
                                         <td class="text-end">
+                                            <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" href="{{ route('teams.show', $team->id) }}">
+                                                <i class="mdi mdi-eye-outline fs-14 text-primary"></i>
+                                            </a>
+
                                             <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editModal{{ $team->id }}">
                                                 <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                             </a>
@@ -146,7 +150,7 @@
                                                         <div class="mb-3">
                                                             <label for="collegeSelectEdit{{ $team->id }}" class="form-label">Select Colleges</label>
                                                             @php
-                                                                $selectedColleges = $team->colleges->pluck('id')->toArray(); 
+                                                                $selectedColleges = $team->colleges->pluck('id')->toArray();
                                                             @endphp
 
                                                             <select required name="college_ids[]" id="collegeSelectEdit{{ $team->id }}" class="form-select" multiple required>
