@@ -8,18 +8,18 @@
             <div class="logo-box">
                 <a href="/" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="assets/imgs/logo/CMUicon-1.svg" alt="" height="50">
+                        <img alt="" height="50">
                     </span>
                     <span class="logo-lg">
-                        <img src="assets/imgs/logo/CMUicon-1.svg" alt="" height="50">
+                        <img  alt="" height="50">
                     </span>
                 </a>
                 <a href="/" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="assets/imgs/logo/CMUicon-1.svg" alt="" height="50">
+                        <img alt="" height="50">
                     </span>
                     <span class="logo-lg">
-                        <img src="assets/imgs/logo/CMUicon-1.svg" alt="" height="50">
+                        <img  alt="" height="50">
                     </span>
                 </a>
             </div>

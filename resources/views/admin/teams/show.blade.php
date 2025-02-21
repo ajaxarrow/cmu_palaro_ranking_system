@@ -44,120 +44,42 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table mb-0 checkbox-all" id="datatable_1">
-                                <thead>
-                                    <tr>
-                                        <th class="ps-0">Sports</th>
-                                        <th>Event Categories</th>
-                                        <th colspan="2" class="text-center">Gold</th>
-                                        <th colspan="2" class="text-center">Silver</th>
-                                        <th colspan="2" class="text-center">Bronze</th>
-                                        <th colspan="2" class="text-center">All Medal Tally</th>
-                                    </tr>
-                                    <tr>
-                                        <th class="ps-0"></th>
-                                        <th></th>
-                                        <th class="text-center">Medal Count</th>
-                                        <th class="text-center">Medal Weight</th>
-                                        <th class="text-center">Medal Count</th>
-                                        <th class="text-center">Medal Weight</th>
-                                        <th class="text-center">Medal Count</th>
-                                        <th class="text-center">Medal Weight</th>
-                                        <th class="text-center">Total Medals</th>
-                                        <th class="text-center">Total Weight</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Basketball -->
-                                    <tr>
-                                        <td rowspan="3">Basketball</td>
-                                        <td>Basketball Men 3x3</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">0.53</td>
-                                        <td class="text-center">0</td>
-                                        <td class="text-center">0</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">0.43</td>
-                                        <td class="text-center">2</td> <!-- Total Medals -->
-                                        <td class="text-center">0.96</td> <!-- Total Weight -->
-                                    </tr>
-                                    <tr>
-                                        <td>Basketball Women 3x3</td>
-                                        <td class="text-center">2</td>
-                                        <td class="text-center">4.5</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">1.25</td>
-                                        <td class="text-center">0</td>
-                                        <td class="text-center">2.3</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-center">8.05</td>
-                                    </tr>
-                                    <!-- Basketball Total -->
-                                    <tr class="fw-bold table-secondary">
-                                        <td>Total Basketball</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-center">5.03</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">1.25</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">2.73</td>
-                                        <td class="text-center">5</td>
-                                        <td class="text-center">9.01</td>
-                                    </tr>
-
-                                    <!-- Volleyball -->
-                                    <tr>
-                                        <td rowspan="3">Volleyball</td>
-                                        <td>Men</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">1.24</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">1.2</td>
-                                        <td class="text-center">0</td>
-                                        <td class="text-center">0</td>
-                                        <td class="text-center">2</td>
-                                        <td class="text-center">2.44</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Women</td>
-                                        <td class="text-center">0</td>
-                                        <td class="text-center">0</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">0.75</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">0.33</td>
-                                        <td class="text-center">2</td>
-                                        <td class="text-center">1.08</td>
-                                    </tr>
-                                    <!-- Volleyball Total -->
-                                    <tr class="fw-bold table-secondary">
-                                        <td>Total Volleyball</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">1.24</td>
-                                        <td class="text-center">2</td>
-                                        <td class="text-center">1.95</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">0.33</td>
-                                        <td class="text-center">4</td>
-                                        <td class="text-center">3.52</td>
-                                    </tr>
-
-                                    <!-- Grand Total for All Sports -->
-                                    <tr class="fw-bold table-dark text-white">
-                                        <td colspan="2">Overall Total</td>
-                                        <td class="text-center">4</td>
-                                        <td class="text-center">6.27</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-center">3.2</td>
-                                        <td class="text-center">2</td>
-                                        <td class="text-center">3.06</td>
-                                        <td class="text-center">9</td>
-                                        <td class="text-center">12.53</td>
-                                    </tr>
-                                </tbody>
-
-
-                            </table>
+                        <table class="table mb-0" id="datatable_1">
+                            <thead>
+                                <tr>
+                                    <th>Sports</th>
+                                    <th>Event Categories</th>
+                                    <th class="text-center">Gold Count</th>
+                                    <th class="text-center">Gold Weight</th>
+                                    <th class="text-center">Silver Count</th>
+                                    <th class="text-center">Silver Weight</th>
+                                    <th class="text-center">Bronze Count</th>
+                                    <th class="text-center">Bronze Weight</th>
+                                    <th class="text-center">Total Medals</th>
+                                    <th class="text-center">Total Weight</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($medalTally as $sport => $events)
+                                    @foreach ($events as $index => $event)
+                                        <tr>
+                                            @if ($index == 0)
+                                                <td rowspan="{{ count($events) }}">{{ $sport }}</td>
+                                            @endif
+                                            <td>{{ $event['event_category'] }}</td>
+                                            <td class="text-center">{{ $event['gold_tally'] }}</td>
+                                            <td class="text-center">{{ number_format($event['gold_weight'], 2) }}</td>
+                                            <td class="text-center">{{ $event['silver_tally'] }}</td>
+                                            <td class="text-center">{{ number_format($event['silver_weight'], 2) }}</td>
+                                            <td class="text-center">{{ $event['bronze_tally'] }}</td>
+                                            <td class="text-center">{{ number_format($event['bronze_weight'], 2) }}</td>
+                                            <td class="text-center">{{ $event['total_medals'] }}</td>
+                                            <td class="text-center">{{ number_format($event['total_weight'], 2) }}</td>
+                                        </tr>
+                                    @endforeach
+                                @endforeach
+                            </tbody>
+                        </table>
                         </div>
                     </div>
                 </div>

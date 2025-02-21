@@ -41,7 +41,7 @@
                                     <th>Gold Tally</th> 
                                     <th>Silver Tally</th>
                                     <th>Bronze Tally</th>
-                                    <th>Medal Weight</th>
+                                    <th>No. of Participants</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -102,9 +102,9 @@
                                                         </div>
 
                                                         <div class="mb-3">
-                                                            <label for="editTeamId" class="form-label">Event Category</label>
-                                                            <select name="team_id" class="form-control" id="editTeamId" required>
-                                                                <option value="">Select Event</option>
+                                                            <label for="editEventCategoryId" class="form-label">Event Category</label>
+                                                            <select name="event_category_id" class="form-control" id="editEventCategoryId" required>
+                                                                <option value="{{$record->event_category_id}}">Select Event</option>
                                                                 @foreach ($events as $event)
                                                                     <option value="{{ $event->id }}" {{ $event->id == $record->event_category_id ? 'selected' : '' }}>{{  $event->name  }}</option>
                                                                 @endforeach
@@ -233,8 +233,6 @@
 @endsection
 
 @section('script-bottom')
-<script src="https://apexcharts.com/samples/assets/stock-prices.js"></script>
-@vite(['resources/js/pages/crm-dashboard.init.js'])
 <script>
     function setEditFormAction(action, teamId, event, goldTally, silverTally, bronzeTally, medalWeight) {
         document.getElementById('editForm').action = action;

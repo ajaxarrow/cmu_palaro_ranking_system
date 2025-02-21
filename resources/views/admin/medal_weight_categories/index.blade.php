@@ -218,7 +218,4 @@
 </script>
 @endsection
 
-@section('script-bottom')
-<script src="https://apexcharts.com/samples/assets/stock-prices.js"></script>
-@vite(['resources/js/pages/crm-dashboard.init.js'])
-@endsection
+

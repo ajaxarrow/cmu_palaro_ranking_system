@@ -65,12 +65,46 @@ class TeamController extends Controller
     }
     /**
      * Display the specified resource.
+     * This is for tallying scores of each team
      */
     public function show(int $id)
     {
-        $team = Team::findOrFail($id);
-        return view('admin.teams.show', compact('team'));
+        $team = Team::with([
+            'medalRecords.eventCategory.sport',
+            'medalRecords.eventCategory.medalWeightCategory'
+        ])->findOrFail($id);
+    
+        $medalTally = [];
+    
+        foreach ($team->medalRecords as $record) {
+            $sportName = $record->eventCategory->sport->name;
+            $eventCategoryName = $record->eventCategory->name;
+            $medalWeights = $record->eventCategory->medalWeightCategory;
+    
+            // Calculate weighted medal tallies
+            $goldWeight = $record->gold_tally * $medalWeights->gold_weight;
+            $silverWeight = $record->silver_tally * $medalWeights->silver_weight;
+            $bronzeWeight = $record->bronze_tally * $medalWeights->bronze_weight;
+            $totalWeight = $goldWeight + $silverWeight + $bronzeWeight;
+            $totalMedals = $record->gold_tally + $record->silver_tally + $record->bronze_tally;
+    
+            // Organize data for the view
+            $medalTally[$sportName][] = [
+                'event_category' => $eventCategoryName,
+                'gold_tally' => $record->gold_tally,
+                'gold_weight' => $goldWeight,
+                'silver_tally' => $record->silver_tally,
+                'silver_weight' => $silverWeight,
+                'bronze_tally' => $record->bronze_tally,
+                'bronze_weight' => $bronzeWeight,
+                'total_medals' => $totalMedals,
+                'total_weight' => $totalWeight
+            ];
+        }
+    
+        return view('admin.teams.show', compact('team', 'medalTally'));
     }
+    
 
     /**
      * Show the form for editing the specified resource.

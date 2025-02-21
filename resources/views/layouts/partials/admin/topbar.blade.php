@@ -118,7 +118,7 @@
                             <!-- item-->
                             <a href="javascript:void(0);" class="dropdown-item notify-item text-muted link-primary">
                                 <div class="notify-icon">
-                                    <img src="/images/users/user-5.jpg" class="img-fluid rounded-circle" alt="" />
+                                    <img  class="img-fluid rounded-circle" alt="" />
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between">
                                     <p class="notify-details">Ralph Edwards</p>
@@ -155,7 +155,7 @@
 
                 <li class="dropdown notification-list topbar-dropdown">
                     <a class="nav-link dropdown-toggle nav-user me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                        <img src="/images/users/user-5.jpg" alt="user-image" class="rounded-circle">
+                        <img  alt="user-image" class="rounded-circle">
                         <span class="pro-user-name ms-1">
                             {{ Auth::user()->name }} <i class="mdi mdi-chevron-down"></i>
                         </span>

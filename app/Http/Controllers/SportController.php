@@ -57,8 +57,10 @@ class SportController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Sport $sport)
+    public function update(Request $request, int $id)
     {
+
+        $sport = Sport::findOrFail($id);
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
