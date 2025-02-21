@@ -33,6 +33,11 @@
         </div>
     </div>
 
+    <div class="p-6">
+  
+
+    </div>
+
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -54,42 +59,24 @@
                                 </tr>
                             </thead>
                             <tbody>
+                         
+
+                      
+                            @foreach ($medalTally as $sport => $data)
                                 <tr>
-                                    <td><strong>1st Place</strong></td>
-                                    <td><strong>Team C</strong></td>
-                                    <td class="text-center">12</td>
-                                    <td class="text-center">28.3</td>
-                                    <td class="text-center">6</td>
-                                    <td class="text-center">15.0</td>
-                                    <td class="text-center">7</td>
-                                    <td class="text-center">17.5</td>
-                                    <td class="text-center"><strong>25</strong></td>
-                                    <td class="text-center"><strong>60.8</strong></td>
+                                    <td><strong>{{ $loop->iteration }} Place</strong></td>
+                                    <td><strong>{{ $data['team'] }}</strong></td>
+                                    <td class="text-center">{{ $data['total']['gold_tally'] }}</td>
+                                    <td class="text-center">{{ number_format($data['total']['gold_weight'], 2) }}</td>
+                                    <td class="text-center">{{ $data['total']['silver_tally'] }}</td>
+                                    <td class="text-center">{{ number_format($data['total']['silver_weight'], 2) }}</td>
+                                    <td class="text-center">{{ $data['total']['bronze_tally'] }}</td>
+                                    <td class="text-center">{{ number_format($data['total']['bronze_weight'], 2) }}</td>
+                                    <td class="text-center"><strong>{{ $data['total']['total_medals'] }}</strong></td>
+                                    <td class="text-center"><strong>{{ number_format($data['total']['total_weight'], 2) }}</strong></td>
                                 </tr>
-                                <tr>
-                                    <td><strong>2nd Place</strong></td>
-                                    <td><strong>Team A</strong></td>
-                                    <td class="text-center">10</td>
-                                    <td class="text-center">25.5</td>
-                                    <td class="text-center">8</td>
-                                    <td class="text-center">20.3</td>
-                                    <td class="text-center">6</td>
-                                    <td class="text-center">15.2</td>
-                                    <td class="text-center"><strong>24</strong></td>
-                                    <td class="text-center"><strong>61.0</strong></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>3rd Place</strong></td>
-                                    <td><strong>Team B</strong></td>
-                                    <td class="text-center">7</td>
-                                    <td class="text-center">18.0</td>
-                                    <td class="text-center">9</td>
-                                    <td class="text-center">22.4</td>
-                                    <td class="text-center">5</td>
-                                    <td class="text-center">13.0</td>
-                                    <td class="text-center"><strong>21</strong></td>
-                                    <td class="text-center"><strong>53.4</strong></td>
-                                </tr>
+                            @endforeach
+       
                                 <tr class="table-primary">
                                     <td><strong>Overall Total</strong></td>
                                     <td></td>
