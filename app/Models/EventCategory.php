@@ -19,4 +19,10 @@ class EventCategory extends Model
     {
         return $this->belongsTo(MedalWeightCategory::class);
     }
+
+
+    public function medalRecords()
+    {
+        return $this->hasMany(MedalRecord::class);
+    }
 }

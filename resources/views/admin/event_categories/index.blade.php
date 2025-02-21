@@ -56,7 +56,7 @@
                             <input type="text" name="name" class="form-control" id="name" required>
                         </div>
                         <div class="mb-3">
-                        
+
                         <input type="hidden" name="is_double_bronze" value="0">
                         <input type="checkbox" name="is_double_bronze" value="1" id="isDoubleBronze" >
                             <label for="isDoubleBronze">Double Bronze</label>
@@ -114,8 +114,8 @@
                                         <td class="">
                                             <i class="fe  fs-14"></i>
                                             <span class=" {{ $eventCategory->is_double_bronze ? 'mdi mdi-check-bold text-primary' : 'mdi mdi-close-thick text-danger' }}"> </span>
-                                            
-                                            
+
+
                                         </td>
                                         <td>
                                             <p class="d-inline-block align-middle mb-0 text-body">{{ $eventCategory->sport->name }}</p>
@@ -124,7 +124,7 @@
                                             <p class="d-inline-block align-middle mb-0 text-body">{{ $eventCategory->medalWeightCategory->name }}</p>
                                         </td>
                                         <td class="text-end">
-                                        
+
 
                                             <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editModal{{ $eventCategory->id }}">
                                                 <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
@@ -152,11 +152,11 @@
                                                             <input type="text" name="name" class="form-control" id="name" value="{{ $eventCategory->name }}" required>
                                                         </div>
                                                         <div class="mb-3">
-                                                      
+
                                                         <input type="checkbox" name="is_double_bronze" id="isDoubleBronze" {{ $eventCategory->is_double_bronze ? 'checked' : '' }}>
                                                         <label for="isDoubleBronze">Double Bronze</label>
 
-                                                        
+
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="sport_id" class="form-label">Sport</label>
@@ -231,7 +231,3 @@
 </script>
 @endsection
 
-@section('script-bottom')
-<script src="https://apexcharts.com/samples/assets/stock-prices.js"></script>
-@vite(['resources/js/pages/crm-dashboard.init.js'])
-@endsection

@@ -56,8 +56,8 @@
                                         <input type="text" name="name" class="form-control" id="firstName" placeholder="Enter name" required>
                                     </div>
                                 </div><!--end col-->
-                               
-                                
+
+
                                 <div class="col-lg-12">
                                     <div class="hstack gap-2 justify-content-end">
                                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
@@ -95,11 +95,11 @@
                                             </p>
                                         </td>
                                         <td class="text-end">
-                                            
+
                                             <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editModal-{{$sport->id}}">
                                                 <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                             </a>
-                                            <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="modal" data-bs-target="#deleteModal-{{$sport->id}}" 
+                                            <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="modal" data-bs-target="#deleteModal-{{$sport->id}}"
                                                onclick="setDeleteFormAction('{{ route('sports.destroy', $sport->id) }}')">
                                                 <i class="mdi mdi-delete fs-14 text-danger"></i>
                                             </a>
@@ -124,8 +124,8 @@
                                                                     <input type="text" name="name" class="form-control" id="firstName" placeholder="Enter name" value="{{ $sport->name }}">
                                                                 </div>
                                                             </div><!--end col-->
-                                                          
-                                                            
+
+
                                                             <div class="col-lg-12">
                                                                 <div class="hstack gap-2 justify-content-end">
                                                                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
@@ -178,8 +178,6 @@
 @endsection
 
 @section('script-bottom')
-<script src="https://apexcharts.com/samples/assets/stock-prices.js"></script>
-@vite(['resources/js/pages/crm-dashboard.init.js'])
 <script>
     function setDeleteFormAction(action) {
         document.getElementById('deleteForm').action = action;

@@ -73,23 +73,29 @@ class TeamController extends Controller
             'medalRecords.eventCategory.sport',
             'medalRecords.eventCategory.medalWeightCategory'
         ])->findOrFail($id);
-    
+
         $medalTally = [];
-    
+        $overallTotal = [
+            'gold_tally' => 0, 'gold_weight' => 0,
+            'silver_tally' => 0, 'silver_weight' => 0,
+            'bronze_tally' => 0, 'bronze_weight' => 0,
+            'total_medals' => 0, 'total_weight' => 0
+        ];
+
         foreach ($team->medalRecords as $record) {
             $sportName = $record->eventCategory->sport->name;
             $eventCategoryName = $record->eventCategory->name;
             $medalWeights = $record->eventCategory->medalWeightCategory;
-    
+
             // Calculate weighted medal tallies
             $goldWeight = $record->gold_tally * $medalWeights->gold_weight;
             $silverWeight = $record->silver_tally * $medalWeights->silver_weight;
             $bronzeWeight = $record->bronze_tally * $medalWeights->bronze_weight;
             $totalWeight = $goldWeight + $silverWeight + $bronzeWeight;
             $totalMedals = $record->gold_tally + $record->silver_tally + $record->bronze_tally;
-    
+
             // Organize data for the view
-            $medalTally[$sportName][] = [
+            $medalTally[$sportName]['events'][] = [
                 'event_category' => $eventCategoryName,
                 'gold_tally' => $record->gold_tally,
                 'gold_weight' => $goldWeight,
@@ -100,11 +106,42 @@ class TeamController extends Controller
                 'total_medals' => $totalMedals,
                 'total_weight' => $totalWeight
             ];
+
+            // Calculate per-sport totals
+            if (!isset($medalTally[$sportName]['total'])) {
+                $medalTally[$sportName]['total'] = [
+                    'gold_tally' => 0, 'gold_weight' => 0,
+                    'silver_tally' => 0, 'silver_weight' => 0,
+                    'bronze_tally' => 0, 'bronze_weight' => 0,
+                    'total_medals' => 0, 'total_weight' => 0
+                ];
+            }
+
+            $medalTally[$sportName]['total']['gold_tally'] += $record->gold_tally;
+            $medalTally[$sportName]['total']['gold_weight'] += $goldWeight;
+            $medalTally[$sportName]['total']['silver_tally'] += $record->silver_tally;
+            $medalTally[$sportName]['total']['silver_weight'] += $silverWeight;
+            $medalTally[$sportName]['total']['bronze_tally'] += $record->bronze_tally;
+            $medalTally[$sportName]['total']['bronze_weight'] += $bronzeWeight;
+            $medalTally[$sportName]['total']['total_medals'] += $totalMedals;
+            $medalTally[$sportName]['total']['total_weight'] += $totalWeight;
+
+            // Calculate overall total
+            $overallTotal['gold_tally'] += $record->gold_tally;
+            $overallTotal['gold_weight'] += $goldWeight;
+            $overallTotal['silver_tally'] += $record->silver_tally;
+            $overallTotal['silver_weight'] += $silverWeight;
+            $overallTotal['bronze_tally'] += $record->bronze_tally;
+            $overallTotal['bronze_weight'] += $bronzeWeight;
+            $overallTotal['total_medals'] += $totalMedals;
+            $overallTotal['total_weight'] += $totalWeight;
         }
-    
-        return view('admin.teams.show', compact('team', 'medalTally'));
+
+        return view('admin.teams.show', compact('team', 'medalTally', 'overallTotal'));
     }
-    
+
+
+
 
     /**
      * Show the form for editing the specified resource.

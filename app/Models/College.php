@@ -9,4 +9,10 @@ class College extends Model
 {
     use HasFactory;
     protected $fillable = ['name', 'acronym'];
+
+
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'team_compositions');
+    }
 }

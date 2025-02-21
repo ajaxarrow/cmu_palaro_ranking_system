@@ -9,4 +9,10 @@ class Sport extends Model
 {
     use HasFactory;
     protected $fillable = ['name'];
+
+
+    public function eventCategories()
+    {
+        return $this->hasMany(EventCategory::class);
+    }
 }

@@ -5,21 +5,11 @@
         <!--- Sidemenu -->
         <div id="sidebar-menu">
 
-            <div class="logo-box">
-                <a href="/" class="logo logo-light">
-                    <span class="logo-sm">
-                        <img alt="" height="50">
-                    </span>
-                    <span class="logo-lg">
-                        <img  alt="" height="50">
-                    </span>
-                </a>
-                <a href="/" class="logo logo-dark">
-                    <span class="logo-sm">
-                        <img alt="" height="50">
-                    </span>
-                    <span class="logo-lg">
-                        <img  alt="" height="50">
+            <div class="logo-box mt-3">
+                <a href="/">
+                    <i data-feather="edit-2"></i>
+                    <span class="fs-16 font-bold">
+                        Ranking System
                     </span>
                 </a>
             </div>
@@ -67,7 +57,12 @@
                         <span> Tally </span>
                     </a>
                 </li>
-
+                <li>
+                    <a href="{{ route('results.index')}}" class="tp-link">
+                        <i data-feather="map-pin"></i>
+                        <span> Results </span>
+                    </a>
+                </li>
 
             </ul>
 

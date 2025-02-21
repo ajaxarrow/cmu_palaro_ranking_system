@@ -60,11 +60,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($medalTally as $sport => $events)
-                                    @foreach ($events as $index => $event)
+                                @foreach ($medalTally as $sport => $data)
+                                    @foreach ($data['events'] as $index => $event)
                                         <tr>
                                             @if ($index == 0)
-                                                <td rowspan="{{ count($events) }}">{{ $sport }}</td>
+                                                <td rowspan="{{ count($data['events']) + 1 }}"><strong>{{ $sport }}</strong></td>
                                             @endif
                                             <td>{{ $event['event_category'] }}</td>
                                             <td class="text-center">{{ $event['gold_tally'] }}</td>
@@ -77,8 +77,34 @@
                                             <td class="text-center">{{ number_format($event['total_weight'], 2) }}</td>
                                         </tr>
                                     @endforeach
+                                    <!-- Sport Total Row -->
+                                    <tr class="table-secondary">
+                                        <td><strong>Total for {{ $sport }}</strong></td>
+                                        <td class="text-center"><strong>{{ $data['total']['gold_tally'] }}</strong></td>
+                                        <td class="text-center"><strong>{{ number_format($data['total']['gold_weight'], 2) }}</strong></td>
+                                        <td class="text-center"><strong>{{ $data['total']['silver_tally'] }}</strong></td>
+                                        <td class="text-center"><strong>{{ number_format($data['total']['silver_weight'], 2) }}</strong></td>
+                                        <td class="text-center"><strong>{{ $data['total']['bronze_tally'] }}</strong></td>
+                                        <td class="text-center"><strong>{{ number_format($data['total']['bronze_weight'], 2) }}</strong></td>
+                                        <td class="text-center"><strong>{{ $data['total']['total_medals'] }}</strong></td>
+                                        <td class="text-center"><strong>{{ number_format($data['total']['total_weight'], 2) }}</strong></td>
+                                    </tr>
                                 @endforeach
+                                <!-- Overall Total Row -->
+                                <tr class="table-primary">
+                                    <td colspan="2"><strong>Overall Total</strong></td>
+                                    <td class="text-center"><strong>{{ $overallTotal['gold_tally'] }}</strong></td>
+                                    <td class="text-center"><strong>{{ number_format($overallTotal['gold_weight'], 2) }}</strong></td>
+                                    <td class="text-center"><strong>{{ $overallTotal['silver_tally'] }}</strong></td>
+                                    <td class="text-center"><strong>{{ number_format($overallTotal['silver_weight'], 2) }}</strong></td>
+                                    <td class="text-center"><strong>{{ $overallTotal['bronze_tally'] }}</strong></td>
+                                    <td class="text-center"><strong>{{ number_format($overallTotal['bronze_weight'], 2) }}</strong></td>
+                                    <td class="text-center"><strong>{{ $overallTotal['total_medals'] }}</strong></td>
+                                    <td class="text-center"><strong>{{ number_format($overallTotal['total_weight'], 2) }}</strong></td>
+                                </tr>
                             </tbody>
+
+
                         </table>
                         </div>
                     </div>
@@ -103,7 +129,3 @@
 </script>
 @endsection
 
-@section('script-bottom')
-<script src="https://apexcharts.com/samples/assets/stock-prices.js"></script>
-@vite(['resources/js/pages/crm-dashboard.init.js'])
-@endsection

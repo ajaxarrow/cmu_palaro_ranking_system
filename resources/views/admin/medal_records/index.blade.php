@@ -38,7 +38,7 @@
                                 <tr>
                                     <th class="ps-0">Team</th>
                                     <th>Event</th>
-                                    <th>Gold Tally</th> 
+                                    <th>Gold Tally</th>
                                     <th>Silver Tally</th>
                                     <th>Bronze Tally</th>
                                     <th>No. of Participants</th>
@@ -69,7 +69,7 @@
                                             <p class="d-inline-block align-middle mb-0 text-body">{{ $record->number_of_participant }}</p>
                                         </td>
                                         <td class="text-end">
-                                           
+
                                             <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editRecordModal-{{$record->id}}" onclick="setEditFormAction('{{ route('medal_records.update', $record->id) }}', '{{ $record->team_id }}', '{{ $record->event->name }}', '{{ $record->gold_tally }}', '{{ $record->silver_tally }}', '{{ $record->bronze_tally }}', '{{ $record->number_of_participant }}')">
                                                 <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                             </a>
@@ -110,7 +110,7 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                     
+
                                                         <div class="mb-3">
                                                             <label for="editGoldTally" class="form-label">Gold Tally</label>
                                                             <input type="number" name="gold_tally" class="form-control" id="editGoldTally" value="{{ $record->gold_tally }}" required>
@@ -228,9 +228,6 @@
 
 @endsection
 
-@section('script')
-@vite(['resources/js/pages/simple-datatables.init.js',])
-@endsection
 
 @section('script-bottom')
 <script>

@@ -9,4 +9,9 @@ class MedalWeightCategory extends Model
 {
     use HasFactory;
     protected $fillable = ['category_no', 'name', 'gold_weight', 'silver_weight', 'bronze_weight'];
+
+    public function eventCategories()
+    {
+        return $this->hasMany(EventCategory::class);
+    }
 }

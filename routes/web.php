@@ -5,6 +5,7 @@ use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\EventCategoryController;
 use App\Http\Controllers\MedalRecordController;
 use App\Http\Controllers\MedalWeightCategoryController;
+use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\SportController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamCompositionController;
@@ -89,7 +90,11 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::put('/medal-records/{id}', [MedalRecordController::class, 'update'])->name('medal_records.update');
     Route::delete('/medal-records/{id}', [MedalRecordController::class, 'destroy'])->name('medal_records.destroy');
 
+    Route::get('/results', [ResultsController::class, 'index'])->name('results.index');
+
 });
+
+
 
 
 require __DIR__.'/auth.php';

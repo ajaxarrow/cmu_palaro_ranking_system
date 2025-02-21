@@ -6,15 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\College;
 use Illuminate\Http\Request;
 
-class TallyController extends Controller
+class ResultsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(int $id)
+    public function index()
     {
-        $college = College::findOrFail($id);
-        return view('tally.index', compact('college'));
+        return view('admin.results.index');
     }
 
     /**
