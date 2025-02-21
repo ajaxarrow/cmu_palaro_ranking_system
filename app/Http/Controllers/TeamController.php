@@ -83,6 +83,7 @@ class TeamController extends Controller
         ];
 
         foreach ($team->medalRecords as $record) {
+            
             $sportName = $record->eventCategory->sport->name;
             $eventCategoryName = $record->eventCategory->name;
             $medalWeights = $record->eventCategory->medalWeightCategory;

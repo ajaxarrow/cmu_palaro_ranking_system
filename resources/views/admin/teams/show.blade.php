@@ -60,6 +60,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                               
                                 @foreach ($medalTally as $sport => $data)
                                     @foreach ($data['events'] as $index => $event)
                                         <tr>
