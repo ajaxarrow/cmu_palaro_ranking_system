@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class College extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'acronym'];
+    protected $fillable = ['name', 'image' ,'acronym'];
 
 
     public function teams()

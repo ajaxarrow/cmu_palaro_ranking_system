@@ -154,25 +154,25 @@
                                                         @method('PUT')
 
                                                         <div class="mb-3">
-                                                        @if($team->image)
-                                                            <div class="mb-2 d-flex justify-content-center align-items-center">
-                                                                <img id="imagePreview{{ $team->id }}" 
-                                                                    src="{{ asset('storage/' . $team->image) }}" 
-                                                                    width="100" height="100" 
-                                                                    class="rounded-circle object-fit-cover">
-                                                            </div>
-                                                        @else
-                                                            <div class="mb-2 d-flex justify-content-center align-items-center">
-                                                                <img id="imagePreview{{ $team->id }}" 
-                                                                    src="{{ asset('storage/default.jpg') }}" 
-                                                                    width="100" height="100"  
-                                                                    class="rounded-circle object-fit-cover">
-                                                            </div>
-                                                        @endif
-                                                                                                                    
-                                                            <label for="teamImage{{ $team->id }}" class="form-label">Image</label>
-                                                            {{-- File input for uploading a new image --}}
-                                                            <input type="file" accept="image/*" name="image" class="form-control" id="teamImage{{ $team->id }}" onchange="previewImage(event, '{{ $team->id }}')">
+                                                            @if($team->image)
+                                                                <div class="mb-2 d-flex justify-content-center align-items-center">
+                                                                    <img id="imagePreview{{ $team->id }}" 
+                                                                        src="{{ asset('storage/' . $team->image) }}" 
+                                                                        width="100" height="100" 
+                                                                        class="rounded-circle object-fit-cover">
+                                                                </div>
+                                                            @else
+                                                                <div class="mb-2 d-flex justify-content-center align-items-center">
+                                                                    <img id="imagePreview{{ $team->id }}" 
+                                                                        src="{{ asset('storage/default.jpg') }}" 
+                                                                        width="100" height="100"  
+                                                                        class="rounded-circle object-fit-cover">
+                                                                </div>
+                                                            @endif
+                                                                                                                        
+                                                                <label for="teamImage{{ $team->id }}" class="form-label">Image</label>
+                                                                {{-- File input for uploading a new image --}}
+                                                                <input type="file" accept="image/*" name="image" class="form-control" id="teamImage{{ $team->id }}" onchange="previewImage(event, '{{ $team->id }}')">
                                                         </div>
 
 
