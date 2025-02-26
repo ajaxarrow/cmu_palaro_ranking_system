@@ -41,26 +41,24 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalgridLabel">Add new College</h5>
+                        <h5 class="modal-title" id="exampleModalgridLabel">Add New College</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form action="{{ route('colleges.store')}}"  method="POST" onsubmit="disableSubmitButton(this)">
                             @csrf
                             <div class="row g-3">
-                                <div class="col-xxl-6">
-                                    <div>
+                                <div >
+                                    <div class="mb-3">
                                         <label for="firstName" class="form-label">Name</label>
-                                        <input type="text" name="name" class="form-control" id="firstName" placeholder="Enter firstname">
+                                        <input type="text" name="name" class="form-control" id="firstName" placeholder="Enter College Name">
                                     </div>
-                                </div><!--end col-->
-                                <div class="col-xxl-6">
-                                    <div>
+                                    <div class="mb-3">
                                         <label for="lastName" class="form-label">Acronym</label>
-                                        <input type="text"  name="acronym" class="form-control" id="lastName" placeholder="Enter lastname">
+                                        <input type="text"  name="acronym" class="form-control" id="lastName" placeholder="Enter College Acronym">
                                     </div>
                                 </div>
-                                
+
                                 <div class="col-lg-12">
                                     <div class="hstack gap-2 justify-content-end">
                                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
@@ -102,11 +100,11 @@
                                             <p class="d-inline-block align-middle mb-0 text-body">{{ $college->acronym }}</p>
                                         </td>
                                         <td class="text-end">
-                                            <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editModal" 
+                                            <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editModal"
                                                onclick="setEditFormAction('{{ route('colleges.update', $college->id) }}', '{{ $college->name }}', '{{ $college->acronym }}')">
                                                 <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                             </a>
-                                            <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="modal" data-bs-target="#deleteModal" 
+                                            <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="modal" data-bs-target="#deleteModal"
                                                onclick="setDeleteFormAction('{{ route('colleges.destroy', $college->id) }}')">
                                                 <i class="mdi mdi-delete fs-14 text-danger"></i>
                                             </a>
@@ -154,11 +152,11 @@
                                         @method('PUT')
                                         <div class="mb-3">
                                             <label for="editName" class="form-label">Name</label>
-                                            <input type="text" name="name" class="form-control" id="editName" placeholder="Enter college name" required>
+                                            <input type="text" name="name" class="form-control" id="editName" placeholder="Enter College Name" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="editAcronym" class="form-label">Acronym</label>
-                                            <input type="text" name="acronym" class="form-control" id="editAcronym" placeholder="Enter college acronym" required>
+                                            <input type="text" name="acronym" class="form-control" id="editAcronym" placeholder="Enter College Acronym" required>
                                         </div>
                                         <div class="hstack gap-2 justify-content-end">
                                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>

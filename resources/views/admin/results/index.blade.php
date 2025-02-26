@@ -34,7 +34,7 @@
     </div>
 
     <div class="p-6">
-  
+
 
     </div>
 
@@ -59,9 +59,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                         
 
-                      
+
+
                             @foreach ($medalTally as $sport => $data)
                                 <tr>
                                     <td><strong>{{ $loop->iteration }} Place</strong></td>
@@ -76,8 +76,8 @@
                                     <td class="text-center"><strong>{{ number_format($data['total']['total_weight'], 2) }}</strong></td>
                                 </tr>
                             @endforeach
-       
-                                <tr class="table-primary">
+
+                                {{-- <tr class="table-primary">
                                     <td><strong>Overall Total</strong></td>
                                     <td></td>
                                     <td class="text-center"><strong>29</strong></td>
@@ -88,7 +88,7 @@
                                     <td class="text-center"><strong>45.7</strong></td>
                                     <td class="text-center"><strong>70</strong></td>
                                     <td class="text-center"><strong>175.2</strong></td>
-                                </tr>
+                                </tr> --}}
                             </tbody>
                         </table>
                     </div>

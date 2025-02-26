@@ -53,7 +53,7 @@
                         @csrf
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" name="name" class="form-control" id="name" required>
+                            <input type="text" name="name" class="form-control" id="name" placeholder="Enter Event Category Name" required>
                         </div>
                         <div class="mb-3">
 
@@ -149,14 +149,12 @@
                                                         @method('PUT')
                                                         <div class="mb-3">
                                                             <label for="name" class="form-label">Name</label>
-                                                            <input type="text" name="name" class="form-control" id="name" value="{{ $eventCategory->name }}" required>
+                                                            <input type="text" name="name" class="form-control" placeholder="Enter Event Category Name"  id="name" value="{{ $eventCategory->name }}" required>
                                                         </div>
                                                         <div class="mb-3">
-
-                                                        <input type="checkbox" name="is_double_bronze" id="isDoubleBronze" {{ $eventCategory->is_double_bronze ? 'checked' : '' }}>
-                                                        <label for="isDoubleBronze">Double Bronze</label>
-
-
+                                                            <input type="hidden" name="is_double_bronze" value="0">
+                                                            <input type="checkbox" name="is_double_bronze" value="1" id="isDoubleBronze{{ $eventCategory->id }}" {{ $eventCategory->is_double_bronze ? 'checked' : '' }}>
+                                                            <label for="isDoubleBronze{{ $eventCategory->id }}">Double Bronze</label>
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="sport_id" class="form-label">Sport</label>

@@ -43,7 +43,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addTeamModalLabel">Add new Team</h5>
+                        <h5 class="modal-title" id="addTeamModalLabel">Add New Team</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -51,11 +51,11 @@
                             @csrf
                             <div class="mb-3">
                                 <label for="teamName" class="form-label">Name</label>
-                                <input required type="text" name="name" class="form-control" id="teamName" placeholder="Enter team name" required>
+                                <input required type="text" name="name" class="form-control" id="teamName" placeholder="Enter Team Name" required>
                             </div>
                             <div class="mb-3">
                                 <label for="teamDescription" class="form-label">Description</label>
-                                <input required type="text" name="desc" class="form-control" id="teamDescription" placeholder="Enter team description" required>
+                                <input required type="text" name="desc" class="form-control" id="teamDescription" placeholder="Enter Team Description" required>
                             </div>
                             <div class="mb-3">
                                 <label for="collegeSelectAdd" class="form-label">Select Colleges</label>
@@ -141,11 +141,11 @@
                                                         @method('PUT')
                                                         <div class="mb-3">
                                                             <label for="editTeamName{{ $team->id }}" class="form-label">Name</label>
-                                                            <input required type="text" name="name" class="form-control" id="editTeamName{{ $team->id }}" value="{{ $team->name }}" required>
+                                                            <input required type="text" name="name" class="form-control" placeholder="Enter Team Name" id="editTeamName{{ $team->id }}" value="{{ $team->name }}" required>
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="editTeamDescription{{ $team->id }}" class="form-label">Description</label>
-                                                            <input required type="text" name="desc" class="form-control" id="editTeamDescription{{ $team->id }}" value="{{ $team->desc }}" required>
+                                                            <input required type="text" placeholder="Enter Team Description" name="desc" class="form-control" id="editTeamDescription{{ $team->id }}" value="{{ $team->desc }}" required>
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="collegeSelectEdit{{ $team->id }}" class="form-label">Select Colleges</label>

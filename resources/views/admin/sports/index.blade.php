@@ -43,17 +43,17 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalgridLabel">Add new Sport</h5>
+                        <h5 class="modal-title" id="exampleModalgridLabel">Add New Sport</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form action="{{ route('sports.store')}}" method="POST" onsubmit="disableSubmitButton(this)">
                             @csrf
                             <div class="row g-3">
-                                <div class="col-xxl-6">
+                                <div class="mb-3">
                                     <div>
                                         <label for="firstName" class="form-label">Name</label>
-                                        <input type="text" name="name" class="form-control" id="firstName" placeholder="Enter name" required>
+                                        <input type="text" name="name" class="form-control" id="firstName" placeholder="Enter Sports Name" required>
                                     </div>
                                 </div><!--end col-->
 
@@ -118,10 +118,10 @@
                                                         @csrf
                                                         @method('PUT')
                                                         <div class="row g-3">
-                                                            <div class="col-xxl-6">
+                                                            <div class="mb-3">
                                                                 <div>
                                                                     <label for="firstName" class="form-label">Name</label>
-                                                                    <input type="text" name="name" class="form-control" id="firstName" placeholder="Enter name" value="{{ $sport->name }}">
+                                                                    <input type="text" name="name" class="form-control" id="firstName" placeholder="Enter Sports Name" value="{{ $sport->name }}">
                                                                 </div>
                                                             </div><!--end col-->
 
