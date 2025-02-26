@@ -32,10 +32,22 @@ class CollegeController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'acronym' => 'required|string|max:10',
         ]);
 
-        College::create($request->all());
+        $imagePath = null;
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('teams', 'public'); 
+            
+        }
+
+       College::create([
+                'name' => $request->name,
+                'acronym' => $request->acronym,
+                'image' => $imagePath,
+        ]);
         return redirect()->route('colleges.index')->with('success', 'College created successfully.');
     }
 
@@ -54,6 +66,9 @@ class CollegeController extends Controller
     public function edit(string $id)
     {
         $college = College::findOrFail($id);
+        
+
+
         return view('colleges.edit', compact('college'));
     }
 
@@ -64,10 +79,16 @@ class CollegeController extends Controller
     {
         $formFields = $request->validate([
             'name' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'acronym' => 'required|string|max:10',
         ]);
-
         $college = College::findOrFail($id);
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('colleges', 'public'); 
+        }
+        
+        $formFields['image'] = $imagePath;
         $college->update($formFields);
         return redirect()->route('colleges.index')->with('success', 'College updated successfully.');
     }

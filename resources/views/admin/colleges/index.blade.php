@@ -45,10 +45,20 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ route('colleges.store')}}"  method="POST" onsubmit="disableSubmitButton(this)">
+                        <form action="{{ route('colleges.store')}}"  method="POST" onsubmit="disableSubmitButton(this)" enctype="multipart/form-data">
                             @csrf
                             <div class="row g-3">
-                                <div >
+                             
+
+                                <div>
+
+                                    <div class="mb-3">
+                                        
+                                        <label for="CollegeImage" class="form-label">Image</label>
+                                        <input required type="file" accept="image/*"  name="image" class="form-control" id="CollegeImage">
+                                    
+                                    </div>
+
                                     <div class="mb-3">
                                         <label for="firstName" class="form-label">Name</label>
                                         <input type="text" name="name" class="form-control" id="firstName" placeholder="Enter College Name">
@@ -57,6 +67,7 @@
                                         <label for="lastName" class="form-label">Acronym</label>
                                         <input type="text"  name="acronym" class="form-control" id="lastName" placeholder="Enter College Acronym">
                                     </div>
+
                                 </div>
 
                                 <div class="col-lg-12">
@@ -91,17 +102,25 @@
                             <tbody>
                                 @foreach ($colleges as $college)
                                     <tr>
-                                        <td class="ps-0">
-                                            <p class="d-inline-block align-middle mb-0">
+                                        <td class="ps-0 d-flex  align-items-center gap-1">
+                                         
+                                            @if($college->image)
+                                                <img src="{{ asset('storage/' . $college->image) }}" width="40" class="rounded-circle p-0 m-0">
+                                            @else
+                                                <i class="ph-duotone fs-24 ph-ranking mb-0"></i>
+                                            @endif
+                                            
+                                            <p class="d-inline-block align-middle d-inline-block align-middle mb-0 py- ">
                                                 <span class="font-13 fw-medium">{{$college->name}}</span>
                                             </p>
+         
                                         </td>
                                         <td>
                                             <p class="d-inline-block align-middle mb-0 text-body">{{ $college->acronym }}</p>
                                         </td>
                                         <td class="text-end">
                                             <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editModal"
-                                               onclick="setEditFormAction('{{ route('colleges.update', $college->id) }}', '{{ $college->name }}', '{{ $college->acronym }}')">
+                                               onclick="setEditFormAction('{{ route('colleges.update', $college->id) }}', '{{ $college->name }}', '{{ $college->acronym }}', '{{ $college->image }}')">
                                                 <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                             </a>
                                             <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="modal" data-bs-target="#deleteModal"
@@ -110,6 +129,9 @@
                                             </a>
                                         </td>
                                     </tr>
+
+                                
+
                                 @endforeach
                             </tbody>
                         </table>
@@ -147,9 +169,15 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form id="editForm" action="" method="POST" onsubmit="disableSubmitButton(this)">
+                                    <form id="editForm" action="" method="POST" onsubmit="disableSubmitButton(this)" enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
+  
+                                        <div class="mb-2 ">
+                                            <label for="" class="form-label">Image</label>          
+                                            <input type="file" accept="image/*" name="image" class="form-control" id="editImage">
+                                        </div>
+
                                         <div class="mb-3">
                                             <label for="editName" class="form-label">Name</label>
                                             <input type="text" name="name" class="form-control" id="editName" placeholder="Enter College Name" required>
@@ -186,9 +214,10 @@
         document.getElementById('deleteForm').action = action;
     }
 
-    function setEditFormAction(action, name, acronym) {
+    function setEditFormAction(action, name, acronym, image) {
         document.getElementById('editForm').action = action;
         document.getElementById('editName').value = name;
+        document.getElementById('editImage').value = image;
         document.getElementById('editAcronym').value = acronym;
     }
 
@@ -198,4 +227,21 @@
         submitButton.innerText = 'Submitting...'; // Optional: Change button text
     }
 </script>
+
+<script>
+    function previewImage(event, teamId) {
+        const input = event.target;
+        const preview = document.getElementById(`imagePreview${teamId}`);
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+            }
+            reader.readAsDataURL(input.files[0]); // Read the image file
+        }
+    }
+</script>
+
+
 @endsection

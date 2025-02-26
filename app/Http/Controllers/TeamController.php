@@ -15,8 +15,8 @@ class TeamController extends Controller
      */
     public function index()
     {
-        $teams = Team::with('colleges')->get(); // Fetch teams with related colleges
-        $colleges = College::all(); // Fetch all colleges
+        $teams = Team::with('colleges')->latest()->get(); 
+        $colleges = College::all(); 
 
         return view('admin.teams.index', compact('teams', 'colleges'));
     }
@@ -40,14 +40,22 @@ class TeamController extends Controller
             $request->validate([
                 'name' => 'required|string|max:255',
                 'desc' => 'nullable|string',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'college_ids' => 'required|array',
                 'college_ids.*' => 'exists:colleges,id',
             ]);
 
+            $imagePath = null;
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('teams', 'public'); 
+                
+            }
+    
             // Create the team
             $team = Team::create([
                 'name' => $request->name,
                 'desc' => $request->desc,
+                'image' => $imagePath,
             ]);
 
             // Loop through college_ids and insert into team_compositions
@@ -59,6 +67,7 @@ class TeamController extends Controller
             }
 
             return redirect()->route('teams.index')->with('success', 'Team created successfully!');
+
         } catch (\Exception $e) {
             return redirect()->route('teams.index')->with('error', 'An error occurred while creating the team.');
         }
@@ -174,15 +183,22 @@ class TeamController extends Controller
 
             $request->validate([
                 'name' => 'required|string|max:255',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'desc' => 'nullable|string',
                 'college_ids' => 'required|array',
                 'college_ids.*' => 'exists:colleges,id',
             ]);
+            $imagePath = null;
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('teams', 'public'); 
+                
+            }
 
             // Update team info
             $team->update([
                 'name' => $request->name,
                 'desc' => $request->desc,
+                'image' => $imagePath,
             ]);
 
             // Delete old compositions and insert new ones
