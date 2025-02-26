@@ -109,7 +109,6 @@
                                             @else
                                                 <i class="ph-duotone fs-24 ph-ranking mb-0"></i>
                                             @endif
-                                            
                                             <p class="d-inline-block align-middle d-inline-block align-middle mb-0 py- ">
                                                 <span class="font-13 fw-medium">{{$college->name}}</span>
                                             </p>
@@ -172,6 +171,13 @@
                                     <form id="editForm" action="" method="POST" onsubmit="disableSubmitButton(this)" enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
+
+                                        <div class="mb-2 d-flex justify-content-center align-items-center">
+                                                                    <img id="EditImagePreview" 
+                                                                        src="{{ asset('storage/default.jpg') }}" 
+                                                                        width="100" height="100"  
+                                                                        class="rounded-circle object-fit-cover">
+                                                                </div>
   
                                         <div class="mb-2 ">
                                             <label for="" class="form-label">Image</label>          
@@ -217,8 +223,17 @@
     function setEditFormAction(action, name, acronym, image) {
         document.getElementById('editForm').action = action;
         document.getElementById('editName').value = name;
-        document.getElementById('editImage').value = image;
+        
         document.getElementById('editAcronym').value = acronym;
+
+        const preview = document.getElementById('EditImagePreview');
+        if (image) {
+            preview.src = "/storage/" + image; // Update with the correct path
+            preview.style.display = "block"; // Show the image
+        } else {
+            preview.style.display = "none"; // Hide if no image
+        }
+
     }
 
     function disableSubmitButton(form) {
