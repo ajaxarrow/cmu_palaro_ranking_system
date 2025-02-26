@@ -5,6 +5,9 @@
     @include('layouts.partials/title-meta', ['title' => 'CMU Palaro Ranking System'])
 
     @include('layouts.partials/head-css')
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@1&display=swap" rel="stylesheet">
+    @vite(['resources/css/layout.css'])
+    <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
 </head>
 
 <body data-menu-color="light" data-sidebar="default">

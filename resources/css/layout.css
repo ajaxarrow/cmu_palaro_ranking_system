@@ -1,0 +1,32 @@
+:root {
+    --primary-color: #00491e;
+    --secondary-color: #02681e;
+    --accent-color: #ffc601;
+    --highlight-color: #ffeca8;
+}
+
+.app-sidebar-menu {
+    background-color: var(--primary-color);
+}
+
+.topbar-custom {
+    background-color: var(--highlight-color);
+}
+
+.topbar-custom * {
+    color: var(--primary-color);
+}
+
+#side-menu .menuitem-active {
+    background-color: var(--accent-color);
+    border-radius: 8px;
+}
+
+#side-menu .menuitem-active * {
+    color: var(--primary-color) !important;
+}
+
+.app-sidebar-menu,
+.app-sidebar-menu * {
+    color: white !important;
+}

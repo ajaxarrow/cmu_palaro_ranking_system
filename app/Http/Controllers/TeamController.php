@@ -67,8 +67,7 @@ class TeamController extends Controller
      * Display the specified resource.
      * This is for tallying scores of each team
      */
-    public function show(int $id)
-    {
+    public function show(int $id){
         $team = Team::with([
             'medalRecords.eventCategory.sport',
             'medalRecords.eventCategory.medalWeightCategory'
@@ -83,17 +82,28 @@ class TeamController extends Controller
         ];
 
         foreach ($team->medalRecords as $record) {
-            
+
             $sportName = $record->eventCategory->sport->name;
             $eventCategoryName = $record->eventCategory->name;
             $medalWeights = $record->eventCategory->medalWeightCategory;
 
+            // Check if the event has double bronze rule
+            $isDoubleBronze = $record->eventCategory->is_double_bronze;
+            $bronzeTally = $record->bronze_tally;
+
+            if ($isDoubleBronze && $bronzeTally > 0) {
+                $medalWeights->bronze_weight = $medalWeights->bronze_weight / 2;
+            }
+
             // Calculate weighted medal tallies
             $goldWeight = $record->gold_tally * $medalWeights->gold_weight;
             $silverWeight = $record->silver_tally * $medalWeights->silver_weight;
-            $bronzeWeight = $record->bronze_tally * $medalWeights->bronze_weight;
+            $bronzeWeight = $bronzeTally * $medalWeights->bronze_weight;
             $totalWeight = $goldWeight + $silverWeight + $bronzeWeight;
-            $totalMedals = $record->gold_tally + $record->silver_tally + $record->bronze_tally;
+            $totalMedals = $record->gold_tally + $record->silver_tally + $bronzeTally;
+
+
+
 
             // Organize data for the view
             $medalTally[$sportName]['events'][] = [
@@ -102,13 +112,13 @@ class TeamController extends Controller
                 'gold_weight' => $goldWeight,
                 'silver_tally' => $record->silver_tally,
                 'silver_weight' => $silverWeight,
-                'bronze_tally' => $record->bronze_tally,
+                'bronze_tally' => $bronzeTally, // Updated tally
                 'bronze_weight' => $bronzeWeight,
                 'total_medals' => $totalMedals,
                 'total_weight' => $totalWeight
             ];
 
-            // Calculate per-sport totals
+            // Initialize per-sport totals
             if (!isset($medalTally[$sportName]['total'])) {
                 $medalTally[$sportName]['total'] = [
                     'gold_tally' => 0, 'gold_weight' => 0,
@@ -118,21 +128,22 @@ class TeamController extends Controller
                 ];
             }
 
+            // Aggregate per-sport totals
             $medalTally[$sportName]['total']['gold_tally'] += $record->gold_tally;
             $medalTally[$sportName]['total']['gold_weight'] += $goldWeight;
             $medalTally[$sportName]['total']['silver_tally'] += $record->silver_tally;
             $medalTally[$sportName]['total']['silver_weight'] += $silverWeight;
-            $medalTally[$sportName]['total']['bronze_tally'] += $record->bronze_tally;
+            $medalTally[$sportName]['total']['bronze_tally'] += $bronzeTally; // Updated tally
             $medalTally[$sportName]['total']['bronze_weight'] += $bronzeWeight;
             $medalTally[$sportName]['total']['total_medals'] += $totalMedals;
             $medalTally[$sportName]['total']['total_weight'] += $totalWeight;
 
-            // Calculate overall total
+            // Aggregate overall total
             $overallTotal['gold_tally'] += $record->gold_tally;
             $overallTotal['gold_weight'] += $goldWeight;
             $overallTotal['silver_tally'] += $record->silver_tally;
             $overallTotal['silver_weight'] += $silverWeight;
-            $overallTotal['bronze_tally'] += $record->bronze_tally;
+            $overallTotal['bronze_tally'] += $bronzeTally; // Updated tally
             $overallTotal['bronze_weight'] += $bronzeWeight;
             $overallTotal['total_medals'] += $totalMedals;
             $overallTotal['total_weight'] += $totalWeight;
@@ -140,6 +151,7 @@ class TeamController extends Controller
 
         return view('admin.teams.show', compact('team', 'medalTally', 'overallTotal'));
     }
+
 
 
 

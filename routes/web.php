@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\EventCategoryController;
@@ -91,6 +92,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::delete('/medal-records/{id}', [MedalRecordController::class, 'destroy'])->name('medal_records.destroy');
 
     Route::get('/results', [ResultsController::class, 'index'])->name('results.index');
+    Route::get('/users', [AppUserController::class, 'index'])->name('users.index');
 
 });
 
