@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Team extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'desc'];
+    protected $fillable = ['name', 'image','desc'];
 
     public function colleges()
     {
