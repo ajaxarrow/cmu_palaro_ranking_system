@@ -47,8 +47,14 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ route('teams.store')}}" method="POST" onsubmit="disableSubmitButton(this)">
+                        <form action="{{ route('teams.store')}}" method="POST" onsubmit="disableSubmitButton(this)" enctype="multipart/form-data">
                             @csrf
+
+                            <div class="mb-3">
+                                <label for="teamImage" class="form-label">Image</label>
+                                <input required type="file" accept="image/*"  name="image" class="form-control" id="teamImage"  required>
+                            </div>
+
                             <div class="mb-3">
                                 <label for="teamName" class="form-label">Name</label>
                                 <input required type="text" name="name" class="form-control" id="teamName" placeholder="Enter Team Name" required>
@@ -96,9 +102,16 @@
                             <tbody>
                                 @foreach ($teams as $team)
                                     <tr>
-                                        <td class="ps-0">
-                                            <p class="d-inline-block align-middle mb-0">
-                                                <span class="font-13 fw-medium">{{$team->name}}</span>
+                                        <td class="ps-0 d-flex align-items-center gap-1">
+                                            @if($team->image)
+                                                <img src="{{ asset('storage/' . $team->image) }}" width="40" class="rounded-circle">
+                                            @else
+                                                <i class="ph-duotone fs-24 ph-ranking mb-0"></i>
+                                            @endif
+                                            <p class="d-inline-block align-middle mb-0 py-2">
+                                        
+                                                <span class="font-16 fw-medium ml-3">{{$team->name}}</span>
+                                               
                                             </p>
                                         </td>
                                         <td>
@@ -136,9 +149,33 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form action="{{ route('teams.update', $team->id) }}" method="POST" onsubmit="disableSubmitButton(this)">
+                                                    <form action="{{ route('teams.update', $team->id) }}" method="POST" onsubmit="disableSubmitButton(this)" enctype="multipart/form-data">
                                                         @csrf
                                                         @method('PUT')
+
+                                                        <div class="mb-3">
+                                                        @if($team->image)
+                                                            <div class="mb-2 d-flex justify-content-center align-items-center">
+                                                                <img id="imagePreview{{ $team->id }}" 
+                                                                    src="{{ asset('storage/' . $team->image) }}" 
+                                                                    width="100" height="100" 
+                                                                    class="rounded-circle object-fit-cover">
+                                                            </div>
+                                                        @else
+                                                            <div class="mb-2 d-flex justify-content-center align-items-center">
+                                                                <img id="imagePreview{{ $team->id }}" 
+                                                                    src="{{ asset('storage/default.jpg') }}" 
+                                                                    width="100" height="100"  
+                                                                    class="rounded-circle object-fit-cover">
+                                                            </div>
+                                                        @endif
+                                                                                                                    
+                                                            <label for="teamImage{{ $team->id }}" class="form-label">Image</label>
+                                                            {{-- File input for uploading a new image --}}
+                                                            <input type="file" accept="image/*" name="image" class="form-control" id="teamImage{{ $team->id }}" onchange="previewImage(event, '{{ $team->id }}')">
+                                                        </div>
+
+
                                                         <div class="mb-3">
                                                             <label for="editTeamName{{ $team->id }}" class="form-label">Name</label>
                                                             <input required type="text" name="name" class="form-control" placeholder="Enter Team Name" id="editTeamName{{ $team->id }}" value="{{ $team->name }}" required>
@@ -221,5 +258,21 @@
 
 @section('script-bottom')
 <script src="https://apexcharts.com/samples/assets/stock-prices.js"></script>
+<script>
+    function previewImage(event, teamId) {
+        const input = event.target;
+        const preview = document.getElementById(`imagePreview${teamId}`);
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+            }
+            reader.readAsDataURL(input.files[0]); // Read the image file
+        }
+    }
+</script>
+
+
 @vite(['resources/js/pages/crm-dashboard.init.js'])
 @endsection
