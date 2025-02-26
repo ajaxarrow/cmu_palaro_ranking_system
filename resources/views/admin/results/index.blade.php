@@ -1,4 +1,4 @@
-@extends('layouts.admin', ['title' => 'Resuls'])
+@extends('layouts.admin', ['title' => 'Results'])
 
 @section('css')
 @vite(['node_modules/simple-datatables/dist/style.css'])
@@ -34,8 +34,7 @@
     </div>
 
     <div class="p-6">
-
-
+        <!-- Add your content here -->
     </div>
 
     <div class="row">
@@ -59,36 +58,20 @@
                                 </tr>
                             </thead>
                             <tbody>
-
-
-
-                            @foreach ($medalTally as $sport => $data)
-                                <tr>
-                                    <td><strong>{{ $loop->iteration }} Place</strong></td>
-                                    <td><strong>{{ $data['team'] }}</strong></td>
-                                    <td class="text-center">{{ $data['total']['gold_tally'] }}</td>
-                                    <td class="text-center">{{ number_format($data['total']['gold_weight'], 2) }}</td>
-                                    <td class="text-center">{{ $data['total']['silver_tally'] }}</td>
-                                    <td class="text-center">{{ number_format($data['total']['silver_weight'], 2) }}</td>
-                                    <td class="text-center">{{ $data['total']['bronze_tally'] }}</td>
-                                    <td class="text-center">{{ number_format($data['total']['bronze_weight'], 2) }}</td>
-                                    <td class="text-center"><strong>{{ $data['total']['total_medals'] }}</strong></td>
-                                    <td class="text-center"><strong>{{ number_format($data['total']['total_weight'], 2) }}</strong></td>
-                                </tr>
-                            @endforeach
-
-                                {{-- <tr class="table-primary">
-                                    <td><strong>Overall Total</strong></td>
-                                    <td></td>
-                                    <td class="text-center"><strong>29</strong></td>
-                                    <td class="text-center"><strong>71.8</strong></td>
-                                    <td class="text-center"><strong>23</strong></td>
-                                    <td class="text-center"><strong>57.7</strong></td>
-                                    <td class="text-center"><strong>18</strong></td>
-                                    <td class="text-center"><strong>45.7</strong></td>
-                                    <td class="text-center"><strong>70</strong></td>
-                                    <td class="text-center"><strong>175.2</strong></td>
-                                </tr> --}}
+                                @foreach ($medalTally as $sport => $data)
+                                    <tr>
+                                        <td><strong>{{ $loop->iteration }} Place</strong></td>
+                                        <td><strong>{{ $data['team'] }}</strong></td>
+                                        <td class="text-center">{{ $data['total']['gold_tally'] }}</td>
+                                        <td class="text-center">{{ number_format($data['total']['gold_weight'], 2) }}</td>
+                                        <td class="text-center">{{ $data['total']['silver_tally'] }}</td>
+                                        <td class="text-center">{{ number_format($data['total']['silver_weight'], 2) }}</td>
+                                        <td class="text-center">{{ $data['total']['bronze_tally'] }}</td>
+                                        <td class="text-center">{{ number_format($data['total']['bronze_weight'], 2) }}</td>
+                                        <td class="text-center"><strong>{{ $data['total']['total_medals'] }}</strong></td>
+                                        <td class="text-center"><strong>{{ number_format($data['total']['total_weight'], 2) }}</strong></td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -97,7 +80,20 @@
         </div>
     </div>
 
-
+    <!-- Bar Charts -->
+    <div class="row">
+        <!-- Basic Bar Chart -->
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Team Ranks</h5>
+                </div>
+                <div class="card-body">
+                    <div id="sport-result-bar" class="apex-charts"></div> 
+                </div>
+            </div>  
+        </div>
+    </div>
 
 </div>
 
@@ -105,12 +101,63 @@
 
 @section('script')
 @vite(['resources/js/pages/simple-datatables.init.js',])
+
+<!-- Include ApexCharts from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
 <script>
-    function disableSubmitButton(form) {
-        const submitButton = form.querySelector('button[type="submit"]');
-        submitButton.disabled = true; // Disable the button
-        submitButton.innerText = 'Submitting...'; // Optional: Change button text
+    // Prepare data for the chart
+    var seriesData = [];
+    var categoriesData = [];
+
+    @foreach ($medalTally as $data)
+        seriesData.push({{ $data['total']['total_weight'] }});
+        categoriesData.push("{{ $data['team'] }}");
+    @endforeach
+
+    // Check if data is populated
+    console.log('Series Data:', seriesData);
+    console.log('Categories Data:', categoriesData);
+
+    // Count the seriesData and create random colors
+    var colors = [];
+    for (var i = 0; i < seriesData.length; i++) {
+        var color = "#" + Math.floor(Math.random()*16777215).toString(16);
+        colors.push(color);
     }
+
+    // ApexCharts initialization
+    var options = {
+        series: [{
+            data: seriesData // Use the series data from the medal tally
+        }],
+        chart: {
+            type: 'bar',
+            height: 500,
+            parentHeightOffset: 0,
+        },
+        plotOptions: {
+            bar: {
+                borderRadius: 100,
+                borderRadiusApplication: 'end',
+                horizontal: true,
+            }
+        },
+        dataLabels: {
+            enabled: true
+        },
+        colors: colors, 
+        xaxis: {
+            categories: categoriesData // Use the categories from the medal tally
+        }
+    };
+
+    // Render the chart
+    var chart = new ApexCharts(document.querySelector("#sport-result-bar"), options);
+    chart.render().catch(function(error) {
+        console.error('Chart rendering error:', error);
+    });
 </script>
+
 @endsection
 
