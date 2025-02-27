@@ -24,7 +24,7 @@
             <h4 class="fs-18 fw-semibold m-0">Tally</h4>
         </div>
         <div class="text-end">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRecordModal">Add Record</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRecordModal">Add</button>
         </div>
     </div>
 
@@ -38,10 +38,10 @@
                                 <tr>
                                     <th class="ps-0">Team</th>
                                     <th>Event</th>
-                                    <th>Gold Tally</th>
+                                    <th>Gold Tally</th> 
                                     <th>Silver Tally</th>
                                     <th>Bronze Tally</th>
-                                    <th>No. of Participants</th>
+                                    <th>Medal Weight</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -69,7 +69,7 @@
                                             <p class="d-inline-block align-middle mb-0 text-body">{{ $record->number_of_participant }}</p>
                                         </td>
                                         <td class="text-end">
-
+                                           
                                             <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editRecordModal-{{$record->id}}" onclick="setEditFormAction('{{ route('medal_records.update', $record->id) }}', '{{ $record->team_id }}', '{{ $record->event->name }}', '{{ $record->gold_tally }}', '{{ $record->silver_tally }}', '{{ $record->bronze_tally }}', '{{ $record->number_of_participant }}')">
                                                 <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                             </a>
@@ -102,30 +102,30 @@
                                                         </div>
 
                                                         <div class="mb-3">
-                                                            <label for="editEventCategoryId" class="form-label">Event Category</label>
-                                                            <select name="event_category_id" class="form-control" id="editEventCategoryId" required>
-                                                                <option value="{{$record->event_category_id}}">Select Event</option>
+                                                            <label for="editTeamId" class="form-label">Event Category</label>
+                                                            <select name="team_id" class="form-control" id="editTeamId" required>
+                                                                <option value="">Select Event</option>
                                                                 @foreach ($events as $event)
                                                                     <option value="{{ $event->id }}" {{ $event->id == $record->event_category_id ? 'selected' : '' }}>{{  $event->name  }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
-
+                                                     
                                                         <div class="mb-3">
                                                             <label for="editGoldTally" class="form-label">Gold Tally</label>
-                                                            <input type="number" name="gold_tally" class="form-control" id="editGoldTally" value="{{ $record->gold_tally }}" placeholder="Enter Gold Tally" required>
+                                                            <input type="number" name="gold_tally" class="form-control" id="editGoldTally" value="{{ $record->gold_tally }}" required>
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="editSilverTally" class="form-label">Silver Tally</label>
-                                                            <input type="number" name="silver_tally" class="form-control" id="editSilverTally" value="{{ $record->silver_tally }}" placeholder="Enter Silver Tally" required>
+                                                            <input type="number" name="silver_tally" class="form-control" id="editSilverTally" value="{{ $record->silver_tally }}" required>
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="editBronzeTally" class="form-label">Bronze Tally</label>
-                                                            <input type="number" name="bronze_tally" class="form-control" id="editBronzeTally" value="{{ $record->bronze_tally }}" placeholder="Enter Bronze Tally" required>
+                                                            <input type="number" name="bronze_tally" class="form-control" id="editBronzeTally" value="{{ $record->bronze_tally }}" required>
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="editMedalWeight" class="form-label">Number of Participant</label>
-                                                            <input type="number" name="number_of_participant" class="form-control" id="editMedalWeight" value="{{ $record->number_of_participant }}" placeholder="Enter No. of Participant" required>
+                                                            <input type="number" name="number_of_participant" class="form-control" id="editMedalWeight" value="{{ $record->number_of_participant }}" required>
                                                         </div>
                                                         <input type="hidden" name="year" value="{{ date('Y') }}">
                                                         <div class="modal-footer">
@@ -201,19 +201,19 @@
                     </div>
                     <div class="mb-3">
                         <label for="goldTally" class="form-label">Gold Tally</label>
-                        <input type="number" name="gold_tally" class="form-control" id="goldTally" placeholder="Enter Gold Tally" required>
+                        <input type="number" name="gold_tally" class="form-control" id="goldTally" required>
                     </div>
                     <div class="mb-3">
                         <label for="silverTally" class="form-label">Silver Tally</label>
-                        <input type="number" name="silver_tally" class="form-control" id="silverTally" placeholder="Enter Silver Tally" required>
+                        <input type="number" name="silver_tally" class="form-control" id="silverTally" required>
                     </div>
                     <div class="mb-3">
                         <label for="bronzeTally" class="form-label">Bronze Tally</label>
-                        <input type="number" name="bronze_tally" class="form-control" id="bronzeTally" placeholder="Enter Bronze Tally" required>
+                        <input type="number" name="bronze_tally" class="form-control" id="bronzeTally" required>
                     </div>
                     <div class="mb-3">
                         <label for="medalWeight" class="form-label">Number of Participant</label>
-                        <input type="number" name="number_of_participant" class="form-control" id="medalWeight" placeholder="Enter No. of Participant" required>
+                        <input type="number" name="number_of_participant" class="form-control" id="medalWeight" required>
                     </div>
                     <input type="number" class="form-control d-none" name="year" value="{{ date('Y') }}">
                     <div class="modal-footer">
@@ -228,8 +228,13 @@
 
 @endsection
 
+@section('script')
+@vite(['resources/js/pages/simple-datatables.init.js',])
+@endsection
 
 @section('script-bottom')
+<script src="https://apexcharts.com/samples/assets/stock-prices.js"></script>
+@vite(['resources/js/pages/crm-dashboard.init.js'])
 <script>
     function setEditFormAction(action, teamId, event, goldTally, silverTally, bronzeTally, medalWeight) {
         document.getElementById('editForm').action = action;
