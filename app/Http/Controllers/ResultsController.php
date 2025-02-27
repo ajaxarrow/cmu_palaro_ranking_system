@@ -93,6 +93,7 @@ class ResultsController extends Controller
             // Store total score per team
             $medalTally[$team->id]['total'] = $teamTotal;
             $medalTally[$team->id]['team'] = $team['name'];
+            $medalTally[$team->id]['team_image'] = $team['image'];
         }
 
         return view('admin.results.index',compact('teams', 'medalTally', 'overallTotal'));
