@@ -86,9 +86,10 @@ class CollegeController extends Controller
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('colleges', 'public'); 
+            $formFields['image'] = $imagePath;
         }
         
-        $formFields['image'] = $imagePath;
+       
         $college->update($formFields);
         return redirect()->route('colleges.index')->with('success', 'College updated successfully.');
     }

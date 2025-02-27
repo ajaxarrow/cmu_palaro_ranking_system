@@ -93,6 +93,10 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
     Route::get('/results', [ResultsController::class, 'index'])->name('results.index');
     Route::get('/users', [AppUserController::class, 'index'])->name('users.index');
+    Route::post('/users', [AppUserController::class, 'store'])->name('users.store');
+    Route::put('/users/{id}', [AppUserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{id}', [AppUserController::class, 'destroy'])->name('users.destroy');
+
 
 });
 
