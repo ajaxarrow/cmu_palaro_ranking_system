@@ -58,21 +58,21 @@
     </div>
 
     <!-- Chart Toggle Section -->
-    
+
     <!-- Charts Row -->
     <div class="row">
         <div class="col-12">
-  
-                 
+
+
                     <div class="chart-toggle d-flex justify-content-center">
                         <button class="chart-tab active me-2" data-target="bar-chart">Medal Standings</button>
                         <button class="chart-tab me-2" data-target="donut-chart">Medal Distribution</button>
                         <button class="chart-tab me-2" data-target="radar-chart">Team Balance</button>
                         <button class="chart-tab" data-target="heatmap-chart">Performance Heatmap</button>
                     </div>
-                
-              
- 
+
+
+
             <!-- Bar Chart Container -->
             <div id="bar-chart" class="chart-container active">
                 <div class="card">
@@ -163,10 +163,10 @@
                             </thead>
                             <tbody>
                                 @foreach ($medalTally as $sport => $data)
-                                  
+
                                     <tr>
-                                        <td><strong>{{ $loop->iteration }}</strong></td>
-                                        <td>  
+                                        <td><strong>{{ $data['rank'] }}</strong></td>
+                                        <td>
                                             <a   href="{{ route('teams.show', ['id' => $data['team_id']]) }}" title="View Team Details">
                                             <div class="team-badge">
                                                 <img src="{{ $data['team_image'] ? asset('storage/'.$data['team_image'])  : Vite::asset('resources/images/bg-pattern.svg') }}" alt="{{ $data['team'] }}" class="team-img">
@@ -189,7 +189,7 @@
                                         <td class="text-center"><strong>{{ $data['total']['total_medals'] }}</strong></td>
                                         <td class="text-center"><strong>{{ number_format($data['total']['total_weight'], 2) }}</strong></td>
                                     </tr>
-</a>                             
+</a>
                                 @endforeach
                             </tbody>
                         </table>
@@ -247,16 +247,16 @@ document.querySelectorAll('.chart-tab').forEach(tab => {
         document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
         // Add active class to clicked tab
         this.classList.add('active');
-        
+
         // Hide all chart containers
         document.querySelectorAll('.chart-container').forEach(container => {
             container.classList.remove('active');
         });
-        
+
         // Show target chart container
         const targetId = this.getAttribute('data-target');
         document.getElementById(targetId).classList.add('active');
-        
+
         // Trigger window resize to fix any chart sizing issues
         window.dispatchEvent(new Event('resize'));
     });
@@ -271,17 +271,17 @@ function renderBarChart(sortByCount = false) {
     } else {
         sortedData.sort((a, b) => b.total - a.total);
     }
-    
+
     const sortedCategories = sortedData.map(item => item.team);
-    
+
     // Create series for stacked bars
     const goldSeries = sortedData.map(item => sortByCount ? item.goldCount : item.gold);
     const silverSeries = sortedData.map(item => sortByCount ? item.silverCount : item.silver);
     const bronzeSeries = sortedData.map(item => sortByCount ? item.bronzeCount : item.bronze);
-    
+
     // Get max value for better visualization scaling
     const maxTotal = Math.max(...sortedData.map(item => sortByCount ? item.totalMedals : item.total));
-    
+
     const options = {
         series: [
             {
@@ -336,7 +336,7 @@ function renderBarChart(sortByCount = false) {
             formatter: function(val, opt) {
                 const index = opt.dataPointIndex;
                 const seriesIndex = opt.seriesIndex;
-                
+
                 if (val > 0) {
                     if (seriesIndex === 0) return sortByCount ? `${sortedData[index].goldCount} 🥇` : `${val.toFixed(1)}`;
                     if (seriesIndex === 1) return sortByCount ? `${sortedData[index].silverCount} 🥈` : `${val.toFixed(1)}`;
@@ -361,7 +361,7 @@ function renderBarChart(sortByCount = false) {
             y: {
                 formatter: function(val, { seriesIndex, dataPointIndex, w }) {
                     const teamData = sortedData[dataPointIndex];
-                    
+
                     if (sortByCount) {
                         if (seriesIndex === 0) {
                             return `${teamData.goldCount} Gold Medals`;
@@ -500,14 +500,14 @@ function renderBarChart(sortByCount = false) {
 
     // Clear previous chart
     document.querySelector("#medal-standings-chart").innerHTML = '';
-    
+
     // Render the chart
     const chart = new ApexCharts(document.querySelector("#medal-standings-chart"), options);
     chart.render().then(function() {
         // Add team images to labels
         setTimeout(function() {
             const yAxisLabels = document.querySelectorAll('#medal-standings-chart .apexcharts-yaxis-label');
-            
+
             yAxisLabels.forEach((label, index) => {
                 if (index < sortedCategories.length) {
                     const teamData = sortedData.find(data => data.team === sortedCategories[index]);
@@ -521,9 +521,9 @@ function renderBarChart(sortByCount = false) {
                         img.style.marginRight = '8px';
                         img.style.verticalAlign = 'middle';
                         img.style.border = '1px solid #ddd';
-                        
+
                         label.parentNode.insertBefore(img, label);
-                        
+
                         label.style.display = 'flex';
                         label.style.alignItems = 'center';
                         label.style.fontWeight = 'bold';
@@ -538,17 +538,17 @@ function renderBarChart(sortByCount = false) {
 function renderDonutCharts(team = 'all') {
     // Prepare data for selected team or all teams
     let countData, weightData;
-    
+
     if (team === 'all') {
         // Aggregate all medals by type
         const totalGoldCount = seriesData.reduce((sum, item) => sum + item.goldCount, 0);
         const totalSilverCount = seriesData.reduce((sum, item) => sum + item.silverCount, 0);
         const totalBronzeCount = seriesData.reduce((sum, item) => sum + item.bronzeCount, 0);
-        
+
         const totalGoldWeight = seriesData.reduce((sum, item) => sum + item.gold, 0);
         const totalSilverWeight = seriesData.reduce((sum, item) => sum + item.silver, 0);
         const totalBronzeWeight = seriesData.reduce((sum, item) => sum + item.bronze, 0);
-        
+
         countData = [totalGoldCount, totalSilverCount, totalBronzeCount];
         weightData = [totalGoldWeight, totalSilverWeight, totalBronzeWeight];
     } else {
@@ -562,7 +562,7 @@ function renderDonutCharts(team = 'all') {
             weightData = [0, 0, 0];
         }
     }
-    
+
     // Medal count donut chart
     const countOptions = {
         series: countData,
@@ -665,7 +665,7 @@ function renderDonutCharts(team = 'all') {
             colors: ['#fff']
         }
     };
-    
+
     // Medal weight donut chart
     const weightOptions = {
         series: weightData.map(val => parseFloat(val.toFixed(2))),
@@ -760,15 +760,15 @@ function renderDonutCharts(team = 'all') {
             colors: ['#fff']
         }
     };
-    
+
     // Clear previous charts
     document.querySelector("#medal-count-chart").innerHTML = '';
     document.querySelector("#medal-weight-chart").innerHTML = '';
-    
+
     // Render charts
     const countChart = new ApexCharts(document.querySelector("#medal-count-chart"), countOptions);
     const weightChart = new ApexCharts(document.querySelector("#medal-weight-chart"), weightOptions);
-    
+
     countChart.render();
     weightChart.render();
 }
@@ -782,12 +782,12 @@ function renderRadarChart() {
         const maxSilver = Math.max(...seriesData.map(t => t.silverCount));
         const maxBronze = Math.max(...seriesData.map(t => t.bronzeCount));
         const maxTotal = Math.max(...seriesData.map(t => t.totalMedals));
-        
+
         const goldScore = Math.round((team.goldCount / maxGold) * 100);
         const silverScore = Math.round((team.silverCount / maxSilver) * 100);
         const bronzeScore = Math.round((team.bronzeCount / maxBronze) * 100);
         const totalScore = Math.round((team.totalMedals / maxTotal) * 100);
-        
+
         // Calculate a consistency score based on standard deviation (lower std dev = higher consistency)
         const medalCounts = [team.goldCount, team.silverCount, team.bronzeCount];
         const mean = medalCounts.reduce((sum, val) => sum + val, 0) / medalCounts.length;
@@ -797,17 +797,17 @@ function renderRadarChart() {
             const avg = counts.reduce((sum, val) => sum + val, 0) / counts.length;
             return Math.sqrt(counts.reduce((sum, val) => sum + Math.pow(val - avg, 2), 0) / counts.length);
         }));
-        
+
         // Lower standard deviation means higher consistency
         const consistencyScore = Math.round(((maxStdDev - stdDev) / maxStdDev) * 100);
-        
+
         return {
             name: team.team,
             data: [goldScore, silverScore, bronzeScore, totalScore, consistencyScore],
             color: getTeamColor(team.team)
         };
     });
-    
+
     const options = {
         series: radarData,
         chart: {
@@ -860,10 +860,10 @@ function renderRadarChart() {
             }
         }
     };
-    
+
     // Clear previous chart
     document.querySelector("#team-radar-chart").innerHTML = '';
-    
+
     // Render chart
     const chart = new ApexCharts(document.querySelector("#team-radar-chart"), options);
     chart.render();
@@ -872,22 +872,22 @@ function renderRadarChart() {
 // 4. HEATMAP CHART - Performance Heatmap
 function renderHeatmapChart() {
     // Prepare data for heatmap
-    const categories = ['Gold', 'Silver', 'Bronze', 'Total']; 
-    
+    const categories = ['Gold', 'Silver', 'Bronze', 'Total'];
+
     // Generate heatmap data
     const sortedTeams = [...seriesData].sort((a, b) => b.total - a.total);
-    
+
     const heatmapData = categories.map((cat, i) => {
         return {
             name: cat,
             data: sortedTeams.map(team => {
                 let value = 0;
-                
+
                 if (cat === 'Gold') value = team.goldCount;
                 else if (cat === 'Silver') value = team.silverCount;
                 else if (cat === 'Bronze') value = team.bronzeCount;
                 else if (cat === 'Total') value = team.totalMedals;
-                
+
                 return {
                     x: team.team,
                     y: value
@@ -895,7 +895,7 @@ function renderHeatmapChart() {
             })
         }
     });
-    
+
     const options = {
         series: heatmapData,
         chart: {
@@ -972,10 +972,10 @@ function renderHeatmapChart() {
             }
         }
     };
-    
+
     // Clear previous chart
     document.querySelector("#performance-heatmap").innerHTML = '';
-    
+
     // Render chart
     const chart = new ApexCharts(document.querySelector("#performance-heatmap"), options);
     chart.render();
@@ -988,10 +988,10 @@ function getTeamColor(teamName) {
     for (let i = 0; i < teamName.length; i++) {
         hash = teamName.charCodeAt(i) + ((hash << 5) - hash);
     }
-    
+
     // Generate a hue between 0 and 360
     const hue = hash % 360;
-    
+
     return `hsl(${hue}, 70%, 50%)`;
 }
 
@@ -1002,12 +1002,12 @@ document.addEventListener('DOMContentLoaded', function() {
     renderDonutCharts('all');
     renderRadarChart();
     renderHeatmapChart();
-    
+
     // Toggle between weight and count for bar chart
     document.getElementById('sortByCount').addEventListener('change', function() {
         renderBarChart(this.checked);
     });
-    
+
     // Team selector for donut charts
     document.getElementById('team-selector').addEventListener('change', function() {
         renderDonutCharts(this.value);

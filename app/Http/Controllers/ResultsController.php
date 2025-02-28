@@ -14,8 +14,6 @@ class ResultsController extends Controller
      */
     public function index()
     {
-
-
         $medalTally = [];
         $overallTotal = [
             'gold_tally' => 0, 'gold_weight' => 0,
@@ -29,7 +27,7 @@ class ResultsController extends Controller
             'medalRecords.eventCategory.medalWeightCategory'
         ])->get();
 
-        foreach ($teams as $team) {  // <-- FIX: Loop through each team
+        foreach ($teams as $team) {
             $teamTotal = [
                 'gold_tally' => 0, 'gold_weight' => 0,
                 'silver_tally' => 0, 'silver_weight' => 0,
@@ -38,38 +36,21 @@ class ResultsController extends Controller
             ];
 
             foreach ($team->medalRecords as $record) {
-                $sportName = $record->eventCategory->sport->name;
-                $eventCategoryName = $record->eventCategory->name;
                 $medalWeights = $record->eventCategory->medalWeightCategory;
 
                 $isDoubleBronze = $record->eventCategory->is_double_bronze;
-                $bronzeTally = $record->bronze_tally;
-
-                if ($isDoubleBronze && $bronzeTally > 0) {
+                if ($isDoubleBronze && $record->bronze_tally > 0) {
                     $medalWeights->bronze_weight = $medalWeights->bronze_weight / 2;
                 }
 
-                // Calculate weighted medal tallies
+                // Calculate weighted tallies
                 $goldWeight = $record->gold_tally * $medalWeights->gold_weight;
                 $silverWeight = $record->silver_tally * $medalWeights->silver_weight;
                 $bronzeWeight = $record->bronze_tally * $medalWeights->bronze_weight;
                 $totalWeight = $goldWeight + $silverWeight + $bronzeWeight;
                 $totalMedals = $record->gold_tally + $record->silver_tally + $record->bronze_tally;
 
-                // Organize data for the view
-                $medalTally[$team->id]['sports'][$sportName]['events'][] = [
-                    'event_category' => $eventCategoryName,
-                    'gold_tally' => $record->gold_tally,
-                    'gold_weight' => $goldWeight,
-                    'silver_tally' => $record->silver_tally,
-                    'silver_weight' => $silverWeight,
-                    'bronze_tally' => $record->bronze_tally,
-                    'bronze_weight' => $bronzeWeight,
-                    'total_medals' => $totalMedals,
-                    'total_weight' => $totalWeight
-                ];
-
-                // Calculate per-team total
+                // Update team totals
                 $teamTotal['gold_tally'] += $record->gold_tally;
                 $teamTotal['gold_weight'] += $goldWeight;
                 $teamTotal['silver_tally'] += $record->silver_tally;
@@ -79,7 +60,7 @@ class ResultsController extends Controller
                 $teamTotal['total_medals'] += $totalMedals;
                 $teamTotal['total_weight'] += $totalWeight;
 
-                // Calculate overall total
+                // Update overall total
                 $overallTotal['gold_tally'] += $record->gold_tally;
                 $overallTotal['gold_weight'] += $goldWeight;
                 $overallTotal['silver_tally'] += $record->silver_tally;
@@ -90,16 +71,39 @@ class ResultsController extends Controller
                 $overallTotal['total_weight'] += $totalWeight;
             }
 
-            // Store total score per team
-            $medalTally[$team->id]['total'] = $teamTotal;
-            $medalTally[$team->id]['team'] = $team['name'];
-            $medalTally[$team->id]['team_image'] = $team['image'];
-            $medalTally[$team->id]['team_id'] = $team['id'];
+            // Store total per team
+            $medalTally[$team->id] = [
+                'team' => $team['name'],
+                'team_image' => $team['image'],
+                'team_id' => $team['id'],
+                'total' => $teamTotal
+            ];
         }
 
-        return view('admin.results.index',compact('teams', 'medalTally', 'overallTotal'));
+        // **Sort by total weight in descending order**
+        usort($medalTally, function ($a, $b) {
+            return $b['total']['total_weight'] <=> $a['total']['total_weight'];
+        });
 
+        // **Assign ordinal rankings**
+        $rank = 1;
+        foreach ($medalTally as $index => &$team) {
+            $team['rank'] = $this->ordinal($rank);
+            $rank++;
+        }
+        return view('admin.results.index', compact('teams', 'medalTally', 'overallTotal'));
     }
+
+    /**
+     * Convert number to ordinal (1st, 2nd, 3rd, etc.)
+     */
+    private function ordinal($number)
+    {
+        $suffixes = ['th', 'st', 'nd', 'rd'];
+        $mod100 = $number % 100;
+        return $number . ($suffixes[($mod100 - 20) % 10] ?? $suffixes[$mod100] ?? $suffixes[0]) . ' place';
+    }
+
 
     /**
      * Show the form for creating a new resource.
