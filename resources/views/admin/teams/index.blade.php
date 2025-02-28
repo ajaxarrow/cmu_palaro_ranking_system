@@ -64,12 +64,12 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ route('teams.store')}}" method="POST" onsubmit="processImageAndSubmit(event, this)" enctype="multipart/form-data">
+                        <form action="{{ route('teams.store')}}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             <div class="mb-3">
                                 <label for="teamImage" class="form-label">Image</label>
-                                <input required type="file" accept="image/*" name="image" class="form-control" id="teamImage" onchange="previewImageWithAnalysis(event, 'add')" required>
+                                <input required type="file" accept="image/*" name="image" class="form-control" id="teamImage" onchange="previewImage(event, 'add')">
                                 <div id="imagePreviewAdd" class="mt-2 text-center" style="display: none;">
                                     <img id="previewImageAdd" src="" width="100" height="100" class="rounded-circle object-fit-cover">
                                     <div id="colorInfoAdd" class="color-info mt-2"></div>
@@ -79,15 +79,15 @@
 
                             <div class="mb-3">
                                 <label for="teamName" class="form-label">Name</label>
-                                <input required type="text" name="name" class="form-control" id="teamName" placeholder="Enter Team Name" required>
+                                <input required type="text" name="name" class="form-control" id="teamName" placeholder="Enter Team Name">
                             </div>
                             <div class="mb-3">
                                 <label for="teamDescription" class="form-label">Description</label>
-                                <input required type="text" name="desc" class="form-control" id="teamDescription" placeholder="Enter Team Description" required>
+                                <input required type="text" name="desc" class="form-control" id="teamDescription" placeholder="Enter Team Description">
                             </div>
                             <div class="mb-3">
                                 <label for="collegeSelectAdd" class="form-label">Select Colleges</label>
-                                <select required name="college_ids[]" id="collegeSelectAdd" class="form-select" multiple required>
+                                <select required name="college_ids[]" id="collegeSelectAdd" class="form-select" multiple>
                                     @foreach ($colleges as $college)
                                         <option value="{{ $college->id }}">{{ $college->name }}</option>
                                     @endforeach
@@ -118,14 +118,13 @@
                                     <th class="ps-0">Name</th>
                                     <th>Description</th>
                                     <th>Colleges</th>
-                                    <th>Dominant Color</th> <!-- New column for displaying dominant color -->
                                     <th class="text-end">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($teams as $team)
                                     <tr>
-                                        <td class="ps-0 d-flex align-items-center gap-1">
+                                        <td class="ps-0 d-flex flex-row align-items-center gap-1">
                                             @if($team->image)
                                                 <img src="{{ asset('storage/' . $team->image) }}" width="40" height="40" class="rounded-circle object-cover" style="object-fit: cover; object-position: top;">
                                             @else
@@ -147,18 +146,8 @@
                                                 @endif
                                             </p>
                                         </td>
-                                        <td>
-                                            <!-- Display dominant color if available -->
-                                            @if($team->dominant_color)
-                                                <div class="color-info">
-                                                    <span class="color-badge" style="background-color: {{ $team->dominant_color }}"></span>
-                                                    <span>{{ $team->dominant_color }}</span>
-                                                </div>
-                                            @else
-                                                <span class="text-muted">Not analyzed</span>
-                                            @endif
-                                        </td>
-                                        <td class="text-end">
+                                        
+                                        <td class="text-end d-flex">
                                             <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" href="{{ route('teams.show', $team->id) }}">
                                                 <i class="mdi mdi-eye-outline fs-14 text-primary"></i>
                                             </a>
@@ -181,19 +170,19 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form action="{{ route('teams.update', $team->id) }}" method="POST" onsubmit="processImageAndSubmit(event, this)" enctype="multipart/form-data">
+                                                    <form action="{{ route('teams.update', $team->id) }}" method="POST" enctype="multipart/form-data">
                                                         @csrf
                                                         @method('PUT')
 
                                                         <div class="mb-3">
                                                             <div class="mb-2 d-flex justify-content-center align-items-center">
-                                                                    <img id="imagePreview{{ $team->id }}" 
-                                                                        src="{{ $team->image ? asset('storage/' . $team->image) : asset('storage/default.jpg') }}" 
-                                                                        width="100" height="100" 
-                                                                        class="rounded-circle object-fit-cover"
-                                                                            style="border: 3px solid {{ $team->dominant_color ?? '#ddd' }};">
-                                                                </div>
-                                                                                                                        
+                                                                <img id="imagePreview{{ $team->id }}" 
+                                                                    src="{{ $team->image ? asset('storage/' . $team->image) : asset('storage/default.jpg') }}" 
+                                                                    width="100" height="100" 
+                                                                    class="rounded-circle object-fit-cover"
+                                                                    style="border: 3px solid {{ $team->dominant_color ?? '#ddd' }};">
+                                                            </div>
+                                                            
                                                             <!-- Display current dominant color if available -->
                                                             @if($team->dominant_color)
                                                                 <div id="currentColorInfo{{ $team->id }}" class="color-info text-center mb-2">
@@ -204,11 +193,11 @@
                                                             
                                                             <!-- Will show new color analysis -->
                                                             <div id="colorInfo{{ $team->id }}" class="color-info text-center mb-2" style="display: none;"></div>
-                                                                                                                        
+                                                            
                                                             <label for="teamImage{{ $team->id }}" class="form-label">Image</label>
                                                             <input type="file" accept="image/*" name="image" class="form-control" 
                                                                 id="teamImage{{ $team->id }}" 
-                                                                onchange="previewImageWithAnalysis(event, '{{ $team->id }}')">
+                                                                onchange="previewImage(event, '{{ $team->id }}')">
                                                             
                                                             <input type="hidden" name="dominant_color" id="dominantColor{{ $team->id }}" 
                                                                 value="{{ $team->dominant_color ?? '' }}">
@@ -216,11 +205,11 @@
 
                                                         <div class="mb-3">
                                                             <label for="editTeamName{{ $team->id }}" class="form-label">Name</label>
-                                                            <input required type="text" name="name" class="form-control" placeholder="Enter Team Name" id="editTeamName{{ $team->id }}" value="{{ $team->name }}" required>
+                                                            <input required type="text" name="name" class="form-control" placeholder="Enter Team Name" id="editTeamName{{ $team->id }}" value="{{ $team->name }}">
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="editTeamDescription{{ $team->id }}" class="form-label">Description</label>
-                                                            <input required type="text" placeholder="Enter Team Description" name="desc" class="form-control" id="editTeamDescription{{ $team->id }}" value="{{ $team->desc }}" required>
+                                                            <input required type="text" placeholder="Enter Team Description" name="desc" class="form-control" id="editTeamDescription{{ $team->id }}" value="{{ $team->desc }}">
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="collegeSelectEdit{{ $team->id }}" class="form-label">Select Colleges</label>
@@ -228,7 +217,7 @@
                                                                 $selectedColleges = $team->colleges->pluck('id')->toArray();
                                                             @endphp
 
-                                                            <select required name="college_ids[]" id="collegeSelectEdit{{ $team->id }}" class="form-select" multiple required>
+                                                            <select required name="college_ids[]" id="collegeSelectEdit{{ $team->id }}" class="form-select" multiple>
                                                                 @foreach ($colleges as $college)
                                                                     <option value="{{ $college->id }}" {{ in_array($college->id, $selectedColleges) ? 'selected' : '' }}>
                                                                         {{ $college->name }}
@@ -292,101 +281,67 @@
         submitButton.innerText = 'Submitting...'; // Optional: Change button text
     }
 
-    // Function to analyze image colors and find dominant color
-    // Function to analyze image colors and find dominant color
-function analyzeImageColors(image) {
-    return new Promise((resolve) => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        
-        // Scale down for performance
-        const maxDimension = 100;
-        let width = image.naturalWidth;
-        let height = image.naturalHeight;
-        
-        if (width > height && width > maxDimension) {
-            height = Math.round(height * (maxDimension / width));
-            width = maxDimension;
-        } else if (height > maxDimension) {
-            width = Math.round(width * (maxDimension / height));
-            height = maxDimension;
-        }
-        
-        canvas.width = width;
-        canvas.height = height;
-        ctx.drawImage(image, 0, 0, width, height);
-        
-        // Get pixel data
-        const imageData = ctx.getImageData(0, 0, width, height).data;
-        
-        // Process colors
-        const colorCounts = {};
-        const whiteThreshold = 240; // Threshold to consider a color as white
-        const blackThreshold = 30;  // Threshold to consider a color as black
-        const grayThreshold = 30;   // Threshold to identify gray (low saturation)
-        
-        for (let i = 0; i < imageData.length; i += 4) {
-            const r = imageData[i];
-            const g = imageData[i + 1];
-            const b = imageData[i + 2];
+    /**
+     * Analyzes an image and extracts its dominant color
+     * @param {HTMLImageElement} image - Image element to analyze
+     * @returns {Promise<Object>} - Object containing color information (hex, rgb, percentage, saturation)
+     */
+    function getDominantColor(image) {
+        return new Promise((resolve) => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
             
-            // Skip pixels that are close to white
-            if (r > whiteThreshold && g > whiteThreshold && b > whiteThreshold) {
-                continue;
+            // Scale down for performance
+            const maxDimension = 100;
+            let width = image.naturalWidth;
+            let height = image.naturalHeight;
+            
+            if (width > height && width > maxDimension) {
+                height = Math.round(height * (maxDimension / width));
+                width = maxDimension;
+            } else if (height > maxDimension) {
+                width = Math.round(width * (maxDimension / height));
+                height = maxDimension;
             }
             
-            // Skip pixels that are close to black
-            if (r < blackThreshold && g < blackThreshold && b < blackThreshold) {
-                continue;
-            }
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(image, 0, 0, width, height);
             
-            // Skip pixels that are close to gray
-            const max = Math.max(r, g, b);
-            const min = Math.min(r, g, b);
-            const saturation = (max === 0) ? 0 : (max - min) / max * 100;
+            // Get pixel data
+            const imageData = ctx.getImageData(0, 0, width, height).data;
             
-            if (saturation < grayThreshold) {
-                continue;
-            }
+            // Process colors
+            const colorCounts = {};
+            const whiteThreshold = 240; // Threshold to consider a color as white
+            const blackThreshold = 30;  // Threshold to consider a color as black
+            const grayThreshold = 30;   // Threshold to identify gray (low saturation)
             
-            // Quantize colors to reduce the number of unique colors
-            const quantizedR = Math.round(r / 10) * 10;
-            const quantizedG = Math.round(g / 10) * 10;
-            const quantizedB = Math.round(b / 10) * 10;
-            
-            const colorKey = `${quantizedR},${quantizedG},${quantizedB}`;
-            
-            if (colorCounts[colorKey]) {
-                colorCounts[colorKey].count++;
-                colorCounts[colorKey].saturation = Math.max(colorCounts[colorKey].saturation, saturation);
-            } else {
-                colorCounts[colorKey] = {
-                    r: quantizedR,
-                    g: quantizedG,
-                    b: quantizedB,
-                    count: 1,
-                    saturation: saturation
-                };
-            }
-        }
-        
-        // Convert to array for sorting
-        let colorsArray = Object.values(colorCounts);
-        
-        // If we don't have enough saturated colors, fall back to all colors
-        if (colorsArray.length === 0) {
-            // Process again without saturation filtering
             for (let i = 0; i < imageData.length; i += 4) {
                 const r = imageData[i];
                 const g = imageData[i + 1];
                 const b = imageData[i + 2];
                 
-                // Still skip pure white pixels
+                // Skip pixels that are close to white
                 if (r > whiteThreshold && g > whiteThreshold && b > whiteThreshold) {
                     continue;
                 }
                 
-                // Quantize colors
+                // Skip pixels that are close to black
+                if (r < blackThreshold && g < blackThreshold && b < blackThreshold) {
+                    continue;
+                }
+                
+                // Skip pixels that are close to gray
+                const max = Math.max(r, g, b);
+                const min = Math.min(r, g, b);
+                const saturation = (max === 0) ? 0 : (max - min) / max * 100;
+                
+                if (saturation < grayThreshold) {
+                    continue;
+                }
+                
+                // Quantize colors to reduce the number of unique colors
                 const quantizedR = Math.round(r / 10) * 10;
                 const quantizedG = Math.round(g / 10) * 10;
                 const quantizedB = Math.round(b / 10) * 10;
@@ -395,11 +350,8 @@ function analyzeImageColors(image) {
                 
                 if (colorCounts[colorKey]) {
                     colorCounts[colorKey].count++;
+                    colorCounts[colorKey].saturation = Math.max(colorCounts[colorKey].saturation, saturation);
                 } else {
-                    const max = Math.max(r, g, b);
-                    const min = Math.min(r, g, b);
-                    const saturation = (max === 0) ? 0 : (max - min) / max * 100;
-                    
                     colorCounts[colorKey] = {
                         r: quantizedR,
                         g: quantizedG,
@@ -410,149 +362,149 @@ function analyzeImageColors(image) {
                 }
             }
             
-            colorsArray = Object.values(colorCounts);
-        }
-        
-        // Sort colors by count and saturation (prioritize more saturated colors)
-        colorsArray.sort((a, b) => {
-            // First prioritize colors with significant presence (at least 5% of non-white pixels)
-            const aSignificant = a.count > (width * height * 0.05);
-            const bSignificant = b.count > (width * height * 0.05);
+            // Convert to array for sorting
+            let colorsArray = Object.values(colorCounts);
             
-            if (aSignificant && !bSignificant) return -1;
-            if (!aSignificant && bSignificant) return 1;
-            
-            // For colors with significant presence, prefer more saturated ones
-            if (aSignificant && bSignificant) {
-                if (a.saturation > b.saturation) return -1;
-                if (a.saturation < b.saturation) return 1;
+            // If we don't have enough saturated colors, fall back to all colors
+            if (colorsArray.length === 0) {
+                // Process again without saturation filtering
+                for (let i = 0; i < imageData.length; i += 4) {
+                    const r = imageData[i];
+                    const g = imageData[i + 1];
+                    const b = imageData[i + 2];
+                    
+                    // Still skip pure white pixels
+                    if (r > whiteThreshold && g > whiteThreshold && b > whiteThreshold) {
+                        continue;
+                    }
+                    
+                    // Quantize colors
+                    const quantizedR = Math.round(r / 10) * 10;
+                    const quantizedG = Math.round(g / 10) * 10;
+                    const quantizedB = Math.round(b / 10) * 10;
+                    
+                    const colorKey = `${quantizedR},${quantizedG},${quantizedB}`;
+                    
+                    if (colorCounts[colorKey]) {
+                        colorCounts[colorKey].count++;
+                    } else {
+                        const max = Math.max(r, g, b);
+                        const min = Math.min(r, g, b);
+                        const saturation = (max === 0) ? 0 : (max - min) / max * 100;
+                        
+                        colorCounts[colorKey] = {
+                            r: quantizedR,
+                            g: quantizedG,
+                            b: quantizedB,
+                            count: 1,
+                            saturation: saturation
+                        };
+                    }
+                }
+                
+                colorsArray = Object.values(colorCounts);
             }
             
-            // If saturation is similar or both are not significant, go by count
-            return b.count - a.count;
+            // Sort colors by count and saturation (prioritize more saturated colors)
+            colorsArray.sort((a, b) => {
+                // First prioritize colors with significant presence (at least 5% of non-white pixels)
+                const aSignificant = a.count > (width * height * 0.05);
+                const bSignificant = b.count > (width * height * 0.05);
+                
+                if (aSignificant && !bSignificant) return -1;
+                if (!aSignificant && bSignificant) return 1;
+                
+                // For colors with significant presence, prefer more saturated ones
+                if (aSignificant && bSignificant) {
+                    if (a.saturation > b.saturation) return -1;
+                    if (a.saturation < b.saturation) return 1;
+                }
+                
+                // If saturation is similar or both are not significant, go by count
+                return b.count - a.count;
+            });
+            
+            // If we found colors, return the dominant one
+            if (colorsArray.length > 0) {
+                const dominantColor = colorsArray[0];
+                const hexColor = rgbToHex(dominantColor.r, dominantColor.g, dominantColor.b);
+                resolve({
+                    hex: hexColor,
+                    rgb: `rgb(${dominantColor.r}, ${dominantColor.g}, ${dominantColor.b})`,
+                    percentage: ((dominantColor.count / (width * height)) * 100).toFixed(2),
+                    saturation: dominantColor.saturation.toFixed(2)
+                });
+            } else {
+                // No valid colors found (all white or filtered out)
+                // Return a default color
+                resolve({
+                    hex: '#4682B4', // Steel blue as fallback
+                    rgb: 'rgb(70, 130, 180)',
+                    percentage: '100',
+                    saturation: '0'
+                });
+            }
         });
-        
-        // If we found colors, return the dominant one
-        if (colorsArray.length > 0) {
-            const dominantColor = colorsArray[0];
-            const hexColor = rgbToHex(dominantColor.r, dominantColor.g, dominantColor.b);
-            resolve({
-                hex: hexColor,
-                rgb: `rgb(${dominantColor.r}, ${dominantColor.g}, ${dominantColor.b})`,
-                percentage: ((dominantColor.count / (width * height)) * 100).toFixed(2),
-                saturation: dominantColor.saturation.toFixed(2)
-            });
-        } else {
-            // No valid colors found (all white or filtered out)
-            // Return a default color
-            resolve({
-                hex: '#4682B4', // Steel blue as fallback
-                rgb: 'rgb(70, 130, 180)',
-                percentage: '100',
-                saturation: '0'
-            });
-        }
-    });
-}
+    }
+
     // Convert RGB to hex
     function rgbToHex(r, g, b) {
         return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
     }
 
     // Function to handle image preview with color analysis
-    // Function to handle image preview with color analysis
-function previewImageWithAnalysis(event, id) {
-    const input = event.target;
-    const prefix = id === 'add' ? 'Add' : id;
-    const preview = document.getElementById(`imagePreview${prefix}`);
-    const previewImage = document.getElementById(`previewImage${prefix}`) || document.getElementById(`imagePreview${prefix}`);
-    const colorInfo = document.getElementById(`colorInfo${prefix}`);
-    const dominantColorInput = document.getElementById(`dominantColor${prefix}`);
-    
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
+    function previewImage(event, id) {
+        const input = event.target;
+        const prefix = id === 'add' ? 'Add' : id;
+        const preview = document.getElementById(`imagePreview${prefix}`);
+        const previewImage = document.getElementById(`previewImage${prefix}`) || document.getElementById(`imagePreview${prefix}`);
+        const colorInfo = document.getElementById(`colorInfo${prefix}`);
+        const dominantColorInput = document.getElementById(`dominantColor${prefix}`);
         
-        reader.onload = function(e) {
-            // Set preview image
-            previewImage.src = e.target.result;
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
             
-            // Show preview container if it's the add form
-            if (id === 'add') {
-                preview.style.display = 'block';
-            }
-            
-            // Create temp image to get natural dimensions
-            const tempImg = new Image();
-            tempImg.onload = function() {
-                // Analyze colors when image is loaded
-                analyzeImageColors(tempImg).then(colorData => {
-                    if (colorData) {
-                        // Display color info
-                        colorInfo.innerHTML = `
-                            <span class="color-badge" style="background-color: ${colorData.hex}"></span>
-                            <span>Dominant: ${colorData.hex} (${colorData.percentage}%)</span>
-                        `;
-                        colorInfo.style.display = 'flex';
-                        
-                        // Store the dominant color in the hidden input
-                        dominantColorInput.value = colorData.hex;
-                        
-                        // Apply the dominant color as border to the image preview
-                        previewImage.style.border = `3px solid ${colorData.hex}`;
-                        
-                        // Hide current color info if it exists (for edit forms)
-                        const currentColorInfo = document.getElementById(`currentColorInfo${prefix}`);
-                        if (currentColorInfo) {
-                            currentColorInfo.style.display = 'none';
+            reader.onload = function(e) {
+                // Set preview image
+                previewImage.src = e.target.result;
+                
+                // Show preview container if it's the add form
+                if (id === 'add') {
+                    preview.style.display = 'block';
+                }
+                
+                // Create temp image to get natural dimensions
+                const tempImg = new Image();
+                tempImg.onload = function() {
+                    // Analyze colors when image is loaded
+                    getDominantColor(tempImg).then(colorData => {
+                        if (colorData) {
+                            // Display color info
+                            colorInfo.innerHTML = `
+                                <span class="color-badge" style="background-color: ${colorData.hex}"></span>
+                                <span>Dominant: ${colorData.hex} (${colorData.percentage}%)</span>
+                            `;
+                            colorInfo.style.display = 'flex';
+                            
+                            // Store the dominant color in the hidden input
+                            dominantColorInput.value = colorData.hex;
+                            
+                            // Apply the dominant color as border to the image preview
+                            previewImage.style.border = `3px solid ${colorData.hex}`;
+                            
+                            // Hide current color info if it exists (for edit forms)
+                            const currentColorInfo = document.getElementById(`currentColorInfo${prefix}`);
+                            if (currentColorInfo) {
+                                currentColorInfo.style.display = 'none';
+                            }
                         }
-                    }
-                });
+                    });
+                };
+                tempImg.src = e.target.result;
             };
-            tempImg.src = e.target.result;
-        };
-        
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-    
-    // Function to process the form submission
-    function processImageAndSubmit(event, form) {
-        const fileInput = form.querySelector('input[type="file"]');
-        const dominantColorInput = form.querySelector('input[name="dominant_color"]');
-        
-        // If no new file is selected, just submit the form with existing color data
-        if (!fileInput.files || !fileInput.files[0]) {
-            disableSubmitButton(form);
-            return true;
+            
+            reader.readAsDataURL(input.files[0]);
         }
-        
-        // If we already have analyzed the color (dominantColorInput has a value), just submit
-        if (dominantColorInput.value) {
-            disableSubmitButton(form);
-            return true;
-        }
-        
-        // Otherwise, prevent default submission and analyze the image first
-        event.preventDefault();
-        
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const tempImg = new Image();
-            tempImg.onload = function() {
-                analyzeImageColors(tempImg).then(colorData => {
-                    if (colorData) {
-                        dominantColorInput.value = colorData.hex;
-                    }
-                    // Now submit the form
-                    disableSubmitButton(form);
-                    form.submit();
-                });
-            };
-            tempImg.src = e.target.result;
-        };
-        reader.readAsDataURL(fileInput.files[0]);
-        
-        return false;
     }
 </script>
 @endsection
