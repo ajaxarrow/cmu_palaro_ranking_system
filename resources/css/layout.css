@@ -5,21 +5,37 @@
     --highlight-color: #ffc601;
 }
 
+.custom-primary-color {
+    color: var(--primary-color) !important;
+}
+
+.custom-primary-background {
+    background-color: var(--primary-color) !important;
+}
+
+.custom-accent-background {
+    background-color: var(--accent-color) !important;
+}
+
+.custom-highlight-background {
+    background-color: var(--highlight-color) !important;
+}
+
 .app-sidebar-menu {
-    background-color: var(--primary-color);
+    background-color: var(--primary-color) !important;
 }
 
 .topbar-custom {
-    background-color: var(--highlight-color);
+    background-color: var(--highlight-color) !important;
 }
 
 .topbar-custom * {
-    color: var(--primary-color);
+    color: var(--primary-color) !important;
 }
 
 #side-menu .menuitem-active {
-    background-color: var(--accent-color);
-    border-radius: 8px;
+    background-color: var(--accent-color) !important;
+    border-radius: 8px !important;
 }
 
 #side-menu .menuitem-active * {
@@ -29,4 +45,199 @@
 .app-sidebar-menu,
 .app-sidebar-menu * {
     color: white !important;
+}
+
+
+
+
+/* CHART STYLES */
+
+.chart-container {
+    display: none;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .chart-container.active {
+    display: block;
+  }
+  
+  .chart-toggle {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  
+  .chart-tab {
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    background: transparent;
+  }
+  
+  .chart-tab:hover {
+    background:#00491e ;
+    color: white;
+  }
+  
+  .chart-tab.active {
+    background:#00491e ;
+    color: white;
+  }
+  
+ 
+ 
+  
+  .loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+  
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(67, 97, 238, 0.3);
+    border-radius: 50%;
+    border-top-color: #4361ee;
+    animation: spin 1s ease-in-out infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  .medal-icon {
+    display: inline-flex;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    margin-right: 8px;
+    color: #333;
+    font-weight: bold;
+    font-size: 12px;
+  }
+  
+  .medal-gold {
+    background: linear-gradient(145deg, #FFD700, #FFC800);
+    box-shadow: 0 2px 4px rgba(255, 184, 0, 0.3);
+  }
+  
+  .medal-silver {
+    background: linear-gradient(145deg, #E0E0E0, #B7B7B7);
+    box-shadow: 0 2px 4px rgba(183, 183, 183, 0.3);
+  }
+  
+  .medal-bronze {
+    background: linear-gradient(145deg, #CD7F32, #B36A2C);
+    box-shadow: 0 2px 4px rgba(205, 127, 50, 0.3);
+  }
+  
+  .team-badge {
+    display: inline-flex;
+    align-items: center;
+    font-weight: 600;
+  }
+  
+  .team-img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    object-fit: cover;
+  }
+
+
+
+
+
+  /* CHART CUSTOM OVERIDE CSS */
+
+  #medal-standings-chart rect {
+    fill: var(--primary-color) !important;
+  }
+
+
+
+
+
+  /* SHOW TEAM INDIVIDUAL */
+
+  .medal-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 14px;
+}
+.medal-gold {
+    background-color: #FFB800;
+    color: #000;
+}
+.medal-silver {
+    background-color: #B7B7B7;
+    color: #000;
+}
+.medal-bronze {
+    background-color: #CD7F32;
+    color: #fff;
+}
+.chart-toggle {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+
+.medal-counter {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.medal-counter .count {
+    font-weight: bold;
+    font-size: 18px;
+}
+.medal-summary-card {
+    transition: all 0.3s ease;
+}
+.medal-summary-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.progress-ring-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+.progress-ring-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 16px;
+    font-weight: bold;
 }

@@ -94,6 +94,7 @@ class ResultsController extends Controller
             $medalTally[$team->id]['total'] = $teamTotal;
             $medalTally[$team->id]['team'] = $team['name'];
             $medalTally[$team->id]['team_image'] = $team['image'];
+            $medalTally[$team->id]['team_id'] = $team['id'];
         }
 
         return view('admin.results.index',compact('teams', 'medalTally', 'overallTotal'));

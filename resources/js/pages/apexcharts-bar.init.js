@@ -13,6 +13,9 @@ File: Apexcharts Bar Chart
 import ApexCharts from 'apexcharts';
 window.ApexCharts = ApexCharts;
 
+
+
+
 // Basic Bar Chart
 var options = {
     series: [{
@@ -44,6 +47,13 @@ var chart = new ApexCharts(document.querySelector("#basic_bar_chart"), options);
 chart.render();
 
 // 
+
+
+
+
+
+
+
 //  Grouped Bar Chart
 // 
 var options = {
