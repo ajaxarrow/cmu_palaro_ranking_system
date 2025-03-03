@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-
+ini_set('max_execution_time', 120); 
 <!-- Start Content-->
 
 @if ($errors->any())
@@ -42,7 +42,8 @@
                                     <th>Silver Tally</th>
                                     <th>Bronze Tally</th>
                                     <th>Medal Weight</th>
-                                    <th>Actions</th>
+                                    <th>Status</th>
+                                    <th >Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -56,6 +57,7 @@
                                         <td>
                                             <p class="d-inline-block align-middle mb-0 text-body">{{ $record->event->name }}</p>
                                         </td>
+                                       
                                         <td>
                                             <p class="d-inline-block align-middle mb-0 text-body">{{ $record->gold_tally }}</p>
                                         </td>
@@ -68,8 +70,16 @@
                                         <td>
                                             <p class="d-inline-block align-middle mb-0 text-body">{{ $record->number_of_participant }}</p>
                                         </td>
+                                        <td>   
+                                         @if($record->is_posted == 1)
+                                            <div class="btn btn-sm bg-info-subtle me-1">Posted</div>
+                                       
+                                        @endif
+                                        </td>
                                         <td class="text-end">
-                                           
+                                            <a aria-label="anchor" class="btn btn-sm bg-success-subtle me-1" data-bs-toggle="modal" data-bs-target="#confirmPostRecordModal-{{$record->id}}" >
+                                                <i class="ph ph-trophy"></i>
+                                            </a>
                                             <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editRecordModal-{{$record->id}}" onclick="setEditFormAction('{{ route('medal_records.update', $record->id) }}', '{{ $record->team_id }}', '{{ $record->event->name }}', '{{ $record->gold_tally }}', '{{ $record->silver_tally }}', '{{ $record->bronze_tally }}', '{{ $record->number_of_participant }}')">
                                                 <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                             </a>
@@ -79,12 +89,42 @@
                                         </td>
                                     </tr>
 
+                                    {{-- Post Medal Record  Modal --}}
+                                    <div class="modal fade" id="confirmPostRecordModal-{{$record->id}}" tabindex="-1" aria-labelledby="ConfirmPostRecordModal-{{$record->id}}Label" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                        <h5 class="modal-title" id="editRecordModalLabel">Post Medal Record</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                       
+                                                    <p class="card-text">
+                                                        <strong>Warning:</strong> You are about to finalize this medal record. Once finalized, it will be officially recorded and can no longer be edited.  
+                                                        <br><br>Are you sure you want to proceed?
+                                                    </p>
+                                                    <div class="d-flex gap-2 justify-content-end">
+                                                        <button class="btn  bg-primary-subtle" data-bs-dismiss="modal" >Cancel</button>
+                                                       
+                                                        <form id="editForm-{{ $record->id }}" action="{{ route('medal_records.update', $record->id) }}" method="POST" onsubmit="disableSubmitButton(this)">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <input type="hidden" name="is_posted" value="1">
+                                                            <button  form="editForm-{{ $record->id }" class="btn  bg-danger-subtle" >Confirm</button>
+                                                        </form>
+                                                    </div>
+                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     {{-- Edit Modal --}}
                                     <div class="modal fade" id="editRecordModal-{{$record->id}}" tabindex="-1" aria-labelledby="editRecordModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="editRecordModalLabel">Edit Medal Record</h5>
+                                                    <h5 class="modal-title" id="editRecordModalLabel">Confirmation Required</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">

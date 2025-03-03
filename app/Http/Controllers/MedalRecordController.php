@@ -54,6 +54,19 @@ class MedalRecordController extends Controller
         MedalRecord::create($validatedData);
         return redirect()->route('medal_records.index')->with('success', 'Medal record created successfully.');
     }
+    public function approve(Request $request, string $id)
+    {   
+        $validatedData = $request->validate([
+            'is_posted' => 'required|boolean',
+        ]);
+
+        $medalRecord = MedalRecord::findOrFail($id);
+        $validatedData['posted_by'] = auth()->id();
+        $medalRecord->update($validatedData);
+       
+        return redirect()->route('medal_records.index')->with('success', 'Medal record approved successfully.');    
+        
+    }
 
     /**
      * Display the specified resource.
