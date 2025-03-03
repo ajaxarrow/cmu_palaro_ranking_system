@@ -49,11 +49,14 @@
         <div class="flex-grow-1">
             <h4 class="fs-18 fw-semibold m-0">Teams</h4>
         </div>
+
+        @if($user->role == 'admin')
         <div class="d-flex flex-wrap gap-2">
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTeamModal">
                 Add Team
             </button>
         </div>
+        @endif
 
         <!-- Add Team Modal -->
         <div class="modal fade" id="addTeamModal" tabindex="-1" aria-labelledby="addTeamModalLabel">
@@ -118,7 +121,9 @@
                                     <th class="ps-0">Name</th>
                                     <th>Description</th>
                                     <th>Colleges</th>
-                                    <th class="text-end">Action</th>
+                                    @if($user->role == 'admin')
+                                        <th class="text-end">Action</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -146,21 +151,23 @@
                                                 @endif
                                             </p>
                                         </td>
-                                        
-                                        <td class="text-end d-flex">
-                                            <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" href="{{ route('teams.show', $team->id) }}">
-                                                <i class="mdi mdi-eye-outline fs-14 text-primary"></i>
-                                            </a>
+                                        @if($user->role == 'admin')
+                                            <td class="text-end d-flex">
+                                                <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" href="{{ route('teams.show', $team->id) }}">
+                                                    <i class="mdi mdi-eye-outline fs-14 text-primary"></i>
+                                                </a>
 
-                                            <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editModal{{ $team->id }}">
-                                                <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
-                                            </a>
-                                            <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $team->id }}">
-                                                <i class="mdi mdi-delete fs-14 text-danger"></i>
-                                            </a>
-                                        </td>
+                                                <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editModal{{ $team->id }}">
+                                                    <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
+                                                </a>
+                                                <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $team->id }}">
+                                                    <i class="mdi mdi-delete fs-14 text-danger"></i>
+                                                </a>
+                                            </td>
+                                        @endif
                                     </tr>
 
+                                    @if($user->role == 'admin')
                                     <!-- EDIT MODAL for each team -->
                                     <div class="modal fade" id="editModal{{ $team->id }}" tabindex="-1" aria-labelledby="editModalLabel{{ $team->id }}">
                                         <div class="modal-dialog">
@@ -258,6 +265,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @endif
 
                                 @endforeach
                             </tbody>

@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-ini_set('max_execution_time', 120); 
+
 <!-- Start Content-->
 
 @if ($errors->any())
@@ -23,9 +23,11 @@ ini_set('max_execution_time', 120);
         <div class="flex-grow-1">
             <h4 class="fs-18 fw-semibold m-0">Tally</h4>
         </div>
-        <div class="text-end">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRecordModal">Add</button>
-        </div>
+        @if($user->role != 'user')
+            <div class="text-end">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRecordModal">Add</button>
+            </div>
+        @endif
     </div>
 
     <div class="row">
@@ -43,7 +45,11 @@ ini_set('max_execution_time', 120);
                                     <th>Bronze Tally</th>
                                     <th>Medal Weight</th>
                                     <th>Status</th>
-                                    <th >Actions</th>
+                                    
+                                    @if($user->role != 'user')
+                                        <th class="text-end" >Actions</th>
+                                    @endif
+                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -55,7 +61,7 @@ ini_set('max_execution_time', 120);
                                             </p>
                                         </td>
                                         <td>
-                                            <p class="d-inline-block align-middle mb-0 text-body">{{ $record->event->name }}</p>
+                                            <p class="d-inline-block align-middle mb-0 text-body">{{ $record->event->name }} </p>
                                         </td>
                                        
                                         <td>
@@ -68,27 +74,76 @@ ini_set('max_execution_time', 120);
                                             <p class="d-inline-block align-middle mb-0 text-body">{{ $record->bronze_tally }}</p>
                                         </td>
                                         <td>
-                                            <p class="d-inline-block align-middle mb-0 text-body">{{ $record->number_of_participant }}</p>
+                                            <p class="d-inline-block align-middle mb-0 text-body">{{ $record->number_of_participant }} </p>
                                         </td>
                                         <td>   
                                          @if($record->is_posted == 1)
-                                            <div class="btn btn-sm bg-info-subtle me-1">Posted</div>
+                                            <div class="btn btn-sm bg-info-subtle me-1">Posted  </div>
+                                        @else
+                                            <div class="btn btn-sm bg-dark-subtle me-1">Pending  </div>
                                        
                                         @endif
                                         </td>
-                                        <td class="text-end">
-                                            <a aria-label="anchor" class="btn btn-sm bg-success-subtle me-1" data-bs-toggle="modal" data-bs-target="#confirmPostRecordModal-{{$record->id}}" >
-                                                <i class="ph ph-trophy"></i>
-                                            </a>
-                                            <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editRecordModal-{{$record->id}}" onclick="setEditFormAction('{{ route('medal_records.update', $record->id) }}', '{{ $record->team_id }}', '{{ $record->event->name }}', '{{ $record->gold_tally }}', '{{ $record->silver_tally }}', '{{ $record->bronze_tally }}', '{{ $record->number_of_participant }}')">
-                                                <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
-                                            </a>
-                                            <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="modal" data-bs-target="#delete-event-modal-{{$record->id}}">
-                                                <i class="mdi mdi-delete fs-14 text-danger"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                        @if($user->role != 'user')
+                                            <td class="text-end">
 
+                                                @if($record->is_posted == 0)
+
+                                                        @if($user->role == 'admin' || $user->role == 'tournament_director' )     
+
+                                                            <a aria-label="anchor" class="btn btn-sm bg-success-subtle me-1" data-bs-toggle="modal" data-bs-target="#confirmPostRecordModal-{{$record->id}}" >
+                                                                <i class="ph ph-trophy s-14 text-primary"></i>
+                                                            </a>
+                                                        @else
+                                                            <button  aria-label="anchor"  class="btn btn-sm bg-dark-subtle me-1"  >
+                                                                <i class="ph ph-trophy fs-14 text-white"></i>
+                                                            </button> 
+                                                        @endif
+                                                    
+                                                        @if($user->role == 'admin' || $user->role == 'tournament_director' || $user->id == optional($record->postedBy)->id)
+
+                                                            <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editRecordModal-{{$record->id}}" onclick="setEditFormAction('{{ route('medal_records.update', $record->id) }}', '{{ $record->team_id }}', '{{ $record->event->name }}', '{{ $record->gold_tally }}', '{{ $record->silver_tally }}', '{{ $record->bronze_tally }}', '{{ $record->number_of_participant }}')">
+                                                                <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
+                                                            </a>
+                                                        @else
+                                                            
+                                                            <a aria-label="anchor"  class="btn btn-sm bg-dark-subtle me-1" >
+                                                                <i class="mdi mdi-pencil-outline fs-14 text-white"></i>
+                                                            </a>
+
+                                                        @endif
+
+                                                        @if($user->role == 'admin')
+
+                                                            <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="modal" data-bs-target="#delete-event-modal-{{$record->id}}">
+                                                                <i class="mdi mdi-delete fs-14 text-danger"></i>
+                                                            </a>
+                                                        @else
+                                                            <button aria-label="anchor" class=" btn btn-sm bg-dark-subtle" >
+                                                                <i class="mdi mdi-delete fs-14 text-white"></i>
+                                                            </button>
+
+                                                        @endif
+                                                @else
+
+                                                    <button  aria-label="anchor"  class="btn btn-sm bg-dark-subtle me-1"  >
+                                                        <i class="ph ph-trophy fs-14 text-white"></i>
+                                                    </button>   
+                                                    
+                                                    <button aria-label="anchor"  class="btn btn-sm bg-dark-subtle me-1" >
+                                                        <i class="mdi mdi-pencil-outline fs-14 text-white"></i>
+                                                    </button>
+
+                                                    <button aria-label="anchor" class=" btn btn-sm bg-dark-subtle" >
+                                                        <i class="mdi mdi-delete fs-14 text-white"></i>
+                                                    </button>
+
+                                                @endif
+
+                                            </td>
+                                        @endif
+                                    </tr>
+                                    @if($user->role == 'admin')     
                                     {{-- Post Medal Record  Modal --}}
                                     <div class="modal fade" id="confirmPostRecordModal-{{$record->id}}" tabindex="-1" aria-labelledby="ConfirmPostRecordModal-{{$record->id}}Label" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
@@ -106,11 +161,11 @@ ini_set('max_execution_time', 120);
                                                     <div class="d-flex gap-2 justify-content-end">
                                                         <button class="btn  bg-primary-subtle" data-bs-dismiss="modal" >Cancel</button>
                                                        
-                                                        <form id="editForm-{{ $record->id }}" action="{{ route('medal_records.update', $record->id) }}" method="POST" onsubmit="disableSubmitButton(this)">
+                                                        <form id="editForm-{{ $record->id }}" action="{{ route('medal_records.approve', $record->id) }}" method="POST" onsubmit="disableSubmitButton(this)">
                                                             @csrf
                                                             @method('PUT')
                                                             <input type="hidden" name="is_posted" value="1">
-                                                            <button  form="editForm-{{ $record->id }" class="btn  bg-danger-subtle" >Confirm</button>
+                                                            <button  form="editForm-{{ $record->id }}" class="btn  bg-danger-subtle" >Confirm</button>
                                                         </form>
                                                     </div>
                                     
@@ -118,6 +173,7 @@ ini_set('max_execution_time', 120);
                                             </div>
                                         </div>
                                     </div>
+                                    @endif
 
                                     {{-- Edit Modal --}}
                                     <div class="modal fade" id="editRecordModal-{{$record->id}}" tabindex="-1" aria-labelledby="editRecordModalLabel" aria-hidden="true">
@@ -210,61 +266,63 @@ ini_set('max_execution_time', 120);
     </div>
 </div>
 
-<!-- Add Record Modal -->
-<div class="modal fade" id="addRecordModal" tabindex="-1" aria-labelledby="addRecordModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addRecordModalLabel">Add Medal Record</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ route('medal_records.store') }}" method="POST" onsubmit="disableSubmitButton(this)">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="teamId" class="form-label">Team</label>
-                        <select name="team_id" class="form-control" id="teamId" required>
-                            <option value="">Select Team</option>
-                            @foreach ($teams as $team)
-                                <option value="{{ $team->id }}">{{ $team->name }}</option>
-                            @endforeach
-                        </select>
+    @if($user->role != 'user')
+        <!-- Add Record Modal -->
+        <div class="modal fade" id="addRecordModal" tabindex="-1" aria-labelledby="addRecordModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addRecordModalLabel">Add Medal Record</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="mb-3">
-                        <label for="event" class="form-label">Event</label>
-                        <select name="event_category_id" class="form-control" id="event" required>
-                            <option value="">Select Event</option>
-                            @foreach ($events as $event)
-                                <option value="{{ $event->id }}">{{ $event->name }}</option>
-                            @endforeach
-                        </select>
+                    <div class="modal-body">
+                        <form action="{{ route('medal_records.store') }}" method="POST" onsubmit="disableSubmitButton(this)">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="teamId" class="form-label">Team</label>
+                                <select name="team_id" class="form-control" id="teamId" required>
+                                    <option value="">Select Team</option>
+                                    @foreach ($teams as $team)
+                                        <option value="{{ $team->id }}">{{ $team->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="event" class="form-label">Event</label>
+                                <select name="event_category_id" class="form-control" id="event" required>
+                                    <option value="">Select Event</option>
+                                    @foreach ($events as $event)
+                                        <option value="{{ $event->id }}">{{ $event->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="goldTally" class="form-label">Gold Tally</label>
+                                <input type="number" name="gold_tally" class="form-control" id="goldTally" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="silverTally" class="form-label">Silver Tally</label>
+                                <input type="number" name="silver_tally" class="form-control" id="silverTally" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="bronzeTally" class="form-label">Bronze Tally</label>
+                                <input type="number" name="bronze_tally" class="form-control" id="bronzeTally" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="medalWeight" class="form-label">Number of Participant</label>
+                                <input type="number" name="number_of_participant" class="form-control" id="medalWeight" required>
+                            </div>
+                            <input type="number" class="form-control d-none" name="year" value="{{ date('Y') }}">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Add Record</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="mb-3">
-                        <label for="goldTally" class="form-label">Gold Tally</label>
-                        <input type="number" name="gold_tally" class="form-control" id="goldTally" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="silverTally" class="form-label">Silver Tally</label>
-                        <input type="number" name="silver_tally" class="form-control" id="silverTally" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="bronzeTally" class="form-label">Bronze Tally</label>
-                        <input type="number" name="bronze_tally" class="form-control" id="bronzeTally" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="medalWeight" class="form-label">Number of Participant</label>
-                        <input type="number" name="number_of_participant" class="form-control" id="medalWeight" required>
-                    </div>
-                    <input type="number" class="form-control d-none" name="year" value="{{ date('Y') }}">
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Add Record</button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+    @endif
 
 @endsection
 

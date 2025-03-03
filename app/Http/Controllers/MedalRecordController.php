@@ -16,10 +16,11 @@ class MedalRecordController extends Controller
      */
     public function index()
     {
-        $medalRecords = MedalRecord::with(['team', 'event'])->get();
+        $medalRecords = MedalRecord::with(['team', 'event', 'postedBy'])->get()->sortByDesc('created_at');
         $teams = Team::all();
         $events = EventCategory::all();
-        return view('admin.medal_records.index', compact('medalRecords', 'teams', 'events'));
+        $user = auth()->user();
+        return view('admin.medal_records.index', compact('medalRecords', 'teams', 'events', 'user', ));
     }
 
     /**
