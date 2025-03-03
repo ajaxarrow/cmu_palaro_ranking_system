@@ -94,6 +94,8 @@ class CollegeController extends Controller
         return redirect()->route('colleges.index')->with('success', 'College updated successfully.');
     }
 
+ 
+
     /**
      * Remove the specified resource from storage.
      */

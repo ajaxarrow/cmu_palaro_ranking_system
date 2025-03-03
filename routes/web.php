@@ -90,6 +90,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/medal-records/{id}/edit', [MedalRecordController::class, 'edit'])->name('medal_records.edit');
     Route::put('/medal-records/{id}', [MedalRecordController::class, 'update'])->name('medal_records.update');
     Route::delete('/medal-records/{id}', [MedalRecordController::class, 'destroy'])->name('medal_records.destroy');
+    Route::put('/medal-records/{id}/approve', [MedalRecordController::class, 'approve'])->name('medal_records.approve');
 
     Route::get('/results', [ResultsController::class, 'index'])->name('results.index');
     Route::get('/users', [AppUserController::class, 'index'])->name('users.index');

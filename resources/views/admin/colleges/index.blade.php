@@ -31,11 +31,13 @@
             <h4 class="fs-18 fw-semibold m-0">Colleges</h4>
         </div>
 
+        @if($user->role == 'admin')
         <div class="d-flex flex-wrap gap-2">
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalgrid">
                 Add College
             </button>
         </div>
+        @endif
 
         <div class="modal fade" id="exampleModalgrid" tabindex="-1" aria-labelledby="exampleModalgridLabel">
             <div class="modal-dialog">
@@ -96,7 +98,9 @@
                                 <tr>
                                     <th class="ps-0">Name</th>
                                     <th>Acronym</th>
-                                    <th class="text-end">Action</th>
+                                    @if($user->role == 'admin')
+                                        <th class="text-end">Action</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -117,6 +121,7 @@
                                         <td>
                                             <p class="d-inline-block align-middle mb-0 text-body">{{ $college->acronym }}</p>
                                         </td>
+                                        @if($user->role == 'admin')
                                         <td class="text-end">
                                             <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editModal"
                                                onclick="setEditFormAction('{{ route('colleges.update', $college->id) }}', '{{ $college->name }}', '{{ $college->acronym }}', '{{ $college->image }}')">
@@ -127,6 +132,7 @@
                                                 <i class="mdi mdi-delete fs-14 text-danger"></i>
                                             </a>
                                         </td>
+                                        @endif  
                                     </tr>
 
                                 
@@ -136,6 +142,7 @@
                         </table>
                     </div>
 
+                    @if($user->role == 'admin')
                     <!-- DELETE MODAL -->
                     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel">
                         <div class="modal-dialog">
@@ -201,6 +208,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>

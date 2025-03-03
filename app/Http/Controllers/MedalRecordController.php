@@ -16,10 +16,11 @@ class MedalRecordController extends Controller
      */
     public function index()
     {
-        $medalRecords = MedalRecord::with(['team', 'event'])->get();
+        $medalRecords = MedalRecord::with(['team', 'event', 'postedBy'])->get()->sortByDesc('created_at');
         $teams = Team::all();
         $events = EventCategory::all();
-        return view('admin.medal_records.index', compact('medalRecords', 'teams', 'events'));
+        $user = auth()->user();
+        return view('admin.medal_records.index', compact('medalRecords', 'teams', 'events', 'user', ));
     }
 
     /**
@@ -53,6 +54,19 @@ class MedalRecordController extends Controller
 
         MedalRecord::create($validatedData);
         return redirect()->route('medal_records.index')->with('success', 'Medal record created successfully.');
+    }
+    public function approve(Request $request, string $id)
+    {   
+        $validatedData = $request->validate([
+            'is_posted' => 'required|boolean',
+        ]);
+
+        $medalRecord = MedalRecord::findOrFail($id);
+        $validatedData['posted_by'] = auth()->id();
+        $medalRecord->update($validatedData);
+       
+        return redirect()->route('medal_records.index')->with('success', 'Medal record approved successfully.');    
+        
     }
 
     /**
