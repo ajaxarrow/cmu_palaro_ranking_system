@@ -1,0 +1,11 @@
+/* DATATABLES OVERIDES */
+#state-saving-datatable_filter {
+
+    display: flex !important;
+    justify-content: end !important;
+}
+
+#state-saving-datatable_paginate {
+    display: flex !important;
+    justify-content: end !important;
+}
