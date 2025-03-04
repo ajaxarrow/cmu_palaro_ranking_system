@@ -65,7 +65,8 @@
 
 
                     <div class="chart-toggle d-flex justify-content-center">
-                        <button class="chart-tab active me-2" data-target="bar-chart">Medal Standings</button>
+                        <button class="chart-tab active me-2" data-target="chart-datatable">Destribution Table</button>
+                        <button class="chart-tab me-2" data-target="bar-chart">Medal Standings</button>
                         <button class="chart-tab me-2" data-target="donut-chart">Medal Distribution</button>
                         <button class="chart-tab me-2" data-target="radar-chart">Team Balance</button>
                         <button class="chart-tab" data-target="heatmap-chart">Performance Heatmap</button>
@@ -73,8 +74,67 @@
 
 
 
+            <div id="chart-datatable" class="chart-container active">
+                <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Detailed Results</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                    <table
+                        id="state-saving-datatable"
+                        class="table activate-select dt-responsive nowrap w-100" >
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Team</th>
+                                    <th class="text-center">Gold</th>
+                                    <th class="text-center">Silver</th>
+                                    <th class="text-center">Bronze</th>
+                                    <th class="text-center">Total Medals</th>
+                                    <th class="text-center">Total Weight</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($medalTally as $sport => $data)
+
+                                    <tr>
+                                        <td><strong>{{ $data['rank'] }}</strong></td>
+                                        <td>
+                                            <a   href="{{ route('teams.show', ['id' => $data['team_id']]) }}" title="View Team Details">
+                                            <div class="team-badge">
+                                                <img src="{{ $data['team_image'] ? asset('storage/'.$data['team_image'])  : Vite::asset('resources/images/bg-pattern.svg') }}" alt="{{ $data['team'] }}" class="team-img">
+                                                <span>{{ $data['team'] }}</span>
+                                            </div>
+                                            </a>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge bg-warning text-dark">{{ $data['total']['gold_tally'] }}</span>
+                                            <small class="d-block text-muted mt-1">{{ number_format($data['total']['gold_weight'], 2) }}</small>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge bg-light text-dark">{{ $data['total']['silver_tally'] }}</span>
+                                            <small class="d-block text-muted mt-1">{{ number_format($data['total']['silver_weight'], 2) }}</small>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge bg-danger-subtle text-dark">{{ $data['total']['bronze_tally'] }}</span>
+                                            <small class="d-block text-muted mt-1">{{ number_format($data['total']['bronze_weight'], 2) }}</small>
+                                        </td>
+                                        <td class="text-center"><strong>{{ $data['total']['total_medals'] }}</strong></td>
+                                        <td class="text-center"><strong>{{ number_format($data['total']['total_weight'], 2) }}</strong></td>
+                                    </tr>
+                                    </a>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+             </div>
+
             <!-- Bar Chart Container -->
-            <div id="bar-chart" class="chart-container active">
+
+            <div id="bar-chart" class="chart-container">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title">Medal Standings by Weight</h5>
@@ -140,64 +200,8 @@
         </div>
     </div>
 
-    <!-- Data Table -->
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Detailed Results</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover" id="datatable_1">
-                            <thead>
-                                <tr>
-                                    <th>Rank</th>
-                                    <th>Team</th>
-                                    <th class="text-center">Gold</th>
-                                    <th class="text-center">Silver</th>
-                                    <th class="text-center">Bronze</th>
-                                    <th class="text-center">Total Medals</th>
-                                    <th class="text-center">Total Weight</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($medalTally as $sport => $data)
 
-                                    <tr>
-                                        <td><strong>{{ $data['rank'] }}</strong></td>
-                                        <td>
-                                            <a   href="{{ route('teams.show', ['id' => $data['team_id']]) }}" title="View Team Details">
-                                            <div class="team-badge">
-                                                <img src="{{ $data['team_image'] ? asset('storage/'.$data['team_image'])  : Vite::asset('resources/images/bg-pattern.svg') }}" alt="{{ $data['team'] }}" class="team-img">
-                                                <span>{{ $data['team'] }}</span>
-                                            </div>
-                                            </a>
-                                        </td>
-                                        <td class="text-center">
-                                            <span class="badge bg-warning text-dark">{{ $data['total']['gold_tally'] }}</span>
-                                            <small class="d-block text-muted mt-1">{{ number_format($data['total']['gold_weight'], 2) }}</small>
-                                        </td>
-                                        <td class="text-center">
-                                            <span class="badge bg-light text-dark">{{ $data['total']['silver_tally'] }}</span>
-                                            <small class="d-block text-muted mt-1">{{ number_format($data['total']['silver_weight'], 2) }}</small>
-                                        </td>
-                                        <td class="text-center">
-                                            <span class="badge bg-danger-subtle text-dark">{{ $data['total']['bronze_tally'] }}</span>
-                                            <small class="d-block text-muted mt-1">{{ number_format($data['total']['bronze_weight'], 2) }}</small>
-                                        </td>
-                                        <td class="text-center"><strong>{{ $data['total']['total_medals'] }}</strong></td>
-                                        <td class="text-center"><strong>{{ number_format($data['total']['total_weight'], 2) }}</strong></td>
-                                    </tr>
-</a>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+ 
 </div>
 
 @endsection

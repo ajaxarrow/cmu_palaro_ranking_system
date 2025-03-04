@@ -90,7 +90,9 @@
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table mb-0 checkbox-all" id="datatable_1">
+                    <table
+                        id="state-saving-datatable"
+                        class="table activate-select dt-responsive nowrap w-100" ">
                             <thead>
                                 <tr>
                                     <th class="ps-0">Category No.</th>
