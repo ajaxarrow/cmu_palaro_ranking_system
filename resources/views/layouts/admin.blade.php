@@ -36,7 +36,7 @@
     @include('layouts.partials/vendor')
     @vite(['resources/js/pages/datatable.init.js'])
 
-
+ @vite(['resources/js/pdf-export.js'])
 </body>
 
 </html>

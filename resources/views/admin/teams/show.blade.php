@@ -899,15 +899,13 @@
             
             // Document styling constants
             const colors = {
-                primary: [0, 145, 30],
-                secondary: [255, 198, 1],
-                light: [241, 245, 249],
-                white: [255, 255, 255],
-                gold: [255, 198, 1],
-                silver: [183, 183, 183],
-                bronze: [205, 127, 50],
-                lightText: [148, 163, 184],
-                darkText: [30, 41, 59]
+                primary: [0, 73, 30],       // Dark Green #00491e
+            secondary: [2, 104, 30],     // Bright Green #02681e
+            accent: [255, 198, 1],       // Gold #ffc601
+            light: [241, 245, 249],
+            white: [255, 255, 255],
+            lightText: [148, 163, 184],
+            darkText: [30, 41, 59]
             };
             
             // Modern cover page
