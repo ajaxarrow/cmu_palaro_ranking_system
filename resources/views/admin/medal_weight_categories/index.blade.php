@@ -8,25 +8,6 @@
 
 <!-- Start Content-->
 
- <!-- Display Success Message -->
- @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
-    <!-- Display Error Message -->
-    @if ($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
 <div class="container-fluid">
 
     <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
@@ -125,11 +106,11 @@
                                         <td>
                                             <p class="d-inline-block align-middle mb-0 text-body">{{ $category->bronze_weight }}</p>
                                         </td>
-                                        
+
                                         @if($user->role == 'admin')
 
                                             <td class="text-end">
-                                            
+
                                                 <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editModal{{ $category->id }}">
                                                     <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                                 </a>
@@ -140,7 +121,7 @@
 
                                         @endif
                                     </tr>
-                                    
+
                                     @if($user->role == 'admin')
                                         <!-- Edit Modal for each category -->
                                         <div class="modal fade" id="editModal{{ $category->id }}" tabindex="-1" aria-labelledby="editModalLabel{{ $category->id }}">

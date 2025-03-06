@@ -32,15 +32,15 @@ class CollegeController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:15000',
             'acronym' => 'required|string|max:10',
         ]);
 
         $imagePath = null;
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('teams', 'public'); 
-            
+            $imagePath = $request->file('image')->store('teams', 'public');
+
         }
 
        College::create([
@@ -66,7 +66,7 @@ class CollegeController extends Controller
     public function edit(string $id)
     {
         $college = College::findOrFail($id);
-        
+
 
 
         return view('colleges.edit', compact('college'));
@@ -79,22 +79,24 @@ class CollegeController extends Controller
     {
         $formFields = $request->validate([
             'name' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:15000',
             'acronym' => 'required|string|max:10',
         ]);
         $college = College::findOrFail($id);
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('colleges', 'public'); 
+            $imagePath = $request->file('image')->store('colleges', 'public');
             $formFields['image'] = $imagePath;
+        } else {
+            $imagePath = $college->image;
         }
-        
-       
+
+
         $college->update($formFields);
         return redirect()->route('colleges.index')->with('success', 'College updated successfully.');
     }
 
- 
+
 
     /**
      * Remove the specified resource from storage.

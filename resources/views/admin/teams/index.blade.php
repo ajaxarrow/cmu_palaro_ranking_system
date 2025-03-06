@@ -29,25 +29,7 @@
 <!-- Start Content-->
 <div class="container-fluid">
 
-    <!-- Display Success Message -->
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
 
-    <!-- Display Error Message -->
-    @if ($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
 
     <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
         <div class="flex-grow-1">
@@ -75,12 +57,15 @@
                             @csrf
 
                             <div class="mb-3">
-                                <label for="teamImage" class="form-label">Image</label>
-                                <input required type="file" accept="image/*" name="image" class="form-control" id="teamImage" onchange="previewImage(event, 'add')">
-                                <div id="imagePreviewAdd" class="mt-2 text-center" style="display: none;">
-                                    <img id="previewImageAdd" src="" width="100" height="100" class="rounded-circle object-fit-cover">
-                                    <div id="colorInfoAdd" class="color-info mt-2"></div>
+                                <div id="imagePreviewAdd" class="mt-2 text-center" onclick="document.getElementById('teamImage').click();">
+                                    <img id="previewImageAdd" src="" width="100" height="100" class="rounded-circle object-fit-cover"
+                                         style="border: 3px solid {{ $team->dominant_color ?? '#ddd' }}; cursor: pointer;">
                                 </div>
+
+                                <label for="teamImage" class="form-label">Image</label>
+                                <input required type="file" accept="image/*" name="image" class="form-control" id="teamImage"
+                                       onchange="previewImage(event, 'add')">
+
                                 <input type="hidden" name="dominant_color" id="dominantColorAdd">
                             </div>
 
@@ -135,15 +120,17 @@
                             <tbody>
                                 @foreach ($teams as $team)
                                     <tr>
-                                        <td class="ps-0 d-flex flex-row align-items-center gap-1">
-                                            @if($team->image)
-                                                <img src="{{ asset('storage/' . $team->image) }}" width="40" height="40" class="rounded-circle object-cover" style="object-fit: cover; object-position: top;">
+                                        <td class="ps-0">
+                                            <div class="d-flex flex-row align-items-center gap-1">
+                                                @if($team->image)
+                                                <img src="{{ asset('storage/' . $team->image) }}" width="32" height="32" class="rounded-circle object-cover" style="object-fit: cover; object-position: top;">
                                             @else
                                                 <i class="ph-duotone fs-24 ph-ranking mb-0"></i>
                                             @endif
                                             <p class="d-inline-block align-middle mb-0 py-2">
                                                 <span class="font-16 fw-medium ml-3">{{$team->name}}</span>
                                             </p>
+                                            </div>
                                         </td>
                                         <td>
                                             <p class="d-inline-block align-middle mb-0 text-body">{{ $team->desc }}</p>
@@ -158,17 +145,20 @@
                                             </p>
                                         </td>
                                         @if($user->role == 'admin')
-                                            <td class="text-end d-flex">
-                                                <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" href="{{ route('teams.show', $team->id) }}">
-                                                    <i class="mdi mdi-eye-outline fs-14 text-primary"></i>
-                                                </a>
+                                            <td class="text-end">
+                                                <div class="d-flex">
+                                                    <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" href="{{ route('teams.show', $team->id) }}">
+                                                        <i class="mdi mdi-eye-outline fs-14 text-primary"></i>
+                                                    </a>
 
-                                                <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editModal{{ $team->id }}">
-                                                    <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
-                                                </a>
-                                                <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $team->id }}">
-                                                    <i class="mdi mdi-delete fs-14 text-danger"></i>
-                                                </a>
+                                                    <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editModal{{ $team->id }}">
+                                                        <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
+                                                    </a>
+                                                    <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $team->id }}">
+                                                        <i class="mdi mdi-delete fs-14 text-danger"></i>
+                                                    </a>
+                                                </div>
+
                                             </td>
                                         @endif
                                     </tr>
@@ -188,31 +178,32 @@
                                                         @method('PUT')
 
                                                         <div class="mb-3">
-                                                            <div class="mb-2 d-flex justify-content-center align-items-center">
-                                                                <img id="imagePreview{{ $team->id }}" 
-                                                                    src="{{ $team->image ? asset('storage/' . $team->image) : asset('storage/default.jpg') }}" 
-                                                                    width="100" height="100" 
-                                                                    class="rounded-circle object-fit-cover"
+                                                            <div class="mb-2 d-flex justify-content-center  align-items-center">
+                                                                <img id="imagePreview{{ $team->id }}"
+                                                                onclick="document.getElementById('teamImage{{ $team->id }}').click();"
+                                                                    src="{{ $team->image ? asset('storage/' . $team->image) : asset('storage/default.jpg') }}"
+                                                                    width="100" height="100"
+                                                                    class="rounded-circle object-fit-cover cursor-pointer"
                                                                     style="border: 3px solid {{ $team->dominant_color ?? '#ddd' }};">
                                                             </div>
-                                                            
+
                                                             <!-- Display current dominant color if available -->
-                                                            @if($team->dominant_color)
+                                                            {{-- @if($team->dominant_color)
                                                                 <div id="currentColorInfo{{ $team->id }}" class="color-info text-center mb-2">
                                                                     <span class="color-badge" style="background-color: {{ $team->dominant_color }}"></span>
                                                                     <span>Current: {{ $team->dominant_color }}</span>
                                                                 </div>
                                                             @endif
-                                                            
+
                                                             <!-- Will show new color analysis -->
-                                                            <div id="colorInfo{{ $team->id }}" class="color-info text-center mb-2" style="display: none;"></div>
-                                                            
+                                                            <div id="colorInfo{{ $team->id }}" class="color-info text-center mb-2" style="display: none;"></div> --}}
+
                                                             <label for="teamImage{{ $team->id }}" class="form-label">Image</label>
-                                                            <input type="file" accept="image/*" name="image" class="form-control" 
-                                                                id="teamImage{{ $team->id }}" 
+                                                            <input type="file" accept="image/*" name="image" class="form-control"
+                                                                id="teamImage{{ $team->id }}"
                                                                 onchange="previewImage(event, '{{ $team->id }}')">
-                                                            
-                                                            <input type="hidden" name="dominant_color" id="dominantColor{{ $team->id }}" 
+
+                                                            <input type="hidden" name="dominant_color" id="dominantColor{{ $team->id }}"
                                                                 value="{{ $team->dominant_color ?? '' }}">
                                                         </div>
 
@@ -229,8 +220,7 @@
                                                             @php
                                                                 $selectedColleges = $team->colleges->pluck('id')->toArray();
                                                             @endphp
-
-                                                            <select required name="college_ids[]" id="collegeSelectEdit{{ $team->id }}" class="form-select" multiple>
+                                                            <select name="college_ids[]" id="collegeSelectEdit{{ $team->id }}" class="form-select" multiple>
                                                                 @foreach ($colleges as $college)
                                                                     <option value="{{ $college->id }}" {{ in_array($college->id, $selectedColleges) ? 'selected' : '' }}>
                                                                         {{ $college->name }}
@@ -289,6 +279,36 @@
 @section('script')
 @vite(['resources/js/pages/simple-datatables.init.js',])
 <script>
+    // document.addEventListener("DOMContentLoaded", function () {
+    //     const editModals = document.querySelectorAll('[id^="editModal"]');
+
+    //     editModals.forEach(modal => {
+    //         modal.addEventListener('shown.bs.modal', function() {
+    //             const selectElement = this.querySelector('[id^="collegeSelectEdit"]');
+    //             if (selectElement) {
+    //                 new Choices(selectElement, {
+    //                     removeItemButton: true,
+    //                     searchEnabled: true,
+    //                     placeholder: true,
+    //                     placeholderValue: 'Select colleges...',
+    //                     classNames: {
+    //                         containerOuter: 'choices'
+    //                     }
+    //                 });
+    //             }
+    //         });
+    //     });
+
+    //     new Choices("#collegeSelectAdd", {
+    //         removeItemButton: true,
+    //         maxItemCount: 5, // Adjust this based on your needs
+    //         placeholder: true,
+    //         placeholderValue: "Select Colleges...",
+    //     });
+
+    // });
+
+
     function disableSubmitButton(form) {
         const submitButton = form.querySelector('button[type="submit"]');
         submitButton.disabled = true; // Disable the button
@@ -304,12 +324,12 @@
         return new Promise((resolve) => {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
-            
+
             // Scale down for performance
             const maxDimension = 100;
             let width = image.naturalWidth;
             let height = image.naturalHeight;
-            
+
             if (width > height && width > maxDimension) {
                 height = Math.round(height * (maxDimension / width));
                 width = maxDimension;
@@ -317,51 +337,51 @@
                 width = Math.round(width * (maxDimension / height));
                 height = maxDimension;
             }
-            
+
             canvas.width = width;
             canvas.height = height;
             ctx.drawImage(image, 0, 0, width, height);
-            
+
             // Get pixel data
             const imageData = ctx.getImageData(0, 0, width, height).data;
-            
+
             // Process colors
             const colorCounts = {};
             const whiteThreshold = 240; // Threshold to consider a color as white
             const blackThreshold = 30;  // Threshold to consider a color as black
             const grayThreshold = 30;   // Threshold to identify gray (low saturation)
-            
+
             for (let i = 0; i < imageData.length; i += 4) {
                 const r = imageData[i];
                 const g = imageData[i + 1];
                 const b = imageData[i + 2];
-                
+
                 // Skip pixels that are close to white
                 if (r > whiteThreshold && g > whiteThreshold && b > whiteThreshold) {
                     continue;
                 }
-                
+
                 // Skip pixels that are close to black
                 if (r < blackThreshold && g < blackThreshold && b < blackThreshold) {
                     continue;
                 }
-                
+
                 // Skip pixels that are close to gray
                 const max = Math.max(r, g, b);
                 const min = Math.min(r, g, b);
                 const saturation = (max === 0) ? 0 : (max - min) / max * 100;
-                
+
                 if (saturation < grayThreshold) {
                     continue;
                 }
-                
+
                 // Quantize colors to reduce the number of unique colors
                 const quantizedR = Math.round(r / 10) * 10;
                 const quantizedG = Math.round(g / 10) * 10;
                 const quantizedB = Math.round(b / 10) * 10;
-                
+
                 const colorKey = `${quantizedR},${quantizedG},${quantizedB}`;
-                
+
                 if (colorCounts[colorKey]) {
                     colorCounts[colorKey].count++;
                     colorCounts[colorKey].saturation = Math.max(colorCounts[colorKey].saturation, saturation);
@@ -375,10 +395,10 @@
                     };
                 }
             }
-            
+
             // Convert to array for sorting
             let colorsArray = Object.values(colorCounts);
-            
+
             // If we don't have enough saturated colors, fall back to all colors
             if (colorsArray.length === 0) {
                 // Process again without saturation filtering
@@ -386,26 +406,26 @@
                     const r = imageData[i];
                     const g = imageData[i + 1];
                     const b = imageData[i + 2];
-                    
+
                     // Still skip pure white pixels
                     if (r > whiteThreshold && g > whiteThreshold && b > whiteThreshold) {
                         continue;
                     }
-                    
+
                     // Quantize colors
                     const quantizedR = Math.round(r / 10) * 10;
                     const quantizedG = Math.round(g / 10) * 10;
                     const quantizedB = Math.round(b / 10) * 10;
-                    
+
                     const colorKey = `${quantizedR},${quantizedG},${quantizedB}`;
-                    
+
                     if (colorCounts[colorKey]) {
                         colorCounts[colorKey].count++;
                     } else {
                         const max = Math.max(r, g, b);
                         const min = Math.min(r, g, b);
                         const saturation = (max === 0) ? 0 : (max - min) / max * 100;
-                        
+
                         colorCounts[colorKey] = {
                             r: quantizedR,
                             g: quantizedG,
@@ -415,29 +435,29 @@
                         };
                     }
                 }
-                
+
                 colorsArray = Object.values(colorCounts);
             }
-            
+
             // Sort colors by count and saturation (prioritize more saturated colors)
             colorsArray.sort((a, b) => {
                 // First prioritize colors with significant presence (at least 5% of non-white pixels)
                 const aSignificant = a.count > (width * height * 0.05);
                 const bSignificant = b.count > (width * height * 0.05);
-                
+
                 if (aSignificant && !bSignificant) return -1;
                 if (!aSignificant && bSignificant) return 1;
-                
+
                 // For colors with significant presence, prefer more saturated ones
                 if (aSignificant && bSignificant) {
                     if (a.saturation > b.saturation) return -1;
                     if (a.saturation < b.saturation) return 1;
                 }
-                
+
                 // If saturation is similar or both are not significant, go by count
                 return b.count - a.count;
             });
-            
+
             // If we found colors, return the dominant one
             if (colorsArray.length > 0) {
                 const dominantColor = colorsArray[0];
@@ -474,19 +494,19 @@
         const previewImage = document.getElementById(`previewImage${prefix}`) || document.getElementById(`imagePreview${prefix}`);
         const colorInfo = document.getElementById(`colorInfo${prefix}`);
         const dominantColorInput = document.getElementById(`dominantColor${prefix}`);
-        
+
         if (input.files && input.files[0]) {
             const reader = new FileReader();
-            
+
             reader.onload = function(e) {
                 // Set preview image
                 previewImage.src = e.target.result;
-                
+
                 // Show preview container if it's the add form
                 if (id === 'add') {
                     preview.style.display = 'block';
                 }
-                
+
                 // Create temp image to get natural dimensions
                 const tempImg = new Image();
                 tempImg.onload = function() {
@@ -499,13 +519,13 @@
                                 <span>Dominant: ${colorData.hex} (${colorData.percentage}%)</span>
                             `;
                             colorInfo.style.display = 'flex';
-                            
+
                             // Store the dominant color in the hidden input
                             dominantColorInput.value = colorData.hex;
-                            
+
                             // Apply the dominant color as border to the image preview
                             previewImage.style.border = `3px solid ${colorData.hex}`;
-                            
+
                             // Hide current color info if it exists (for edit forms)
                             const currentColorInfo = document.getElementById(`currentColorInfo${prefix}`);
                             if (currentColorInfo) {
@@ -516,7 +536,7 @@
                 };
                 tempImg.src = e.target.result;
             };
-            
+
             reader.readAsDataURL(input.files[0]);
         }
     }

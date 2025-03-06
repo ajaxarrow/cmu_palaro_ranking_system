@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Team;
 use App\Models\College;
 use App\Models\TeamComposition;
+use Illuminate\Support\Facades\Log;
 
 class TeamController extends Controller
 {
@@ -15,8 +16,8 @@ class TeamController extends Controller
      */
     public function index()
     {
-        $teams = Team::with('colleges')->latest()->get(); 
-        $colleges = College::all(); 
+        $teams = Team::with('colleges')->latest()->get();
+        $colleges = College::all();
 
         return view('admin.teams.index', compact('teams', 'colleges'));
     }
@@ -34,23 +35,31 @@ class TeamController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(Request $request)
     {
         try {
             $request->validate([
                 'name' => 'required|string|max:255',
                 'desc' => 'nullable|string',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:15000',
                 'college_ids' => 'required|array',
                 'college_ids.*' => 'exists:colleges,id',
             ]);
 
             $imagePath = null;
             if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->store('teams', 'public'); 
-                
+                try {
+                    $imagePath = $request->file('image')->store('teams', 'public');
+                } catch (\Exception $imageException) {
+                    Log::error('Image upload failed: ' . $imageException->getMessage(), [
+                        'file' => $imageException->getFile(),
+                        'line' => $imageException->getLine()
+                    ]);
+                    return redirect()->route('teams.index')->with('error', 'Image upload failed.');
+                }
             }
-    
+
             // Create the team
             $team = Team::create([
                 'name' => $request->name,
@@ -69,9 +78,14 @@ class TeamController extends Controller
             return redirect()->route('teams.index')->with('success', 'Team created successfully!');
 
         } catch (\Exception $e) {
+            Log::error('Error creating team: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
             return redirect()->route('teams.index')->with('error', 'An error occurred while creating the team.');
         }
     }
+
     /**
      * Display the specified resource.
      * This is for tallying scores of each team
@@ -110,8 +124,6 @@ class TeamController extends Controller
             $bronzeWeight = $bronzeTally * $medalWeights->bronze_weight;
             $totalWeight = $goldWeight + $silverWeight + $bronzeWeight;
             $totalMedals = $record->gold_tally + $record->silver_tally + $bronzeTally;
-
-
 
 
             // Organize data for the view
@@ -183,22 +195,24 @@ class TeamController extends Controller
 
             $request->validate([
                 'name' => 'required|string|max:255',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:15000',
                 'desc' => 'nullable|string',
                 'college_ids' => 'required|array',
                 'college_ids.*' => 'exists:colleges,id',
             ]);
-            $imagePath = null;
+
+            // Check if an image is uploaded, otherwise retain the previous image
             if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->store('teams', 'public'); 
-                
+                $imagePath = $request->file('image')->store('teams', 'public');
+            } else {
+                $imagePath = $team->image; // Retain previous image
             }
 
             // Update team info
             $team->update([
                 'name' => $request->name,
                 'desc' => $request->desc,
-                'image' => $imagePath,
+                'image' => $imagePath, // Keep existing image if not updating
             ]);
 
             // Delete old compositions and insert new ones
@@ -213,6 +227,10 @@ class TeamController extends Controller
 
             return redirect()->route('teams.index')->with('success', 'Team updated successfully!');
         } catch (\Exception $e) {
+            Log::error('Error updating team: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
             return redirect()->route('teams.index', $id)->with('error', 'An error occurred while updating the team.');
         }
     }
@@ -220,11 +238,11 @@ class TeamController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Team $team)
+    public function destroy(int $id)
     {
         try {
-            $team->delete();
-            return redirect()->route('teams.index');
+            Team::findOrFail($id)->delete();
+            return redirect()->route('teams.index')->with('success', 'Team deleted successfully!');
         } catch (\Exception $e) {
             return redirect()->route('teams.index')->with('error', 'An error occurred while deleting the team.');
         }

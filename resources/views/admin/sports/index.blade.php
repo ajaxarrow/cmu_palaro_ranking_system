@@ -5,25 +5,6 @@
 @endsection
 @section('content')
 
-<!-- Display Success Message -->
-@if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
-
-<!-- Display Error Message -->
-@if ($errors->any())
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
 
 <!-- Start Content-->
 <div class="container-fluid">
@@ -39,7 +20,7 @@
                     Add Sport
                 </button>
             </div>
-        
+
 
             <div class="modal fade" id="exampleModalgrid" tabindex="-1" aria-labelledby="exampleModalgridLabel">
                 <div class="modal-dialog">
@@ -105,13 +86,15 @@
                                             @if($user->role == 'admin')
                                             <td class="text-end">
 
-                                                <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editModal-{{$sport->id}}">
-                                                    <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
-                                                </a>
-                                                <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="modal" data-bs-target="#deleteModal-{{$sport->id}}"
-                                                onclick="setDeleteFormAction('{{ route('sports.destroy', $sport->id) }}')">
-                                                    <i class="mdi mdi-delete fs-14 text-danger"></i>
-                                                </a>
+                                                <div class="d-flex justify-content-end">
+                                                    <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editModal-{{$sport->id}}">
+                                                        <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
+                                                    </a>
+                                                    <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="modal" data-bs-target="#deleteModal-{{$sport->id}}"
+                                                    onclick="setDeleteFormAction('{{ route('sports.destroy', $sport->id) }}')">
+                                                        <i class="mdi mdi-delete fs-14 text-danger"></i>
+                                                    </a>
+                                                </div>
                                             </td>
                                         @endif
                                     </tr>
