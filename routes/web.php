@@ -10,11 +10,10 @@ use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\SportController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamCompositionController;
+use App\Http\Controllers\LandingPageController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [LandingPageController::class, 'index'])->name('landing');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
