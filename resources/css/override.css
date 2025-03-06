@@ -9,3 +9,18 @@
     display: flex !important;
     justify-content: end !important;
 }
+
+
+.sorting.sorting_desc::after {
+    content: '⬆';
+    color: green ;
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+.sorting.sorting_asc::after {
+    content: '⬇';
+    color: green ;
+    font-size: 1.1rem;
+    font-weight: 800;
+}
