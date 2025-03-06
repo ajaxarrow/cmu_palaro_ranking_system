@@ -8,11 +8,40 @@
     <link href="https://api.fontshare.com/v2/css?f[]=satoshi@1&display=swap" rel="stylesheet">
     @vite(['resources/css/layout.css'])
     @vite(['resources/css/override.css'])
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script> --}}
 
     <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
 </head>
 
 <body data-menu-color="light" data-sidebar="default">
+    <!-- Success Snackbar -->
+    @if (session('success'))
+        <div id="successToast" class="toast align-items-center text-white border-0 position-fixed top-0 end-0 m-3" role="alert" aria-live="assertive" aria-atomic="true" style="z-index: 1055; background-color: #02681e;">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{ session('success') }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    @endif
+
+    <!-- Error Snackbar -->
+    @if ($errors->any())
+        <div id="errorToast" class="toast align-items-center text-white bg-danger border-0 position-fixed top-0 end-0 m-3" role="alert" aria-live="assertive" aria-atomic="true" style="z-index: 1055;">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    @endif
 
     <div id="app-layout">
 
@@ -37,6 +66,25 @@
     @vite(['resources/js/pages/datatable.init.js'])
 
  @vite(['resources/js/pdf-export.js'])
+
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var successToastEl = document.getElementById('successToast');
+        var errorToastEl = document.getElementById('errorToast');
+
+        if (successToastEl) {
+            var successToast = new bootstrap.Toast(successToastEl);
+            successToast.show();
+        }
+
+        if (errorToastEl) {
+            var errorToast = new bootstrap.Toast(errorToastEl);
+            errorToast.show();
+        }
+    });
+</script>
+
 </body>
 
 </html>

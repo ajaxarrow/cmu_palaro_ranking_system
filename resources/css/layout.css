@@ -48,28 +48,26 @@
 }
 
 
-
-
 /* CHART STYLES */
 
 .chart-container {
     display: none;
     animation: fadeIn 0.5s ease-in-out;
-  }
-  
-  .chart-container.active {
+}
+
+.chart-container.active {
     display: block;
-  }
-  
-  .chart-toggle {
+}
+
+.chart-toggle {
     background: #f8f9fa;
     border-radius: 8px;
     padding: 10px;
     margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  }
-  
-  .chart-tab {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.chart-tab {
     padding: 8px 16px;
     border-radius: 6px;
     cursor: pointer;
@@ -77,53 +75,56 @@
     transition: all 0.3s ease;
     border: none;
     background: transparent;
-  }
-  
-  .chart-tab:hover {
-    background:#00491e ;
+}
+
+.chart-tab:hover {
+    background: #00491e;
     color: white;
-  }
-  
-  .chart-tab.active {
-    background:#00491e ;
+}
+
+.chart-tab.active {
+    background: #00491e;
     color: white;
-  }
-  
- 
- 
-  
-  .loading-overlay {
+}
+
+.loading-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255,255,255,0.8);
+    background: rgba(255, 255, 255, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 10;
-  }
-  
-  .loading-spinner {
+}
+
+.loading-spinner {
     width: 40px;
     height: 40px;
     border: 3px solid rgba(67, 97, 238, 0.3);
     border-radius: 50%;
     border-top-color: #4361ee;
     animation: spin 1s ease-in-out infinite;
-  }
-  
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  
-  .medal-icon {
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.medal-icon {
     display: inline-flex;
     width: 24px;
     height: 24px;
@@ -134,56 +135,50 @@
     color: #333;
     font-weight: bold;
     font-size: 12px;
-  }
-  
-  .medal-gold {
+}
+
+.medal-gold {
     background: linear-gradient(145deg, #FFD700, #FFC800);
     box-shadow: 0 2px 4px rgba(255, 184, 0, 0.3);
-  }
-  
-  .medal-silver {
+}
+
+.medal-silver {
     background: linear-gradient(145deg, #E0E0E0, #B7B7B7);
     box-shadow: 0 2px 4px rgba(183, 183, 183, 0.3);
-  }
-  
-  .medal-bronze {
+}
+
+.medal-bronze {
     background: linear-gradient(145deg, #CD7F32, #B36A2C);
     box-shadow: 0 2px 4px rgba(205, 127, 50, 0.3);
-  }
-  
-  .team-badge {
+}
+
+.team-badge {
     display: inline-flex;
     align-items: center;
     font-weight: 600;
-  }
-  
-  .team-img {
+}
+
+.team-img {
     width: 28px;
     height: 28px;
     border-radius: 50%;
     margin-right: 10px;
     border: 2px solid #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     object-fit: cover;
-  }
+}
 
 
+/* CHART CUSTOM OVERIDE CSS */
 
-
-
-  /* CHART CUSTOM OVERIDE CSS */
-
-  #medal-standings-chart rect {
+#medal-standings-chart rect {
     fill: var(--primary-color) !important;
-  }
+}
 
 
+/* SHOW TEAM INDIVIDUAL */
 
-
-
-  /* SHOW TEAM INDIVIDUAL */
-
-  .medal-icon {
+.medal-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -193,46 +188,54 @@
     font-weight: bold;
     font-size: 14px;
 }
+
 .medal-gold {
     background-color: #FFB800;
     color: #000;
 }
+
 .medal-silver {
     background-color: #B7B7B7;
     color: #000;
 }
+
 .medal-bronze {
     background-color: #CD7F32;
     color: #fff;
 }
+
 .chart-toggle {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
 }
 
-
 .medal-counter {
     display: flex;
     align-items: center;
     gap: 4px;
 }
+
 .medal-counter .count {
     font-weight: bold;
     font-size: 18px;
 }
+
 .medal-summary-card {
     transition: all 0.3s ease;
 }
+
 .medal-summary-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
+
 .progress-ring-container {
     position: relative;
     width: 120px;
     height: 120px;
 }
+
 .progress-ring-text {
     position: absolute;
     top: 50%;

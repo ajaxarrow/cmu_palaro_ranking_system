@@ -5,27 +5,6 @@
 @endsection
 @section('content')
 
-<!-- Start Content-->
-<div class="container-fluid">
-<!-- Display Success Message -->
-@if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
-
-<!-- Display Error Message -->
-@if ($errors->any())
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
     <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
         <div class="flex-grow-1">
             <h4 class="fs-18 fw-semibold m-0">Colleges</h4>
@@ -50,15 +29,22 @@
                         <form action="{{ route('colleges.store')}}"  method="POST" onsubmit="disableSubmitButton(this)" enctype="multipart/form-data">
                             @csrf
                             <div class="row g-3">
-                             
-
                                 <div>
 
+                                    <div class="mb-2 d-flex justify-content-center align-items-center">
+                                        <img id="ImagePreview"
+                                         onclick="document.getElementById('CollegeImage').click();"
+                                            src="{{ asset('storage/default.jpg') }}"
+                                            width="100" height="100"
+                                            class="rounded-circle object-fit-cover">
+                                    </div>
+
+
                                     <div class="mb-3">
-                                        
+
                                         <label for="CollegeImage" class="form-label">Image</label>
-                                        <input required type="file" accept="image/*"  name="image" class="form-control" id="CollegeImage">
-                                    
+                                        <input required type="file" accept="image/*"  name="image" class="form-control" id="CollegeImage" onchange="previewImage(event, 'ImagePreview')">
+
                                     </div>
 
                                     <div class="mb-3">
@@ -99,7 +85,6 @@
                             <thead>
                                 <tr>
                                     <th class="ps-0">Name</th>
-                                    <th>Acronym</th>
                                     @if($user->role == 'admin')
                                         <th class="text-end">Action</th>
                                     @endif
@@ -108,20 +93,17 @@
                             <tbody>
                                 @foreach ($colleges as $college)
                                     <tr>
-                                        <td class="ps-0 d-flex  align-items-center gap-1">
-                                         
-                                            @if($college->image)
-                                                <img src="{{ asset('storage/' . $college->image) }}" width="40" class="rounded-circle p-0 m-0">
+                                        <td class="ps-0  gap-2">
+                                            <div class="d-flex align-items-center gap-1">
+                                                @if($college->image)
+                                                <img src="{{ asset('storage/' . $college->image) }}" width="32" height="32" class="rounded-circle">
                                             @else
-                                                <i class="ph-duotone fs-24 ph-ranking mb-0"></i>
+                                                <i class="ph-duotone fs-24 ph-ranking"></i>
                                             @endif
-                                            <p class="d-inline-block align-middle d-inline-block align-middle mb-0 py- ">
-                                                <span class="font-13 fw-medium">{{$college->name}}</span>
-                                            </p>
-         
-                                        </td>
-                                        <td>
-                                            <p class="d-inline-block align-middle mb-0 text-body">{{ $college->acronym }}</p>
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <span class="font-13 fw-medium">{{$college->name}} ({{ $college->acronym }})</span>
+                                            </div>
+                                            </div>
                                         </td>
                                         @if($user->role == 'admin')
                                         <td class="text-end">
@@ -134,10 +116,10 @@
                                                 <i class="mdi mdi-delete fs-14 text-danger"></i>
                                             </a>
                                         </td>
-                                        @endif  
+                                        @endif
                                     </tr>
 
-                                
+
 
                                 @endforeach
                             </tbody>
@@ -182,15 +164,16 @@
                                         @method('PUT')
 
                                         <div class="mb-2 d-flex justify-content-center align-items-center">
-                                                                    <img id="EditImagePreview" 
-                                                                        src="{{ asset('storage/default.jpg') }}" 
-                                                                        width="100" height="100"  
-                                                                        class="rounded-circle object-fit-cover">
-                                                                </div>
-  
+                                            <img id="ImagePreview{{ $college->id }}"
+                                             onclick="document.getElementById('editImage').click();"
+                                                src="{{ $college->image ? asset('storage/' . $college->image) : asset('storage/default.jpg') }}"
+                                                width="100" height="100"
+                                                class="rounded-circle object-fit-cover">
+                                        </div>
+
                                         <div class="mb-2 ">
-                                            <label for="" class="form-label">Image</label>          
-                                            <input type="file" accept="image/*" name="image" class="form-control" id="editImage">
+                                            <label for="editImage" class="form-label">Image</label>
+                                            <input type="file" accept="image/*" name="image" class="form-control" id="editImage" onchange="previewImage(event, 'ImagePreview{{ $college->id }}')">
                                         </div>
 
                                         <div class="mb-3">
@@ -233,7 +216,7 @@
     function setEditFormAction(action, name, acronym, image) {
         document.getElementById('editForm').action = action;
         document.getElementById('editName').value = name;
-        
+
         document.getElementById('editAcronym').value = acronym;
 
         const preview = document.getElementById('EditImagePreview');
@@ -256,7 +239,7 @@
 <script>
     function previewImage(event, teamId) {
         const input = event.target;
-        const preview = document.getElementById(`imagePreview${teamId}`);
+        const preview = document.getElementById(teamId);
 
         if (input.files && input.files[0]) {
             const reader = new FileReader();

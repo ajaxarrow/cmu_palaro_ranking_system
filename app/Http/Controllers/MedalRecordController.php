@@ -56,7 +56,7 @@ class MedalRecordController extends Controller
         return redirect()->route('medal_records.index')->with('success', 'Medal record created successfully.');
     }
     public function approve(Request $request, string $id)
-    {   
+    {
         $validatedData = $request->validate([
             'is_posted' => 'required|boolean',
         ]);
@@ -64,9 +64,9 @@ class MedalRecordController extends Controller
         $medalRecord = MedalRecord::findOrFail($id);
         $validatedData['posted_by'] = auth()->id();
         $medalRecord->update($validatedData);
-       
-        return redirect()->route('medal_records.index')->with('success', 'Medal record approved successfully.');    
-        
+
+        return redirect()->route('medal_records.index')->with('success', 'Medal record approved successfully.');
+
     }
 
     /**
@@ -116,7 +116,7 @@ class MedalRecordController extends Controller
     {
 
         $medalRecord = MedalRecord::findOrFail($id);
-    
+
         $medalRecord->delete();
         return redirect()->route('medal_records.index')->with('success', 'Medal record deleted successfully.');
     }
