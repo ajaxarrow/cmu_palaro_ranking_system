@@ -872,235 +872,231 @@
     </script>
 
     <script>
-   document.addEventListener('DOMContentLoaded', function() {
-    const exportBtn = document.getElementById('exportPDF');
-    const progressBar = document.getElementById('exportProgress');
-    const progressFill = document.querySelector('.progress-fill');
-    const progressText = document.getElementById('progressText');
-    
-    exportBtn.addEventListener('click', function() {
-        progressBar.style.display = 'block';
-        exportBtn.disabled = true;
-        progressFill.style.width = '10%';
-        progressText.textContent = 'Preparing document...';
+    document.addEventListener('DOMContentLoaded', function() {
+        const exportBtn = document.getElementById('exportPDF');
+        const progressBar = document.getElementById('exportProgress');
+        const progressFill = document.querySelector('.progress-fill');
+        const progressText = document.getElementById('progressText');
         
-
-        
-        setTimeout(() => {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('l', 'mm', 'a4');
+        exportBtn.addEventListener('click', function() {
+            progressBar.style.display = 'block';
+            exportBtn.disabled = true;
+            progressFill.style.width = '10%';
+            progressText.textContent = 'Preparing document...';
             
-            // Get team name
-            const teamName = document.querySelector('.fw-bold.mb-0').textContent
-                .trim()
-                .replace('🏆', '')
-                .replace('Medal Dashboard', '')
-                .trim();
-            
-            // Document styling constants
-            const colors = {
-                primary: [0, 73, 30],       // Dark Green #00491e
-            secondary: [2, 104, 30],     // Bright Green #02681e
-            accent: [255, 198, 1],       // Gold #ffc601
-            light: [241, 245, 249],
-            white: [255, 255, 255],
-            lightText: [148, 163, 184],
-            darkText: [30, 41, 59]
-            };
-            
-            // Modern cover page
-            doc.setFillColor(...colors.primary);
-            doc.rect(0, 0, doc.internal.pageSize.width, doc.internal.pageSize.height, 'F');
-            
-            // Add a large swoosh design element
-            doc.setFillColor(42, 125, 255);
-            doc.roundedRect(0, doc.internal.pageSize.height - 110, doc.internal.pageSize.width, 110, 80, 0, 'F');
-            
-            // Add white text for header
-            doc.setTextColor(...colors.white);
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(38);
-            doc.text(teamName, 30, 50);
-            
-            doc.setFontSize(26);
-            doc.text('Medal Report', 30, 65);
-            
-            // Add medal icons
-            doc.setFillColor(...colors.gold);
-            doc.circle(35, 100, 10, 'F');
-            doc.setFillColor(...colors.silver);
-            doc.circle(65, 100, 10, 'F');
-            doc.setFillColor(...colors.bronze);
-            doc.circle(95, 100, 10, 'F');
-            
-           
-            
-            // Add date with modern styling
-            doc.setTextColor(...colors.lightText);
-            doc.setFontSize(12);
-            doc.text(`Generated: ${new Date().toLocaleDateString()}`, 30, 140);
-            
-            // Add a new page for the content
-            doc.addPage();
-            
-            // Create header
-            doc.setFillColor(...colors.primary);
-            doc.rect(0, 0, doc.internal.pageSize.width, 20, 'F');
-            
-            doc.setTextColor(...colors.white);
-            doc.setFontSize(12);
-            doc.setFont('helvetica', 'bold');
-            doc.text(teamName + ' Medal Report', doc.internal.pageSize.width / 2, 13, { align: 'center' });
-            
-            progressFill.style.width = '30%';
-            progressText.textContent = 'Adding medal summary...';
-            
-            // Modern summary section with color-coded boxes
-            doc.setDrawColor(...colors.light);
-            
-            // Gold summary box
-            const summaryStartY = 30;
-            const boxWidth = 60;
-            const boxHeight = 30;
-            const gapBetweenBoxes = 10;
-            
-            // Create gold summary box
-            doc.setFillColor(...colors.gold);
-            doc.roundedRect(20, summaryStartY, boxWidth, boxHeight, 3, 3, 'F');
-            doc.setTextColor(...colors.darkText);
-            doc.setFontSize(14);
-            doc.setFont('helvetica', 'bold');
-            doc.text('Gold Medals', 50, summaryStartY + 10, { align: 'center' });
-            doc.setFontSize(18);
-            doc.text(document.querySelector('.col-md-3:nth-child(1) .fs-3.fw-bold').textContent.trim(), 
-                    50, summaryStartY + 22, { align: 'center' });
-            
-            // Create silver summary box
-            doc.setFillColor(...colors.silver);
-            doc.roundedRect(20 + boxWidth + gapBetweenBoxes, summaryStartY, boxWidth, boxHeight, 3, 3, 'F');
-            doc.setTextColor(...colors.darkText);
-            doc.setFontSize(14);
-            doc.setFont('helvetica', 'bold');
-            doc.text('Silver Medals', 50 + boxWidth + gapBetweenBoxes, summaryStartY + 10, { align: 'center' });
-            doc.setFontSize(18);
-            doc.text(document.querySelector('.col-md-3:nth-child(2) .fs-3.fw-bold').textContent.trim(), 
-                    50 + boxWidth + gapBetweenBoxes, summaryStartY + 22, { align: 'center' });
-            
-            // Create bronze summary box
-            doc.setFillColor(...colors.bronze);
-            doc.roundedRect(20 + (boxWidth + gapBetweenBoxes) * 2, summaryStartY, boxWidth, boxHeight, 3, 3, 'F');
-            doc.setTextColor(...colors.darkText);
-            doc.setFontSize(14);
-            doc.setFont('helvetica', 'bold');
-            doc.text('Bronze Medals', 50 + (boxWidth + gapBetweenBoxes) * 2, summaryStartY + 10, { align: 'center' });
-            doc.setFontSize(18);
-            doc.text(document.querySelector('.col-md-3:nth-child(3) .fs-3.fw-bold').textContent.trim(), 
-                    50 + (boxWidth + gapBetweenBoxes) * 2, summaryStartY + 22, { align: 'center' });
-            
-            // Create total summary box
-            doc.setFillColor(...colors.primary);
-            doc.roundedRect(20 + (boxWidth + gapBetweenBoxes) * 3, summaryStartY, boxWidth, boxHeight, 3, 3, 'F');
-            doc.setTextColor(...colors.white);
-            doc.setFontSize(14);
-            doc.setFont('helvetica', 'bold');
-            doc.text('Total Medals', 50 + (boxWidth + gapBetweenBoxes) * 3, summaryStartY + 10, { align: 'center' });
-            doc.setFontSize(18);
-            doc.text(document.querySelector('.col-md-3:nth-child(4) .fs-3.fw-bold').textContent.trim(), 
-                    50 + (boxWidth + gapBetweenBoxes) * 3, summaryStartY + 22, { align: 'center' });
-            
-            // Section title for detailed breakdown
-            doc.setTextColor(...colors.darkText);
-            doc.setFontSize(14);
-            doc.setFont('helvetica', 'bold');
-            doc.text('Medal Breakdown by Sport & Event', 20, summaryStartY + boxHeight + 15);
-            
-            progressFill.style.width = '60%';
-            progressText.textContent = 'Processing table data...';
-            
-            // Process table data
-            const table = document.getElementById('saving-datatable-shesh');
-            const rows = Array.from(table.querySelectorAll('tbody tr'));
+            setTimeout(() => {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('l', 'mm', 'a4');
+                
+                // Get team name
+                const teamName = document.querySelector('.fw-bold.mb-0').textContent
+                    .trim()
+                    .replace('🏆', '')
+                    .replace('Medal Dashboard', '')
+                    .trim();
+                
+                // Document styling constants
+                const colors = {
+                    primary: [0, 73, 30],       // Dark Green #00491e
+                    secondary: [2, 104, 30],     // Bright Green #02681e
+                    accent: [255, 198, 1],       // Gold #ffc601
+                    light: [241, 245, 249],
+                    white: [255, 255, 255],
+                    lightText: [148, 163, 184],
+                    darkText: [30, 41, 59]
+                };
+                
+                // Modern cover page
+                doc.setFillColor(...colors.primary);
+                doc.rect(0, 0, doc.internal.pageSize.width, doc.internal.pageSize.height, 'F');
+                
+                // Add a large swoosh design element
+                doc.setFillColor(42, 125, 255);
+                doc.roundedRect(0, doc.internal.pageSize.height - 110, doc.internal.pageSize.width, 110, 80, 0, 'F');
+                
+                // Add white text for header
+                doc.setTextColor(...colors.white);
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(38);
+                doc.text(teamName, 30, 50);
+                
+                doc.setFontSize(26);
+                doc.text('Medal Report', 30, 65);
+                
+                // Add medal icons
+                doc.setFillColor(...colors.gold);
+                doc.circle(35, 100, 10, 'F');
+                doc.setFillColor(...colors.silver);
+                doc.circle(65, 100, 10, 'F');
+                doc.setFillColor(...colors.bronze);
+                doc.circle(95, 100, 10, 'F');
+                
+                // Add date with modern styling
+                doc.setTextColor(...colors.lightText);
+                doc.setFontSize(12);
+                doc.text(`Generated: ${new Date().toLocaleDateString()}`, 30, 140);
+                
+                // Add a new page for the content
+                doc.addPage();
+                
+                // Create header
+                doc.setFillColor(...colors.primary);
+                doc.rect(0, 0, doc.internal.pageSize.width, 20, 'F');
+                
+                doc.setTextColor(...colors.white);
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'bold');
+                doc.text(teamName + ' Medal Report', doc.internal.pageSize.width / 2, 13, { align: 'center' });
+                
+                progressFill.style.width = '30%';
+                progressText.textContent = 'Adding medal summary...';
+                
+                // Modern summary section with color-coded boxes
+                doc.setDrawColor(...colors.light);
+                
+                // Gold summary box
+                const summaryStartY = 30;
+                const boxWidth = 60;
+                const boxHeight = 30;
+                const gapBetweenBoxes = 10;
+                
+                // Create gold summary box
+                doc.setFillColor(...colors.gold);
+                doc.roundedRect(20, summaryStartY, boxWidth, boxHeight, 3, 3, 'F');
+                doc.setTextColor(...colors.darkText);
+                doc.setFontSize(14);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Gold Medals', 50, summaryStartY + 10, { align: 'center' });
+                doc.setFontSize(18);
+                doc.text(document.querySelector('.col-md-3:nth-child(1) .fs-3.fw-bold').textContent.trim(), 
+                        50, summaryStartY + 22, { align: 'center' });
+                
+                // Create silver summary box
+                doc.setFillColor(...colors.silver);
+                doc.roundedRect(20 + boxWidth + gapBetweenBoxes, summaryStartY, boxWidth, boxHeight, 3, 3, 'F');
+                doc.setTextColor(...colors.darkText);
+                doc.setFontSize(14);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Silver Medals', 50 + boxWidth + gapBetweenBoxes, summaryStartY + 10, { align: 'center' });
+                doc.setFontSize(18);
+                doc.text(document.querySelector('.col-md-3:nth-child(2) .fs-3.fw-bold').textContent.trim(), 
+                        50 + boxWidth + gapBetweenBoxes, summaryStartY + 22, { align: 'center' });
+                
+                // Create bronze summary box
+                doc.setFillColor(...colors.bronze);
+                doc.roundedRect(20 + (boxWidth + gapBetweenBoxes) * 2, summaryStartY, boxWidth, boxHeight, 3, 3, 'F');
+                doc.setTextColor(...colors.darkText);
+                doc.setFontSize(14);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Bronze Medals', 50 + (boxWidth + gapBetweenBoxes) * 2, summaryStartY + 10, { align: 'center' });
+                doc.setFontSize(18);
+                doc.text(document.querySelector('.col-md-3:nth-child(3) .fs-3.fw-bold').textContent.trim(), 
+                        50 + (boxWidth + gapBetweenBoxes) * 2, summaryStartY + 22, { align: 'center' });
+                
+                // Create total summary box
+                doc.setFillColor(...colors.primary);
+                doc.roundedRect(20 + (boxWidth + gapBetweenBoxes) * 3, summaryStartY, boxWidth, boxHeight, 3, 3, 'F');
+                doc.setTextColor(...colors.white);
+                doc.setFontSize(14);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Total Medals', 50 + (boxWidth + gapBetweenBoxes) * 3, summaryStartY + 10, { align: 'center' });
+                doc.setFontSize(18);
+                doc.text(document.querySelector('.col-md-3:nth-child(4) .fs-3.fw-bold').textContent.trim(), 
+                        50 + (boxWidth + gapBetweenBoxes) * 3, summaryStartY + 22, { align: 'center' });
+                
+                // Section title for detailed breakdown
+                doc.setTextColor(...colors.darkText);
+                doc.setFontSize(14);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Medal Breakdown by Sport & Event', 20, summaryStartY + boxHeight + 15);
+                
+                progressFill.style.width = '60%';
+                progressText.textContent = 'Processing table data...';
+                
+                // Process table data
+                const table = document.getElementById('saving-datatable-shesh');
+                const rows = Array.from(table.querySelectorAll('tbody tr'));
             const tableData = [];
             let currentSport = '';
-            let rowSpanCount = 0;
+                let rowSpanCount = 0;
             
             // Process each row
-            for (let i = 0; i < rows.length; i++) {
-                const row = rows[i];
+                for (let i = 0; i < rows.length; i++) {
+                    const row = rows[i];
                 const cells = Array.from(row.cells);
-                
-                // Skip rows that are filtered out
-                if (getComputedStyle(row).display === 'none') continue;
+                    
+                    // Skip rows that are filtered out
+                    if (getComputedStyle(row).display === 'none') continue;
                 
                 // Check if this is a sport header row (has rowspan)
                 if (cells[0].hasAttribute('rowspan')) {
                     currentSport = cells[0].textContent.trim();
-                    rowSpanCount = parseInt(cells[0].getAttribute('rowspan')) - 1;
-                    
-                    const rowData = [
-                        currentSport,
-                        cells[1].textContent.trim()
-                    ];
-                    
-                    // Add the medal data
-                    for (let j = 2; j < cells.length; j++) {
-                        rowData.push(cells[j].textContent.trim());
+                        rowSpanCount = parseInt(cells[0].getAttribute('rowspan')) - 1;
+                        
+                        const rowData = [
+                            currentSport,
+                            cells[1].textContent.trim()
+                        ];
+                        
+                        // Add the medal data
+                        for (let j = 2; j < cells.length; j++) {
+                            rowData.push(cells[j].textContent.trim());
+                        }
+                        
+                        tableData.push(rowData);
                     }
-                    
-                    tableData.push(rowData);
-                }
-                // Check if this is a continuation of events for the current sport
-                else if (rowSpanCount > 0) {
-                    const rowData = [
-                        currentSport,
-                        cells[0].textContent.trim()
-                    ];
-                    
-                    // Add the medal data
-                    for (let j = 1; j < cells.length; j++) {
-                        rowData.push(cells[j].textContent.trim());
-                    }
-                    
-                    tableData.push(rowData);
-                    rowSpanCount--;
+                    // Check if this is a continuation of events for the current sport
+                    else if (rowSpanCount > 0) {
+                        const rowData = [
+                            currentSport,
+                            cells[0].textContent.trim()
+                        ];
+                        
+                        // Add the medal data
+                        for (let j = 1; j < cells.length; j++) {
+                            rowData.push(cells[j].textContent.trim());
+                        }
+                        
+                        tableData.push(rowData);
+                        rowSpanCount--;
                 }
                 // Check if this is a sport total row
                 else if (cells[0].textContent.includes('Total for')) {
-                    const rowData = [
-                        cells[0].textContent.trim(),
-                        ''
-                    ];
-                    
-                    // Add the medal data
-                    for (let j = 1; j < cells.length; j++) {
-                        rowData.push(cells[j].textContent.trim());
-                    }
-                    
-                    tableData.push(rowData);
+                        const rowData = [
+                            cells[0].textContent.trim(),
+                            ''
+                        ];
+                        
+                        // Add the medal data
+                        for (let j = 1; j < cells.length; j++) {
+                            rowData.push(cells[j].textContent.trim());
+                        }
+                        
+                        tableData.push(rowData);
                 }
                 // Check if this is the overall total row
                 else if (cells[0].textContent.includes('Overall Total')) {
-                    const rowData = [
-                        'Overall Total',
-                        ''
-                    ];
-                    
-                    // Add the medal data
-                    for (let j = 2; j < cells.length; j++) {
-                        rowData.push(cells[j].textContent.trim());
+                        const rowData = [
+                            'Overall Total',
+                            ''
+                        ];
+                        
+                        // Add the medal data
+                        for (let j = 2; j < cells.length; j++) {
+                            rowData.push(cells[j].textContent.trim());
+                        }
+                        
+                        tableData.push(rowData);
                     }
-                    
-                    tableData.push(rowData);
                 }
-            }
-            
-            progressFill.style.width = '80%';
-            progressText.textContent = 'Generating table...';
-            
-            // Modern main table styling
-            doc.autoTable({
-                startY: summaryStartY + boxHeight + 20,
-                head: [[
+                
+                progressFill.style.width = '80%';
+                progressText.textContent = 'Generating table...';
+                
+                // Modern main table styling
+                doc.autoTable({
+                    startY: summaryStartY + boxHeight + 20,
+                    head: [[
                     'Sports',
                     'Event Categories',
                     'Gold Count',
@@ -1111,127 +1107,127 @@
                     'Bronze Weight',
                     'Total Medals',
                     'Total Weight'
-                ]],
-                body: tableData,
-                theme: 'grid',
-                styles: {
-                    fontSize: 9,
-                    cellPadding: 4,
-                    lineColor: [240, 240, 240],
-                    lineWidth: 0.1,
-                    font: 'helvetica',
-                },
-                headStyles: {
-                    fillColor: colors.primary,
-                    textColor: colors.white,
-                    fontSize: 10,
-                    fontStyle: 'bold',
-                    halign: 'center',
-                    cellPadding: 5,
-                    lineWidth: 0
-                },
+                    ]],
+                    body: tableData,
+                    theme: 'grid',
+                    styles: {
+                        fontSize: 9,
+                        cellPadding: 4,
+                        lineColor: [240, 240, 240],
+                        lineWidth: 0.1,
+                        font: 'helvetica',
+                    },
+                    headStyles: {
+                        fillColor: colors.primary,
+                        textColor: colors.white,
+                        fontSize: 10,
+                        fontStyle: 'bold',
+                        halign: 'center',
+                        cellPadding: 5,
+                        lineWidth: 0
+                    },
                 columnStyles: {
                     0: { halign: 'left', fontStyle: 'bold', cellWidth: 'auto' },
                     1: { halign: 'left', cellWidth: 'auto' },
-                    2: { halign: 'center', cellWidth: 'auto' },
-                    3: { halign: 'center', cellWidth: 'auto' },
-                    4: { halign: 'center', cellWidth: 'auto' },
-                    5: { halign: 'center', cellWidth: 'auto' },
-                    6: { halign: 'center', cellWidth: 'auto' },
-                    7: { halign: 'center', cellWidth: 'auto' },
-                    8: { halign: 'center', fontStyle: 'bold', cellWidth: 'auto' },
-                    9: { halign: 'center', fontStyle: 'bold', cellWidth: 'auto' }
-                },
-                alternateRowStyles: {
-                    fillColor: colors.light
-                },
-                didParseCell: function(data) {
-                    const cellText = data.cell.text.join(' ');
-                    
-                    // Style medal count cells with their respective colors
-                    if (data.column.index === 2 && data.section === 'body') {
-                        data.cell.styles.textColor = colors.gold;
-                        data.cell.styles.fontStyle = 'bold';
-                    } else if (data.column.index === 4 && data.section === 'body') {
-                        data.cell.styles.textColor = colors.silver;
-                        data.cell.styles.fontStyle = 'bold';
-                    } else if (data.column.index === 6 && data.section === 'body') {
-                        data.cell.styles.textColor = colors.bronze;
-                        data.cell.styles.fontStyle = 'bold';
-                    }
-                    
-                    // Special styling for total rows
-                    if (cellText.includes('Total for')) {
-                        data.cell.styles.fillColor = [240, 245, 250];
-                        data.cell.styles.textColor = colors.darkText;
-                        data.cell.styles.fontStyle = 'bold';
-                    } else if (cellText === 'Overall Total') {
-                        data.cell.styles.fillColor = colors.primary;
-                        data.cell.styles.textColor = colors.white;
-                        data.cell.styles.fontStyle = 'bold';
-                    }
-                },
-                willDrawCell: function(data) {
-                    // Add rounded corners to the cells in the first and last columns
-                    if (data.section === 'body') {
-                        if (data.column.index === 0) {
-                            doc.roundedRect(data.cell.x, data.cell.y, data.cell.width, data.cell.height, 1, 1, 'F');
-                        } else if (data.column.index === data.table.columns.length - 1) {
-                            doc.roundedRect(data.cell.x, data.cell.y, data.cell.width, data.cell.height, 1, 1, 'F');
+                        2: { halign: 'center', cellWidth: 'auto' },
+                        3: { halign: 'center', cellWidth: 'auto' },
+                        4: { halign: 'center', cellWidth: 'auto' },
+                        5: { halign: 'center', cellWidth: 'auto' },
+                        6: { halign: 'center', cellWidth: 'auto' },
+                        7: { halign: 'center', cellWidth: 'auto' },
+                        8: { halign: 'center', fontStyle: 'bold', cellWidth: 'auto' },
+                        9: { halign: 'center', fontStyle: 'bold', cellWidth: 'auto' }
+                    },
+                    alternateRowStyles: {
+                        fillColor: colors.light
+                    },
+                    didParseCell: function(data) {
+                        const cellText = data.cell.text.join(' ');
+                        
+                        // Style medal count cells with their respective colors
+                        if (data.column.index === 2 && data.section === 'body') {
+                            data.cell.styles.textColor = colors.gold;
+                            data.cell.styles.fontStyle = 'bold';
+                        } else if (data.column.index === 4 && data.section === 'body') {
+                            data.cell.styles.textColor = colors.silver;
+                            data.cell.styles.fontStyle = 'bold';
+                        } else if (data.column.index === 6 && data.section === 'body') {
+                            data.cell.styles.textColor = colors.bronze;
+                            data.cell.styles.fontStyle = 'bold';
                         }
-                    }
-                },
-                margin: { top: 20, left: 10, right: 10 },
-            });
-            
-            // Modern footer with page numbers
-            const pageCount = doc.internal.getNumberOfPages();
-            for (let i = 1; i <= pageCount; i++) {
-                doc.setPage(i);
+                        
+                        // Special styling for total rows
+                        if (cellText.includes('Total for')) {
+                            data.cell.styles.fillColor = [240, 245, 250];
+                            data.cell.styles.textColor = colors.darkText;
+                            data.cell.styles.fontStyle = 'bold';
+                        } else if (cellText === 'Overall Total') {
+                            data.cell.styles.fillColor = colors.primary;
+                            data.cell.styles.textColor = colors.white;
+                            data.cell.styles.fontStyle = 'bold';
+                        }
+                    },
+                    willDrawCell: function(data) {
+                        // Add rounded corners to the cells in the first and last columns
+                        if (data.section === 'body') {
+                            if (data.column.index === 0) {
+                                doc.roundedRect(data.cell.x, data.cell.y, data.cell.width, data.cell.height, 1, 1, 'F');
+                            } else if (data.column.index === data.table.columns.length - 1) {
+                                doc.roundedRect(data.cell.x, data.cell.y, data.cell.width, data.cell.height, 1, 1, 'F');
+                            }
+                        }
+                    },
+                    margin: { top: 20, left: 10, right: 10 },
+                });
                 
-                // Skip footer on the cover page
-                if (i === 1) continue;
+                // Modern footer with page numbers
+                const pageCount = doc.internal.getNumberOfPages();
+                for (let i = 1; i <= pageCount; i++) {
+                    doc.setPage(i);
+                    
+                    // Skip footer on the cover page
+                    if (i === 1) continue;
+                    
+                    // Add subtle footer line
+                    doc.setDrawColor(...colors.light);
+                    doc.setLineWidth(0.5);
+                    doc.line(10, doc.internal.pageSize.height - 15, doc.internal.pageSize.width - 10, doc.internal.pageSize.height - 15);
+                    
+                    // Add page number
+                    doc.setFillColor(...colors.light);
+                    doc.roundedRect(doc.internal.pageSize.width / 2 - 15, doc.internal.pageSize.height - 12, 30, 8, 4, 4, 'F');
+                    
+                    doc.setTextColor(...colors.darkText);
+                    doc.setFontSize(8);
+                    doc.text(
+                        `Page ${i} of ${pageCount}`, 
+                        doc.internal.pageSize.width / 2, 
+                        doc.internal.pageSize.height - 7,
+                        { align: 'center' }
+                    );
+                    
+                    // Add footer text
+                    doc.setTextColor(...colors.secondary);
+                    doc.text(
+                        'Medal Tally System', 
+                        20, 
+                        doc.internal.pageSize.height - 7
+                    );
+                    
+                    // Add team name on the right
+                    doc.text(
+                        teamName, 
+                        doc.internal.pageSize.width - 20, 
+                        doc.internal.pageSize.height - 7,
+                        { align: 'right' }
+                    );
+                }
                 
-                // Add subtle footer line
-                doc.setDrawColor(...colors.light);
-                doc.setLineWidth(0.5);
-                doc.line(10, doc.internal.pageSize.height - 15, doc.internal.pageSize.width - 10, doc.internal.pageSize.height - 15);
-                
-                // Add page number
-                doc.setFillColor(...colors.light);
-                doc.roundedRect(doc.internal.pageSize.width / 2 - 15, doc.internal.pageSize.height - 12, 30, 8, 4, 4, 'F');
-                
-                doc.setTextColor(...colors.darkText);
-                doc.setFontSize(8);
-                doc.text(
-                    `Page ${i} of ${pageCount}`, 
-                    doc.internal.pageSize.width / 2, 
-                    doc.internal.pageSize.height - 7,
-                    { align: 'center' }
-                );
-                
-                // Add footer text
-                doc.setTextColor(...colors.secondary);
-                doc.text(
-                    'Medal Tally System', 
-                    20, 
-                    doc.internal.pageSize.height - 7
-                );
-                
-                // Add team name on the right
-                doc.text(
-                    teamName, 
-                    doc.internal.pageSize.width - 20, 
-                    doc.internal.pageSize.height - 7,
-                    { align: 'right' }
-                );
-            }
-            
             progressFill.style.width = '100%';
-            progressText.textContent = 'Download starting...';
+                progressText.textContent = 'Download starting...';
             
             setTimeout(() => {
-                doc.save(`${teamName}_medal_report.pdf`);
+                    doc.save(`${teamName}_medal_report.pdf`);
                 progressBar.style.display = 'none';
                 exportBtn.disabled = false;
             }, 500);
