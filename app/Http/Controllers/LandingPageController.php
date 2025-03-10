@@ -70,6 +70,8 @@ class LandingPageController extends Controller
                 'team' => $team['name'],
                 'team_image' => $team['image'],
                 'team_id' => $team['id'],
+                'description' => $team['desc'],
+                'colleges' => $team->colleges->pluck('name'),
                 'total' => $teamTotal
             ];
         }

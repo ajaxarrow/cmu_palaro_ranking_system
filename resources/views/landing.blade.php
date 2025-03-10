@@ -16,13 +16,91 @@
 <body>
 
 <style>
-    .hero-section {
+  .hero-section {
     position: relative;
     min-height: 100vh;
-    background: url('{{ Vite::asset('resources/images/landingPageBkg.jpg') }}') center/cover no-repeat;
+    background: url('{{ Vite::asset('resources/images/landingPageBkg.jpg') }}') center/cover no-repeat !important;
     overflow: hidden;
 }
 
+
+.analytics-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.analytics-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 400px;
+    background: linear-gradient(180deg, rgba(0,73,30,0.03) 0%, rgba(255,255,255,0) 100%);
+    pointer-events: none;
+}
+
+.chart-card {
+    background: white;
+    border-radius: 24px;
+    padding: 1.5rem;
+    box-shadow: 
+        0 4px 6px -1px rgba(0,0,0,0.05),
+        0 2px 4px -1px rgba(0,0,0,0.03),
+        0 0 0 1px rgba(0,0,0,0.02);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.chart-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 20px 25px -5px rgba(0,0,0,0.05),
+        0 10px 10px -5px rgba(0,0,0,0.02),
+        0 0 0 1px rgba(0,0,0,0.02);
+}
+
+.featured-chart {
+    background: linear-gradient(145deg, #ffffff, #f8fafc);
+    border: 1px solid rgba(0,73,30,0.1);
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.chart-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 0.25rem;
+}
+
+.chart-subtitle {
+    font-size: 0.875rem;
+    color: #6b7280;
+    display: block;
+}
+
+.chart-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chart-action-btn {
+    padding: 0.5rem;
+    border-radius: 8px;
+    color: #6b7280;
+    transition: all 0.2s ease;
+}
+
+.chart-action-btn:hover {
+    background: rgba(0,73,30,0.05);
+    color: #00491E;
+}
 </style>
     <!-- Hero Section -->
     <section class="hero-section">
@@ -34,149 +112,217 @@
                 <h1 class="text-7xl font-extrabold text-white mb-6 tracking-tight">
                     <span class="title-accent">CMU PALARO {{ date('Y') }}</span>
                     <span class="block text-3xl mt-8 bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-200">
-                        Excellence Through Sports
+                        
+                    Excellence Through Sports
+
                     </span>
                 </h1>
             </div>
 
             <!-- Podium Section -->
             <div class="podium-section max-w-6xl mx-auto mb-20" data-aos="fade-up">
-                <div class="flex justify-center items-end h-[400px] gap-4">
-                    <!-- Second Place -->
-                    <div class="w-[250px] relative" data-aos="fade-up" data-aos-delay="200">
-                        @if(isset($medalTally[1]))
-                        <div class="transform hover:scale-105 transition-all duration-300">
-                            <div class="relative z-20">
-                                <!-- Team Image -->
+                <!-- Desktop Podium -->
+                <div class="podium-desktop">
+                    <div class="flex justify-center items-end h-[400px] gap-4">
+                        <!-- Second Place -->
+                        <div class="podium-item second-place">
+                            @if(isset($medalTally[1]))
+                            <div class="podium-content">
                                 <div class="winner-image">
-                                    <img 
-                                        src="{{ $medalTally[0]['team_image'] ? Vite::asset('storage/' . $medalTally[0]['team_image']) : Vite::asset('resources/images/default.png') }}"
-                                        alt="{{ $medalTally[0]['team'] }}"
-                                        class="relative z-10"
-                                    >
-                                    <div class="winner-badge bg-gradient-to-r from-gray-300 to-gray-400">2</div>
+                                    <img src="{{ $medalTally[1]['team_image'] ? Vite::asset('storage/app/public/' . $team['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                         alt="{{ $medalTally[1]['team'] }}"
+                                         class="relative z-10">
+                                    <div class="winner-badge silver">2</div>
                                 </div>
-                                
-                                <!-- Team Info -->
-                                <div class="text-center mt-4">
-                                    <h3 class="font-bold text-xl mb-2 text-white">{{ $medalTally[1]['team'] }}</h3>
-                                    <div class="medal-container">
-                                        <div class="medal-item medal-gold-bg">
-                                            <span class="medal-emoji">🥇</span>
-                                            <span class="medal-count text-yellow-400">{{ $medalTally[1]['total']['gold_tally'] }}</span>
-                                        </div>
-                                        <div class="medal-item medal-silver-bg">
-                                            <span class="medal-emoji">🥈</span>
-                                            <span class="medal-count text-gray-300">{{ $medalTally[1]['total']['silver_tally'] }}</span>
-                                        </div>
-                                        <div class="medal-item medal-bronze-bg">
-                                            <span class="medal-emoji">🥉</span>
-                                            <span class="medal-count text-orange-300">{{ $medalTally[1]['total']['bronze_tally'] }}</span>
-                                        </div>
+                                <h3 class="winner-name">{{ $medalTally[1]['team'] }}</h3>
+                                <div class="medal-stats">
+                                    <div class="medal gold">
+                                        <span>🥇</span>
+                                        <span>{{ $medalTally[1]['total']['gold_tally'] }}</span>
                                     </div>
-                                    <div class="mt-3 text-lg font-semibold text-gray-200">
-                                        {{ number_format($medalTally[1]['total']['total_weight'], 2) }} pts
+                                    <div class="medal silver">
+                                        <span>🥈</span>
+                                        <span>{{ $medalTally[1]['total']['silver_tally'] }}</span>
+                                    </div>
+                                    <div class="medal bronze">
+                                        <span>🥉</span>
+                                        <span>{{ $medalTally[1]['total']['bronze_tally'] }}</span>
                                     </div>
                                 </div>
+                                <div class="total-points">
+                                    {{ number_format($medalTally[1]['total']['total_weight'], 2) }} pts
+                                </div>
                             </div>
-                            <!-- Podium -->
-                            <div class="h-[150px] bg-gradient-to-t from-gray-400 to-gray-300 rounded-t-lg relative">
-                                <div class="absolute bottom-0 w-full h-1/3 bg-gradient-to-t from-black/20 to-transparent"></div>
-                            </div>
+                            <div class="podium-stand silver"></div>
+                            @endif
                         </div>
-                        @endif
-                    </div>
 
-                    <!-- First Place -->
-                    <div class="w-[300px] relative -mt-10" data-aos="fade-up" data-aos-delay="100">
+                        <!-- First Place -->
+                        <div class="podium-item champion">
+                            @if(isset($medalTally[0]))
+                            <div class="podium-content">
+                                <div class="winner-image">
+                                    <img src="{{ $medalTally[0]['team_image'] ? Vite::asset('storage/app/public/' . $team['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                         alt="{{ $medalTally[0]['team'] }}"
+                                         class="relative z-10">
+                                    <div class="winner-badge gold">1</div>
+                                </div>
+                                <h3 class="winner-name">{{ $medalTally[0]['team'] }}</h3>
+                                <div class="medal-stats">
+                                    <div class="medal gold">
+                                        <span>🥇</span>
+                                        <span>{{ $medalTally[0]['total']['gold_tally'] }}</span>
+                                    </div>
+                                    <div class="medal silver">
+                                        <span>🥈</span>
+                                        <span>{{ $medalTally[0]['total']['silver_tally'] }}</span>
+                                    </div>
+                                    <div class="medal bronze">
+                                        <span>🥉</span>
+                                        <span>{{ $medalTally[0]['total']['bronze_tally'] }}</span>
+                                    </div>
+                                </div>
+                                <div class="total-points champion">
+                                    {{ number_format($medalTally[0]['total']['total_weight'], 2) }} pts
+                                </div>
+                            </div>
+                            <div class="podium-stand gold"></div>
+                            @endif
+                        </div>
+
+                        <!-- Third Place -->
+                        <div class="podium-item third-place">
+                            @if(isset($medalTally[2]))
+                            <div class="podium-content">
+                                <div class="winner-image">
+                                    <img src="{{ $medalTally[2]['team_image'] ? Vite::asset('storage/app/public/' . $team['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                         alt="{{ $medalTally[2]['team'] }}"
+                                         class="relative z-10">
+                                    <div class="winner-badge bronze">3</div>
+                                </div>
+                                <h3 class="winner-name">{{ $medalTally[2]['team'] }}</h3>
+                                <div class="medal-stats">
+                                    <div class="medal gold">
+                                        <span>🥇</span>
+                                        <span>{{ $medalTally[2]['total']['gold_tally'] }}</span>
+                                    </div>
+                                    <div class="medal silver">
+                                        <span>🥈</span>
+                                        <span>{{ $medalTally[2]['total']['silver_tally'] }}</span>
+                                    </div>
+                                    <div class="medal bronze">
+                                        <span>🥉</span>
+                                        <span>{{ $medalTally[2]['total']['bronze_tally'] }}</span>
+                                    </div>
+                                </div>
+                                <div class="total-points">
+                                    {{ number_format($medalTally[2]['total']['total_weight'], 2) }} pts
+                                </div>
+                            </div>
+                            <div class="podium-stand bronze"></div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Podium -->
+                <div class="podium-mobile">
+                    <div class="mobile-podium-grid">
+                        <!-- Champion Card -->
                         @if(isset($medalTally[0]))
-                        <div class="transform hover:scale-105 transition-all duration-300">
-                            <div class="relative z-20">
-                                <!-- Trophy Animation -->
-                                <div class="absolute -top-16 left-1/2 transform -translate-x-1/2">
-                                    
+                        <div class="mobile-podium-card champion">
+                            <div class="card-content">
+                                <div class="position-marker">1st</div>
+                                <div class="team-image-wrapper">
+                                    <img src="{{ $medalTally[0]['team_image'] ? Vite::asset('storage/app/public/' . $team['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                         alt="{{ $medalTally[0]['team'] }}">
                                 </div>
-                                
-                                <!-- Team Image -->
-                                <div class="winner-image ">
-                                    <img 
-                                        src="{{ $medalTally[0]['team_image'] ? Vite::asset('storage/' . $medalTally[0]['team_image']) : Vite::asset('resources/images/default.png') }}"
-                                        alt="{{ $medalTally[0]['team'] }}"
-                                        class="relative z-10"
-                                    >
-                                    <div class="winner-badge bg-gradient-to-r from-yellow-400 to-yellow-500">1</div>
-                                </div>
-                                
-                                <!-- Team Info -->
-                                <div class="text-center mt-4">
-                                    <h3 class="font-bold text-2xl mb-2 text-white">{{ $medalTally[0]['team'] }}</h3>
-                                    <div class="medal-container">
-                                        <div class="medal-item medal-gold-bg">
-                                            <span class="medal-emoji">🥇</span>
-                                            <span class="medal-count text-yellow-400">{{ $medalTally[0]['total']['gold_tally'] }}</span>
+                                <div class="team-info">
+                                    <h3>{{ $medalTally[0]['team'] }}</h3>
+                                    <div class="medal-row">
+                                        <div class="medal-cell">
+                                            <span class="medal-icon">🥇</span>
+                                            <span class="medal-count">{{ $medalTally[0]['total']['gold_tally'] }}</span>
                                         </div>
-                                        <div class="medal-item medal-silver-bg">
-                                            <span class="medal-emoji">🥈</span>
-                                            <span class="medal-count text-gray-300">{{ $medalTally[0]['total']['silver_tally'] }}</span>
+                                        <div class="medal-cell">
+                                            <span class="medal-icon">🥈</span>
+                                            <span class="medal-count">{{ $medalTally[0]['total']['silver_tally'] }}</span>
                                         </div>
-                                        <div class="medal-item medal-bronze-bg">
-                                            <span class="medal-emoji">🥉</span>
-                                            <span class="medal-count text-orange-300">{{ $medalTally[0]['total']['bronze_tally'] }}</span>
+                                        <div class="medal-cell">
+                                            <span class="medal-icon">🥉</span>
+                                            <span class="medal-count">{{ $medalTally[0]['total']['bronze_tally'] }}</span>
                                         </div>
                                     </div>
-                                    <div class="mt-3 text-xl font-bold text-yellow-400">
+                                    <div class="total-score">
                                         {{ number_format($medalTally[0]['total']['total_weight'], 2) }} pts
                                     </div>
                                 </div>
                             </div>
-                            <!-- Podium -->
-                            <div class="h-[200px] bg-gradient-to-t from-yellow-500 to-yellow-300 rounded-t-lg relative">
-                                <div class="absolute bottom-0 w-full h-1/3 bg-gradient-to-t from-black/20 to-transparent"></div>
+                        </div>
+                        @endif
+
+                        <!-- Second Place Card -->
+                        @if(isset($medalTally[1]))
+                        <div class="mobile-podium-card silver">
+                            <div class="card-content">
+                                <div class="position-marker">2nd</div>
+                                <div class="team-image-wrapper">
+                                    <img src="{{ $medalTally[1]['team_image'] ? Vite::asset('storage/app/public/' . $team['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                         alt="{{ $medalTally[1]['team'] }}">
+                                </div>
+                                <div class="team-info">
+                                    <h3>{{ $medalTally[1]['team'] }}</h3>
+                                    <div class="medal-row">
+                                        <div class="medal-cell">
+                                            <span class="medal-icon">🥇</span>
+                                            <span class="medal-count">{{ $medalTally[1]['total']['gold_tally'] }}</span>
+                                        </div>
+                                        <div class="medal-cell">
+                                            <span class="medal-icon">🥈</span>
+                                            <span class="medal-count">{{ $medalTally[1]['total']['silver_tally'] }}</span>
+                                        </div>
+                                        <div class="medal-cell">
+                                            <span class="medal-icon">🥉</span>
+                                            <span class="medal-count">{{ $medalTally[1]['total']['bronze_tally'] }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="total-score">
+                                        {{ number_format($medalTally[1]['total']['total_weight'], 2) }} pts
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         @endif
-                    </div>
 
-                    <!-- Third Place -->
-                    <div class="w-[200px] relative" data-aos="fade-up" data-aos-delay="300">
+                        <!-- Third Place Card -->
                         @if(isset($medalTally[2]))
-                        <div class="transform hover:scale-105 transition-all duration-300">
-                            <div class="relative z-20">
-                                <!-- Team Image -->
-                                <div class="winner-image">
-                                    <img 
-                                        src="{{ $medalTally[0]['team_image'] ? Vite::asset('storage/' . $medalTally[0]['team_image']) : Vite::asset('resources/images/default.png') }}"
-                                        alt="{{ $medalTally[0]['team'] }}"
-                                        class="relative z-10"
-                                    >
-                                    <div class="winner-badge bg-gradient-to-r from-orange-400 to-orange-500">3</div>
+                        <div class="mobile-podium-card bronze">
+                            <div class="card-content">
+                                <div class="position-marker">3rd</div>
+                                <div class="team-image-wrapper">
+                                    <img src="{{ $medalTally[2]['team_image'] ? Vite::asset('storage/app/public/' . $team['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                         alt="{{ $medalTally[2]['team'] }}">
                                 </div>
-                                
-                                <!-- Team Info -->
-                                <div class="text-center mt-4">
-                                    <h3 class="font-bold text-lg mb-2 text-white">{{ $medalTally[2]['team'] }}</h3>
-                                    <div class="medal-container">
-                                        <div class="medal-item medal-gold-bg">
-                                            <span class="medal-emoji">🥇</span>
-                                            <span class="medal-count text-yellow-400">{{ $medalTally[2]['total']['gold_tally'] }}</span>
+                                <div class="team-info">
+                                    <h3>{{ $medalTally[2]['team'] }}</h3>
+                                    <div class="medal-row">
+                                        <div class="medal-cell">
+                                            <span class="medal-icon">🥇</span>
+                                            <span class="medal-count">{{ $medalTally[2]['total']['gold_tally'] }}</span>
                                         </div>
-                                        <div class="medal-item medal-silver-bg">
-                                            <span class="medal-emoji">🥈</span>
-                                            <span class="medal-count text-gray-300">{{ $medalTally[2]['total']['silver_tally'] }}</span>
+                                        <div class="medal-cell">
+                                            <span class="medal-icon">🥈</span>
+                                            <span class="medal-count">{{ $medalTally[2]['total']['silver_tally'] }}</span>
                                         </div>
-                                        <div class="medal-item medal-bronze-bg">
-                                            <span class="medal-emoji">🥉</span>
-                                            <span class="medal-count text-orange-300">{{ $medalTally[2]['total']['bronze_tally'] }}</span>
+                                        <div class="medal-cell">
+                                            <span class="medal-icon">🥉</span>
+                                            <span class="medal-count">{{ $medalTally[2]['total']['bronze_tally'] }}</span>
                                         </div>
                                     </div>
-                                    <div class="mt-3 text-lg font-semibold text-gray-200">
+                                    <div class="total-score">
                                         {{ number_format($medalTally[2]['total']['total_weight'], 2) }} pts
                                     </div>
                                 </div>
-                            </div>
-                            <!-- Podium -->
-                            <div class="h-[100px] bg-gradient-to-t from-orange-400 to-orange-300 rounded-t-lg relative">
-                                <div class="absolute bottom-0 w-full h-1/3 bg-gradient-to-t from-black/20 to-transparent"></div>
                             </div>
                         </div>
                         @endif
@@ -236,123 +382,207 @@
 
     <!-- Team Standings -->
     <section id="standings" class="py-20 bg-gray-50">
+
         <div class="container mx-auto px-4">
             <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-up">
                 Team Standings
                 <div class="w-20 h-1 bg-green-600 mx-auto mt-4"></div>
             </h2>
 
-            <div class="grid grid-cols-1 gap-8">
+
+
+            <div class="grid grid-cols-1 gap-[40px]">
+
                 @foreach($medalTally as $index => $team)
+
                 <div class="team-card" 
                      data-aos="{{ $index % 2 == 0 ? 'fade-right' : 'fade-left' }}" 
                      data-aos-delay="{{ $index * 100 }}"
                      data-team-id="{{ $index }}">
                     <div class="modern-card-wrapper">
+                        <!-- Add gradient background -->
+                        <div class="card-gradient-bg"></div>
+                        <div class="card-gradient-bg right"></div>
+                     
+                     
+                        
                         <div class="card-glass-effect"></div>
                         <div class="card-content">
-                            <div class="flex flex-col lg:flex-row items-center gap-8">
-                                <!-- Team Info Left Side -->
-                                <div class="flex-1 text-left">
-                                    <div class="team-header">
-                                        <span class="team-label">Team</span>
-                                        <h3 class="team-name">{{ $team['team'] }}</h3>
-                                        <p class="college-name">College of {{ $team['college_name'] ?? 'Unknown' }}</p>
+                        <div class="flex flex-col lg:flex-row items-center gap-8">
+                           
+                            <!-- Team Info Left Side -->
+                            <div class="flex-1 text-left">
+                                <div class="team-header">
+                                    <span class="team-label">Team</span>
+                                    <h3 class="team-name">{{ $team['team'] }}</h3>
+                                    <div class="d-flex column gap-0">
+                                    @foreach($team['colleges'] as $college)
+                                        <p class="college-name">College of {{ $college }}</p>
+                                    @endforeach
                                     </div>
-                                    <div class="team-description">
-                                        <p>{{ $team['description'] ?? 'Representing excellence in sports and academics.' }}</p>
-                                        <div class="rank-indicator">
-                                            <span class="rank-pill">
-                                                Rank #{{ $index + 1 }}
-                                            </span>
+                                   
+                                </div>
+                                <div class="team-description">
+                                    <p>{{ $team['description'] ?? 'Representing excellence in sports and academics.' }}</p>
+                                    <div class="rank-indicator">
+                                        <span class="rank-pill font-bold">
+                                            Rank #{{ $index + 1 }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                             <!-- Team Image Center -->
+                             <div class="team-image-section">
+                                <div class="modern-image-container">
+                                    <div class="rank-badge {{ 'rank-' . ($index + 1) }}">
+                                        #{{ $index + 1 }}
+                                    </div>
+                                    <div class="image-glow"></div>
+                                    <img 
+                                        src="{{ $team['team_image'] ? Vite::asset('storage/app/public/' . $team['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                        alt="{{ $team['team'] }}"
+                                        class="team-image"
+                                        crossorigin="anonymous"
+                                        loading="lazy"
+                                    >
+                                </div>
+                            </div>
+
+                            
+
+                            <!-- Team Stats Right Side -->
+                            <div class="flex-1 space-y-6">
+                                <div class="modern-stats-grid">
+                                    <div class="modern-stat-pill gold">
+                                        <div class="stat-icon">🥇</div>
+                                        <div class="stat-content">
+                                            <div class="stat-value">{{ $team['total']['gold_tally'] }}</div>
+                                            <div class="stat-label">Gold</div>
+                                            <div class="stat-points">{{ number_format($team['total']['gold_weight'], 2) }} pts</div>
+                                        </div>
+                                    </div>
+                                    <div class="modern-stat-pill silver">
+                                        <div class="stat-icon">🥈</div>
+                                        <div class="stat-content">
+                                            <div class="stat-value">{{ $team['total']['silver_tally'] }}</div>
+                                            <div class="stat-label">Silver</div>
+                                            <div class="stat-points">{{ number_format($team['total']['silver_weight'], 2) }} pts</div>
+                                        </div>
+                                    </div>
+                                    <div class="modern-stat-pill bronze">
+                                        <div class="stat-icon">🥉</div>
+                                        <div class="stat-content">
+                                            <div class="stat-value">{{ $team['total']['bronze_tally'] }}</div>
+                                            <div class="stat-label">Bronze</div>
+                                            <div class="stat-points">{{ number_format($team['total']['bronze_weight'], 2) }} pts</div>
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- Team Image Center -->
-                                <div class="team-image-section">
-                                    <div class="modern-image-container">
-                                        <div class="rank-badge {{ 'rank-' . ($index + 1) }}">
-                                            #{{ $index + 1 }}
+                                
+                                <!-- Total Score -->
+                                <div class="modern-score-container">
+                                    <div class="score-display">
+                                        <div class="score-value">
+                                            {{ number_format($team['total']['total_weight'], 2) }}
                                         </div>
-                                        <div class="image-glow"></div>
-                                        <img 
-                                            src="{{ $team['team_image'] ? Vite::asset('storage/' . $team['team_image']) : Vite::asset('resources/images/05.webp') }}"
-                                            alt="{{ $team['team'] }}"
-                                            class="team-image"
-                                            crossorigin="anonymous"
-                                            loading="lazy"
-                                        >
+                                        <div class="score-label">Total Points</div>
                                     </div>
-                                </div>
-
-                                <!-- Team Stats Right Side -->
-                                <div class="flex-1 space-y-6">
-                                    <div class="modern-stats-grid">
-                                        <div class="modern-stat-pill gold">
-                                            <div class="stat-icon">🥇</div>
-                                            <div class="stat-content">
-                                                <div class="stat-value">{{ $team['total']['gold_tally'] }}</div>
-                                                <div class="stat-label">Gold</div>
-                                                <div class="stat-points">{{ number_format($team['total']['gold_weight'], 2) }} pts</div>
-                                            </div>
-                                        </div>
-                                        <div class="modern-stat-pill silver">
-                                            <div class="stat-icon">🥈</div>
-                                            <div class="stat-content">
-                                                <div class="stat-value">{{ $team['total']['silver_tally'] }}</div>
-                                                <div class="stat-label">Silver</div>
-                                                <div class="stat-points">{{ number_format($team['total']['silver_weight'], 2) }} pts</div>
-                                            </div>
-                                        </div>
-                                        <div class="modern-stat-pill bronze">
-                                            <div class="stat-icon">🥉</div>
-                                            <div class="stat-content">
-                                                <div class="stat-value">{{ $team['total']['bronze_tally'] }}</div>
-                                                <div class="stat-label">Bronze</div>
-                                                <div class="stat-points">{{ number_format($team['total']['bronze_weight'], 2) }} pts</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Total Score -->
-                                    <div class="modern-score-container">
-                                        <div class="score-display">
-                                            <div class="score-value">
-                                                {{ number_format($team['total']['total_weight'], 2) }}
-                                            </div>
-                                            <div class="score-label">Total Points</div>
-                                        </div>
-                                        <div class="total-medals">
-                                            {{ $team['total']['total_medals'] }} total medals
-                                        </div>
+                                    <div class="total-medals">
+                                        {{ $team['total']['total_medals'] }} total medals
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+</div>
+
                 @endforeach
             </div>
         </div>
     </section>
 
-    <!-- Charts Section -->
-    <section class="py-20 bg-white">
+    <!-- Ultra-Modern Analytics Section -->
+    <section class="analytics-section py-24 bg-gradient-to-b from-gray-50 via-white to-gray-50">
         <div class="container mx-auto px-4">
-            <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-up">
-                Performance Analysis
-                <div class="w-20 h-1 bg-green-600 mx-auto mt-4"></div>
-            </h2>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-white rounded-2xl shadow-lg p-6" data-aos="fade-right">
-                    <div id="medalDistributionChart" class="h-[400px]"></div>
-                </div>
-                <div class="bg-white rounded-2xl shadow-lg p-6" data-aos="fade-left">
-                    <div id="performanceRadarChart" class="h-[400px]"></div>
+            <!-- Modern Header -->
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-5xl font-black text-gray-800 mb-4 tracking-tight">
+                    Performance Analytics
+                    <span class="block text-lg font-medium text-gray-500 mt-2">
+                        Comprehensive analysis of team achievements
+                    </span>
+                </h2>
+                <div class="flex justify-center items-center gap-2 mt-4">
+                    <span class="w-8 h-1 bg-green-500 rounded-full"></span>
+                    <span class="w-3 h-1 bg-green-300 rounded-full"></span>
+                    <span class="w-2 h-1 bg-green-200 rounded-full"></span>
                 </div>
             </div>
+
+            <!-- Main Analytics Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+                <!-- Featured Chart - Medal Distribution -->
+                <div class="lg:col-span-8" data-aos="fade-right">
+                    <div class="chart-card featured-chart">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Medal Distribution</h3>
+                            <div class="chart-actions">
+                                <button class="chart-action-btn" onclick="toggleChartView('medalDistribution')">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v16h16"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="medalDistributionChart" class="h-[400px]"></div>
+                    </div>
+                </div>
+
+                <!-- Performance Radar -->
+                <div class="lg:col-span-4" data-aos="fade-left">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Team Performance</h3>
+                        </div>
+                        <div id="performanceRadarChart" class="h-[400px]"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Secondary Analytics Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Points Progress -->
+                <div data-aos="fade-up">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Points Progression</h3>
+                            <span class="chart-subtitle">Total points accumulated</span>
+                        </div>
+                        <div id="pointsProgressChart" class="h-[300px]"></div>
+                    </div>
+                </div>
+
+                <!-- Medal Distribution Pie -->
+                <div data-aos="fade-up" data-aos-delay="100">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Medal Breakdown</h3>
+                            <span class="chart-subtitle">Distribution by type</span>
+                        </div>
+                        <div id="medalPieChart" class="h-[300px]"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modern Footer -->
+    <footer class="bg-gradient-to-b from-gray-900 to-green-900 text-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                
         </div>
     </section>
 
@@ -383,9 +613,10 @@
         const goldCounts = medalData.map(team => team.total.gold_tally);
         const silverCounts = medalData.map(team => team.total.silver_tally);
         const bronzeCounts = medalData.map(team => team.total.bronze_tally);
+        const totalPoints = medalData.map(team => team.total.total_weight);
 
-        // Medal Count Distribution Chart
-        new ApexCharts(document.querySelector("#medalDistributionChart"), {
+        // 1. Medal Distribution Chart
+        const medalDistChart = new ApexCharts(document.querySelector("#medalDistributionChart"), {
             series: [{
                 name: 'Gold',
                 data: goldCounts
@@ -401,60 +632,318 @@
                 height: 400,
                 stacked: true,
                 toolbar: {
-                    show: false
+                    show: true,
+                    tools: {
+                        download: true,
+                        selection: false,
+                        zoom: false,
+                        zoomin: false,
+                        zoomout: false,
+                        pan: false,
+                        reset: false
+                    }
+                },
+                animations: {
+                    enabled: true,
+                    easing: 'easeinout',
+                    speed: 800,
+                    animateGradually: {
+                        enabled: true,
+                        delay: 150
+                    }
                 }
             },
             plotOptions: {
                 bar: {
                     horizontal: false,
-                    borderRadius: 4
-                },
-            },
-            xaxis: {
-                categories: teams
+                    borderRadius: 8,
+                    columnWidth: '70%',
+                    dataLabels: {
+                        total: {
+                            enabled: true,
+                            style: {
+                                fontSize: '13px',
+                                fontWeight: 900
+                            }
+                        }
+                    }
+                }
             },
             colors: ['#FFD700', '#C0C0C0', '#CD7F32'],
-            title: {
-                text: 'Medal Count Distribution',
-                align: 'center',
+            dataLabels: {
+                enabled: true,
+                formatter: function(val) {
+                    return val || '';
+                },
                 style: {
-                    fontSize: '16px',
-                    fontWeight: 600
+                    fontSize: '12px'
                 }
+            },
+            xaxis: {
+                categories: teams,
+                labels: {
+                    style: {
+                        fontSize: '12px',
+                        fontWeight: 500
+                    },
+                    rotate: -45,
+                    trim: true
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Number of Medals'
+                }
+            },
+            legend: {
+                position: 'top',
+                horizontalAlign: 'left'
+            },
+            fill: {
+                opacity: 1
             }
-        }).render();
+        });
+        medalDistChart.render();
 
-        // Performance Chart (Radar)
-        new ApexCharts(document.querySelector("#performanceRadarChart"), {
+        // 2. Performance Radar Chart
+        const radarChart = new ApexCharts(document.querySelector("#performanceRadarChart"), {
             series: medalData.map(team => ({
                 name: team.team,
                 data: [
-                    team.total.gold_weight,
-                    team.total.silver_weight,
-                    team.total.bronze_weight,
-                    team.total.total_weight,
-                    team.total.total_medals
+                    team.total.gold_tally,
+                    team.total.silver_tally,
+                    team.total.bronze_tally,
+                    team.total.total_medals,
+                    team.total.total_weight
                 ]
             })),
             chart: {
                 height: 400,
                 type: 'radar',
+                dropShadow: {
+                    enabled: true,
+                    blur: 1,
+                    left: 1,
+                    top: 1
+                },
+                toolbar: {
+                    show: true,
+                    tools: {
+                        download: true
+                    }
+                }
+            },
+            stroke: {
+                width: 2
+            },
+            fill: {
+                opacity: 0.2
+            },
+            markers: {
+                size: 4,
+                hover: {
+                    size: 6
+                }
+            },
+            xaxis: {
+                categories: ['Gold', 'Silver', 'Bronze', 'Total Medals', 'Points']
+            },
+            yaxis: {
+                show: false
+            }
+        });
+        radarChart.render();
+
+        // 3. Points Progress Chart
+        const progressChart = new ApexCharts(document.querySelector("#pointsProgressChart"), {
+            series: [{
+                name: 'Total Points',
+                data: totalPoints
+            }],
+            chart: {
+                type: 'bar',
+                height: 300,
                 toolbar: {
                     show: false
                 }
             },
-            xaxis: {
-                categories: ['Gold Weight', 'Silver Weight', 'Bronze Weight', 'Total Weight', 'Total Medals']
+            plotOptions: {
+                bar: {
+                    horizontal: true,
+                    borderRadius: 6,
+                    dataLabels: {
+                        position: 'top'
+                    }
+                }
             },
-            title: {
-                text: 'Team Performance Analysis',
-                align: 'center',
+            colors: ['#00491E'],
+            dataLabels: {
+                enabled: true,
+                formatter: function(val) {
+                    return val.toFixed(2) + ' pts';
+                },
                 style: {
-                    fontSize: '16px',
-                    fontWeight: 600
+                    fontSize: '12px',
+                    colors: ['#333']
+                }
+            },
+            xaxis: {
+                categories: teams,
+                labels: {
+                    style: {
+                        fontSize: '12px'
+                    }
                 }
             }
-        }).render();
+        });
+        progressChart.render();
+
+        // 4. Medal Distribution Pie Chart
+        const pieChart = new ApexCharts(document.querySelector("#medalPieChart"), {
+            series: [
+                medalData.reduce((sum, team) => sum + team.total.gold_tally, 0),
+                medalData.reduce((sum, team) => sum + team.total.silver_tally, 0),
+                medalData.reduce((sum, team) => sum + team.total.bronze_tally, 0)
+            ],
+            chart: {
+                type: 'donut',
+                height: 300
+            },
+            labels: ['Gold', 'Silver', 'Bronze'],
+            colors: ['#FFD700', '#C0C0C0', '#CD7F32'],
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: '70%',
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                label: 'Total Medals',
+                                formatter: function(w) {
+                                    return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        height: 250
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+        });
+        pieChart.render();
+
+        // 5. Ranking Timeline Chart
+        const timelineChart = new ApexCharts(document.querySelector("#rankingTimelineChart"), {
+            series: [{
+                name: 'Points',
+                data: totalPoints
+            }],
+            chart: {
+                height: 300,
+                type: 'line',
+                zoom: {
+                    enabled: false
+                },
+                dropShadow: {
+                    enabled: true,
+                    color: '#000',
+                    top: 18,
+                    left: 7,
+                    blur: 10,
+                    opacity: 0.2
+                }
+            },
+            dataLabels: {
+                enabled: true,
+                formatter: function(val) {
+                    return val.toFixed(1);
+                }
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+            markers: {
+                size: 6,
+                strokeWidth: 0,
+                hover: {
+                    size: 9
+                }
+            },
+            xaxis: {
+                categories: teams,
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '12px'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Points'
+                }
+            }
+        });
+        timelineChart.render();
+
+        // Handle responsiveness
+        function updateChartsResponsiveness() {
+            const width = window.innerWidth;
+            if (width < 768) {
+                medalDistChart.updateOptions({
+                    plotOptions: {
+                        bar: {
+                            columnWidth: '90%'
+                        }
+                    },
+                    xaxis: {
+                        labels: {
+                            rotate: -90
+                        }
+                    }
+                });
+                
+                radarChart.updateOptions({
+                    chart: {
+                        height: 300
+                    }
+                });
+            } else {
+                medalDistChart.updateOptions({
+                    plotOptions: {
+                        bar: {
+                            columnWidth: '70%'
+                        }
+                    },
+                    xaxis: {
+                        labels: {
+                            rotate: -45
+                        }
+                    }
+                });
+                
+                radarChart.updateOptions({
+                    chart: {
+                        height: 400
+                    }
+                });
+            }
+        }
+
+        // Initial call and event listener for resize
+        updateChartsResponsiveness();
+        window.addEventListener('resize', updateChartsResponsiveness);
     </script>
 
     <script>
@@ -468,8 +957,8 @@
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
                     
-                    // Scale down for performance
-                    const maxDimension = 100;
+                    // Increase sample size for better color analysis
+                    const maxDimension = 150;
                     let width = img.naturalWidth;
                     let height = img.naturalHeight;
                     
@@ -490,70 +979,43 @@
                         const colorCounts = {};
                         const whiteThreshold = 240;
                         const blackThreshold = 30;
-                        const grayThreshold = 30;
+                        const saturationThreshold = 20;
                         
                         for (let i = 0; i < imageData.length; i += 4) {
                             const r = imageData[i];
                             const g = imageData[i + 1];
                             const b = imageData[i + 2];
                             
-                            // Skip white pixels
-                            if (r > whiteThreshold && g > whiteThreshold && b > whiteThreshold) continue;
+                            // Skip white and black pixels
+                            if ((r > whiteThreshold && g > whiteThreshold && b > whiteThreshold) ||
+                                (r < blackThreshold && g < blackThreshold && b < blackThreshold)) {
+                                continue;
+                            }
                             
-                            // Skip black pixels
-                            if (r < blackThreshold && g < blackThreshold && b < blackThreshold) continue;
-                            
-                            // Check for gray pixels
+                            // Calculate saturation
                             const max = Math.max(r, g, b);
                             const min = Math.min(r, g, b);
-                            const saturation = (max === 0) ? 0 : (max - min) / max * 100;
+                            const saturation = max === 0 ? 0 : (max - min) / max * 100;
                             
-                            if (saturation < grayThreshold) continue;
+                            if (saturation < saturationThreshold) continue;
                             
-                            // Quantize colors
-                            const quantizedR = Math.round(r / 10) * 10;
-                            const quantizedG = Math.round(g / 10) * 10;
-                            const quantizedB = Math.round(b / 10) * 10;
-                            
-                            const colorKey = `${quantizedR},${quantizedG},${quantizedB}`;
-                            
-                            if (colorCounts[colorKey]) {
-                                colorCounts[colorKey].count++;
-                                colorCounts[colorKey].saturation = Math.max(colorCounts[colorKey].saturation, saturation);
-                            } else {
-                                colorCounts[colorKey] = {
-                                    r: quantizedR,
-                                    g: quantizedG,
-                                    b: quantizedB,
-                                    count: 1,
-                                    saturation: saturation
-                                };
+                            const key = `${r},${g},${b}`;
+                            colorCounts[key] = (colorCounts[key] || 0) + 1;
+                        }
+                        
+                        // Find the most common color
+                        let maxCount = 0;
+                        let dominantColor = { r: 0, g: 73, b: 30 }; // CMU green as fallback
+                        
+                        for (const key in colorCounts) {
+                            if (colorCounts[key] > maxCount) {
+                                maxCount = colorCounts[key];
+                                const [r, g, b] = key.split(',').map(Number);
+                                dominantColor = { r, g, b };
                             }
                         }
                         
-                        // Convert to array and sort
-                        let colorsArray = Object.values(colorCounts);
-                        
-                        // Sort by count and saturation
-                        colorsArray.sort((a, b) => {
-                            const aSignificant = a.count > (width * height * 0.05);
-                            const bSignificant = b.count > (width * height * 0.05);
-                            
-                            if (aSignificant && !bSignificant) return -1;
-                            if (!aSignificant && bSignificant) return 1;
-                            
-                            if (aSignificant && bSignificant) {
-                                if (a.saturation > b.saturation) return -1;
-                                if (a.saturation < b.saturation) return 1;
-                            }
-                            
-                            return b.count - a.count;
-                        });
-                        
-                        // Use the most dominant color or fallback to CMU green
-                        const dominantColor = colorsArray.length > 0 ? colorsArray[0] : { r: 0, g: 73, b: 30 };
                         resolve(dominantColor);
-                        
                     } catch (error) {
                         console.error('Error processing image:', error);
                         resolve({ r: 0, g: 73, b: 30 }); // CMU green as fallback
@@ -579,13 +1041,26 @@
                     // Set the CSS variable for the team color
                     card.style.setProperty('--team-color-rgb', `${dominantColor.r}, ${dominantColor.g}, ${dominantColor.b}`);
                     
-                    // Apply color to team label
+                    // Apply gradient background
+                    const gradientBg = card.querySelector('.card-gradient-bg');
+                    if (gradientBg) {
+                        // Create a more dynamic gradient based on the dominant color
+                        const gradient = `
+                            rgba(${dominantColor.r}, ${dominantColor.g}, ${dominantColor.b}) 100%
+                           `;
+                        
+                        gradientBg.style.background = gradient;
+                        
+                    
+                    
+                    }
+
+                    // Rest of your existing color applications...
                     const teamLabel = card.querySelector('.team-label');
                     if (teamLabel) {
                         teamLabel.style.color = `rgb(${dominantColor.r}, ${dominantColor.g}, ${dominantColor.b})`;
                     }
                     
-                    // Apply gradient to team name
                     const teamName = card.querySelector('.team-name');
                     if (teamName) {
                         teamName.style.background = `linear-gradient(135deg, 
@@ -595,12 +1070,6 @@
                         teamName.style.webkitBackgroundClip = 'text';
                         teamName.style.webkitTextFillColor = 'transparent';
                     }
-                    
-                    // Update stat pills and score container
-                    const statPills = card.querySelectorAll('.modern-stat-pill');
-                    statPills.forEach(pill => {
-                        pill.style.borderColor = `rgba(${dominantColor.r}, ${dominantColor.g}, ${dominantColor.b}, 0.2)`;
-                    });
                 }
             } catch (error) {
                 console.error('Error initializing team card:', error);
@@ -622,6 +1091,57 @@
                     img.onload = () => initializeTeamCard(img, teamId);
                 }
             });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const scrollContainer = document.querySelector('.podium-scroll-container');
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            if (scrollContainer) {
+                scrollContainer.addEventListener('mousedown', (e) => {
+                    isDown = true;
+                    scrollContainer.classList.add('active');
+                    startX = e.pageX - scrollContainer.offsetLeft;
+                    scrollLeft = scrollContainer.scrollLeft;
+                });
+
+                scrollContainer.addEventListener('mouseleave', () => {
+                    isDown = false;
+                    scrollContainer.classList.remove('active');
+                });
+
+                scrollContainer.addEventListener('mouseup', () => {
+                    isDown = false;
+                    scrollContainer.classList.remove('active');
+                });
+
+                scrollContainer.addEventListener('mousemove', (e) => {
+                    if (!isDown) return;
+                    e.preventDefault();
+                    const x = e.pageX - scrollContainer.offsetLeft;
+                    const walk = (x - startX) * 2;
+                    scrollContainer.scrollLeft = scrollLeft - walk;
+                });
+
+                // Snap to closest card after scroll
+                scrollContainer.addEventListener('scroll', () => {
+                    clearTimeout(scrollContainer.scrollTimeout);
+                    scrollContainer.scrollTimeout = setTimeout(() => {
+                        const cards = document.querySelectorAll('.podium-card');
+                        const scrollPosition = scrollContainer.scrollLeft;
+                        const cardWidth = cards[0].offsetWidth;
+                        const targetIndex = Math.round(scrollPosition / cardWidth);
+                        scrollContainer.scrollTo({
+                            left: targetIndex * cardWidth,
+                            behavior: 'smooth'
+                        });
+                    }, 150);
+                });
+            }
         });
     </script>
 </body>
