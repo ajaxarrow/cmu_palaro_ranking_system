@@ -64,6 +64,7 @@
                     </a>
                 </li>
 
+                @if($user->role == 'admin')
                 <li class="menu-title mt-2">Management</li>
 
                 <li>
@@ -72,6 +73,7 @@
                         <span> Users </span>
                     </a>
                 </li>
+                @endif
 
             </ul>
 

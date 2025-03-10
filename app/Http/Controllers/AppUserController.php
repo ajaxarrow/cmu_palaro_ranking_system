@@ -17,6 +17,16 @@ class AppUserController extends Controller
     {   
 
         $users = User::where('is_deleted', false)->get();
+        $user = auth()->user();
+        
+        if ($user->role != 'admin' ) {
+            
+            return redirect()->route('teams.index')->with('error', 'You are not allowed u paking shiet!');
+
+        }
+    
+
+
         return view('admin.users.index', compact('users'));
     }
 
