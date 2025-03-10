@@ -33,19 +33,15 @@
                             <span>My Account</span>
                         </a>
 
-                        <!-- item-->
-                        <a href="auth-lock-screen.html" class="dropdown-item notify-item">
-                            <i class="mdi mdi-lock-outline fs-16 align-middle"></i>
-                            <span>Lock Screen</span>
-                        </a>
 
                         <div class="dropdown-divider"></div>
-
-                        <!-- item-->
-                        <a href="{{route('logout')}}" class="dropdown-item notify-item">
-                            <i class="mdi mdi-location-exit fs-16 align-middle"></i>
-                            <span>Logout</span>
-                        </a>
+                        <form id="logout-form" method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="dropdown-item notify-item">
+                                <i class="mdi mdi-location-exit fs-16 align-middle"></i>
+                                <span>Logout</span>
+                            </button>
+                        </form>
 
                     </div>
                 </li>
