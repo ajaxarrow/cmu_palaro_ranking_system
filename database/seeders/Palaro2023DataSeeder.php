@@ -13,6 +13,7 @@ class Palaro2023DataSeeder extends Seeder
      */
     public function run()
     {
+
         $now = now();
         $year = 2023;
 
