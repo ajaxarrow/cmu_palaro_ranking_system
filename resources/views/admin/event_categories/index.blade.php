@@ -60,6 +60,10 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="mb-3">
+                            <label for="medalCount" class="form-label">Medal Count</label>
+                            <input type="number" name="medal_count" class="form-control" id="medalCount" required>
+                        </div>
                         <div class="hstack gap-2 justify-content-end">
                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Submit</button>
@@ -86,6 +90,7 @@
                                     <th>Double Bronze</th>
                                     <th>Sport</th>
                                     <th>Medal Weight Category</th>
+                                    <th>Medal Count</th>
                                     @if($user->role == 'admin')
                                         <th class="text-end">Action</th>
                                     @endif
@@ -110,6 +115,9 @@
                                         </td>
                                         <td>
                                             <p class="d-inline-block align-middle mb-0 text-body">{{ $eventCategory->medalWeightCategory->name }}</p>
+                                        </td>
+                                        <td>
+                                            <p class="d-inline-block align-middle mb-0 text-body">{{ $eventCategory->medal_count }}</p>
                                         </td>
                                         @if($user->role == 'admin')
                                             <td class="text-end">
@@ -162,6 +170,10 @@
                                                                         <option value="{{ $category->id }}" {{ $eventCategory->medal_weight_category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                                                                     @endforeach
                                                                 </select>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="medalCount" class="form-label">Medal Count</label>
+                                                                <input type="number" name="medal_count" class="form-control" id="medalCount" value="{{$eventCategory->medal_count}}" required>
                                                             </div>
                                                             <div class="hstack gap-2 justify-content-end">
                                                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>

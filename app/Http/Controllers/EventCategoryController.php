@@ -39,13 +39,14 @@ class EventCategoryController extends Controller
             'is_double_bronze' => 'nullable|boolean',
             'sport_id' => 'required|exists:sports,id',
             'medal_weight_category_id' => 'required|exists:medal_weight_categories,id',
+            'medal_count' => 'required|numeric',
         ]);
-    
+
         // If checkbox is not in request, set it to false
         $validatedData['is_double_bronze'] = $request->boolean('is_double_bronze', false);
-    
+
         EventCategory::create($validatedData);
-    
+
         return redirect()->route('event_categories.index')->with('success', 'Event Category created successfully.');
     }
 
@@ -72,8 +73,9 @@ class EventCategoryController extends Controller
      */
     public function update(Request $request, int $id)
 {
-  
+
     $validatedData = $request->validate([
+        'medal_count' => 'required|numeric',
         'name' => 'required|string|max:255',
         'is_double_bronze' => 'nullable|boolean',
         'sport_id' => 'required|exists:sports,id',
@@ -88,7 +90,7 @@ class EventCategoryController extends Controller
 
     return redirect()->route('event_categories.index')->with('success', 'Event Category updated successfully.');
 }
-    
+
 
     /**
      * Remove the specified resource from storage.
