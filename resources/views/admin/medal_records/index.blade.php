@@ -145,7 +145,7 @@
                                             </td>
                                         @endif
                                     </tr>
-                                    @if($user->role == 'admin')
+                                    @if($user->role == 'admin' || $user->role == 'tournament_director')
                                     {{-- Post Medal Record  Modal --}}
                                     <div class="modal fade" id="confirmPostRecordModal-{{$record->id}}" tabindex="-1" aria-labelledby="ConfirmPostRecordModal-{{$record->id}}Label" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
@@ -201,7 +201,7 @@
 
                                                         <div class="mb-3">
                                                             <label for="editTeamId" class="form-label">Event Category</label>
-                                                            <select name="team_id" class="form-control" id="editTeamId" required>
+                                                            <select name="event_category_id" class="form-control" id="editTeamId" required>
                                                                 <option value="">Select Event</option>
                                                                 @foreach ($events as $event)
                                                                     <option value="{{ $event->id }}" {{ $event->id == $record->event_category_id ? 'selected' : '' }}>{{  $event->name  }}</option>
