@@ -42,16 +42,16 @@
                                 <tr>
                                     <th class="ps-0">Team</th>
                                     <th>Event</th>
-                                    <th>Gold Tally</th> 
+                                    <th>Gold Tally</th>
                                     <th>Silver Tally</th>
                                     <th>Bronze Tally</th>
-                                    <th>Medal Weight</th>
+                                    {{-- <th>Medal Weight</th> --}}
                                     <th>Status</th>
-                                    
+
                                     @if($user->role != 'user')
                                         <th class="text-end" >Actions</th>
                                     @endif
-                                    
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -65,7 +65,7 @@
                                         <td>
                                             <p class="d-inline-block align-middle mb-0 text-body">{{ $record->event->name }} </p>
                                         </td>
-                                       
+
                                         <td>
                                             <p class="d-inline-block align-middle mb-0 text-body">{{ $record->gold_tally }}</p>
                                         </td>
@@ -75,15 +75,15 @@
                                         <td>
                                             <p class="d-inline-block align-middle mb-0 text-body">{{ $record->bronze_tally }}</p>
                                         </td>
-                                        <td>
+                                        {{-- <td>
                                             <p class="d-inline-block align-middle mb-0 text-body">{{ $record->number_of_participant }} </p>
-                                        </td>
-                                        <td>   
+                                        </td> --}}
+                                        <td>
                                          @if($record->is_posted == 1)
                                             <div class="btn btn-sm bg-info-subtle me-1">Posted  </div>
                                         @else
                                             <div class="btn btn-sm bg-dark-subtle me-1">Pending  </div>
-                                       
+
                                         @endif
                                         </td>
                                         @if($user->role != 'user')
@@ -91,7 +91,7 @@
 
                                                 @if($record->is_posted == 0)
 
-                                                        @if($user->role == 'admin' || $user->role == 'tournament_director' )     
+                                                        @if($user->role == 'admin' || $user->role == 'tournament_director' )
 
                                                             <a aria-label="anchor" class="btn btn-sm bg-success-subtle me-1" data-bs-toggle="modal" data-bs-target="#confirmPostRecordModal-{{$record->id}}" >
                                                                 <i class="ph ph-trophy s-14 text-primary"></i>
@@ -99,16 +99,16 @@
                                                         @else
                                                             <button  aria-label="anchor"  class="btn btn-sm bg-dark-subtle me-1"  >
                                                                 <i class="ph ph-trophy fs-14 text-white"></i>
-                                                            </button> 
+                                                            </button>
                                                         @endif
-                                                    
+
                                                         @if($user->role == 'admin' || $user->role == 'tournament_director' || $user->id == optional($record->postedBy)->id)
 
                                                             <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editRecordModal-{{$record->id}}" onclick="setEditFormAction('{{ route('medal_records.update', $record->id) }}', '{{ $record->team_id }}', '{{ $record->event->name }}', '{{ $record->gold_tally }}', '{{ $record->silver_tally }}', '{{ $record->bronze_tally }}', '{{ $record->number_of_participant }}')">
                                                                 <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                                             </a>
                                                         @else
-                                                            
+
                                                             <a aria-label="anchor"  class="btn btn-sm bg-dark-subtle me-1" >
                                                                 <i class="mdi mdi-pencil-outline fs-14 text-white"></i>
                                                             </a>
@@ -130,8 +130,8 @@
 
                                                     <button  aria-label="anchor"  class="btn btn-sm bg-dark-subtle me-1"  >
                                                         <i class="ph ph-trophy fs-14 text-white"></i>
-                                                    </button>   
-                                                    
+                                                    </button>
+
                                                     <button aria-label="anchor"  class="btn btn-sm bg-dark-subtle me-1" >
                                                         <i class="mdi mdi-pencil-outline fs-14 text-white"></i>
                                                     </button>
@@ -145,7 +145,7 @@
                                             </td>
                                         @endif
                                     </tr>
-                                    @if($user->role == 'admin')     
+                                    @if($user->role == 'admin')
                                     {{-- Post Medal Record  Modal --}}
                                     <div class="modal fade" id="confirmPostRecordModal-{{$record->id}}" tabindex="-1" aria-labelledby="ConfirmPostRecordModal-{{$record->id}}Label" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
@@ -155,14 +155,14 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                       
+
                                                     <p class="card-text">
-                                                        <strong>Warning:</strong> You are about to finalize this medal record. Once finalized, it will be officially recorded and can no longer be edited.  
+                                                        <strong>Warning:</strong> You are about to finalize this medal record. Once finalized, it will be officially recorded and can no longer be edited.
                                                         <br><br>Are you sure you want to proceed?
                                                     </p>
                                                     <div class="d-flex gap-2 justify-content-end">
                                                         <button class="btn  bg-primary-subtle" data-bs-dismiss="modal" >Cancel</button>
-                                                       
+
                                                         <form id="editForm-{{ $record->id }}" action="{{ route('medal_records.approve', $record->id) }}" method="POST" onsubmit="disableSubmitButton(this)">
                                                             @csrf
                                                             @method('PUT')
@@ -170,7 +170,7 @@
                                                             <button  form="editForm-{{ $record->id }}" class="btn  bg-danger-subtle" >Confirm</button>
                                                         </form>
                                                     </div>
-                                    
+
                                                 </div>
                                             </div>
                                         </div>
@@ -208,7 +208,7 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                     
+
                                                         <div class="mb-3">
                                                             <label for="editGoldTally" class="form-label">Gold Tally</label>
                                                             <input type="number" name="gold_tally" class="form-control" id="editGoldTally" value="{{ $record->gold_tally }}" required>

@@ -23,6 +23,9 @@ class ResultsController extends Controller
         ];
 
         $teams = Team::with([
+            'medalRecords' => function ($query) {
+                $query->where('is_posted', true);
+            },
             'medalRecords.eventCategory.sport',
             'medalRecords.eventCategory.medalWeightCategory'
         ])->get();

@@ -23,18 +23,18 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-end profile-dropdown ">
                         <!-- item-->
-                        <div class="dropdown-header noti-title">
+                        {{-- <div class="dropdown-header noti-title">
                             <h6 class="text-overflow m-0">Welcome !</h6>
-                        </div>
+                        </div> --}}
 
-                        <!-- item-->
+                        {{-- <!-- item-->
                         <a href="{{route('profile.edit')}}" class="dropdown-item notify-item">
                             <i class="mdi mdi-account-circle-outline fs-16 align-middle"></i>
                             <span>My Account</span>
-                        </a>
+                        </a> --}}
 
 
-                        <div class="dropdown-divider"></div>
+                        {{-- <div class="dropdown-divider"></div> --}}
                         <form id="logout-form" method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="dropdown-item notify-item">

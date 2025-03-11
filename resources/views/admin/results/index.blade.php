@@ -45,7 +45,7 @@
 
 
                     <div class="chart-toggle d-flex justify-content-center">
-                        <button class="chart-tab active me-2" data-target="chart-datatable">Destribution Table</button>
+                        <button class="chart-tab active me-2" data-target="chart-datatable">Distribution Table</button>
                         <button class="chart-tab me-2" data-target="bar-chart">Medal Standings</button>
                         <button class="chart-tab me-2" data-target="donut-chart">Medal Distribution</button>
                         <button class="chart-tab me-2" data-target="radar-chart">Team Balance</button>

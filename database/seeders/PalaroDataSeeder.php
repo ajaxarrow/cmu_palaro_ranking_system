@@ -4,11 +4,22 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class PalaroDataSeeder extends Seeder
 {
     public function run()
     {
+
+        User::factory()->create([
+            'name' => 'Administrator',
+            'email' => 'admin@gmail.com',
+            'role' => 'admin',
+            'password' => Hash::make('admin123'),
+        ]);
+
+
         $now = now(); // Get current timestamp once to use across inserts
 
         // Insert Teams
