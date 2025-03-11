@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
     @vite(['resources/css/landingpage.css'])
 
-  
+
 </head>
 <body>
 
@@ -44,7 +44,7 @@
     background: white;
     border-radius: 24px;
     padding: 1.5rem;
-    box-shadow: 
+    box-shadow:
         0 4px 6px -1px rgba(0,0,0,0.05),
         0 2px 4px -1px rgba(0,0,0,0.03),
         0 0 0 1px rgba(0,0,0,0.02);
@@ -54,7 +54,7 @@
 
 .chart-card:hover {
     transform: translateY(-2px);
-    box-shadow: 
+    box-shadow:
         0 20px 25px -5px rgba(0,0,0,0.05),
         0 10px 10px -5px rgba(0,0,0,0.02),
         0 0 0 1px rgba(0,0,0,0.02);
@@ -105,14 +105,14 @@
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="hero-overlay"></div>
-        
+
         <div class="hero-content container mx-auto px-4 pt-20 pb-32">
             <!-- Header -->
             <div class="text-center mb-[150px]" data-aos="fade-down">
                 <h1 class="text-7xl font-extrabold text-white mb-6 tracking-tight">
                     <span class="title-accent">CMU PALARO {{ date('Y') }}</span>
                     <span class="block text-3xl mt-8 bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-200">
-                        
+
                     Excellence Through Sports
 
                     </span>
@@ -129,8 +129,8 @@
                             @if(isset($medalTally[1]))
                             <div class="podium-content">
                                 <div class="winner-image">
-                                    <img src="{{ $medalTally[1]['team_image'] ? Vite::asset('storage/app/public/' . $team['team_image']) : Vite::asset('resources/images/05.webp') }}"
-                                         alt="{{ $medalTally[1]['team'] }}"
+                                    <img src="{{ $medalTally[1]['team_image'] ? Vite::asset('storage/app/public/' . $medalTally[1]['team_image']) : Vite::asset('resources/images/05.webp') }}"
+
                                          class="relative z-10">
                                     <div class="winner-badge silver">2</div>
                                 </div>
@@ -162,8 +162,8 @@
                             @if(isset($medalTally[0]))
                             <div class="podium-content">
                                 <div class="winner-image">
-                                    <img src="{{ $medalTally[0]['team_image'] ? Vite::asset('storage/app/public/' . $team['team_image']) : Vite::asset('resources/images/05.webp') }}"
-                                         alt="{{ $medalTally[0]['team'] }}"
+                                    <img src="{{ $medalTally[0]['team_image'] ? Vite::asset('storage/app/public/' . $medalTally[0]['team_image']) : Vite::asset('resources/images/05.webp') }}"
+
                                          class="relative z-10">
                                     <div class="winner-badge gold">1</div>
                                 </div>
@@ -195,8 +195,8 @@
                             @if(isset($medalTally[2]))
                             <div class="podium-content">
                                 <div class="winner-image">
-                                    <img src="{{ $medalTally[2]['team_image'] ? Vite::asset('storage/app/public/' . $team['team_image']) : Vite::asset('resources/images/05.webp') }}"
-                                         alt="{{ $medalTally[2]['team'] }}"
+                                    <img src="{{ $medalTally[2]['team_image'] ? Vite::asset('storage/app/public/' .  $medalTally[2]['team_image']) : Vite::asset('resources/images/05.webp') }}"
+
                                          class="relative z-10">
                                     <div class="winner-badge bronze">3</div>
                                 </div>
@@ -234,8 +234,8 @@
                             <div class="card-content">
                                 <div class="position-marker">1st</div>
                                 <div class="team-image-wrapper">
-                                    <img src="{{ $medalTally[0]['team_image'] ? Vite::asset('storage/app/public/' . $team['team_image']) : Vite::asset('resources/images/05.webp') }}"
-                                         alt="{{ $medalTally[0]['team'] }}">
+                                    <img src="{{ $medalTally[0]['team_image'] ? Vite::asset('storage/app/public/' . $medalTally[0]['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                        >
                                 </div>
                                 <div class="team-info">
                                     <h3>{{ $medalTally[0]['team'] }}</h3>
@@ -267,8 +267,8 @@
                             <div class="card-content">
                                 <div class="position-marker">2nd</div>
                                 <div class="team-image-wrapper">
-                                    <img src="{{ $medalTally[1]['team_image'] ? Vite::asset('storage/app/public/' . $team['team_image']) : Vite::asset('resources/images/05.webp') }}"
-                                         alt="{{ $medalTally[1]['team'] }}">
+                                    <img src="{{ $medalTally[1]['team_image'] ? Vite::asset('storage/app/public/' . $medalTally[1]['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                         >
                                 </div>
                                 <div class="team-info">
                                     <h3>{{ $medalTally[1]['team'] }}</h3>
@@ -300,7 +300,7 @@
                             <div class="card-content">
                                 <div class="position-marker">3rd</div>
                                 <div class="team-image-wrapper">
-                                    <img src="{{ $medalTally[2]['team_image'] ? Vite::asset('storage/app/public/' . $team['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                    <img src="{{ $medalTally[2]['team_image'] ? Vite::asset('storage/app/public/' . $medalTally[2]['team_image']) : Vite::asset('resources/images/05.webp') }}"
                                          alt="{{ $medalTally[2]['team'] }}">
                                 </div>
                                 <div class="team-info">
@@ -369,7 +369,7 @@
 
             <!-- Scroll Button -->
             <div class="text-center mt-16">
-                <a href="#standings" 
+                <a href="#standings"
                    class="inline-flex items-center justify-center px-8 py-3 text-lg font-medium text-white bg-green-600 border border-transparent rounded-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
                     View Full Standings
                     <svg class="w-5 h-5 ml-2 -mr-1 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -395,21 +395,21 @@
 
                 @foreach($medalTally as $index => $team)
 
-                <div class="team-card" 
-                     data-aos="{{ $index % 2 == 0 ? 'fade-right' : 'fade-left' }}" 
+                <div class="team-card"
+                     data-aos="{{ $index % 2 == 0 ? 'fade-right' : 'fade-left' }}"
                      data-aos-delay="{{ $index * 100 }}"
                      data-team-id="{{ $index }}">
                     <div class="modern-card-wrapper">
                         <!-- Add gradient background -->
                         <div class="card-gradient-bg"></div>
                         <div class="card-gradient-bg right"></div>
-                     
-                     
-                        
+
+
+
                         <div class="card-glass-effect"></div>
                         <div class="card-content">
                         <div class="flex flex-col lg:flex-row items-center gap-8">
-                           
+
                             <!-- Team Info Left Side -->
                             <div class="flex-1 text-left">
                                 <div class="team-header">
@@ -420,7 +420,7 @@
                                         <p class="college-name">College of {{ $college }}</p>
                                     @endforeach
                                     </div>
-                                   
+
                                 </div>
                                 <div class="team-description">
                                     <p>{{ $team['description'] ?? 'Representing excellence in sports and academics.' }}</p>
@@ -439,7 +439,7 @@
                                         #{{ $index + 1 }}
                                     </div>
                                     <div class="image-glow"></div>
-                                    <img 
+                                    <img
                                         src="{{ $team['team_image'] ? Vite::asset('storage/app/public/' . $team['team_image']) : Vite::asset('resources/images/05.webp') }}"
                                         alt="{{ $team['team'] }}"
                                         class="team-image"
@@ -449,7 +449,7 @@
                                 </div>
                             </div>
 
-                            
+
 
                             <!-- Team Stats Right Side -->
                             <div class="flex-1 space-y-6">
@@ -479,7 +479,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Total Score -->
                                 <div class="modern-score-container">
                                     <div class="score-display">
@@ -582,7 +582,7 @@
     <footer class="bg-gradient-to-b from-gray-900 to-green-900 text-white py-16">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                
+
         </div>
     </section>
 
@@ -913,7 +913,7 @@
                         }
                     }
                 });
-                
+
                 radarChart.updateOptions({
                     chart: {
                         height: 300
@@ -932,7 +932,7 @@
                         }
                     }
                 });
-                
+
                 radarChart.updateOptions({
                     chart: {
                         height: 400
@@ -952,16 +952,16 @@
             return new Promise((resolve) => {
                 const img = new Image();
                 img.crossOrigin = "Anonymous";
-                
+
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
-                    
+
                     // Increase sample size for better color analysis
                     const maxDimension = 150;
                     let width = img.naturalWidth;
                     let height = img.naturalHeight;
-                    
+
                     if (width > height && width > maxDimension) {
                         height = Math.round(height * (maxDimension / width));
                         width = maxDimension;
@@ -969,44 +969,44 @@
                         width = Math.round(width * (maxDimension / height));
                         height = maxDimension;
                     }
-                    
+
                     canvas.width = width;
                     canvas.height = height;
                     ctx.drawImage(img, 0, 0, width, height);
-                    
+
                     try {
                         const imageData = ctx.getImageData(0, 0, width, height).data;
                         const colorCounts = {};
                         const whiteThreshold = 240;
                         const blackThreshold = 30;
                         const saturationThreshold = 20;
-                        
+
                         for (let i = 0; i < imageData.length; i += 4) {
                             const r = imageData[i];
                             const g = imageData[i + 1];
                             const b = imageData[i + 2];
-                            
+
                             // Skip white and black pixels
                             if ((r > whiteThreshold && g > whiteThreshold && b > whiteThreshold) ||
                                 (r < blackThreshold && g < blackThreshold && b < blackThreshold)) {
                                 continue;
                             }
-                            
+
                             // Calculate saturation
                             const max = Math.max(r, g, b);
                             const min = Math.min(r, g, b);
                             const saturation = max === 0 ? 0 : (max - min) / max * 100;
-                            
+
                             if (saturation < saturationThreshold) continue;
-                            
+
                             const key = `${r},${g},${b}`;
                             colorCounts[key] = (colorCounts[key] || 0) + 1;
                         }
-                        
+
                         // Find the most common color
                         let maxCount = 0;
                         let dominantColor = { r: 0, g: 73, b: 30 }; // CMU green as fallback
-                        
+
                         for (const key in colorCounts) {
                             if (colorCounts[key] > maxCount) {
                                 maxCount = colorCounts[key];
@@ -1014,19 +1014,19 @@
                                 dominantColor = { r, g, b };
                             }
                         }
-                        
+
                         resolve(dominantColor);
                     } catch (error) {
                         console.error('Error processing image:', error);
                         resolve({ r: 0, g: 73, b: 30 }); // CMU green as fallback
                     }
                 };
-                
+
                 img.onerror = function() {
                     console.error('Error loading image:', imageUrl);
                     resolve({ r: 0, g: 73, b: 30 }); // CMU green as fallback
                 };
-                
+
                 img.src = imageUrl;
             });
         }
@@ -1036,11 +1036,11 @@
             try {
                 const dominantColor = await getDominantColor(imgElement.src);
                 const card = document.querySelector(`[data-team-id="${teamId}"]`);
-                
+
                 if (card) {
                     // Set the CSS variable for the team color
                     card.style.setProperty('--team-color-rgb', `${dominantColor.r}, ${dominantColor.g}, ${dominantColor.b}`);
-                    
+
                     // Apply gradient background
                     const gradientBg = card.querySelector('.card-gradient-bg');
                     if (gradientBg) {
@@ -1048,11 +1048,11 @@
                         const gradient = `
                             rgba(${dominantColor.r}, ${dominantColor.g}, ${dominantColor.b}) 100%
                            `;
-                        
+
                         gradientBg.style.background = gradient;
-                        
-                    
-                    
+
+
+
                     }
 
                     // Rest of your existing color applications...
@@ -1060,10 +1060,10 @@
                     if (teamLabel) {
                         teamLabel.style.color = `rgb(${dominantColor.r}, ${dominantColor.g}, ${dominantColor.b})`;
                     }
-                    
+
                     const teamName = card.querySelector('.team-name');
                     if (teamName) {
-                        teamName.style.background = `linear-gradient(135deg, 
+                        teamName.style.background = `linear-gradient(135deg,
                             rgb(${dominantColor.r}, ${dominantColor.g}, ${dominantColor.b}),
                             rgba(${dominantColor.r}, ${dominantColor.g}, ${dominantColor.b}, 0.8)
                         )`;
@@ -1079,10 +1079,10 @@
         // Initialize all team cards when the page loads
         document.addEventListener('DOMContentLoaded', function() {
             const teamImages = document.querySelectorAll('[data-team-id] img');
-            
+
             teamImages.forEach(img => {
                 const teamId = img.closest('[data-team-id]').dataset.teamId;
-                
+
                 // Check if image is already loaded
                 if (img.complete) {
                     initializeTeamCard(img, teamId);
