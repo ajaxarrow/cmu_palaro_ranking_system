@@ -26,6 +26,10 @@
         </div>
         <div class="d-flex align-items-center gap-3">
             <div class="d-flex align-items-center gap-3">
+                <!-- Reset Filter Button (Initially Hidden) -->
+                <button id="resetFilterBtn" class="btn btn-light" onclick="resetFilter()" style="display: none;">
+                    <i class="mdi mdi-refresh me-1"></i> Reset Filter
+                </button>
                 <!-- Sport Filter Dropdown -->
                 <div class="dropdown">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sportFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -52,10 +56,7 @@
                     </ul>
                 </div>
 
-                <!-- Reset Filter Button (Initially Hidden) -->
-                <button id="resetFilterBtn" class="btn btn-light" onclick="resetFilter()" style="display: none;">
-                    <i class="mdi mdi-refresh me-1"></i> Reset Filter
-                </button>
+
             </div>
             <!-- View toggle buttons -->
             <div class="view-tabs">
@@ -127,7 +128,7 @@
                                 if ($record->bronze_tally > 0) {
                                     $bronzeWinners[] = $team;
                                     if($eventCategory->is_double_bronze){
-                                        $bronzeWeight = $record->bronze_tally * $eventCategory->medalWeightCategory->bronze_weight / 2;
+                                        $bronzeWeight = $record->bronze_tally * $eventCategory->medalWeightCategory->bronze_weight;
                                     } else {
                                         $bronzeWeight = $record->bronze_tally * $eventCategory->medalWeightCategory->bronze_weight;
                                     }
@@ -135,7 +136,7 @@
                                 }
 
                                 // Track the total number of participants and posting status
-                                $participants += $record->number_of_participant;
+                                $participants = $record->number_of_participant;
                                 $isPosted = $record->is_posted;
                             }
                         @endphp
@@ -161,7 +162,7 @@
                                                     @else
                                                         <i class="ph-duotone fs-24 ph-ranking mb-0"></i>
                                                     @endif
-                                                    <span class="team-name">{{ $silverWinner ? $silverWinner->name : '-' }}</span>
+                                                    <span class="team-name">{{ $goldWinner ? $goldWinner->name : '-' }}</span>
                                                 </div>
                                                 <div class="medal-stats">
                                                     <div class="medal-stat-item">
@@ -249,15 +250,50 @@
                                 </div>
                                 <div class="card-footer bg-white d-flex justify-content-between align-items-center">
                                     <div class="text-muted">
-                                        <i class="mdi mdi-account-group me-1"></i> {{ $participants }} Participants
+                                        <i class="mdi mdi-account-group me-1"></i> {{ $participants }} Participating Teams
                                     </div>
-                                    @if($user->role != 'user')
-                                        <button type="button" class="btn btn-sm btn-outline-primary btn-floating"
-                                                data-bs-toggle="modal" data-bs-target="#editRecordModal"
-                                                onclick="prepareEditForm('{{ $eventCategory->id }}')">
-                                            <i class="mdi mdi-pencil"></i>
-                                        </button>
-                                    @endif
+                                    <div class="d-flex align-items-center gap-1">
+                                        @if($user->role != 'user')
+                                            <button type="button"
+                                                    class="btn btn-sm btn-outline-primary btn-floating"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editRecordModal"
+                                                    onclick="prepareEditForm('{{ $eventCategory->id }}')"
+                                                    {{ $isPosted ? 'disabled' : '' }}
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="top"
+                                                    title="{{ $isPosted ? 'Editing disabled: Record is posted' : 'Edit record' }}"
+                                                    style="{{ $isPosted ? 'cursor: not-allowed;' : '' }}">
+                                                <i class="mdi mdi-pencil"></i>
+                                            </button>
+                                        @endif
+
+                                        @if($user->role == 'admin' || $user->role == 'tournament_director')
+                                            <!-- Approve Button -->
+                                            <button type="button"
+                                                    class="btn btn-sm btn-outline-success btn-floating"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#approveRecordModal"
+                                                    {{ $isPosted ? 'disabled' : '' }}
+                                                    onclick="setEventCategory('{{ $eventCategory->id }}', 'approve')"
+                                                    title="Approve this record">
+                                                <i class="mdi mdi-check"></i>
+                                            </button>
+                                        @endif
+
+                                        @if($user->role == 'admin' || $user->role == 'tournament_director')
+                                            <!-- Delete Button -->
+                                            <button type="button"
+                                                class="btn btn-sm btn-outline-danger btn-floating"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteRecordModal"
+                                                onclick="setEventCategory('{{ $eventCategory->id }}', 'delete')"
+                                                title="Delete this record">
+                                                <i class="mdi mdi-delete"></i>
+                                            </button>
+                                        @endif
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -291,7 +327,7 @@
                                 <th>Team</th>
                                 <th>Medal Count</th>
                                 <th>Medal Weight</th>
-                                <th>Participants</th>
+                                <th>No. of Participating Teams</th>
                                 <th>Status</th>
                                 @if($user->role != 'user')
                                     <th>Actions</th>
@@ -383,7 +419,7 @@
                                                 }
 
                                                 // Track the total number of participants and posting status
-                                                $participants += $record->number_of_participant;
+                                                $participants = $record->number_of_participant;
                                                 $isPosted = $record->is_posted;
                                             }
 
@@ -413,11 +449,47 @@
                                             </td>
                                             @if($user->role != 'user')
                                                 <td rowspan="{{ $eventRowspan }}" class="align-middle text-center">
-                                                    <button type="button" class="btn btn-sm btn-outline-primary btn-floating"
-                                                            data-bs-toggle="modal" data-bs-target="#editRecordModal"
-                                                            onclick="prepareEditForm('{{ $eventCategory->id }}')">
-                                                        <i class="mdi mdi-pencil"></i>
-                                                    </button>
+                                                    <div class="d-flex align-items-center gap-1">
+                                                        @if($user->role != 'user')
+                                                            <button type="button"
+                                                                    class="btn btn-sm btn-outline-primary btn-floating"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#editRecordModal"
+                                                                    onclick="prepareEditForm('{{ $eventCategory->id }}')"
+                                                                    {{ $isPosted ? 'disabled' : '' }}
+                                                                    data-bs-toggle="tooltip"
+                                                                    data-bs-placement="top"
+                                                                    title="{{ $isPosted ? 'Editing disabled: Record is posted' : 'Edit record' }}"
+                                                                    style="{{ $isPosted ? 'cursor: not-allowed;' : '' }}">
+                                                                <i class="mdi mdi-pencil"></i>
+                                                            </button>
+                                                        @endif
+
+                                                        @if($user->role == 'admin' || $user->role == 'tournament_director')
+                                                            <!-- Approve Button -->
+                                                            <button type="button"
+                                                                    class="btn btn-sm btn-outline-success btn-floating"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#approveRecordModal"
+                                                                    {{ $isPosted ? 'disabled' : '' }}
+                                                                    onclick="setEventCategory('{{ $eventCategory->id }}', 'approve')"
+                                                                    title="Approve this record">
+                                                                <i class="mdi mdi-check"></i>
+                                                            </button>
+                                                        @endif
+
+                                                        @if($user->role == 'admin' || $user->role == 'tournament_director')
+                                                            <!-- Delete Button -->
+                                                            <button type="button"
+                                                                class="btn btn-sm btn-outline-danger btn-floating"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#deleteRecordModal"
+                                                                onclick="setEventCategory('{{ $eventCategory->id }}', 'delete')"
+                                                                title="Delete this record">
+                                                                <i class="mdi mdi-delete"></i>
+                                                            </button>
+                                                        @endif
+                                                    </div>
                                                 </td>
                                             @endif
                                         </tr>
@@ -473,6 +545,55 @@
         </div>
     </div>
 </div>
+
+<!--Approve Modal-->
+<div class="modal fade" id="approveRecordModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Approve Record</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Warning:</strong> Once approved, this record cannot be edited.</p>
+                <p>Are you sure you want to approve this record?</p>
+                <div class="d-flex gap-2 justify-content-end">
+                    <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <form id="approveForm" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="is_posted" value="1">
+                        <button type="submit" class="btn btn-success">Confirm</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--delete modal-->
+<div class="modal fade" id="deleteRecordModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Record?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this record?</p>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <form id="deleteForm" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @if($user->role != 'user')
     <!-- Add Record Modal -->
@@ -582,7 +703,7 @@
                                     <div class="text-hint">Determined by event category</div>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="medalWeight" class="form-label">Number of Participants</label>
+                                    <label for="medalWeight" class="form-label">Number of Participating Teams</label>
                                     <input type="number" name="number_of_participant" class="form-control" id="medalWeight" value="1" min="1" required>
                                 </div>
                             </div>
@@ -730,6 +851,134 @@
             submitButton.innerText = 'Submitting...';
         }
     </script>
+
+<div class="modal fade" id="editRecordModal" tabindex="-1" aria-labelledby="editRecordModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editRecordModalLabel">Edit Medal Record</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST" id="editRecordForm" onsubmit="disableSubmitButton(this)">
+                    @csrf
+                    @method('PUT')
+
+                    <input type="hidden" name="event_category_id" id="edit_event_category_id">
+                    <div class="mb-4">
+                        <label for="edit_event" class="form-label">Event Category</label>
+                        <select name="event_category_id" class="form-select" id="edit_event" disabled>
+                            <option value="">Select Event</option>
+                            @foreach ($events as $event)
+                                <option value="{{ $event->id }}"
+                                    data-double-bronze="{{ $event->is_double_bronze }}"
+                                    data-medal-count="{{ $event->medal_count }}">
+                                    {{ $event->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <small class="text-muted">Event cannot be changed once records exist</small>
+                    </div>
+
+                    <div class="medal-card">
+                        <h6 class="section-title">Winners & Runners Up</h6>
+
+                        <!-- Champion (Gold) Row -->
+                        <div class="medal-row">
+                            <div class="row w-100 align-items-center">
+                                <div class="col-4 text-end">
+                                    <span class="medal-badge medal-gold">Champion</span>
+                                </div>
+                                <div class="col-8">
+                                    <select name="champion_team_id" class="form-select" id="edit_championTeam" required onchange="updateEditTeamSelections()">
+                                        <option value="">Select Team</option>
+                                        @foreach ($teams as $team)
+                                            <option value="{{ $team->id }}">{{ $team->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 1st Runner Up (Silver) Row -->
+                        <div class="medal-row">
+                            <div class="row w-100 align-items-center">
+                                <div class="col-4 text-end">
+                                    <span class="medal-badge medal-silver">1st Runner Up</span>
+                                </div>
+                                <div class="col-8">
+                                    <select name="first_runner_up_team_id" class="form-select" id="edit_firstRunnerUp" required onchange="updateEditTeamSelections()">
+                                        <option value="">Select Team</option>
+                                        @foreach ($teams as $team)
+                                            <option value="{{ $team->id }}">{{ $team->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2nd Runner Up (Bronze) Row -->
+                        <div class="medal-row">
+                            <div class="row w-100 align-items-center">
+                                <div class="col-4 text-end">
+                                    <span class="medal-badge medal-bronze">2nd Runner Up</span>
+                                </div>
+                                <div class="col-8">
+                                    <select name="second_runner_up_team_id" class="form-select" id="edit_secondRunnerUp" required onchange="updateEditTeamSelections()">
+                                        <option value="">Select Team</option>
+                                        @foreach ($teams as $team)
+                                            <option value="{{ $team->id }}">{{ $team->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2nd Bronze Medal Row (Initially Hidden) -->
+                        <div class="medal-row edit-second-bronze-div" style="display: none;">
+                            <div class="row w-100 align-items-center">
+                                <div class="col-4 text-end">
+                                    <span class="medal-badge medal-bronze">2nd Runner Up (2)</span>
+                                </div>
+                                <div class="col-8">
+                                    <select name="second_runner_up_team_id_2" class="form-select" id="edit_secondRunnerUp2" onchange="updateEditTeamSelections()">
+                                        <option value="">Select Team</option>
+                                        @foreach ($teams as $team)
+                                            <option value="{{ $team->id }}">{{ $team->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-divider"></div>
+
+                    <div class="additional-fields">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="edit_medalCount" class="form-label">Medal Count</label>
+                                <input type="number" name="medal_count" class="form-control" id="edit_medalCount" readonly>
+                                <div class="text-hint">Determined by event category</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="edit_participants" class="form-label">Number of Participating Teams</label>
+                                <input type="number" name="number_of_participant" class="form-control" id="edit_participants" min="1" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="is_double_bronze" id="edit_isDoubleBronze" value="0">
+
+                    <div class="d-flex justify-content-end gap-3 mt-4">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Update Record</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endif
 
 @endsection
@@ -741,10 +990,159 @@
 @section('script-bottom')
 <script src="https://apexcharts.com/samples/assets/stock-prices.js"></script>
 @vite(['resources/js/pages/crm-dashboard.init.js'])
+<!-- Add this JavaScript function to prepare the edit form -->
 <script>
-    function prepareEditForm(eventCategoryId) {
-        // Your edit form preparation code goes here
+function setEventCategory(eventCategoryId, actionType) {
+    if (actionType === 'approve') {
+        document.getElementById('approveForm').action = `/admin/medal-records/${eventCategoryId}/approve`;
+    } else if (actionType === 'delete') {
+        document.getElementById('deleteForm').action = `/admin/medal-records/${eventCategoryId}`;
     }
+}
+
+// Initialize tooltips
+document.addEventListener("DOMContentLoaded", function() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+
+    // Store event data globally for easy access
+let eventCategoriesData = {};
+
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Prepare event data for quick lookup
+    @foreach($events as $event)
+        eventCategoriesData[{{ $event->id }}] = {
+            name: "{{ $event->name }}",
+            isDoubleBronze: {{ $event->is_double_bronze ? 'true' : 'false' }},
+            medalCount: {{ $event->medal_count }},
+            medalWeightCategory: {
+                goldWeight: {{ $event->medalWeightCategory->gold_weight }},
+                silverWeight: {{ $event->medalWeightCategory->silver_weight }},
+                bronzeWeight: {{ $event->medalWeightCategory->bronze_weight }}
+            }
+        };
+    @endforeach
+});
+
+async function prepareEditForm(eventCategoryId) {
+    // Reset the form
+    document.getElementById('editRecordForm').reset();
+
+    // Set the form action URL
+    document.getElementById('editRecordForm').action = `/admin/medal-records/${eventCategoryId}`;
+
+    // Set the event category ID in the hidden input
+    document.getElementById('edit_event_category_id').value = eventCategoryId;
+
+    // Find and set the corresponding option in the event select dropdown
+    const eventSelect = document.querySelector('#editRecordModal select[name="event_category_id"]');
+    for (let i = 0; i < eventSelect.options.length; i++) {
+        if (eventSelect.options[i].value == eventCategoryId) {
+            eventSelect.selectedIndex = i;
+            break;
+        }
+    }
+
+    // Get event data
+    const eventData = Array.from(eventSelect.options)
+        .find(option => option.value == eventCategoryId);
+
+    if (eventData) {
+        // Set medal count
+        document.getElementById('edit_medalCount').value = eventData.getAttribute('data-medal-count') || 1;
+
+        // Set double bronze flag
+        const isDoubleBronze = eventData.getAttribute('data-double-bronze') === '1';
+        document.getElementById('edit_isDoubleBronze').value = isDoubleBronze ? '1' : '0';
+
+        // Show/hide second bronze input based on double bronze status
+        const secondBronzeDiv = document.querySelector('.edit-second-bronze-div');
+        if (isDoubleBronze) {
+            secondBronzeDiv.style.display = 'block';
+            document.getElementById('edit_secondRunnerUp2').setAttribute('required', 'required');
+        } else {
+            secondBronzeDiv.style.display = 'none';
+            document.getElementById('edit_secondRunnerUp2').removeAttribute('required');
+        }
+    }
+
+    // Fetch existing medal records for this event
+    await fetchMedalRecords(eventCategoryId);
+    updateEditTeamSelections();
+}
+
+function fetchMedalRecords(eventCategoryId) {
+    let goldTeamId = null;
+    let silverTeamId = null;
+    let bronzeTeamIds = [];
+    let participants = 0;
+
+    // Extract data from the displayed cards or table rows
+    @foreach($medalRecords as $record)
+        if ({{ $record->event_category_id }} == eventCategoryId) {
+            if ({{ $record->gold_tally }} > 0) {
+                goldTeamId = {{ $record->team_id }};
+            }
+            if ({{ $record->silver_tally }} > 0) {
+                silverTeamId = {{ $record->team_id }};
+            }
+            if ({{ $record->bronze_tally }} > 0) {
+                bronzeTeamIds.push({{ $record->team_id }});
+            }
+            participants = {{ $record->number_of_participant }};
+        }
+    @endforeach
+
+
+    // Set form values
+    document.getElementById('edit_championTeam').value = goldTeamId || '';
+    document.getElementById('edit_firstRunnerUp').value = silverTeamId || '';
+
+    if (bronzeTeamIds.length > 0) {
+        document.getElementById('edit_secondRunnerUp').value = bronzeTeamIds[0] || '';
+
+        if (bronzeTeamIds.length > 1 && document.getElementById('edit_isDoubleBronze').value === '1') {
+            document.getElementById('edit_secondRunnerUp2').value = bronzeTeamIds[1] || '';
+        }
+    }
+
+    document.getElementById('edit_participants').value = participants;
+
+    updateEditTeamSelections();
+}
+
+function updateEditTeamSelections() {
+    const selects = [
+        document.getElementById('edit_championTeam'),
+        document.getElementById('edit_firstRunnerUp'),
+        document.getElementById('edit_secondRunnerUp'),
+        document.getElementById('edit_secondRunnerUp2')
+    ];
+
+    const selectedValues = selects.map(select => select.value).filter(value => value !== '');
+
+    // For each select box
+    selects.forEach(currentSelect => {
+        // Only process if the select exists
+        if (!currentSelect) return;
+
+        // For each option in current select box
+        Array.from(currentSelect.options).forEach(option => {
+            if (option.value === '') return; // Skip empty option
+
+            const isSelectedElsewhere = selectedValues.includes(option.value) &&
+                                       option.value !== currentSelect.value;
+
+            option.disabled = isSelectedElsewhere;
+        });
+    });
+}
+</script>
+<script>
 
     function toggleView(viewType) {
     // Get view elements
