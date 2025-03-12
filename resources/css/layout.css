@@ -5,6 +5,15 @@
     --highlight-color: #ffc601;
 }
 
+.btn-outline-secondary {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--primary-color);
+}
+
 .custom-primary-color {
     color: var(--primary-color) !important;
 }
@@ -243,4 +252,464 @@
     transform: translate(-50%, -50%);
     font-size: 16px;
     font-weight: bold;
+}
+
+.medal-card {
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 100%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border: none;
+}
+
+.medal-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.sport-header {
+    background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.medal-badge {
+    display: inline-flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 12px !important;
+    border-radius: 50px;
+    padding: 4px 10px;
+}
+
+.medal-gold {
+    background: linear-gradient(45deg, #FFD700, #FFC107);
+    color: #5D4037;
+}
+
+.medal-silver {
+    background: linear-gradient(45deg, #E0E0E0, #BDBDBD);
+    color: #424242;
+}
+
+.medal-bronze {
+    background: linear-gradient(45deg, #CD7F32, #BF8970);
+    color: #3E2723;
+}
+
+.medal-icon {
+    font-size: 14px;
+}
+
+.team-name {
+    font-weight: 600;
+}
+
+.medal-stats {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.medal-stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.medal-stat-value {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.medal-stat-label {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.modern-table {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.modern-table thead th {
+    background-color: #f8f9fa;
+    border-bottom: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    padding: 15px;
+}
+
+.modern-table tbody td {
+    padding: 15px;
+    vertical-align: middle;
+    border-color: #f1f1f1;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-floating {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Animation for status badges */
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.status-posted {
+    background-color: rgba(25, 135, 84, 0.1);
+    color: #198754;
+    animation: pulse 2s infinite;
+}
+
+.status-pending {
+    background-color: rgba(33, 37, 41, 0.1);
+    color: #212529;
+}
+
+
+/* Tab system for switching views */
+
+.view-tabs {
+    display: flex;
+    border-radius: 50px;
+    background: #f1f3f4;
+    padding: 5px;
+    width: fit-content;
+}
+
+.view-tab {
+    padding: 8px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.view-tab.active {
+    background: var(--secondary-color);
+    color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Base Modal Styling */
+
+#addRecordModal .modal-content {
+    border: none;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    border-radius: 1rem;
+    min-width: 700px;
+    overflow: hidden;
+}
+
+#addRecordModal .modal-dialog {
+    min-width: 700px !important;
+}
+
+#addRecordModal .modal-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 1.5rem 2rem;
+    background: linear-gradient(to right, #f8f9fa, #f1f3f5);
+}
+
+#addRecordModal .modal-title {
+    font-size: 1.25rem;
+    color: #1a202c;
+    font-weight: 700;
+}
+
+#addRecordModal .modal-body {
+    padding: 1.5rem 2rem 2rem;
+    background-color: #ffffff;
+}
+
+
+/* Form Controls */
+
+#addRecordModal .form-label {
+    margin-bottom: 0.5rem;
+    color: #344054;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+#addRecordModal .form-select,
+#addRecordModal .form-control {
+    border: 1px solid #E2E8F0;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+    transition: all 0.2s ease;
+    font-size: 0.9375rem;
+    color: #1a202c;
+    background-color: #FFFFFF;
+}
+
+#addRecordModal .form-select:focus,
+#addRecordModal .form-control:focus {
+    border-color: #4F46E5;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+    outline: none;
+}
+
+#addRecordModal .form-select:hover:not(:focus),
+#addRecordModal .form-control:hover:not(:focus) {
+    border-color: #CBD5E1;
+}
+
+
+/* Medal Card */
+
+#addRecordModal .medal-card {
+    background-color: #F8FAFC;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(16, 24, 40, 0.1);
+    border: 1px solid #F1F5F9;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+#addRecordModal .medal-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background: linear-gradient(to bottom, #FFD700, #C0C0C0, #CD7F32);
+}
+
+#addRecordModal .section-title {
+    font-size: 1rem;
+    color: #0F172A;
+    margin-bottom: 1.25rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+#addRecordModal .section-title::before {
+    content: "🏆";
+    margin-right: 0.5rem;
+    font-size: 1.125rem;
+}
+
+
+/* Medal Rows */
+
+#addRecordModal .medal-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    transition: all 0.2s ease;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+}
+
+#addRecordModal .medal-row:last-child {
+    margin-bottom: 0;
+}
+
+#addRecordModal .medal-row:hover {
+    background-color: rgba(241, 245, 249, 0.7);
+}
+
+
+/* Medal Badges */
+
+#addRecordModal .medal-badge {
+    font-weight: 600;
+    padding: 0.5rem 0.75rem;
+    border-radius: 2rem;
+    font-size: 0.8125rem;
+    min-width: 120px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    letter-spacing: 0.01em;
+}
+
+#addRecordModal .medal-gold {
+    background-color: rgba(255, 215, 0, 0.15);
+    color: #92400E;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+#addRecordModal .medal-gold::before {
+    content: "🥇";
+    font-size: 1rem;
+}
+
+#addRecordModal .medal-silver {
+    background-color: rgba(192, 192, 192, 0.15);
+    color: #475569;
+    border: 1px solid rgba(192, 192, 192, 0.3);
+}
+
+#addRecordModal .medal-silver::before {
+    content: "🥈";
+    font-size: 1rem;
+}
+
+#addRecordModal .medal-bronze {
+    background-color: rgba(205, 127, 50, 0.15);
+    color: #991B1B;
+    border: 1px solid rgba(205, 127, 50, 0.3);
+}
+
+#addRecordModal .medal-bronze::before {
+    content: "🥉";
+    font-size: 1rem;
+}
+
+
+/* Button Styling */
+
+#addRecordModal .btn {
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+    font-size: 0.9375rem;
+    letter-spacing: 0.01em;
+}
+
+#addRecordModal .btn-primary {
+    background-color: #4F46E5;
+    border-color: #4F46E5;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+}
+
+#addRecordModal .btn-primary:hover {
+    background-color: #4338CA;
+    border-color: #4338CA;
+    box-shadow: 0 2px 5px rgba(16, 24, 40, 0.1);
+}
+
+#addRecordModal .btn-light {
+    background-color: #F8FAFC;
+    border-color: #E2E8F0;
+    color: #475569;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+}
+
+#addRecordModal .btn-light:hover {
+    background-color: #F1F5F9;
+    border-color: #CBD5E1;
+    color: #334155;
+    box-shadow: 0 2px 5px rgba(16, 24, 40, 0.1);
+}
+
+
+/* Hints and Other Text */
+
+#addRecordModal .text-hint {
+    font-size: 0.75rem;
+    color: #64748B;
+    margin-top: 0.375rem;
+    font-style: italic;
+}
+
+
+/* Divider */
+
+#addRecordModal .form-divider {
+    height: 1px;
+    background: linear-gradient(to right, rgba(226, 232, 240, 0.5), rgba(226, 232, 240, 1), rgba(226, 232, 240, 0.5));
+    margin: 1.5rem 0;
+}
+
+
+/* Additional Fields */
+
+#addRecordModal .additional-fields {
+    background-color: #F8FAFC;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    border: 1px solid #F1F5F9;
+}
+
+
+/* Animations */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#addRecordModal .medal-row {
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+#addRecordModal .medal-row:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+#addRecordModal .medal-row:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+#addRecordModal .medal-row:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+#addRecordModal .medal-row:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+
+/* Responsive improvements */
+
+@media (max-width: 767.98px) {
+    #addRecordModal .medal-badge {
+        min-width: 100px;
+        font-size: 0.75rem;
+    }
+    #addRecordModal .modal-body {
+        padding: 1.25rem 1.5rem 1.5rem;
+    }
 }
