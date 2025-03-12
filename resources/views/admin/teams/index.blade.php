@@ -123,10 +123,10 @@
                                         <td class="ps-0">
                                             <div class="d-flex flex-row align-items-center gap-1">
                                                 @if($team->image)
-                                                <img src="{{ asset('storage/' . $team->image) }}" width="32" height="32" class="rounded-circle object-cover" style="object-fit: cover; object-position: top;">
-                                            @else
-                                                <i class="ph-duotone fs-24 ph-ranking mb-0"></i>
-                                            @endif
+                                                    <img src="{{ asset('storage/' . $team->image) }}" width="32" height="32" class="rounded-circle object-cover" style="object-fit: cover; object-position: top;">
+                                                @else
+                                                    <i class="ph-duotone fs-24 ph-ranking mb-0"></i>
+                                                @endif
                                             <p class="d-inline-block align-middle mb-0 py-2">
                                                 <span class="font-16 fw-medium ml-3">{{$team->name}}</span>
                                             </p>
