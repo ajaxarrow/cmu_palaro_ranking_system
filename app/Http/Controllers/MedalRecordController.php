@@ -30,6 +30,37 @@ class MedalRecordController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $sportId = null;
+        // Get all sports with their event categories
+        $sports = Sport::with(['eventCategories' => function($query) {
+            $query->orderBy('name');
+        }])->orderBy('name')->get();
+
+        // Get all teams
+        $teams = Team::orderBy('name')->get();
+
+        // Get all event categories for the form
+        $events = EventCategory::orderBy('name')->get();
+        $eventCategories = $sports->flatMap->eventCategories->unique('id');
+
+        // Get all medal records
+        $medalRecords = MedalRecord::with(['team', 'event'])->get();
+
+        return view('admin.medal_records.index', compact(
+            'sportId',
+            'eventCategories',
+            'user',
+            'sports',
+            'teams',
+            'events',
+            'medalRecords'
+        ));
+    }
+
+
+    public function recordsBySport(int $sportId)
+    {
+        $user = auth()->user();
 
         // Get all sports with their event categories
         $sports = Sport::with(['eventCategories' => function($query) {
@@ -41,11 +72,18 @@ class MedalRecordController extends Controller
 
         // Get all event categories for the form
         $events = EventCategory::orderBy('name')->get();
+        $eventCategories = $sports->flatMap->eventCategories->unique('id');
 
         // Get all medal records
-        $medalRecords = MedalRecord::with(['team', 'event'])->get();
+        $medalRecords = MedalRecord::with(['team', 'event'])
+            ->whereHas('event', function($query) use ($sportId) {
+                $query->where('sport_id', $sportId);
+            })
+            ->get();
 
         return view('admin.medal_records.index', compact(
+            'sportId',
+            'eventCategories',
             'user',
             'sports',
             'teams',
@@ -312,5 +350,25 @@ class MedalRecordController extends Controller
         ]);
 
         return redirect()->route('medal_records.index')->with('success', 'All medal records under this event category have been approved.');
+    }
+
+    public function approveAll(Request $request, int $id)
+    {
+        $validatedData = $request->validate([
+            'is_posted' => 'required|boolean',
+        ]);
+
+        // Find all event category IDs that belong to the given sport_id
+        $eventCategoryIds = EventCategory::where('sport_id', $id)->pluck('id');
+
+        // Update medal records where event_category_id is in the list and is_posted is false
+        MedalRecord::whereIn('event_category_id', $eventCategoryIds)
+            ->where('is_posted', false)
+            ->update([
+                'is_posted' => $validatedData['is_posted'],
+                'posted_by' => auth()->id(),
+            ]);
+
+        return redirect()->route('medal_records.index')->with('success', 'All unposted medal records under this sport category have been approved.');
     }
 }
