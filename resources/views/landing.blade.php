@@ -9,6 +9,8 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
     @vite(['resources/css/landingpage.css'])
 
 
@@ -329,6 +331,9 @@
                     </div>
                 </div>
             </div>
+            
+
+            
 
             <!-- Stats Section -->
             <div class="stats-container" data-aos="fade-up" data-aos-delay="200">
@@ -380,9 +385,169 @@
         </div>
     </section>
 
-    <!-- Team Standings -->
-    <section id="standings" class="py-20 bg-gray-50">
+    <section class="championship-carousel py-24 bg-gradient-to-b from-white to-gray-50">
+    <div class="container mx-auto px-4">
+        <!-- Section Header -->
+        <div class="text-center mb-16" data-aos="fade-up">
+            <h2 class="text-5xl font-black text-gray-800 mb-4 tracking-tight">
+                Championship Results
+                <span class="block text-lg font-medium text-gray-500 mt-2">
+                    Celebrating excellence in sports
+                </span>
+            </h2>
+            <div class="flex justify-center items-center gap-2 mt-4">
+                <span class="w-8 h-1 bg-green-600 rounded-full"></span>
+                <span class="w-3 h-1 bg-green-400 rounded-full"></span>
+                <span class="w-2 h-1 bg-green-200 rounded-full"></span>
+            </div>
+        </div>
 
+        <!-- Carousel Container -->
+        <div class="swiper sports-championship-swiper">
+            <div class="swiper-wrapper">
+                @foreach($flattenedEvents as $event)
+                <div class="swiper-slide">
+                    <div class="event-card">
+                        <div class="event-header">
+                            <span class="sport-badge">{{ $event['sport_name'] }}</span>
+                            <div class="event-header-content">
+                                <h3 class="event-name">{{ $event['name'] }}</h3>
+                                <div class="event-description">Championship {{ date('Y') }}</div>
+                            </div>
+                            <div class="sport-icon">
+                                @if($event['sport_icon'])
+                                <img src="{{ Vite::asset('resources/images/sports/' . $event['sport_icon']) }}" alt="{{ $event['sport_name'] }}" class="sport-icon-img">
+                                @else
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sport-icon-svg">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M12 2v20M2 12h20"></path>
+                                </svg>
+                                @endif
+                            </div>
+                        </div>
+                        
+                        <div class="podium-container">
+                            @if($event['gold_winner'] || $event['silver_winner'] || count($event['bronze_winners']) > 0)
+                                @if($event['gold_winner'])
+                                <div class="medal-tier gold-tier">
+                                    <div class="medal-header">
+                                        <div class="medal-icon gold">1</div>
+                                        <div class="medal-title">Gold Medal</div>
+                                    </div>
+                                    <div class="winner-details">
+                                        <div class="winner-team">{{ $event['gold_winner']['team_name'] }}</div>
+                                        <div class="winner-college">
+                                            @if(isset($event['gold_winner']['colleges']) && count($event['gold_winner']['colleges']) > 0)
+                                                {{ implode(', ', $event['gold_winner']['colleges']->toArray()) }}
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+
+                                @if($event['silver_winner'])
+                                <div class="medal-tier silver-tier">
+                                    <div class="medal-header">
+                                        <div class="medal-icon silver">2</div>
+                                        <div class="medal-title">Silver Medal</div>
+                                    </div>
+                                    <div class="winner-details">
+                                        <div class="winner-team">{{ $event['silver_winner']['team_name'] }}</div>
+                                        <div class="winner-college">
+                                            @if(isset($event['silver_winner']['colleges']) && count($event['silver_winner']['colleges']) > 0)
+                                                {{ implode(', ', $event['silver_winner']['colleges']->toArray()) }}
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+
+                                @if(count($event['bronze_winners']) > 0)
+                                    @foreach($event['bronze_winners'] as $index => $bronzeWinner)
+                                    <div class="medal-tier bronze-tier">
+                                        <div class="medal-header">
+                                            <div class="medal-icon bronze">3</div>
+                                            <div class="medal-title">Bronze Medal {{ count($event['bronze_winners']) > 1 ? ($index + 1) : '' }}</div>
+                                        </div>
+                                        <div class="winner-details">
+                                            <div class="winner-team">{{ $bronzeWinner['team_name'] }}</div>
+                                            <div class="winner-college">
+                                                @if(isset($bronzeWinner['colleges']) && count($bronzeWinner['colleges']) > 0)
+                                                    {{ implode(', ', $bronzeWinner['colleges']->toArray()) }}
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                @endif
+                            @else
+                                <div class="no-results">
+                                    <div class="no-results-icon">🏆</div>
+                                    <div>Results coming soon</div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+            
+            <!-- Navigation Controls -->
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize Swiper
+  const sportsSwiper = new Swiper('.sports-championship-swiper', {
+    slidesPerView: 1,
+    spaceBetween: 20,
+    loop: true,
+    centeredSlides: true,
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false,
+    },
+    effect: 'coverflow',
+    coverflowEffect: {
+      rotate: 5,
+      stretch: 0,
+      depth: 100,
+      modifier: 1,
+      slideShadows: false,
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    breakpoints: {
+      640: {
+        slidesPerView: 2,
+        spaceBetween: 20,
+      },
+      1024: {
+        slidesPerView: 3,
+        spaceBetween: 30,
+      },
+    },
+  });
+});
+</script>
+
+
+
+ 
+
+
+    <section id="standings" class="py-20 bg-gray-50">
         <div class="container mx-auto px-4">
             <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-up">
                 Team Standings
@@ -496,7 +661,7 @@
                         </div>
                     </div>
                 </div>
-</div>
+                </div>
 
                 @endforeach
             </div>
@@ -1144,5 +1309,6 @@
             }
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
 </body>
 </html>
