@@ -9,6 +9,8 @@ use App\Models\Team;
 use App\Models\EventCategory;
 use App\Models\Sport;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
 
 class MedalRecordController extends Controller
 {
@@ -163,19 +165,7 @@ class MedalRecordController extends Controller
 
         return redirect()->route('medal_records.index')->with('success', 'Medal records created successfully.');
     }
-    public function approve(Request $request, string $id)
-    {
-        $validatedData = $request->validate([
-            'is_posted' => 'required|boolean',
-        ]);
 
-        $medalRecord = MedalRecord::findOrFail($id);
-        $validatedData['posted_by'] = auth()->id();
-        $medalRecord->update($validatedData);
-
-        return redirect()->route('medal_records.index')->with('success', 'Medal record approved successfully.');
-
-    }
 
     /**
      * Display the specified resource.
@@ -198,22 +188,103 @@ class MedalRecordController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, int $id)
+    public function update(Request $request, int $eventCategoryId)
     {
         $validatedData = $request->validate([
-            'team_id' => 'required|exists:teams,id',
+            'champion_team_id' => 'required|exists:teams,id',
+            'first_runner_up_team_id' => 'required|exists:teams,id',
+            'second_runner_up_team_id' => 'required|exists:teams,id',
+            'second_runner_up_team_id_2' => 'nullable|exists:teams,id',
             'event_category_id' => 'required|exists:event_categories,id',
-            'gold_tally' => 'required|integer',
-            'silver_tally' => 'required|integer',
-            'bronze_tally' => 'required|integer',
-            'number_of_participant' => 'required|numeric',
-            'year' =>  'required|numeric'
+            'medal_count' => 'required|integer|min:1',
+            'number_of_participant' => 'required|integer|min:1',
+            'is_double_bronze' => 'required|in:0,1',
+            'is_posted' => 'nullable'
         ]);
 
+        $eventCategory = EventCategory::findOrFail($eventCategoryId);
 
-        $medalRecord = MedalRecord::findOrFail($id);
-        $medalRecord->update($validatedData);
-        return redirect()->route('medal_records.index')->with('success', 'Medal record updated successfully.');
+        DB::beginTransaction();
+
+        try {
+            // Fetch existing records for this event category
+            $existingRecords = MedalRecord::where('event_category_id', $eventCategoryId)->get();
+            $isPosted = isset($validatedData['is_posted']) && $validatedData['is_posted'] == 1;
+
+            // Array to track updated team IDs
+            $updatedTeamIds = [];
+
+            // Process gold medal
+            $updatedTeamIds[] = $this->updateMedalRecord(
+                $existingRecords, $eventCategoryId, $validatedData['champion_team_id'],
+                $validatedData['medal_count'], 0, 0, $validatedData['number_of_participant'], $isPosted
+            )->team_id;
+
+            // Process silver medal
+            $updatedTeamIds[] = $this->updateMedalRecord(
+                $existingRecords, $eventCategoryId, $validatedData['first_runner_up_team_id'],
+                0, $validatedData['medal_count'], 0, $validatedData['number_of_participant'], $isPosted
+            )->team_id;
+
+            // Process bronze medal
+            $updatedTeamIds[] = $this->updateMedalRecord(
+                $existingRecords, $eventCategoryId, $validatedData['second_runner_up_team_id'],
+                0, 0, $validatedData['medal_count'], $validatedData['number_of_participant'], $isPosted
+            )->team_id;
+
+            // Process second bronze medal if applicable
+            if ($validatedData['is_double_bronze'] == '1' && !empty($validatedData['second_runner_up_team_id_2'])) {
+                $updatedTeamIds[] = $this->updateMedalRecord(
+                    $existingRecords, $eventCategoryId, $validatedData['second_runner_up_team_id_2'],
+                    0, 0, $validatedData['medal_count'], $validatedData['number_of_participant'], $isPosted
+                )->team_id;
+            }
+
+            // Delete records that were not updated
+            MedalRecord::where('event_category_id', $eventCategoryId)
+                ->whereNotIn('team_id', $updatedTeamIds)
+                ->delete();
+
+            DB::commit();
+            return redirect()->route('medal_records.index')->with('success', 'Medal records updated successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('medal_records.index')->with('error', 'Error updating medal records: ' . $e->getMessage());
+        }
+    }
+
+
+    /**
+     * Helper method to update or create medal records
+     */
+    private function updateMedalRecord($existingRecords, $eventCategoryId, $teamId, $goldTally, $silverTally, $bronzeTally, $participants, $isPosted)
+    {
+        // Try to find an existing record for this team
+        $record = $existingRecords->first(function($item) use ($teamId) {
+            return $item->team_id == $teamId;
+        });
+
+        // If no record exists, create a new one
+        if (!$record) {
+            $record = new MedalRecord();
+            $record->event_category_id = $eventCategoryId;
+            $record->team_id = $teamId;
+            $record->year = date('Y'); // Current year
+        }
+
+        // Update the record
+        $record->gold_tally = $goldTally;
+        $record->silver_tally = $silverTally;
+        $record->bronze_tally = $bronzeTally;
+        $record->number_of_participant = $participants;
+        $record->is_posted = $isPosted;
+        $record->entry_by = auth()->id();
+        $record->posted_by = auth()->id();
+
+
+        $record->save();
+
+        return $record;
     }
 
     /**
@@ -222,10 +293,24 @@ class MedalRecordController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
+        // Delete all records where event_category_id matches $id
+        MedalRecord::where('event_category_id', $id)->delete();
 
-        $medalRecord = MedalRecord::findOrFail($id);
+        return redirect()->route('medal_records.index')->with('success', 'All medal records under this event category have been deleted.');
+    }
 
-        $medalRecord->delete();
-        return redirect()->route('medal_records.index')->with('success', 'Medal record deleted successfully.');
+    public function approve(Request $request, int $id)
+    {
+        $validatedData = $request->validate([
+            'is_posted' => 'required|boolean',
+        ]);
+
+        // Update all records where event_category_id matches $id
+        MedalRecord::where('event_category_id', $id)->update([
+            'is_posted' => $validatedData['is_posted'],
+            'posted_by' => auth()->id(),
+        ]);
+
+        return redirect()->route('medal_records.index')->with('success', 'All medal records under this event category have been approved.');
     }
 }
