@@ -25,6 +25,7 @@
             <p class="text-muted">Track medal performances across all events</p>
         </div>
         <div class="d-flex align-items-center gap-3">
+        @if(!$sportId)
             <div class="d-flex align-items-center gap-3">
                 <!-- Reset Filter Button (Initially Hidden) -->
                 <button id="resetFilterBtn" class="btn btn-light" onclick="resetFilter()" style="display: none;">
@@ -36,7 +37,11 @@
                         <i class="mdi mdi-filter-outline me-1"></i> Filter by Sport
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="sportFilterDropdown">
-                        <li><a class="dropdown-item active" href="#" onclick="filterSport('all')">All Sports</a></li>
+                        <li>
+                            <label class="dropdown-item">
+                                <input type="checkbox" class="sport-checkbox" value="all" onchange="filterSport()"> All Sports
+                            </label>
+                        </li>
                         @foreach($sports as $sport)
                             @php
                                 $sportHasRecords = false;
@@ -48,27 +53,50 @@
                                     }
                                 }
                             @endphp
-
                             @if($sportHasRecords)
-                                <li><a class="dropdown-item" href="#" onclick="filterSport('{{ $sport->id }}')">{{ $sport->name }}</a></li>
+                                <li>
+                                    <label class="dropdown-item">
+                                        <input type="checkbox" class="sport-checkbox" value="{{ $sport->id }}" onchange="filterSport()"> 
+                                        {{ $sport->name }}
+                                    </label>
+                                </li>
                             @endif
                         @endforeach
                     </ul>
                 </div>
-
-
             </div>
-            <!-- View toggle buttons -->
-            <div class="view-tabs">
-                <div class="view-tab card-view active" onclick="toggleView('card')">Card View</div>
-                <div class="view-tab table-view" onclick="toggleView('table')">Table View</div>
-            </div>
+        @else
+        <div class="dropdown">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="eventCategoryFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="mdi mdi-filter-outline me-1" ></i> Filter by Event Category
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="eventCategoryFilterDropdown">
+                <li>
+                    <label class="dropdown-item">
+                        <input type="checkbox" class="event-category-checkbox" value="all" onchange="filterCatRecords()"> All Categories
+                    </label>
+                </li>
+                @foreach($eventCategories as $eventCategory)
+                    @if($medalRecords->where('event_category_id', $eventCategory->id)->count() > 0)
+                        <li>
+                            <label class="dropdown-item">
+                                <input type="checkbox" class="event-category-checkbox" value="{{ $eventCategory->id }}" onchange="filterCatRecords()"> 
+                                {{ $eventCategory->name }}
+                            </label>
+                        </li>
+                    @endif
+                @endforeach
+            </ul>
+        </div>
 
-            @if($user->role != 'user')
-                <button type="button" class="btn btn-primary custom-primary-background" data-bs-toggle="modal" data-bs-target="#addRecordModal">
-                    <i class="mdi mdi-plus me-1"></i> Add Record
-                </button>
-            @endif
+
+        @endif
+      
+        @if($user->role != 'user')
+            <button type="button" class="btn btn-primary custom-primary-background" data-bs-toggle="modal" data-bs-target="#addRecordModal">
+                <i class="mdi mdi-plus me-1"></i> Add Record
+            </button>
+        @endif
         </div>
     </div>
 
@@ -92,8 +120,25 @@
             @endphp
 
             @if($sportHasRecords)
-                <div class="sport-header mb-4">
+                <div class="sport-header mb-4 d-flex justify-content-between align-items-center" data-sport-id="{{ $sport->id }}">
                     <h4 class="fs-16 m-0">{{ $sport->name }}</h4>
+                    @if($user->role == 'admin')
+                        @php
+                            $hasUnapprovedRecords = \App\Models\MedalRecord::whereHas('eventCategory', function ($query) use ($sport) {
+                                $query->where('sport_id', $sport->id);
+                            })->where('is_posted', false)->exists();
+                        @endphp
+
+                        @if($hasUnapprovedRecords)
+                            <button class="btn btn-primary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#approveAllRecordModal"
+                                    title="Approve all records"
+                                    onclick="setEventCategory('{{ $sport->id }}', 'approvedAll')">
+                                Approve All
+                            </button>
+                        @endif
+                    @endif
                 </div>
 
                 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-5">
@@ -144,7 +189,7 @@
                         <div class="col">
                             <div class="card medal-card h-100">
                                 <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                                    <h5 class="card-title mb-0">{{ $eventCategory->name }}</h5>
+                                    <h5 class="card-title mb-0" data-event-category-id="{{ $eventCategory->id }}">{{ $eventCategory->name }}</h5>
                                     <span class="status-badge {{ $isPosted ? 'status-posted' : 'status-pending' }}">
                                         {{ $isPosted ? 'Posted' : 'Pending' }}
                                     </span>
@@ -252,20 +297,21 @@
                                     <div class="text-muted">
                                         <i class="mdi mdi-account-group me-1"></i> {{ $participants }} Participating Teams
                                     </div>
+                                    @if(!$isPosted)
                                     <div class="d-flex align-items-center gap-1">
-                                        @if($user->role != 'user')
+                                        @if($user->id == $record->posted_by && !$isPosted)
                                             <button type="button"
-                                                    class="btn btn-sm btn-outline-primary btn-floating"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#editRecordModal"
-                                                    onclick="prepareEditForm('{{ $eventCategory->id }}')"
-                                                    {{ $isPosted ? 'disabled' : '' }}
-                                                    data-bs-toggle="tooltip"
-                                                    data-bs-placement="top"
-                                                    title="{{ $isPosted ? 'Editing disabled: Record is posted' : 'Edit record' }}"
-                                                    style="{{ $isPosted ? 'cursor: not-allowed;' : '' }}">
+                                                class="btn btn-sm btn-outline-primary btn-floating"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#editRecordModal"
+                                                onclick="prepareEditForm('{{ $eventCategory->id }}')"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Edit record">
                                                 <i class="mdi mdi-pencil"></i>
                                             </button>
+                                 
+
                                         @endif
 
                                         @if($user->role == 'admin' || $user->role == 'tournament_director')
@@ -279,6 +325,7 @@
                                                     title="Approve this record">
                                                 <i class="mdi mdi-check"></i>
                                             </button>
+                                   
                                         @endif
 
                                         @if($user->role == 'admin' || $user->role == 'tournament_director')
@@ -291,8 +338,11 @@
                                                 title="Delete this record">
                                                 <i class="mdi mdi-delete"></i>
                                             </button>
+                               
+
                                         @endif
                                     </div>
+                                    @endif
 
                                 </div>
                             </div>
@@ -313,238 +363,7 @@
         @endif
     </div>
 
-    <!-- Table View -->
-    <div id="tableView" class="view-content" style="display: none;">
-        <div class="card modern-table">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0" id="medalTable">
-                        <thead>
-                            <tr>
-                                <th>Sport</th>
-                                <th>Event Category</th>
-                                <th>Rank</th>
-                                <th>Team</th>
-                                <th>Medal Count</th>
-                                <th>Medal Weight</th>
-                                <th>No. of Participating Teams</th>
-                                <th>Status</th>
-                                @if($user->role != 'user')
-                                    <th>Actions</th>
-                                @endif
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @php
-                                $hasTableRecords = false;
-                                $currentSport = null;
-                                $sportRowspan = 0;
-                                $eventRowspan = 0;
-                            @endphp
 
-                            @foreach($sports as $sport)
-                                @php
-                                    $sportHasRecords = false;
-                                    $sportEventCount = 0;
-                                    $totalRowsForSport = 0;
-
-                                    // First, count how many rows this sport will need
-                                    foreach($sport->eventCategories as $eventCategory) {
-                                        $eventRecords = $medalRecords->where('event_category_id', $eventCategory->id);
-                                        if($eventRecords->count() > 0) {
-                                            $sportHasRecords = true;
-                                            $sportEventCount++;
-
-                                            // Count rows for this event (gold, silver, bronze winners)
-                                            $bronzeWinnersCount = 0;
-                                            foreach($eventRecords as $record) {
-                                                if($record->bronze_tally > 0) {
-                                                    $bronzeWinnersCount++;
-                                                }
-                                            }
-                                            // Each event needs at least 3 rows (gold, silver, bronze)
-                                            // If double bronze, it might need 4 rows
-                                            $rowsForEvent = 2 + $bronzeWinnersCount; // gold + silver + bronze winners
-                                            $totalRowsForSport += $rowsForEvent;
-                                        }
-                                    }
-                                @endphp
-
-                                @if($sportHasRecords)
-                                    @php $hasTableRecords = true; @endphp
-
-                                    <!-- Loop through event categories within the sport -->
-                                    @php $eventCounter = 0; @endphp
-                                    @foreach($sport->eventCategories as $eventCategory)
-                                        @php
-                                            // Get all medal records for this event category
-                                            $eventRecords = $medalRecords->where('event_category_id', $eventCategory->id);
-
-                                            // Skip if no records
-                                            if($eventRecords->count() == 0) continue;
-
-                                            $eventCounter++;
-
-                                            // Find gold, silver, and bronze winners
-                                            $goldWinner = $silverWinner = null;
-                                            $bronzeWinners = [];
-                                            $goldWeight = $silverWeight = $bronzeWeight = null;
-                                            $goldTally = $silverTally = $bronzeTally = 0;
-                                            $participants = 0;
-                                            $isPosted = false;
-
-                                            foreach ($eventRecords as $record) {
-                                                $team = $teams->find($record->team_id);
-
-                                                if ($record->gold_tally > 0) {
-                                                    $goldWinner = $team;
-                                                    $goldWeight = $record->gold_tally * $eventCategory->medalWeightCategory->gold_weight;
-                                                    $goldTally = $record->gold_tally;
-                                                }
-
-                                                if ($record->silver_tally > 0) {
-                                                    $silverWinner = $team;
-                                                    $silverWeight = $record->silver_tally * $eventCategory->medalWeightCategory->silver_weight;
-                                                    $silverTally = $record->silver_tally;
-                                                }
-
-                                                if ($record->bronze_tally > 0) {
-                                                    $bronzeWinners[] = $team;
-                                                    if($eventCategory->is_double_bronze){
-                                                        $bronzeWeight = $record->bronze_tally * $eventCategory->medalWeightCategory->bronze_weight / 2;
-                                                    } else {
-                                                        $bronzeWeight = $record->bronze_tally * $eventCategory->medalWeightCategory->bronze_weight;
-                                                    }
-                                                    $bronzeTally = $record->bronze_tally;
-                                                }
-
-                                                // Track the total number of participants and posting status
-                                                $participants = $record->number_of_participant;
-                                                $isPosted = $record->is_posted;
-                                            }
-
-                                            $eventRowspan = 2 + count($bronzeWinners);
-                                        @endphp
-
-                                        <!-- Gold Winner Row -->
-                                        <tr>
-                                            @if($eventCounter === 1)
-                                                <td rowspan="{{ $totalRowsForSport }}" class="align-middle">
-                                                    <h5 class="m-0 fw-bold">{{ $sport->name }}</h5>
-                                                </td>
-                                            @endif
-
-                                            <td rowspan="{{ $eventRowspan }}" class="align-middle">{{ $eventCategory->name }}</td>
-                                            <td class="text-center">
-                                                <span class="medal-badge medal-gold">Champion</span>
-                                            </td>
-                                            <td>{{ $goldWinner ? $goldWinner->name : '-' }}</td>
-                                            <td>{{ $goldTally }}</td>
-                                            <td>{{ $goldWeight }}</td>
-                                            <td rowspan="{{ $eventRowspan }}" class="align-middle text-center">{{ $participants }}</td>
-                                            <td rowspan="{{ $eventRowspan }}" class="align-middle text-center">
-                                                <span class="status-badge {{ $isPosted ? 'status-posted' : 'status-pending' }}">
-                                                    {{ $isPosted ? 'Posted' : 'Pending' }}
-                                                </span>
-                                            </td>
-                                            @if($user->role != 'user')
-                                                <td rowspan="{{ $eventRowspan }}" class="align-middle text-center">
-                                                    <div class="d-flex align-items-center gap-1">
-                                                        @if($user->role != 'user')
-                                                            <button type="button"
-                                                                    class="btn btn-sm btn-outline-primary btn-floating"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#editRecordModal"
-                                                                    onclick="prepareEditForm('{{ $eventCategory->id }}')"
-                                                                    {{ $isPosted ? 'disabled' : '' }}
-                                                                    data-bs-toggle="tooltip"
-                                                                    data-bs-placement="top"
-                                                                    title="{{ $isPosted ? 'Editing disabled: Record is posted' : 'Edit record' }}"
-                                                                    style="{{ $isPosted ? 'cursor: not-allowed;' : '' }}">
-                                                                <i class="mdi mdi-pencil"></i>
-                                                            </button>
-                                                        @endif
-
-                                                        @if($user->role == 'admin' || $user->role == 'tournament_director')
-                                                            <!-- Approve Button -->
-                                                            <button type="button"
-                                                                    class="btn btn-sm btn-outline-success btn-floating"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#approveRecordModal"
-                                                                    {{ $isPosted ? 'disabled' : '' }}
-                                                                    onclick="setEventCategory('{{ $eventCategory->id }}', 'approve')"
-                                                                    title="Approve this record">
-                                                                <i class="mdi mdi-check"></i>
-                                                            </button>
-                                                        @endif
-
-                                                        @if($user->role == 'admin' || $user->role == 'tournament_director')
-                                                            <!-- Delete Button -->
-                                                            <button type="button"
-                                                                class="btn btn-sm btn-outline-danger btn-floating"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#deleteRecordModal"
-                                                                onclick="setEventCategory('{{ $eventCategory->id }}', 'delete')"
-                                                                title="Delete this record">
-                                                                <i class="mdi mdi-delete"></i>
-                                                            </button>
-                                                        @endif
-                                                    </div>
-                                                </td>
-                                            @endif
-                                        </tr>
-
-                                        <!-- Silver Winner Row -->
-                                        <tr>
-                                            <td class="text-center">
-                                                <span class="medal-badge medal-silver">1st Runner Up</span>
-                                            </td>
-                                            <td>{{ $silverWinner ? $silverWinner->name : '-' }}</td>
-                                            <td>{{ $silverTally }}</td>
-                                            <td>{{ $silverWeight }}</td>
-                                        </tr>
-
-                                        <!-- Bronze Winner Row(s) -->
-                                        @if(count($bronzeWinners) > 0)
-                                            @foreach($bronzeWinners as $index => $bronzeWinner)
-                                                <tr>
-                                                    <td class="text-center">
-                                                        <span class="medal-badge medal-bronze">2nd Runner Up</span>
-                                                    </td>
-                                                    <td>{{ $bronzeWinner->name }}</td>
-                                                    <td>{{ $bronzeTally }}</td>
-                                                    <td>{{ $bronzeWeight }}</td>
-                                                </tr>
-                                            @endforeach
-                                        @else
-                                            <tr>
-                                                <td class="text-center">
-                                                    <span class="medal-badge medal-bronze">2nd Runner Up</span>
-                                                </td>
-                                                <td>-</td>
-                                                <td>{{ $bronzeTally }}</td>
-                                                <td>{{ $bronzeWeight }}</td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-                                @endif
-                            @endforeach
-
-                            @if(!$hasTableRecords)
-                                <tr>
-                                    <td colspan="{{ $user->role != 'user' ? 9 : 8 }}" class="text-center py-5">
-                                        <img src="{{ asset('assets/images/no-data.svg') }}" alt="No Data" class="img-fluid mb-3" style="max-width: 100px;">
-                                        <h5>No medal records found</h5>
-                                    </td>
-                                </tr>
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!--Approve Modal-->
 <div class="modal fade" id="approveRecordModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
@@ -560,6 +379,32 @@
                 <div class="d-flex gap-2 justify-content-end">
                     <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
                     <form id="approveForm" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="is_posted" value="1">
+                        <button type="submit" class="btn btn-success">Confirm</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Approve ALL Modal-->
+<div class="modal fade" id="approveAllRecordModal" tabindex="-1" aria-labelledby="approveAllRecordModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Approve All Records</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Warning:</strong> Once approved, this record cannot be edited.</p>
+                <p>Are you sure you want to approve this record?</p>
+                <div class="d-flex gap-2 justify-content-end">
+                    <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <form id="approveAllForm" method="POST">
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="is_posted" value="1">
@@ -997,8 +842,12 @@ function setEventCategory(eventCategoryId, actionType) {
         document.getElementById('approveForm').action = `/admin/medal-records/${eventCategoryId}/approve`;
     } else if (actionType === 'delete') {
         document.getElementById('deleteForm').action = `/admin/medal-records/${eventCategoryId}`;
+    } else if ( actionType === 'approvedAll') {
+        document.getElementById('approveAllForm').action = `/admin/medal-records/${eventCategoryId}/approve/all`;
     }
 }
+
+
 
 // Initialize tooltips
 document.addEventListener("DOMContentLoaded", function() {
@@ -1075,6 +924,8 @@ async function prepareEditForm(eventCategoryId) {
     updateEditTeamSelections();
 }
 
+
+
 function fetchMedalRecords(eventCategoryId) {
     let goldTeamId = null;
     let silverTeamId = null;
@@ -1144,173 +995,184 @@ function updateEditTeamSelections() {
 </script>
 <script>
 
-    function toggleView(viewType) {
-    // Get view elements
-    const cardView = document.getElementById('cardView');
-    const tableView = document.getElementById('tableView');
-
-    // Get tab elements
-    const cardTab = document.querySelector('.view-tab.card-view');
-    const tableTab = document.querySelector('.view-tab.table-view');
-
-    // Toggle view display
-    if (viewType === 'card') {
-        cardView.style.display = 'block';
-        tableView.style.display = 'none';
-        cardTab.classList.add('active');
-        tableTab.classList.remove('active');
-    } else if (viewType === 'table') {
-        cardView.style.display = 'none';
-        tableView.style.display = 'block';
-        cardTab.classList.remove('active');
-        tableTab.classList.add('active');
-    }
-
-    // Store the preference in localStorage so it persists across page loads (optional)
-    localStorage.setItem('preferredView', viewType);
-}
+    
 
 // Add this script to the script section at the bottom of the page
-function filterSport(sportId) {
+// Run this function on page load to hide all sports if 'All' is selected by default
+document.addEventListener('DOMContentLoaded', () => {
+    filterSport();
+});
+
+function filterSport() {
+    const checkboxes = document.querySelectorAll('.sport-checkbox');
+    const selectedSports = [];
+    
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            selectedSports.push(checkbox.value);
+        }
+    });
+
+    const isAllSelected = selectedSports.includes('all') || selectedSports.length === 0;
+
     // Update the dropdown button text
     const dropdownButton = document.getElementById('sportFilterDropdown');
-    const sportName = sportId === 'all' ? 'All Sports' : document.querySelector(`.dropdown-item[onclick="filterSport('${sportId}')"]`).textContent;
-    dropdownButton.innerHTML = `<i class="mdi mdi-filter-outline me-1"></i> ${sportName}`;
-
-    // Update active class in dropdown menu
-    document.querySelectorAll('.dropdown-item').forEach(item => {
-        item.classList.remove('active');
-    });
-    document.querySelector(sportId === 'all' ? '.dropdown-item[onclick="filterSport(\'all\')"]' : `.dropdown-item[onclick="filterSport('${sportId}')"]`).classList.add('active');
+    dropdownButton.innerHTML = `<i class="mdi mdi-filter-outline me-1"></i> ${isAllSelected ? 'All Sports' : selectedSports.length + ' Selected'}`;
 
     // Show/hide reset button
-    document.getElementById('resetFilterBtn').style.display = sportId === 'all' ? 'none' : 'block';
+    document.getElementById('resetFilterBtn').style.display = isAllSelected ? 'none' : 'block';
 
-    // Card View Filtering - FIXED VERSION
+    // Card View Filtering
     const cardView = document.getElementById('cardView');
     const sportSections = cardView.querySelectorAll('.sport-header');
-    let anyVisibleSport = sportId === 'all'; // If "all", we know some will be visible
+    let anyVisibleSport = false;
 
     sportSections.forEach(header => {
-        // Get the sport name from the header
-        const sportTitle = header.querySelector('h4').textContent.trim();
-        const shouldShow = sportId === 'all' || (sportId !== 'all' && sportTitle === document.querySelector(`.dropdown-item[onclick="filterSport('${sportId}')"]`).textContent.trim());
+        // Find the nearest parent with sport-id attribute or data attribute
+        const sportId = header.getAttribute('data-sport-id');
+        
+        // Check if we should show this sport based on ID, not name
+        const shouldShow = isAllSelected || selectedSports.includes(sportId);
 
-        // Get all related elements: the header itself and the row of cards that follows it
         const cardRow = header.nextElementSibling;
-
         if (shouldShow) {
-            header.style.display = 'block';
+            header.style.display = 'flex'; // Changed to flex since it's using d-flex
             cardRow.style.display = 'flex';
             anyVisibleSport = true;
+            header.classList.remove('d-none');
         } else {
+            header.classList.add('d-none');
             header.style.display = 'none';
             cardRow.style.display = 'none';
         }
     });
 
+
     // Handle "no data" message in card view
-    const noDataCard = cardView.querySelector('.card.shadow-sm');
+    const noDataCard = cardView.querySelector('.card.shadow-sm.no-data-filtered');
     if (!anyVisibleSport && !noDataCard) {
-        // Create a "no data" card if there's no visible sport
         const noDataElement = document.createElement('div');
         noDataElement.className = 'card shadow-sm no-data-filtered';
         noDataElement.innerHTML = `
             <div class="card-body text-center p-5">
-                <img src="${document.querySelector('img[alt="No Data"]')?.src || '/assets/images/no-data.svg'}" alt="No Data" class="img-fluid mb-3" style="max-width: 200px;">
+                <img src="/assets/images/no-data.svg" alt="No Data" class="img-fluid mb-3" style="max-width: 200px;">
                 <h4>No Medal Records Found for this Filter</h4>
                 <p class="text-muted">Try a different sport filter or reset filters to view all records.</p>
             </div>
         `;
-        cardView.appendChild(noDataElement);
+        if (!cardView.querySelector('.no-data-filtered')) {
+            cardView.appendChild(noDataElement);
+        }
+
     } else if (anyVisibleSport) {
-        // Remove the "no data" card if we have visible sports
         const noDataFiltered = cardView.querySelector('.no-data-filtered');
         if (noDataFiltered) {
             noDataFiltered.remove();
         }
     }
 
-    // Table View Filtering - Fixed version
-    const table = document.getElementById('medalTable');
-    const tbody = table.querySelector('tbody');
-    const sportText = sportId === 'all' ? 'all' : document.querySelector(`.dropdown-item[onclick="filterSport('${sportId}')"]`).textContent.trim();
+   
 
-    // Store all sport sections to show/hide them together
-    let tableSportSections = [];
-    let currentSportRows = [];
-    let currentSportName = '';
-
-    // First pass: identify sport sections and group rows
-    Array.from(tbody.rows).forEach(row => {
-        const sportCell = row.querySelector('td:first-child h5');
-
-        if (sportCell) {
-            // Found a new sport section
-            if (currentSportRows.length > 0) {
-                // Save previous sport section
-                tableSportSections.push({
-                    name: currentSportName,
-                    rows: [...currentSportRows]
-                });
-            }
-
-            // Start new sport section
-            currentSportName = sportCell.textContent.trim();
-            currentSportRows = [row];
-        } else {
-            // Add to current sport section
-            if (currentSportRows.length > 0) {
-                currentSportRows.push(row);
-            }
-        }
-    });
-
-    // Add the last sport section if any
-    if (currentSportRows.length > 0) {
-        tableSportSections.push({
-            name: currentSportName,
-            rows: [...currentSportRows]
-        });
-    }
-
-    // Second pass: show/hide sport sections
-    tableSportSections.forEach(section => {
-        const visible = sportId === 'all' || section.name === sportText;
-
-        section.rows.forEach(row => {
-            row.style.display = visible ? '' : 'none';
-        });
-    });
-
-    // Show "no data" row if all sport sections are hidden
-    const hasVisibleRows = Array.from(tbody.rows).some(row => row.style.display !== 'none');
-
-    // Check if we already have a "no data found" row
-    let noDataRow = Array.from(tbody.rows).find(row => {
-        const cols = row.querySelectorAll('td');
-        return cols.length === 1 && cols[0].textContent.includes('No medal records found');
-    });
-
-    if (!hasVisibleRows && !noDataRow) {
-        // Create and append a "no data" row
-        const colSpan = table.rows[0].cells.length;
-        const newRow = tbody.insertRow();
-        const cell = newRow.insertCell();
-        cell.colSpan = colSpan;
-        cell.className = 'text-center py-5';
-        cell.innerHTML = `
-            <img src="${document.querySelector('img[alt="No Data"]')?.src || '/assets/images/no-data.svg'}" alt="No Data" class="img-fluid mb-3" style="max-width: 100px;">
-            <h5>No medal records found for this filter</h5>
-        `;
-    } else if (hasVisibleRows && noDataRow) {
-        // Remove the "no data" row if we have visible rows
-        noDataRow.remove();
-    }
 }
 
 function resetFilter() {
-    filterSport('all');
+    document.querySelectorAll('.sport-checkbox').forEach(checkbox => checkbox.checked = false);
+    filterSport();
 }
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    filterCatRecords() ;
+});
+
+function filterCatRecords() {
+    // Get all checked event category checkboxes
+    const eventCategoryCheckboxes = document.querySelectorAll('.event-category-checkbox');
+    const selectedEventCategories = [];
+    
+    eventCategoryCheckboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            selectedEventCategories.push(checkbox.value);
+        }
+    });
+
+    // Check if "All Categories" is selected or nothing is selected
+    const isAllCategoriesSelected = selectedEventCategories.includes('all') || selectedEventCategories.length === 0;
+
+    // Update the dropdown button text
+    const dropdownButton = document.getElementById('eventCategoryFilterDropdown');
+    dropdownButton.innerHTML = `<i class="mdi mdi-filter-outline me-1"></i> ${isAllCategoriesSelected ? 'All Categories' : selectedEventCategories.length + ' Selected'}`;
+
+    // Get all medal cards
+    const medalCards = document.querySelectorAll('.medal-card');
+    let anyVisibleCard = false;
+
+    // Loop through all medal cards
+    medalCards.forEach(card => {
+        // Find the event category ID from the card
+        const cardTitle = card.closest('.col').querySelector('.card-title');
+
+        if (!cardTitle) return; // Skip if no card title exists
+
+        const eventCategoryId = cardTitle.getAttribute('data-event-category-id');
+
+        // Ensure eventCategoryId is valid
+        if (!eventCategoryId) return;
+
+        // Check if we should show this card
+        const shouldShowByCategory = isAllCategoriesSelected || selectedEventCategories.includes(eventCategoryId);
+        
+        // Show/hide the card based on category filter
+        const cardCol = card.closest('.col');
+
+        if (shouldShowByCategory) {
+            cardCol.style.display = 'block';
+            anyVisibleCard = true;
+        } else {
+            cardCol.style.display = 'none';
+        }
+    });
+
+    // Handle "no data" message when no cards are visible
+    const cardView = document.getElementById('cardView');
+    const noDataFilteredCard = cardView.querySelector('.no-data-filtered');
+
+    if (!anyVisibleCard) {
+        if (!noDataFilteredCard) {
+            const noDataElement = document.createElement('div');
+            noDataElement.className = 'card shadow-sm no-data-filtered';
+            noDataElement.innerHTML = `
+                <div class="card-body text-center p-5">
+                    <img src="/assets/images/no-data.svg" alt="No Data" class="img-fluid mb-3" style="max-width: 200px;">
+                    <h4>No Medal Records Found for this Filter</h4>
+                    <p class="text-muted">Try different filter settings or reset filters to view all records.</p>
+                </div>
+            `;
+            cardView.appendChild(noDataElement);
+        }
+    } else if (noDataFilteredCard) {
+        noDataFilteredCard.remove();
+    }
+
+    // Show/hide sport headers based on whether they have any visible cards
+    const sportSections = cardView.querySelectorAll('.sport-header');
+    sportSections.forEach(header => {
+        const cardRow = header.nextElementSibling;
+        const visibleCards = cardRow.querySelectorAll('.col:not([style*="display: none"])'); // Fix for hidden elements
+
+        if (visibleCards.length === 0) {
+            header.style.display = 'none';
+            cardRow.style.display = 'none';
+        } else {
+            header.style.display = 'flex';
+            cardRow.style.display = 'flex';
+        }
+    });
+}
+
+
+
+
 </script>
 @endsection
