@@ -90,6 +90,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
     // Medal Record Routes
     Route::get('/medal-records', [MedalRecordController::class, 'index'])->name('medal_records.index');
+    Route::get('/medal-records/sport/{id}', [MedalRecordController::class, 'recordsBySport'])->name('medal_records.by_sport');
     Route::get('/medal-records/create', [MedalRecordController::class, 'create'])->name('medal_records.create');
     Route::post('/medal-records', [MedalRecordController::class, 'store'])->name('medal_records.store');
     Route::get('/medal-records/{id}', [MedalRecordController::class, 'show'])->name('medal_records.show');
@@ -97,6 +98,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::put('/medal-records/{id}', [MedalRecordController::class, 'update'])->name('medal_records.update');
     Route::delete('/medal-records/{id}', [MedalRecordController::class, 'destroy'])->name('medal_records.destroy');
     Route::put('/medal-records/{id}/approve', [MedalRecordController::class, 'approve'])->name('medal_records.approve');
+    Route::put('/medal-records/{id}/approve/all', [MedalRecordController::class, 'approveAll'])->name('medal_records.approve.all');
 
     Route::get('/results', [ResultsController::class, 'index'])->name('results.index');
     Route::get('/users', [AppUserController::class, 'index'])->name('users.index');

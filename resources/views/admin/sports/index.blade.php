@@ -87,6 +87,10 @@
                                             <td class="text-end">
 
                                                 <div class="d-flex justify-content-end">
+                                                    <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" href="{{ route('medal_records.by_sport', $sport->id) }}">
+                                                        <i class="mdi mdi-eye-outline fs-14 text-primary"></i>
+                                                    </a>
+
                                                     <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editModal-{{$sport->id}}">
                                                         <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                                     </a>
