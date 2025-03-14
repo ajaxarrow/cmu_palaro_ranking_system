@@ -71,7 +71,7 @@ class MedalRecordController extends Controller
         $teams = Team::orderBy('name')->get();
 
         // Get all event categories for the form
-        $events = EventCategory::orderBy('name')->get();
+        $events = EventCategory::where('sport_id', $sportId)->orderBy('name')->get();
         $eventCategories = $sports->flatMap->eventCategories->unique('id');
 
         // Get all medal records
