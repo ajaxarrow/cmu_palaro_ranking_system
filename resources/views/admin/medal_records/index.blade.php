@@ -5,7 +5,83 @@
 @endsection
 
 @section('content')
-
+<style>
+    /* Fixed position export button */
+    .export-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 1000;
+        padding: 15px 30px;
+        background-color: #00491e; /* Use your primary color */
+        color: white;
+        border: none;
+        border-radius: 50px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 16px;
+    }
+    .export-btn:hover {
+        background-color: #02681e; /* Slightly lighter shade for hover */
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    }
+    .export-btn:disabled {
+        background-color: #6c757d;
+        cursor: wait;
+        transform: none;
+    }
+    
+    /* Improved progress dialog */
+    #exportProgress {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 30px rgba(0,0,0,0.3);
+        display: none;
+        z-index: 1002;
+        width: 400px;
+        text-align: center;
+    }
+    .progress-bar {
+        width: 100%;
+        height: 20px;
+        background-color: #e9ecef;
+        border-radius: 10px;
+        overflow: hidden;
+        margin: 20px 0 15px;
+    }
+    .progress-fill {
+        height: 100%;
+        background-color: #00491e;
+        transition: width 1s ease; /* Slower transition */
+    }
+    .export-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1001;
+        display: none;
+        cursor: wait;
+    }
+    #progressText {
+        margin-bottom: 0;
+        font-size: 14px;
+        color: #6c757d;
+    }
+</style>
 <!-- Start Content-->
 @if ($errors->any())
     <div class="alert alert-danger">
@@ -97,6 +173,7 @@
                 <i class="mdi mdi-plus me-1"></i> Add Record
             </button>
         @endif
+
         </div>
     </div>
 
@@ -827,6 +904,32 @@
 </div>
 @endif
 
+<!-- Add this button to the header section near the top of your page, right after the d-flex align-items-center gap-3 div -->
+<button id="exportPDF" class="export-btn">
+    <i class="mdi mdi-file-pdf-outline me-1"></i> Export PDF
+</button>
+
+<!-- Progress Overlay and Dialog (Keep these) -->
+<div id="exportOverlay" class="export-overlay"></div>
+<div id="exportProgress">
+    <h4>Generating PDF Report...</h4>
+    <div class="progress-bar">
+        <div class="progress-fill" style="width: 0%"></div>
+    </div>
+    <p id="progressText">Preparing document...</p>
+</div>
+
+
+<!-- Add progress overlay and bar -->
+<div id="exportOverlay" class="export-overlay"></div>
+<div id="exportProgress">
+    <h4>Generating PDF Report...</h4>
+    <div class="progress-bar">
+        <div class="progress-fill" style="width: 0%"></div>
+    </div>
+    <p id="progressText">Preparing document...</p>
+</div>
+
 @endsection
 
 @section('script')
@@ -1175,5 +1278,391 @@ function filterCatRecords() {
 
 
 
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+<script>
+// PDF Export functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const exportBtn = document.getElementById('exportPDF');
+    if (!exportBtn) return; // Exit if button doesn't exist
+    
+    const progressBar = document.getElementById('exportProgress');
+    const progressFill = document.querySelector('.progress-fill');
+    const progressText = document.getElementById('progressText');
+    const exportOverlay = document.getElementById('exportOverlay');
+    
+    // Only add this event listener once
+    if (!exportBtn.hasAttribute('data-listener-attached')) {
+        exportBtn.setAttribute('data-listener-attached', 'true');
+        
+        exportBtn.addEventListener('click', function() {
+            // Show overlay to block user interaction
+            exportOverlay.style.display = 'block';
+            progressBar.style.display = 'block';
+            exportBtn.disabled = true;
+            progressFill.style.width = '70%';
+            progressText.textContent = 'Preparing document...';
+            
+            setTimeout(() => {
+                try {
+                    // Check if jsPDF is available
+                    if (!window.jspdf || !window.jspdf.jsPDF) {
+                        throw new Error('PDF library not loaded. Please refresh the page and try again.');
+                    }
+                    
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF('l', 'mm', 'a4');
+                    
+                    // Document styling constants
+                    const colors = {
+                        primary: [0, 73, 30],
+                        secondary: [2, 104, 30],
+                        accent: [255, 255, 255],
+                        gold: [255, 184, 0],
+                        silver: [183, 183, 183],
+                        bronze: [205, 127, 50],
+                        light: [241, 245, 249],
+                        white: [255, 255, 255],
+                        lightText: [148, 163, 184],
+                        darkText: [30, 41, 59]
+                    };
+                    
+                    // Create cover page
+                    doc.setFillColor(...colors.primary);
+                    doc.rect(0, 0, doc.internal.pageSize.width, doc.internal.pageSize.height, 'F');
+                    
+                    // Add design element - white section at bottom
+                    doc.setFillColor(...colors.white);
+                    doc.roundedRect(0, doc.internal.pageSize.height - 110, doc.internal.pageSize.width, 110, 80, 0, 'F');
+                    
+                    // Add header text
+                    doc.setTextColor(...colors.white);
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFontSize(38);
+                    doc.text('Medal Tally Report', 30, 50);
+                    
+                    doc.setFontSize(26);
+                    doc.text('Event Results Summary', 30, 65);
+                    
+                    // Add medal icons
+                    doc.setFillColor(...colors.gold);
+                    doc.circle(35, 100, 10, 'F');
+                    doc.setFillColor(...colors.silver);
+                    doc.circle(65, 100, 10, 'F');
+                    doc.setFillColor(...colors.bronze);
+                    doc.circle(95, 100, 10, 'F');
+                    
+                    // Add date
+                    doc.setTextColor(...colors.darkText);
+                    doc.setFontSize(12);
+                    
+                    // Format the current date
+                    const now = new Date();
+                    const day = String(now.getDate()).padStart(2, '0');
+                    const year = now.getFullYear();
+                    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    const monthName = monthNames[now.getMonth()];
+                    const hours12 = now.getHours() % 12 || 12;
+                    const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
+                    const formattedHours = String(hours12).padStart(2, '0');
+                    const formattedMinutes = String(now.getMinutes()).padStart(2, '0');
+                    const formattedDateTime = `${day}-${monthName}-${year} ${formattedHours}:${formattedMinutes} ${ampm}`;
+                    
+                    doc.text(`Generated: ${formattedDateTime}`, 30, 140);
+                    
+                    progressFill.style.width = '40%';
+                    progressText.textContent = 'Extracting medal data...';
+                    
+                    // Process medal data from the page - check for visible elements only
+                    const medalData = [];
+                    const sportHeaders = document.querySelectorAll('.sport-header:not([style*="display: none"])');
+                    
+                    // Check if we have any visible sports
+                    if (sportHeaders.length === 0) {
+                        throw new Error('No visible data to export. Please adjust your filters to show some data first.');
+                    }
+                    
+                    sportHeaders.forEach(header => {
+                        // Safely extract sport name
+                        const sportNameEl = header.querySelector('h4');
+                        if (!sportNameEl) return;
+                        
+                        const sportName = sportNameEl.textContent.trim();
+                        const cardContainer = header.nextElementSibling;
+                        if (!cardContainer) return;
+                        
+                        const medalCards = cardContainer.querySelectorAll('.medal-card');
+                        
+                        medalCards.forEach(card => {
+                            // Skip card if parent col is hidden
+                            const cardCol = card.closest('.col');
+                            if (cardCol && cardCol.style.display === 'none') return;
+                            
+                            // Safely extract data with optional chaining
+                            const cardTitle = card.querySelector('.card-title');
+                            if (!cardTitle) return;
+                            
+                            const eventName = cardTitle.textContent.trim();
+                            const statusBadge = card.querySelector('.status-badge');
+                            const status = statusBadge ? statusBadge.textContent.trim() : 'Unknown';
+                            
+                            // Get gold winner - with safe access
+                            let goldTeam = '-', goldCount = '0', goldWeight = '0';
+                            const goldBadge = card.querySelector('.medal-badge.medal-gold');
+                            if (goldBadge) {
+                                const goldPosition = goldBadge.closest('.medal-position');
+                                if (goldPosition) {
+                                    const teamEl = goldPosition.querySelector('.team-name');
+                                    if (teamEl) goldTeam = teamEl.textContent.trim();
+                                    
+                                    const countEl = goldPosition.querySelector('.medal-stat-value:first-child');
+                                    if (countEl) goldCount = countEl.textContent.trim();
+                                    
+                                    const weightEl = goldPosition.querySelector('.medal-stat-value:last-child');
+                                    if (weightEl) goldWeight = weightEl.textContent.trim();
+                                }
+                            }
+                            
+                            // Get silver winner - with safe access
+                            let silverTeam = '-', silverCount = '0', silverWeight = '0';
+                            const silverBadge = card.querySelector('.medal-badge.medal-silver');
+                            if (silverBadge) {
+                                const silverPosition = silverBadge.closest('.medal-position');
+                                if (silverPosition) {
+                                    const teamEl = silverPosition.querySelector('.team-name');
+                                    if (teamEl) silverTeam = teamEl.textContent.trim();
+                                    
+                                    const countEl = silverPosition.querySelector('.medal-stat-value:first-child');
+                                    if (countEl) silverCount = countEl.textContent.trim();
+                                    
+                                    const weightEl = silverPosition.querySelector('.medal-stat-value:last-child');
+                                    if (weightEl) silverWeight = weightEl.textContent.trim();
+                                }
+                            }
+                            
+                            // Get bronze winner(s) - with safe access
+                            let bronzeTeams = '-', bronzeCount = '0', bronzeWeight = '0';
+                            const bronzeBadge = card.querySelector('.medal-badge.medal-bronze');
+                            if (bronzeBadge) {
+                                const bronzePosition = bronzeBadge.closest('.medal-position');
+                                if (bronzePosition) {
+                                    const bronzeTeamElements = bronzePosition.querySelectorAll('.team-name');
+                                    if (bronzeTeamElements && bronzeTeamElements.length > 0) {
+                                        const teams = Array.from(bronzeTeamElements).map(el => el.textContent.trim());
+                                        bronzeTeams = teams.join(', ');
+                                    }
+                                    
+                                    const countEl = bronzePosition.querySelector('.medal-stat-value:first-child');
+                                    if (countEl) bronzeCount = countEl.textContent.trim();
+                                    
+                                    const weightEl = bronzePosition.querySelector('.medal-stat-value:last-child');
+                                    if (weightEl) bronzeWeight = weightEl.textContent.trim();
+                                }
+                            }
+                            
+                            // Get participants count - with safe access
+                            let participants = '0';
+                            const participantsEl = card.querySelector('.card-footer .text-muted');
+                            if (participantsEl) {
+                                const participantsText = participantsEl.textContent.trim();
+                                const participantsMatch = participantsText.match(/(\d+)/);
+                                if (participantsMatch) participants = participantsMatch[1];
+                            }
+                            
+                            medalData.push({
+                                sportName,
+                                eventName,
+                                status,
+                                goldTeam,
+                                goldCount,
+                                goldWeight,
+                                silverTeam,
+                                silverCount,
+                                silverWeight,
+                                bronzeTeams,
+                                bronzeCount,
+                                bronzeWeight,
+                                participants
+                            });
+                        });
+                    });
+                    
+                    // Ensure we have data to export
+                    if (medalData.length === 0) {
+                        throw new Error('No medal data found. Please make sure some data is visible.');
+                    }
+                    
+                    // Add medal data summary page
+                    doc.addPage();
+                    
+                    // Create header
+                    doc.setFillColor(...colors.primary);
+                    doc.rect(0, 0, doc.internal.pageSize.width, 20, 'F');
+                    
+                    doc.setTextColor(...colors.white);
+                    doc.setFontSize(12);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('Medal Tally Report', doc.internal.pageSize.width / 2, 13, { align: 'center' });
+                    
+                    progressFill.style.width = '60%';
+                    progressText.textContent = 'Creating medal summary table...';
+                    
+                    // Group by sport
+                    const sportGroups = {};
+                    medalData.forEach(item => {
+                        if (!sportGroups[item.sportName]) {
+                            sportGroups[item.sportName] = [];
+                        }
+                        sportGroups[item.sportName].push(item);
+                    });
+                    
+                    let yPos = 30;
+                    let currentPage = 2;
+                    
+                    // Create tables for each sport
+                    for (const sportName in sportGroups) {
+                        // Check if we need a new page
+                        if (yPos > doc.internal.pageSize.height - 60) {
+                            doc.addPage();
+                            currentPage++;
+                            
+                            // Add header to new page
+                            doc.setFillColor(...colors.primary);
+                            doc.rect(0, 0, doc.internal.pageSize.width, 20, 'F');
+                            
+                            doc.setTextColor(...colors.white);
+                            doc.setFontSize(12);
+                            doc.setFont('helvetica', 'bold');
+                            doc.text('Medal Tally Report', doc.internal.pageSize.width / 2, 13, { align: 'center' });
+                            
+                            yPos = 30;
+                        }
+                        
+                        // Add sport title
+                        doc.setTextColor(...colors.darkText);
+                        doc.setFontSize(14);
+                        doc.setFont('helvetica', 'bold');
+                        doc.text(sportName, 20, yPos);
+                        
+                        yPos += 10;
+                        
+                        // Create table data for this sport
+                        const tableData = sportGroups[sportName].map(item => [
+                            item.eventName,
+                            item.status,
+                            `${item.goldTeam} (${item.goldCount})`,
+                            `${item.silverTeam} (${item.silverCount})`,
+                            item.bronzeTeams,
+                            item.participants
+                        ]);
+                        
+                        // Add table for this sport
+                        doc.autoTable({
+                            startY: yPos,
+                            head: [[
+                                'Event',
+                                'Status',
+                                'Gold',
+                                'Silver',
+                                'Bronze',
+                                'Teams'
+                            ]],
+                            body: tableData,
+                            theme: 'grid',
+                            styles: {
+                                fontSize: 9,
+                                cellPadding: 4,
+                                lineColor: [240, 240, 240],
+                                lineWidth: 0.1,
+                                font: 'helvetica',
+                            },
+                            headStyles: {
+                                fillColor: colors.secondary,
+                                textColor: colors.white,
+                                fontSize: 10,
+                                fontStyle: 'bold',
+                                halign: 'center',
+                                cellPadding: 4,
+                                lineWidth: 0
+                            },
+                            columnStyles: {
+                                0: { halign: 'left', cellWidth: 'auto' },
+                                1: { halign: 'center', cellWidth: 20 },
+                                2: { halign: 'left', cellWidth: 'auto' },
+                                3: { halign: 'left', cellWidth: 'auto' },
+                                4: { halign: 'left', cellWidth: 'auto' },
+                                5: { halign: 'center', cellWidth: 20 }
+                            },
+                            alternateRowStyles: {
+                                fillColor: colors.light
+                            },
+                            didDrawPage: (data) => {
+                                // Update yPos for next table
+                                yPos = data.cursor.y + 15;
+                            }
+                        });
+                    }
+                    
+                    progressFill.style.width = '80%';
+                    progressText.textContent = 'Finalizing document...';
+                    
+                    // Add footers to all pages
+                    const pageCount = doc.internal.getNumberOfPages();
+                    for (let i = 1; i <= pageCount; i++) {
+                        doc.setPage(i);
+                        
+                        // Skip footer on cover page
+                        if (i === 1) continue;
+                        
+                        // Add footer line
+                        doc.setDrawColor(...colors.light);
+                        doc.setLineWidth(0.5);
+                        doc.line(10, doc.internal.pageSize.height - 15, doc.internal.pageSize.width - 10, doc.internal.pageSize.height - 15);
+                        
+                        // Add page number
+                        doc.setFillColor(...colors.light);
+                        doc.roundedRect(doc.internal.pageSize.width / 2 - 15, doc.internal.pageSize.height - 12, 30, 8, 4, 4, 'F');
+                        
+                        doc.setTextColor(...colors.darkText);
+                        doc.setFontSize(8);
+                        doc.text(
+                            `Page ${i} of ${pageCount}`, 
+                            doc.internal.pageSize.width / 2, 
+                            doc.internal.pageSize.height - 7,
+                            { align: 'center' }
+                        );
+                        
+                        // Add footer text
+                        doc.setTextColor(...colors.secondary);
+                        doc.text(
+                            'Medal Tally System', 
+                            20, 
+                            doc.internal.pageSize.height - 7
+                        );
+                    }
+                    progressFill.style.width = '100%';
+                    progressText.textContent = 'Download starting...';
+                    
+                    // Save the PDF with formatted filename after a 2-second delay
+                   
+                        const filename = `Medal_Tally_Report_${day}-${monthName}-${year}_${formattedHours}-${formattedMinutes}-${ampm}.pdf`;
+                        doc.save(filename);
+               
+                } catch (error) {
+                    console.error('Error generating PDF:', error);
+                    alert(error.message || 'Error generating PDF. Please try again.');
+                } finally {
+                    // Hide overlay and progress bar
+                    exportOverlay.style.display = 'none';
+                    progressBar.style.display = 'none';
+                    exportBtn.disabled = false;
+                }
+            }, 2000);
+        });
+    }
+});
 </script>
 @endsection
