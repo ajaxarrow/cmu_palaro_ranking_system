@@ -6,6 +6,7 @@ use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\EventCategoryController;
 use App\Http\Controllers\MedalRecordController;
 use App\Http\Controllers\MedalWeightCategoryController;
+use App\Http\Controllers\PublicTeamController;
 use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\SportController;
 use App\Http\Controllers\TeamController;
@@ -13,7 +14,13 @@ use App\Http\Controllers\TeamCompositionController;
 use App\Http\Controllers\LandingPageController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [LandingPageController::class, 'index'])->name('landing');
+
+Route::get('/', [LandingPageController::class, 'index'])->name('public.landing.index');
+
+
+// Public team standings routes
+Route::get('/standings', [PublicTeamController::class, 'index'])->name('public.standings');
+Route::get('/standings/{id}', [PublicTeamController::class, 'show'])->name('public.standings.details');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
