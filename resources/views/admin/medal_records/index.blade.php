@@ -457,6 +457,7 @@
                             <select name="event_category_id" class="form-select" id="event" required onchange="handleEventChange(this)">
                                 <option value="">Select Event</option>
                                 @foreach ($events as $event)
+                                    
                                     <option value="{{ $event->id }}"
                                         data-double-bronze="{{ $event->is_double_bronze }}"
                                         data-medal-count="{{ $event->medal_count }}">
