@@ -246,7 +246,7 @@ class LandingPageController extends Controller
             }
         }
 
-        return view('landing', [
+        return view('public.landing.index', [
             'medalTally' => $medalTally, 
             'overallTotal' => $overallTotal,
             'sportResults' => $sportResults,
