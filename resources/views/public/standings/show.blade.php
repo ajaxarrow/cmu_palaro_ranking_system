@@ -1,314 +1,115 @@
     {{-- resources/views/public/standings/show.blade.php --}}
-    @extends('public.layouts.app')
+@extends('public.layouts.app')
 
-    @section('title', isset($team->name) ? $team->name . ' - Medal Details' : 'Team Details')
+@section('title', isset($team->name) ? $team->name . ' - Medal Details' : 'Team Details')
 
-    @section('styles')
-    <style>
-        :root {
-            --team-color-rgb: 0, 73, 30; /* Default color, will be updated via JS */
-            --team-color-rgb-dark: 0, 53, 20; /* Darker version for accessibility */
-            --team-color: rgb(var(--team-color-rgb));
-            --team-color-dark: rgb(var(--team-color-rgb-dark));
-            --team-color-light: rgba(var(--team-color-rgb), 0.1);
-            --team-color-medium: rgba(var(--team-color-rgb), 0.5);
-        }
-        
-        /* Modern medal design with subtle shadow and gradient */
-        .medal-circle { 
-            @apply flex items-center justify-center rounded-full shadow-md text-center font-bold;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            backdrop-filter: blur(4px);
-        }
-        .medal-circle.xs { @apply w-8 h-8 text-xs; }
-        .medal-circle.sm { @apply w-10 h-10 text-sm; }
-        .medal-circle.md { @apply w-12 h-12 text-base; }
-        .medal-circle.lg { @apply w-16 h-16 text-2xl; }
-        .medal-circle.xl { @apply w-20 h-20 text-3xl; }
-        
-        .medal-circle:hover { 
-            transform: scale(1.05) translateY(-2px);
-            box-shadow: 0 7px 14px rgba(0,0,0,0.2);
-        }
-        
-        .gold { background: linear-gradient(135deg, #FEF9C3, #FCD34D, #EAB308); color: #78350F; }
-        .silver { background: linear-gradient(135deg, #F9FAFB, #E5E7EB, #9CA3AF); color: #1F2937; }
-        .bronze { background: linear-gradient(135deg, #FEF3C7, #D97706, #92400E); color: #FFFBEB; }
-        
-        /* Modern progress bars with rounded caps */
-        .progress-container { 
-            @apply h-3 rounded-full bg-gray-100 overflow-hidden shadow-inner; 
-        }
-        .progress-bar { 
-            @apply h-full rounded-full transition-all duration-700;
-            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        /* Dynamic team header with texture overlay */
-        .team-header-bg {
-            background: linear-gradient(135deg, 
-                rgba(var(--team-color-rgb-dark), 0.95), 
-                rgba(var(--team-color-rgb), 0.8)),
-                url('/images/texture-pattern.svg');
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-        
-        .team-header-bg::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 70% 30%, rgba(255,255,255,0.15), transparent 70%);
-        }
-        
-        /* Modern card hover effects */
-        .card-hover { 
-            @apply transition-all duration-300;
-            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .card-hover:hover { 
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1), 0 5px 15px rgba(0,0,0,0.07);
-        }
-        
-        /* Glassmorphism for medal count cards */
-        .medal-count-card {
-            backdrop-filter: blur(16px);
-            background: rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* Sport card with custom border */
-        .sport-card {
-            border-left: 5px solid var(--team-color);
-            transition: all 0.3s ease;
-        }
-        
-        .sport-card:hover {
-            border-left-width: 8px;
-        }
-        
-        /* Table row hover effect */
-        .table-row-hover { 
-            @apply transition-all duration-200; 
-        }
-        .table-row-hover:hover { 
-            @apply bg-gray-50;
-            transform: translateX(3px);
-        }
-        
-        /* Modern wave divider */
-        .wave-divider {
-            height: 120px;
-            overflow: hidden;
-            position: relative;
-            margin-top: -20px;
-        }
-        
-        /* Modern medal labels */
-        .medal-label {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.35rem 0.75rem;
-            border-radius: 9999px;
-            font-weight: 600;
-            font-size: 0.75rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        /* Stats styling */
-        .stat-value {
-            font-size: 2.25rem;
-            font-weight: 700;
-            line-height: 1;
-            letter-spacing: -0.025em;
-        }
-        
-        .stat-label {
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            opacity: 0.7;
-        }
-        
-        /* Animated buttons */
-        .btn-animated {
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s;
-        }
-        
-        .btn-animated::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: all 0.5s;
-        }
-        
-        .btn-animated:hover::after {
-            left: 100%;
-        }
-        
-        /* Responsive font size utility classes */
-        .text-responsive {
-            font-size: clamp(1.5rem, 5vw, 3.5rem);
-        }
-        
-        /* Modern scrollbar */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-        
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: var(--team-color-medium);
-            border-radius: 10px;
-        }
-        
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: var(--team-color);
-        }
-        
-        /* Flag container with reflection effect */
-        .flag-container {
-            position: relative;
-        }
-        
-        .flag-container::after {
-            content: '';
-            position: absolute;
-            bottom: -30%;
-            left: 10%;
-            right: 10%;
-            height: 40%;
-            background: linear-gradient(to bottom, var(--team-color), transparent);
-            filter: blur(15px);
-            opacity: 0.3;
-            transform: scaleY(-1);
-            z-index: -1;
-        }
-    </style>
-    @endsection
+@section('styles')
+    @vite(['resources/css/teamdetails.css'])
+@endsection
 
-    @section('content')
-    <!-- Check for error message -->
-    @if(isset($error))
-        <div class="container mx-auto px-4 py-8">
-            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-6 rounded-xl mb-6 shadow-md" role="alert">
-                <div class="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                    <p class="font-medium">Error</p>
-                </div>
-                <p class="mt-2">{{ $error }}</p>
-            </div>
-            <a href="{{ route('public.standings') }}" class="inline-flex items-center px-5 py-3 bg-red-600 text-white rounded-xl shadow-lg hover:bg-red-700 transition-colors btn-animated">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+@section('content')
+<!-- Check for error message -->
+@if(isset($error))
+    <div class="container mx-auto px-4 py-8">
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-6 rounded-xl mb-6 shadow-md" role="alert">
+            <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
-                Back to Standings
-            </a>
-        </div>
-    @else
-        <!-- Team Hero Section with Dynamic Background -->
-        <div class="team-header-bg text-white relative">
-            <div class="container mx-auto px-6 py-20 relative z-10">
-                <a href="{{ route('public.standings') }}" class="inline-flex items-center px-5 py-2.5 bg-white/20 backdrop-blur-md text-white rounded-xl shadow-md hover:bg-white/30 transition-all mb-8 group">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 transition-transform group-hover:-translate-x-1" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-                    </svg>
-                    Back to Standings
-                </a>
-                
-                <div class="flex flex-col md:flex-row items-center md:items-start gap-8" data-aos="fade-up">
-                    @if($team->image)
-                        <div class="flag-container w-50 h-50 md:w-48 md:h-48 border-none overflow-visible ">
-                        <img
-                                            src="{{ $team->image ? Vite::asset('storage/app/public/' . $team->image) : Vite::asset('resources/images/05.webp') }}"
-                                            alt="{{ $team['team'] }}"
-                                            class="w-full h-full object-cover" id="teamFlag"
-                                            crossorigin="anonymous"
-                                            loading="lazy"
-                                        >
-                        </div>
-                    @endif
-                    <div>
-                        <h1 class="text-responsive font-extrabold tracking-tight text-center md:text-left">{{ $team->name }}</h1>
-                        @if($team->code)
-                            <p class="text-xl md:text-2xl mt-2 opacity-90 font-light text-center md:text-left">{{ $team->code }}</p>
-                        @endif
-                    </div>
-                </div>
+                <p class="font-medium">Error</p>
             </div>
+            <p class="mt-2">{{ $error }}</p>
         </div>
-
-        <!-- Wave Divider -->
-        <div class="wave-divider bg-white">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
-                <path fill="var(--team-color)" fill-opacity="1" d="M0,160L48,149.3C96,139,192,117,288,133.3C384,149,480,203,576,202.7C672,203,768,149,864,128C960,107,1056,117,1152,138.7C1248,160,1344,192,1392,208L1440,224L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
-            </svg>
-        </div>
-
-        <div class="container mx-auto px-6 py-12">
-            <!-- Medal Summary Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 -mt-24 mb-16" data-aos="fade-up" data-aos-delay="100">
+       
+    </div>
+@else
+<!-- Team Hero Section with Dynamic Background -->
+{{-- Modern Sporty Hero Section for CMU PALARO Standings Page --}}
+<!-- Modern Sporty Hero Section -->
+<section class="team-hero-section pt-[10vh] h-[100vh]">
+    <!-- Background Elements -->
+    <img
+        src="{{ $team->image ? Vite::asset('storage/app/public/' . $team->image) : Vite::asset('resources/images/05.webp') }}"
+        alt="{{ $team['team'] }}"
+        class="hero-background-img w-full h-full object-cover absolute"
+        crossorigin="anonymous"
+        loading="lazy"
+    >
+    <div class="hero-pattern"></div>
+    <div class="hero-lines"></div>
+    <div class="hero-diagonal"></div>
+    
+    <div class="hero-content">
+        <div class="container mx-auto px-4 py-8">
+           
+            
+            <!-- Team Info -->
+            <div class="text-center mb-12" data-aos="fade-up">
+                @if($team->image)
+                    <div class="team-image-wrapper">
+                        <img
+                            src="{{ $team->image ? Vite::asset('storage/app/public/' . $team->image) : Vite::asset('resources/images/05.webp') }}"
+                            alt="{{ $team['team'] }}"
+                            class="w-full h-full object-cover" id="teamFlag"
+                            crossorigin="anonymous"
+                            loading="lazy"
+                        >
+                    </div>
+                @endif
+                <h1 class="team-title">{{ $team->name }}</h1>
+                @if($team->code)
+                    <p class="team-subtitle">{{ $team->code }}</p>
+                @endif
+            </div>
+            
+            <!-- Medal Stats Grid -->
+            <div class="medal-stats-grid" data-aos="fade-up" data-aos-delay="100">
                 <!-- Gold Medal Card -->
-                <div class="medal-count-card rounded-2xl shadow-lg overflow-hidden card-hover">
-                    <div class="p-6 text-center">
-                        <div class="medal-circle xl gold mx-auto mb-4 flex items-center justify-center" data-aos="zoom-in" data-aos-delay="200">G</div>
-                        <div class="stat-value mb-2" data-medal-count="{{ $overallTotal['gold_tally'] }}">0</div>
-                        <div class="stat-label">Gold Medals</div>
+                <div class="medal-stat-card">
+                    <div class="text-center">
+                        <div class="medal-circle xl gold mx-auto mb-6" data-aos="zoom-in" data-aos-delay="200">G</div>
+                        <div class="text-4xl font-bold text-white mb-2" data-medal-count="{{ $overallTotal['gold_tally'] }}">0</div>
+                        <div class="text-sm uppercase tracking-wider text-white/70">Gold</div>
                     </div>
                 </div>
                 
                 <!-- Silver Medal Card -->
-                <div class="medal-count-card rounded-2xl shadow-lg overflow-hidden card-hover">
-                    <div class="p-6 text-center">
-                        <div class="medal-circle xl silver mx-auto mb-4 flex items-center justify-center" data-aos="zoom-in" data-aos-delay="300">S</div>
-                        <div class="stat-value mb-2" data-medal-count="{{ $overallTotal['silver_tally'] }}">0</div>
-                        <div class="stat-label">Silver Medals</div>
+                <div class="medal-stat-card">
+                    <div class="text-center">
+                        <div class="medal-circle xl silver mx-auto mb-6" data-aos="zoom-in" data-aos-delay="300">S</div>
+                        <div class="text-4xl font-bold text-white mb-2" data-medal-count="{{ $overallTotal['silver_tally'] }}">0</div>
+                        <div class="text-sm uppercase tracking-wider text-white/70">Silver</div>
                     </div>
                 </div>
                 
                 <!-- Bronze Medal Card -->
-                <div class="medal-count-card rounded-2xl shadow-lg overflow-hidden card-hover">
-                    <div class="p-6 text-center">
-                        <div class="medal-circle xl bronze mx-auto mb-4 flex items-center justify-center" data-aos="zoom-in" data-aos-delay="400">B</div>
-                        <div class="stat-value mb-2" data-medal-count="{{ $overallTotal['bronze_tally'] }}">0</div>
-                        <div class="stat-label">Bronze Medals</div>
+                <div class="medal-stat-card">
+                    <div class="text-center">
+                        <div class="medal-circle xl bronze mx-auto mb-6" data-aos="zoom-in" data-aos-delay="400">B</div>
+                        <div class="text-4xl font-bold text-white mb-2" data-medal-count="{{ $overallTotal['bronze_tally'] }}">0</div>
+                        <div class="text-sm uppercase tracking-wider text-white/70">Bronze</div>
                     </div>
                 </div>
                 
                 <!-- Total Medals Card -->
-                <div class="rounded-2xl shadow-lg overflow-hidden card-hover text-white" style="background: linear-gradient(135deg, var(--team-color-dark), var(--team-color));">
-                    <div class="p-6 text-center">
-                        <div class="medal-circle xl bg-white mx-auto mb-4 flex items-center justify-center" data-aos="zoom-in" data-aos-delay="500" style="color: var(--team-color)">
+                <div class="medal-stat-card" style="background: linear-gradient(135deg, rgba(var(--team-color-rgb), 0.5), rgba(var(--team-color-rgb), 0.2));">
+                    <div class="text-center">
+                        <div class="medal-circle xl bg-white mx-auto mb-6" data-aos="zoom-in" data-aos-delay="500" style="color: var(--team-color)">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                             </svg>
                         </div>
-                        <div class="stat-value mb-2" data-medal-count="{{ $overallTotal['total_medals'] }}">0</div>
-                        <div class="stat-label">Total Medals</div>
+                        <div class="text-4xl font-bold text-white mb-2" data-medal-count="{{ $overallTotal['total_medals'] }}">0</div>
+                        <div class="text-sm uppercase tracking-wider text-white/70">Total</div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</section>
+
+        <div class="container mx-auto px-6 py-12">
+     
 
             <!-- Medal Distribution -->
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-16 card-hover" data-aos="fade-up" style="border-top: 4px solid var(--team-color)">
@@ -502,134 +303,11 @@
                 </div>
             @endforelse
 
-            <!-- Back to Standings Button -->
-            <div class="mt-12 mb-6 text-center">
-                <a href="{{ route('public.standings') }}" class="inline-flex items-center px-6 py-3 text-white rounded-xl shadow-lg transition-all btn-animated" style="background-color: var(--team-color)">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L4.414 9H17a1 1 0 110 2H4.414l5.293 5.293a1 1 0 010 1.414z" clip-rule="evenodd" />
-                    </svg>
-                    Back to Medal Standings
-                </a>
-            </div>
+         
         </div>
-    @endif
-    @endsection
+@endif
+@endsection
 
-    @section('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Extract dominant color from flag image
-            const teamFlag = document.getElementById('teamFlag');
-            if (teamFlag) {
-                // Create virtual canvas to analyze image
-                setTimeout(function() {
-                    try {
-                        const canvas = document.createElement('canvas');
-                        const context = canvas.getContext('2d');
-                        canvas.width = teamFlag.width;
-                        canvas.height = teamFlag.height;
-                        context.drawImage(teamFlag, 0, 0, teamFlag.width, teamFlag.height);
-                        
-                        // Sample colors from the image
-                        const imageData = context.getImageData(0, 0, canvas.width, canvas.height).data;
-                        
-                        // Simple dominant color detection
-                        let colorCounts = {};
-                        let maxCount = 0;
-                        let dominantColor = { r: 0, g: 73, b: 30 }; // Default color
-                        
-                        // Sample every 10th pixel to improve performance
-                        for (let i = 0; i < imageData.length; i += 40) {
-                            const r = imageData[i];
-                            const g = imageData[i + 1];
-                            const b = imageData[i + 2];
-                            const a = imageData[i + 3];
-                            
-                            // Skip transparent pixels
-                            if (a < 125) continue;
-                            
-                            // Skip very light or very dark colors
-                            const brightness = (r + g + b) / 3;
-                            if (brightness < 30 || brightness > 220) continue;
-                            
-                            // Create a key for this color (rounded to reduce variations)
-                            const colorKey = Math.round(r/10)*10 + ',' + Math.round(g/10)*10 + ',' + Math.round(b/10)*10;
-                            
-                            if (!colorCounts[colorKey]) {
-                                colorCounts[colorKey] = 0;
-                            }
-                            
-                            colorCounts[colorKey]++;
-                            
-                            if (colorCounts[colorKey] > maxCount) {
-                                maxCount = colorCounts[colorKey];
-                                dominantColor = { 
-                                    r: Math.round(r/10)*10, 
-                                    g: Math.round(g/10)*10, 
-                                    b: Math.round(b/10)*10 
-                                };
-                            }
-                        }
-                        
-                        // Calculate a darker version for contrast
-                        const darkerColor = {
-                            r: Math.max(0, dominantColor.r - 20),
-                            g: Math.max(0, dominantColor.g - 20),
-                            b: Math.max(0, dominantColor.b - 20)
-                        };
-                        
-                        // Set the CSS variables
-                        document.documentElement.style.setProperty('--team-color-rgb', `${dominantColor.r}, ${dominantColor.g}, ${dominantColor.b}`);
-                        document.documentElement.style.setProperty('--team-color-rgb-dark', `${darkerColor.r}, ${darkerColor.g}, ${darkerColor.b}`);
-                    } catch (e) {
-                        console.error("Error processing flag image:", e);
-                    }
-                }, 500);
-            }
-            
-            // Animate progress bars
-            setTimeout(function() {
-                document.querySelectorAll('.width-animate').forEach(function(bar) {
-                    bar.style.width = bar.dataset.width;
-                });
-            }, 300);
-            
-            // Animate counters
-            document.querySelectorAll('[data-medal-count]').forEach(function(element) {
-                animateCounter(element, parseInt(element.dataset.medalCount));
-            });
-            
-            document.querySelectorAll('[data-count]').forEach(function(element) {
-                animateCounter(element, parseFloat(element.dataset.count), 1);
-            });
-            
-            function animateCounter(element, target, decimals = 0) {
-                let start = 0;
-                const duration = 1500;
-                const startTime = performance.now();
-                
-                function updateCounter(currentTime) {
-                    const elapsedTime = currentTime - startTime;
-                    const progress = Math.min(elapsedTime / duration, 1);
-                    
-                    // Use an easing function for more natural animation
-                    const easedProgress = 1 - Math.pow(1 - progress, 3); // Cubic ease-out
-                    
-                    const value = start + (target - start) * easedProgress;
-                    
-                    if (decimals > 0) {
-                        element.textContent = value.toFixed(decimals);
-                    } else {
-                        element.textContent = Math.floor(value);
-                    }
-                    
-                    if (progress < 1) {
-                        requestAnimationFrame(updateCounter);
-                    }
-                }
-                
-                requestAnimationFrame(updateCounter);
-            }
-        });
-    </script>
-    @endsection
+@section('scripts')
+    @vite(['resources/js/teamdetails.js'])
+@endsection

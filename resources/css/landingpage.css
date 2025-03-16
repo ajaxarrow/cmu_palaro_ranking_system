@@ -16,6 +16,29 @@ section {
 }
 
 
+/* Modern scrollbar */
+/* Custom Scrollbar - Consistent with landing page */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #00a65e;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #00863e;
+}
+   
+
+
 
 .hero-gradient {
     background: linear-gradient(135deg, #00491e28 0%, #02681d21 60%,  #e0ec3727 100%);
@@ -436,8 +459,12 @@ section {
 
 .stat-card {
     position: relative;
-    overflow: hidden;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
 }
 
 .stat-card::before {
@@ -582,7 +609,6 @@ section {
 
 .stat-label {
     font-size: 0.875rem;
-
     font-weight: 500;
 }
 
@@ -1269,256 +1295,6 @@ section {
     }
 }
 
-/* Add these new styles for the podium section */
-
-/* Desktop Podium Styles */
-.podium-desktop {
-    display: block;
-}
-
-.podium-mobile {
-    display: none;
-}
-
-.podium-item {
-    position: relative;
-    transition: transform 0.3s ease;
-}
-
-.podium-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
-}
-
-.winner-image {
-    width: 120px;
-    height: 120px;
-    border-radius: 20px;
-    overflow: hidden;
-    position: relative;
-    margin-bottom: 1rem;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-}
-
-.winner-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.winner-badge {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    z-index: 2;
-}
-
-.winner-badge.gold {
-    background: linear-gradient(135deg, #FFD700, #FFA500);
-}
-
-.winner-badge.silver {
-    background: linear-gradient(135deg, #C0C0C0, #A9A9A9);
-}
-
-.winner-badge.bronze {
-    background: linear-gradient(135deg, #CD7F32, #8B4513);
-}
-
-.winner-name {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: white;
-    text-align: center;
-    margin-bottom: 0.5rem;
-}
-
-.medal-stats {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.medal {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0.5rem;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.1);
-    min-width: 50px;
-}
-
-.total-points {
-    font-size: 1.125rem;
-    font-weight: bold;
-    color: white;
-}
-
-.total-points.champion {
-    color: #FFD700;
-}
-
-.podium-stand {
-    height: 100px;
-    border-radius: 12px 12px 0 0;
-}
-
-.podium-stand.gold {
-    height: 160px;
-    background: linear-gradient(to bottom, #FFD700, #FFA500);
-}
-
-.podium-stand.silver {
-    height: 120px;
-    background: linear-gradient(to bottom, #C0C0C0, #A9A9A9);
-}
-
-.podium-stand.bronze {
-    height: 80px;
-    background: linear-gradient(to bottom, #CD7F32, #8B4513);
-}
-
-/* Mobile Podium Styles */
-@media (max-width: 768px) {
-    .podium-desktop {
-        display: none;
-    }
-
-    .podium-mobile {
-        display: block;
-        padding: 1rem;
-    }
-
-    .mobile-podium-grid {
-        display: grid;
-        gap: 1rem;
-        padding: 1rem;
-    }
-
-    .mobile-podium-card {
-        background: rgba(255,255,255,0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        overflow: hidden;
-        transition: transform 0.3s ease;
-    }
-
-    .mobile-podium-card.champion {
-        grid-row: 1;
-        background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,165,0,0.2));
-        border: 2px solid rgba(255,215,0,0.3);
-        transform: scale(1.05);
-    }
-
-    .mobile-podium-card.silver {
-        grid-row: 2;
-        background: linear-gradient(135deg, rgba(192,192,192,0.2), rgba(169,169,169,0.2));
-    }
-
-    .mobile-podium-card.bronze {
-        grid-row: 3;
-        background: linear-gradient(135deg, rgba(205,127,50,0.2), rgba(139,69,19,0.2));
-    }
-
-    .card-content {
-        padding: 1.5rem;
-        position: relative;
-    }
-
-    .position-marker {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        font-weight: bold;
-        font-size: 0.875rem;
-        background: rgba(255,255,255,0.2);
-        backdrop-filter: blur(5px);
-    }
-
-    .team-image-wrapper {
-        width: 100px;
-        height: 100px;
-        margin: 0 auto 1rem;
-       
-    }
-
-    .team-image-wrapper img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.3s ease;
-    }
-
-    .team-info {
-        text-align: center;
-    }
-
-    .team-info h3 {
-        font-size: 1.25rem;
-        font-weight: bold;
-        color: white;
-        margin-bottom: 1rem;
-    }
-
-    .medal-row {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-        margin-bottom: 1rem;
-    }
-
-    .medal-cell {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.25rem;
-    }
-
-    .medal-icon {
-        font-size: 1.5rem;
-    }
-
-    .medal-count {
-        font-weight: bold;
-        color: white;
-    }
-
-    .total-score {
-        font-size: 1.25rem;
-        font-weight: bold;
-        color: white;
-        padding: 0.5rem;
-        border-radius: 12px;
-        background: rgba(255,255,255,0.1);
-    }
-
-    /* Hover Effects */
-    .mobile-podium-card:hover {
-        transform: translateY(-5px);
-    }
-
-    .mobile-podium-card.champion:hover {
-        transform: scale(1.08);
-    }
-
-    .team-image-wrapper:hover img {
-        transform: scale(1.1);
-    }
-}
-
 /* Animation for podium appearance */
 @keyframes slideUp {
     from {
@@ -1539,13 +1315,333 @@ section {
     animation: slideUp 0.5s ease forwards;
 }
 
+/* Modern Podium Styles */
+.podium-section {
+    margin-top: 4rem;
+    perspective: 1000px;
+}
 
+.podium-desktop {
+    display: block;
+}
 
+.podium-mobile {
+    display: none;
+}
 
+.podium-item {
+    position: relative;
+    transform-style: preserve-3d;
+    animation: podiumAppear 1s ease-out forwards;
+}
 
+@keyframes podiumAppear {
+    from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
 
+.podium-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease;
+}
 
+.podium-content:hover {
+    transform: translateY(-10px);
+}
 
+.winner-image {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin-bottom: 1rem;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.winner-image:hover {
+    transform: scale(1.05);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.winner-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.winner-badge {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    animation: badgePop 0.5s ease-out forwards;
+}
+
+@keyframes badgePop {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+    }
+}
+
+.winner-badge.gold {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #464646;
+    font-weight: 800;
+    font-size: 1.2rem;
+}
+
+.winner-badge.silver {
+    background: linear-gradient(135deg, #C0C0C0, #A9A9A9);
+    color: #383838;
+}
+
+.winner-badge.bronze {
+    background: linear-gradient(135deg, #CD7F32, #8B4513);
+    color: #fff;
+}
+
+.winner-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.medal-stats {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.medal {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-weight: 600;
+}
+
+.medal-emoji {
+    font-size: 1.25rem;
+    animation: spin 20s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotateY(0deg);
+    }
+    to {
+        transform: rotateY(360deg);
+    }
+}
+
+.medal-count {
+    font-size: 1rem;
+}
+
+.total-points {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.total-points.champion {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 165, 0, 0.3));
+}
+
+.podium-stand {
+    position: relative;
+    width: 160px;
+    border-radius: 12px 12px 0 0;
+    transform-style: preserve-3d;
+    animation: standRise 1s ease-out forwards;
+    overflow: hidden;
+}
+
+@keyframes standRise {
+    from {
+        transform: scaleY(0);
+    }
+    to {
+        transform: scaleY(1);
+    }
+}
+
+.podium-stand.gold {
+    height: 160px;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+}
+
+.podium-stand.silver {
+    height: 120px;
+    background: linear-gradient(135deg, #C0C0C0, #A9A9A9);
+}
+
+.podium-stand.bronze {
+    height: 80px;
+    background: linear-gradient(135deg, #CD7F32, #8B4513);
+}
+
+.podium-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    animation: shine 3s infinite;
+}
+
+@keyframes shine {
+    0% {
+        left: -100%;
+    }
+    20% {
+        left: 100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+.champion-crown {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    50% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+}
+
+/* Mobile Podium Styles */
+@media (max-width: 768px) {
+    .podium-desktop {
+        display: none;
+    }
+    
+    .podium-mobile {
+        display: block;
+    }
+    
+    .mobile-podium-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    .mobile-podium-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: transform 0.3s ease;
+    }
+    
+    .mobile-podium-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .mobile-podium-card.champion {
+        background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.2));
+        order: -1;
+    }
+    
+    .position-marker {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+    
+    .team-image-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 1rem;
+        position: relative;
+    }
+    
+    .team-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .champion-crown.mobile {
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 1.5rem;
+        animation: float 3s ease-in-out infinite;
+    }
+    
+    .team-name {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #fff;
+        text-align: center;
+        margin-bottom: 0.75rem;
+    }
+    
+    .medal-counts {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .total-score {
+        text-align: center;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+    }
+}
 
 /* Sports Championship Carousel Styles */
 .championship-carousel {

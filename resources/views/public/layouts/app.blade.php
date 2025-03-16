@@ -414,35 +414,13 @@ body {
 </head>
 <body class="bg-neutral-50 text-neutral-800">
     <!-- Modern Navbar with Glass Effect -->
-    <nav class="bg-white/70 backdrop-blur-md sticky top-0 z-50 shadow-soft">
+    <nav class="bg-white/10 backdrop-blur-md fixed w-[100%] top-0 z-50 shadow-soft">
         <div class="container mx-auto px-4 py-4">
-            <div class="flex justify-between items-center">
+            <div class="flex justify-left items-center">
                 <a href="{{ route('public.landing.index') }}" class="flex items-center space-x-3">
                     <span class="text-2xl font-bold text-cmu-500 display-font">CMU PALARO</span>
                     <span class="px-3 py-1 bg-cmu-100 text-cmu-800 rounded-full text-xs font-medium">{{ date('Y') }}</span>
                 </a>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="{{ route('public.standings') }}" class="text-neutral-700 hover:text-cmu-500 font-medium transition-colors">Standings</a>
-                    <a href="#" class="text-neutral-700 hover:text-cmu-500 font-medium transition-colors">Events</a>
-                    <a href="#" class="text-neutral-700 hover:text-cmu-500 font-medium transition-colors">Teams</a>
-                    <a href="#" class="text-neutral-700 hover:text-cmu-500 font-medium transition-colors">About</a>
-                    <a href="#" class="rounded-full py-2 px-5 bg-cmu-500 hover:bg-cmu-600 text-white font-medium transition-all shadow-md hover:shadow-lg">Sign In</a>
-                </div>
-                <div class="md:hidden">
-                    <button type="button" class="text-neutral-700 p-1" id="mobile-menu-button">
-                        <i class="ph ph-list text-2xl"></i>
-                    </button>
-                </div>
-            </div>
-            <!-- Modern Mobile menu dropdown -->
-            <div class="hidden md:hidden mt-4 rounded-xl overflow-hidden glass shadow-card" id="mobile-menu">
-                <div class="py-2 space-y-1">
-                    <a href="{{ route('public.standings') }}" class="block px-4 py-3 text-base font-medium text-neutral-700 hover:bg-cmu-50 hover:text-cmu-500">Standings</a>
-                    <a href="#" class="block px-4 py-3 text-base font-medium text-neutral-700 hover:bg-cmu-50 hover:text-cmu-500">Events</a>
-                    <a href="#" class="block px-4 py-3 text-base font-medium text-neutral-700 hover:bg-cmu-50 hover:text-cmu-500">Teams</a>
-                    <a href="#" class="block px-4 py-3 text-base font-medium text-neutral-700 hover:bg-cmu-50 hover:text-cmu-500">About</a>
-                    <a href="#" class="block px-4 py-3 text-base font-medium bg-cmu-500 text-white">Sign In</a>
-                </div>
             </div>
         </div>
     </nav>
@@ -451,77 +429,7 @@ body {
     <main>
         @yield('content')
         
-        <!-- Example of modern hero section if needed -->
-        <section class="bg-white py-16 md:py-24">
-            <div class="container mx-auto px-4">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    <div class="space-y-6" data-aos="fade-right">
-                        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-800 display-font leading-tight">
-                            Track <span class="text-cmu-500">Excellence</span> in Real-Time
-                        </h1>
-                        <p class="text-lg text-neutral-600">
-                            Follow the latest medal counts and achievements from Central Mindanao University's annual sports festival.
-                        </p>
-                        <div class="flex flex-wrap gap-4 pt-4">
-                            <a href="#" class="rounded-full py-3 px-6 bg-cmu-500 hover:bg-cmu-600 text-white font-medium transition-all shadow-md hover:shadow-lg">
-                                View Standings
-                            </a>
-                            <a href="#" class="rounded-full py-3 px-6 bg-white border border-neutral-200 hover:border-neutral-300 text-neutral-700 font-medium transition-all shadow-md hover:shadow-lg">
-                                Learn More
-                            </a>
-                        </div>
-                    </div>
-                    <div class="relative" data-aos="fade-left">
-                        <!-- Medal Podium Visualization Example -->
-                        <div class="relative h-96 rounded-2xl overflow-hidden shadow-2xl">
-                            <div class="absolute inset-0 bg-gradient-to-br from-cmu-500/20 to-cmu-700/20"></div>
-                            
-                            <!-- Podium Structure -->
-                            <div class="absolute bottom-0 inset-x-0 h-64 flex items-end justify-center">
-                                <!-- Silver Medal (2nd) -->
-                                <div class="w-1/4 relative mx-2" data-aos="fade-up" data-aos-delay="200">
-                                    <div class="absolute -top-16 left-1/2 transform -translate-x-1/2">
-                                        <div class="h-16 w-16 rounded-full silver-gradient medal-shine flex items-center justify-center shadow-medal">
-                                            <p class="text-white font-bold">2</p>
-                                        </div>
-                                    </div>
-                                    <div class="h-32 bg-neutral-100 rounded-t-xl flex flex-col items-center justify-end p-4">
-                                        <p class="font-bold text-center display-font">TEAM B</p>
-                                        <p class="text-xl font-bold text-neutral-500">12</p>
-                                    </div>
-                                </div>
-                                
-                                <!-- Gold Medal (1st) -->
-                                <div class="w-1/3 relative mx-2" data-aos="fade-up" data-aos-delay="100">
-                                    <div class="absolute -top-20 left-1/2 transform -translate-x-1/2">
-                                        <div class="h-20 w-20 rounded-full gold-gradient medal-shine flex items-center justify-center shadow-medal">
-                                            <p class="text-white font-bold">1</p>
-                                        </div>
-                                    </div>
-                                    <div class="h-40 bg-neutral-100 rounded-t-xl flex flex-col items-center justify-end p-4">
-                                        <p class="font-bold text-center display-font">TEAM A</p>
-                                        <p class="text-2xl font-bold text-cmu-500">15</p>
-                                    </div>
-                                </div>
-                                
-                                <!-- Bronze Medal (3rd) -->
-                                <div class="w-1/5 relative mx-2" data-aos="fade-up" data-aos-delay="300">
-                                    <div class="absolute -top-12 left-1/2 transform -translate-x-1/2">
-                                        <div class="h-12 w-12 rounded-full bronze-gradient medal-shine flex items-center justify-center shadow-medal">
-                                            <p class="text-white font-bold">3</p>
-                                        </div>
-                                    </div>
-                                    <div class="h-24 bg-neutral-100 rounded-t-xl flex flex-col items-center justify-end p-4">
-                                        <p class="font-bold text-center display-font">TEAM C</p>
-                                        <p class="text-lg font-bold text-neutral-500">8</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+   
     </main>
 
     <!-- Modern Footer -->
