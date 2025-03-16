@@ -347,7 +347,7 @@ document.addEventListener('DOMContentLoaded', function() {
             progressText.textContent = 'Generating report...';
             
             setTimeout(() => {
-                pdfReport.save();
+              
                 
                 progressFill.style.width = '100%';
                 progressText.textContent = 'Download complete!';

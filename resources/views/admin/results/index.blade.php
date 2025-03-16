@@ -6,7 +6,72 @@
 @endsection
 
 @section('content')
+<style>
+    .export-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 1000;
+        padding: 15px 30px;
+        background-color: #0d6efd;
+        color: white;
+        border: none;
+        border-radius: 50px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    .export-btn:hover {
+        background-color: #0b5ed7;
+    }
+    .export-btn:disabled {
+        background-color: #6c757d;
+        cursor: wait;
+    }
+    #exportProgress {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        display: none;
+        z-index: 1001;
+    }
+    .progress-bar {
+        width: 300px;
+        height: 20px;
+        background-color: #e9ecef;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 10px;
+    }
+    .progress-fill {
+        height: 100%;
+        background-color: #0d6efd;
+        transition: width 0.3s ease;
+    }
+    .export-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none;
+    cursor: wait;
+}
 
+#exportProgress {
+    z-index: 1002; /* Make sure it's above the overlay */
+}
+</style>
 <!-- Start Content-->
 <div class="container-fluid">
 
@@ -179,8 +244,19 @@
             </div>
         </div>
     </div>
+    <div id="exportOverlay" class="export-overlay"></div>
+    <button id="exportPDF" class="export-btn">
+        <i class="mdi mdi-file-pdf-outline"></i>
+        Export to PDF
+    </button>
 
-
+    <div id="exportProgress">
+        <h4>Generating PDF Report...</h4>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 0%"></div>
+        </div>
+        <p id="progressText">Preparing document...</p>
+    </div>
 
 </div>
 
@@ -998,5 +1074,249 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
+<script>
+// PDF Export functionality - add this at the end of your script section
+document.addEventListener('DOMContentLoaded', function() {
+    const exportBtn = document.getElementById('exportPDF');
+    const progressBar = document.getElementById('exportProgress');
+    const progressFill = document.querySelector('.progress-fill');
+    const progressText = document.getElementById('progressText');
+    const exportOverlay = document.getElementById('exportOverlay');
+    
+    // Only add this event listener once
+    if (exportBtn && !exportBtn.hasAttribute('data-listener-attached')) {
+        exportBtn.setAttribute('data-listener-attached', 'true');
+        
+        exportBtn.addEventListener('click', function() {
+            // Show overlay to block user interaction
+            exportOverlay.style.display = 'block';
+            progressBar.style.display = 'block';
+            exportBtn.disabled = true;
+            progressFill.style.width = '10%';
+            progressText.textContent = 'Preparing document...';
+            
+            setTimeout(async () => {
+                try {
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF('l', 'mm', 'a4');
+                    
+                    // Document styling constants
+                    const colors = {
+                        primary: [0, 73, 30],       // Dark Green #00491e
+                        secondary: [2, 104, 30],     // Bright Green #02681e
+                        accent: [255, 255, 255],     // White instead of blue
+                        gold: [255, 184, 0],         // Gold color
+                        silver: [183, 183, 183],     // Silver color
+                        bronze: [205, 127, 50],      // Bronze color
+                        light: [241, 245, 249],
+                        white: [255, 255, 255],
+                        lightText: [148, 163, 184],
+                        darkText: [30, 41, 59]
+                    };
+                    
+                    // Create cover page
+                    doc.setFillColor(...colors.primary);
+                    doc.rect(0, 0, doc.internal.pageSize.width, doc.internal.pageSize.height, 'F');
+                    
+                    // Add design element - white section at bottom
+                    doc.setFillColor(...colors.white);
+                    doc.roundedRect(0, doc.internal.pageSize.height - 110, doc.internal.pageSize.width, 110, 80, 0, 'F');
+                    
+                    // Add header text
+                    doc.setTextColor(...colors.white);
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFontSize(38);
+                    doc.text('Medal Results', 30, 50);
+                    
+                    doc.setFontSize(26);
+                    doc.text('Dashboard Report', 30, 65);
+                    
+                    // Add medal icons
+                    doc.setFillColor(...colors.gold);
+                    doc.circle(35, 100, 10, 'F');
+                    doc.setFillColor(...colors.silver);
+                    doc.circle(65, 100, 10, 'F');
+                    doc.setFillColor(...colors.bronze);
+                    doc.circle(95, 100, 10, 'F');
+                    
+                    // Add date (dark text in the white section)
+                    doc.setTextColor(...colors.darkText);
+                    doc.setFontSize(12);
+                    
+                    // Format the current date
+                    const now = new Date();
+                    const day = String(now.getDate()).padStart(2, '0');
+                    const year = now.getFullYear();
+                    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    const monthName = monthNames[now.getMonth()];
+                    const hours12 = now.getHours() % 12 || 12;
+                    const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
+                    const formattedHours = String(hours12).padStart(2, '0');
+                    const formattedMinutes = String(now.getMinutes()).padStart(2, '0');
+                    const formattedDateTime = `${day}-${monthName}-${year} ${formattedHours}:${formattedMinutes} ${ampm}`;
+                    
+                    doc.text(`Generated: ${formattedDateTime}`, 30, 140);
+                    
+                    progressFill.style.width = '40%';
+                    progressText.textContent = 'Creating medal standings table...';
+                    
+                    // Add content page for results table
+                    doc.addPage();
+                    
+                    // Create header
+                    doc.setFillColor(...colors.primary);
+                    doc.rect(0, 0, doc.internal.pageSize.width, 20, 'F');
+                    
+                    doc.setTextColor(...colors.white);
+                    doc.setFontSize(12);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('Medal Results Dashboard', doc.internal.pageSize.width / 2, 13, { align: 'center' });
+                    
+                    // Add table title
+                    doc.setTextColor(...colors.darkText);
+                    doc.setFontSize(16);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('Medal Standings', doc.internal.pageSize.width / 2, 30, { align: 'center' });
+                    
+                    // Extract table data from the medal tally
+                    const tableData = [];
+                    const table = document.getElementById('state-saving-datatable');
+                    const rows = Array.from(table.querySelectorAll('tbody tr'));
+                    
+                    for (let i = 0; i < rows.length; i++) {
+                        const row = rows[i];
+                        const cells = Array.from(row.cells);
+                        
+                        // Extract data from each cell
+                        const rowData = [
+                            cells[0].textContent.trim(), // Rank
+                            cells[1].querySelector('span') ? cells[1].querySelector('span').textContent.trim() : cells[1].textContent.trim(), // Team
+                            cells[2].querySelector('.badge') ? cells[2].querySelector('.badge').textContent.trim() : '0', // Gold
+                            cells[3].querySelector('.badge') ? cells[3].querySelector('.badge').textContent.trim() : '0', // Silver
+                            cells[4].querySelector('.badge') ? cells[4].querySelector('.badge').textContent.trim() : '0', // Bronze
+                            cells[5].textContent.trim(), // Total Medals
+                            cells[6].textContent.trim()  // Total Weight
+                        ];
+                        
+                        tableData.push(rowData);
+                    }
+                    
+                    // Create medal standings table
+                    doc.autoTable({
+                        startY: 40,
+                        head: [[
+                            'Rank',
+                            'Team',
+                            'Gold',
+                            'Silver',
+                            'Bronze',
+                            'Total Medals',
+                            'Total Weight'
+                        ]],
+                        body: tableData,
+                        theme: 'grid',
+                        styles: {
+                            fontSize: 10,
+                            cellPadding: 4,
+                            lineColor: [240, 240, 240],
+                            lineWidth: 0.1,
+                            font: 'helvetica',
+                        },
+                        headStyles: {
+                            fillColor: colors.primary,
+                            textColor: colors.white,
+                            fontSize: 11,
+                            fontStyle: 'bold',
+                            halign: 'center',
+                            cellPadding: 5,
+                            lineWidth: 0
+                        },
+                        columnStyles: {
+                            0: { halign: 'center', fontStyle: 'bold', cellWidth: 15 },
+                            1: { halign: 'left', cellWidth: 'auto' },
+                            2: { halign: 'center', fontStyle: 'bold', cellWidth: 20 },
+                            3: { halign: 'center', fontStyle: 'bold', cellWidth: 20 },
+                            4: { halign: 'center', fontStyle: 'bold', cellWidth: 20 },
+                            5: { halign: 'center', fontStyle: 'bold', cellWidth: 30 },
+                            6: { halign: 'center', fontStyle: 'bold', cellWidth: 30 }
+                        },
+                        alternateRowStyles: {
+                            fillColor: colors.light
+                        },
+                        didParseCell: function(data) {
+                            // Style medal count cells
+                            if (data.column.index === 2 && data.section === 'body') {
+                                data.cell.styles.textColor = colors.gold;
+                            } else if (data.column.index === 3 && data.section === 'body') {
+                                data.cell.styles.textColor = colors.silver;
+                            } else if (data.column.index === 4 && data.section === 'body') {
+                                data.cell.styles.textColor = colors.bronze;
+                            }
+                        },
+                        margin: { top: 20, left: 10, right: 10 },
+                    });
+                    
+                    progressFill.style.width = '80%';
+                    progressText.textContent = 'Finishing document...';
+                    
+                    // Add footers to all pages
+                    const pageCount = doc.internal.getNumberOfPages();
+                    for (let i = 1; i <= pageCount; i++) {
+                        doc.setPage(i);
+                        
+                        // Skip footer on cover page
+                        if (i === 1) continue;
+                        
+                        // Add footer line
+                        doc.setDrawColor(...colors.light);
+                        doc.setLineWidth(0.5);
+                        doc.line(10, doc.internal.pageSize.height - 15, doc.internal.pageSize.width - 10, doc.internal.pageSize.height - 15);
+                        
+                        // Add page number
+                        doc.setFillColor(...colors.light);
+                        doc.roundedRect(doc.internal.pageSize.width / 2 - 15, doc.internal.pageSize.height - 12, 30, 8, 4, 4, 'F');
+                        
+                        doc.setTextColor(...colors.darkText);
+                        doc.setFontSize(8);
+                        doc.text(
+                            `Page ${i} of ${pageCount}`, 
+                            doc.internal.pageSize.width / 2, 
+                            doc.internal.pageSize.height - 7,
+                            { align: 'center' }
+                        );
+                        
+                        // Add footer text
+                        doc.setTextColor(...colors.secondary);
+                        doc.text(
+                            'Medal Results Dashboard', 
+                            20, 
+                            doc.internal.pageSize.height - 7
+                        );
+                    }
+                    
+                    progressFill.style.width = '100%';
+                    progressText.textContent = 'Download starting...';
+                    
+                    // Save the PDF with formatted filename
+                    const filename = `Medal_Dashboard_${day}-${monthName}-${year}_${formattedHours}-${formattedMinutes}-${ampm}.pdf`;
+                    doc.save(filename);
+                    
+                } catch (error) {
+                    console.error('Error generating PDF:', error);
+                    alert('Error generating PDF. Please try again.');
+                } finally {
+                    // Hide overlay and progress bar
+                    exportOverlay.style.display = 'none';
+                    progressBar.style.display = 'none';
+                    exportBtn.disabled = false;
+                }
+            }, 100);
+        });
+    }
+});
+</script>
 @endsection
