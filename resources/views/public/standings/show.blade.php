@@ -1,5 +1,5 @@
     {{-- resources/views/public/standings/show.blade.php --}}
-@extends('public.layouts.app')
+    @extends('public.layouts.app')
 
 @section('title', isset($team->name) ? $team->name . ' - Medal Details' : 'Team Details')
 
@@ -24,84 +24,81 @@
     </div>
 @else
 <!-- Team Hero Section with Dynamic Background -->
-{{-- Modern Sporty Hero Section for CMU PALARO Standings Page --}}
-<!-- Modern Sporty Hero Section -->
-<section class="team-hero-section pt-[10vh] h-[100vh]">
+<section class="team-hero-section pt-[10vh]">
     <!-- Background Elements -->
     <img
         src="{{ $team->image ? Vite::asset('storage/app/public/' . $team->image) : Vite::asset('resources/images/05.webp') }}"
         alt="{{ $team['team'] }}"
-        class="hero-background-img w-full h-full object-cover absolute"
+        class="hero-background-img"
         crossorigin="anonymous"
         loading="lazy"
     >
+    <div class="hero-overlay"></div>
     <div class="hero-pattern"></div>
     <div class="hero-lines"></div>
     <div class="hero-diagonal"></div>
     
-    <div class="hero-content">
-        <div class="container mx-auto px-4 py-8">
-           
-            
-            <!-- Team Info -->
-            <div class="text-center mb-12" data-aos="fade-up">
-                @if($team->image)
-                    <div class="team-image-wrapper">
-                        <img
-                            src="{{ $team->image ? Vite::asset('storage/app/public/' . $team->image) : Vite::asset('resources/images/05.webp') }}"
-                            alt="{{ $team['team'] }}"
-                            class="w-full h-full object-cover" id="teamFlag"
-                            crossorigin="anonymous"
-                            loading="lazy"
-                        >
-                    </div>
-                @endif
-                <h1 class="team-title">{{ $team->name }}</h1>
-                @if($team->code)
-                    <p class="team-subtitle">{{ $team->code }}</p>
-                @endif
+    <div class="hero-content container mx-auto px-4 pt-20 pb-32">
+      
+        
+        <!-- Team Info -->
+        <div class="text-center mb-[50px]" data-aos="fade-down">
+            @if($team->image)
+                <div class="team-image-wrapper">
+                    <img
+                        src="{{ $team->image ? Vite::asset('storage/app/public/' . $team->image) : Vite::asset('resources/images/05.webp') }}"
+                        alt="{{ $team['team'] }}"
+                        class="w-full h-full object-cover" id="teamFlag"
+                        crossorigin="anonymous"
+                        loading="lazy"
+                    >
+                </div>
+            @endif
+            <h1 class="team-title">{{ $team->name }}</h1>
+            @if($team->code)
+                <p class="team-subtitle">{{ $team->code }}</p>
+            @endif
+        </div>
+        
+        <!-- Medal Stats Grid -->
+        <div class="medal-stats-grid">
+            <!-- Gold Medal Card -->
+            <div class="medal-stat-card">
+                <div class="text-center">
+                    <div class="medal-circle xl gold mx-auto mb-6"  >G</div>
+                    <div class="text-4xl font-bold text-white mb-2 animated-number" data-medal-count="{{ $overallTotal['gold_tally'] }}">0</div>
+                    <div class="text-sm uppercase tracking-wider text-white/70">Gold</div>
+                </div>
             </div>
             
-            <!-- Medal Stats Grid -->
-            <div class="medal-stats-grid" data-aos="fade-up" data-aos-delay="100">
-                <!-- Gold Medal Card -->
-                <div class="medal-stat-card">
-                    <div class="text-center">
-                        <div class="medal-circle xl gold mx-auto mb-6" data-aos="zoom-in" data-aos-delay="200">G</div>
-                        <div class="text-4xl font-bold text-white mb-2" data-medal-count="{{ $overallTotal['gold_tally'] }}">0</div>
-                        <div class="text-sm uppercase tracking-wider text-white/70">Gold</div>
-                    </div>
+            <!-- Silver Medal Card -->
+            <div class="medal-stat-card">
+                <div class="text-center">
+                    <div class="medal-circle xl silver mx-auto mb-6" >S</div>
+                    <div class="text-4xl font-bold text-white mb-2 animated-number" data-medal-count="{{ $overallTotal['silver_tally'] }}">0</div>
+                    <div class="text-sm uppercase tracking-wider text-white/70">Silver</div>
                 </div>
-                
-                <!-- Silver Medal Card -->
-                <div class="medal-stat-card">
-                    <div class="text-center">
-                        <div class="medal-circle xl silver mx-auto mb-6" data-aos="zoom-in" data-aos-delay="300">S</div>
-                        <div class="text-4xl font-bold text-white mb-2" data-medal-count="{{ $overallTotal['silver_tally'] }}">0</div>
-                        <div class="text-sm uppercase tracking-wider text-white/70">Silver</div>
-                    </div>
+            </div>
+            
+            <!-- Bronze Medal Card -->
+            <div class="medal-stat-card">
+                <div class="text-center">
+                    <div class="medal-circle xl bronze mx-auto mb-6">B</div>
+                    <div class="text-4xl font-bold text-white mb-2 animated-number" data-medal-count="{{ $overallTotal['bronze_tally'] }}">0</div>
+                    <div class="text-sm uppercase tracking-wider text-white/70">Bronze</div>
                 </div>
-                
-                <!-- Bronze Medal Card -->
-                <div class="medal-stat-card">
-                    <div class="text-center">
-                        <div class="medal-circle xl bronze mx-auto mb-6" data-aos="zoom-in" data-aos-delay="400">B</div>
-                        <div class="text-4xl font-bold text-white mb-2" data-medal-count="{{ $overallTotal['bronze_tally'] }}">0</div>
-                        <div class="text-sm uppercase tracking-wider text-white/70">Bronze</div>
+            </div>
+            
+            <!-- Total Medals Card -->
+            <div class="medal-stat-card" style="background: linear-gradient(135deg, rgba(var(--team-color-rgb), 0.5), rgba(var(--team-color-rgb), 0.2));">
+                <div class="text-center">
+                    <div class="medal-circle xl bg-white mx-auto mb-6"  style="color: var(--team-color)">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
                     </div>
-                </div>
-                
-                <!-- Total Medals Card -->
-                <div class="medal-stat-card" style="background: linear-gradient(135deg, rgba(var(--team-color-rgb), 0.5), rgba(var(--team-color-rgb), 0.2));">
-                    <div class="text-center">
-                        <div class="medal-circle xl bg-white mx-auto mb-6" data-aos="zoom-in" data-aos-delay="500" style="color: var(--team-color)">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                        </div>
-                        <div class="text-4xl font-bold text-white mb-2" data-medal-count="{{ $overallTotal['total_medals'] }}">0</div>
-                        <div class="text-sm uppercase tracking-wider text-white/70">Total</div>
-                    </div>
+                    <div class="text-4xl font-bold text-white mb-2 animated-number" data-medal-count="{{ $overallTotal['total_medals'] }}">0</div>
+                    <div class="text-sm uppercase tracking-wider text-white/70">Total</div>
                 </div>
             </div>
         </div>
@@ -116,8 +113,7 @@
                 <div class="p-6 border-b border-gray-100">
                     <h2 class="text-2xl font-bold flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" style="color: var(--team-color)" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
-                            <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
+                            <path fill-rule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 17.5 9.134a1 1 0 010 1.732l-3.354 1.935-1.18 4.455a1 1 0 01-1.933 0L9.854 12.8 6.5 10.866a1 1 0 010-1.732l3.354-1.935 1.18-4.455A1 1 0 0112 2z" clip-rule="evenodd" />
                         </svg>
                         Medal Distribution
                     </h2>

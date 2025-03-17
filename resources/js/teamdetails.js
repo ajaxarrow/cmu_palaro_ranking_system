@@ -111,4 +111,58 @@ document.addEventListener('DOMContentLoaded', function() {
         
         requestAnimationFrame(updateCounter);
     }
+
+    // Add parallax effect to hero section
+    const heroSection = document.querySelector('.team-hero-section');
+    if (heroSection) {
+        window.addEventListener('scroll', function() {
+            const scrollPosition = window.scrollY;
+            if (scrollPosition < window.innerHeight) {
+                const translateY = scrollPosition * 0.4;
+                const opacity = 1 - (scrollPosition / (window.innerHeight * 0.8));
+                
+                // Apply parallax effect to background image
+                const heroBackground = document.querySelector('.hero-background-img');
+                if (heroBackground) {
+                    heroBackground.style.transform = `scale(1.05) translateY(${translateY * 0.2}px)`;
+                }
+                
+                // // Apply fade effect to hero content
+                // const heroContent = document.querySelector('.hero-content');
+                // if (heroContent) {
+                //     heroContent.style.opacity = Math.max(0.2, opacity);
+                //     heroContent.style.transform = `translateY(${translateY * 0.1}px)`;
+                // }
+                
+                // Apply parallax effect to pattern
+                const heroPattern = document.querySelector('.hero-pattern');
+                if (heroPattern) {
+                    heroPattern.style.transform = `translateY(${translateY * 0.15}px)`;
+                }
+            }
+        });
+    }
+
+
+    // Add hover effect to team image
+    const teamImageWrapper = document.querySelector('.team-image-wrapper');
+    if (teamImageWrapper) {
+        teamImageWrapper.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const deltaX = (x - centerX) / centerX;
+            const deltaY = (y - centerY) / centerY;
+            
+            this.style.transform = `perspective(1000px) rotateX(${deltaY * 10}deg) rotateY(${-deltaX * 10}deg) scale(1.05)`;
+        });
+        
+        teamImageWrapper.addEventListener('mouseleave', function() {
+            this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+        });
+    }
 });
