@@ -1446,7 +1446,7 @@ section {
 
 .medal-emoji {
     font-size: 1.25rem;
-    animation: spin 20s linear infinite;
+    /* animation: spin 20s linear infinite; */
 }
 
 @keyframes spin {

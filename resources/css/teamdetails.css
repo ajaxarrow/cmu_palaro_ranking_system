@@ -9,6 +9,10 @@
     --team-color-medium: rgba(var(--team-color-rgb), 0.5);
 }
 
+* {
+    scroll-behavior: smooth;
+}
+
 /* Modern medal design with subtle shadow and gradient */
 .medal-circle { 
     @apply flex items-center justify-center rounded-full shadow-md text-center font-bold;
@@ -42,17 +46,42 @@
 /* Modern Sporty Hero Section */
 .team-hero-section {
     position: relative;
-    min-height: 80vh;
+    min-height: 100vh;
     overflow: hidden;
     background-color: #111;
     display: flex;
     align-items: center;
+    width: 100%;
 }
 
 .hero-background-img {
-    right: -50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    filter: blur(20px);
+    filter: brightness(0.4) saturate(1.2);
+    transform: scale(1.05);
+    animation: subtle-zoom 20s infinite alternate ease-in-out;
+}
+
+@keyframes subtle-zoom {
+    0% { transform: scale(1.05); }
+    100% { transform: scale(1.15); }
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(var(--team-color-rgb), 0.95) 0%,
+        rgba(var(--team-color-rgb-dark), 0.85) 100%
+    );
+    opacity: 0.2;
+    backdrop-filter: blur(2px);
+    z-index: 1;
 }
 
 .hero-pattern {
@@ -62,10 +91,16 @@
     width: 100%;
     height: 100%;
     background-image: 
-        radial-gradient(circle at 20% 30%, rgba(var(--team-color-rgb), 0.4) 0%, transparent 50%),
-        radial-gradient(circle at 80% 70%, rgba(var(--team-color-rgb), 0.3) 0%, transparent 40%);
+        radial-gradient(circle at 20% 30%, rgba(var(--team-color-rgb), 0.6) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(var(--team-color-rgb), 0.5) 0%, transparent 40%);
     opacity: 0.8;
-    z-index: 1;
+    z-index: 2;
+    animation: pulse-pattern 15s infinite alternate ease-in-out;
+}
+
+@keyframes pulse-pattern {
+    0% { opacity: 0.7; }
+    100% { opacity: 0.9; }
 }
 
 .hero-lines {
@@ -78,7 +113,8 @@
         transparent 1px,
         transparent 60px
     );
-    z-index: 2;
+    z-index: 3;
+    opacity: 0.7;
 }
 
 .hero-diagonal {
@@ -86,16 +122,17 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 40%;
-    background: linear-gradient(135deg, transparent 30%, rgba(var(--team-color-rgb), 0.2) 100%);
+    height: 50%;
+    background: linear-gradient(135deg, transparent 30%, rgba(var(--team-color-rgb), 0.3) 100%);
     clip-path: polygon(0 100%, 100% 60%, 100% 100%);
-    z-index: 3;
+    z-index: 4;
 }
 
 .hero-content {
     position: relative;
     z-index: 10;
     width: 100%;
+    padding: 2rem 0;
 }
 
 .team-image-wrapper {
@@ -111,11 +148,21 @@
         0 0 0 4px rgba(var(--team-color-rgb), 0.3),
         0 25px 50px -12px rgba(0, 0, 0, 0.5);
     overflow: hidden;
-    transition: transform 0.5s ease;
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
 }
 
 .team-image-wrapper:hover {
-    transform: scale(1.05);
+    transform: scale(1.05) translateY(-5px);
+    box-shadow: 
+        0 0 0 4px rgba(var(--team-color-rgb), 0.5),
+        0 30px 60px -15px rgba(0, 0, 0, 0.6);
 }
 
 .team-image-wrapper::after {
@@ -124,7 +171,7 @@
     inset: 0;
     background: linear-gradient(
         to bottom right,
-        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.2),
         transparent
     );
     z-index: 1;
@@ -137,8 +184,23 @@
     text-align: center;
     margin: 1.5rem 0 0.5rem;
     color: #fff;
-    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3),
+                 0 0 30px rgba(var(--team-color-rgb), 0.5);
     letter-spacing: -0.02em;
+    animation: fade-in-up 1s ease-out forwards;
+    position: relative;
+}
+
+
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .team-subtitle {
@@ -149,14 +211,22 @@
     margin-bottom: 2rem;
     text-transform: uppercase;
     letter-spacing: 0.2em;
+    animation: fade-in-up 1s ease-out 0.2s forwards;
+    opacity: 0;
 }
 
 .medal-stats-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
     max-width: 1200px;
     margin: 0 auto;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
 .medal-stat-card {
@@ -169,7 +239,15 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     transition: all 0.3s ease;
+    animation: fade-in-up 1s ease-out forwards;
+    animation-delay: calc(0.1s * var(--animation-order, 0));
+    opacity: 0;
 }
+
+.medal-stat-card:nth-child(1) { --animation-order: 1; }
+.medal-stat-card:nth-child(2) { --animation-order: 2; }
+.medal-stat-card:nth-child(3) { --animation-order: 3; }
+.medal-stat-card:nth-child(4) { --animation-order: 4; }
 
 .medal-stat-card:hover {
     transform: translateY(-8px);
@@ -199,10 +277,8 @@
     border-radius: 0.75rem;
     font-weight: 500;
     transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .hero-back-button:hover {
@@ -210,97 +286,37 @@
     transform: translateY(-2px);
 }
 
-.hero-back-button .icon {
-    transition: transform 0.3s ease;
+.animated-number {
+    animation: countUp 2s ease-out forwards;
 }
 
-.hero-back-button:hover .icon {
-    transform: translateX(-4px);
+@keyframes countUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
+/* Responsive adjustments */
 @media (max-width: 768px) {
-    .medal-stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        padding: 0 1rem;
+    .team-hero-section {
+        min-height: auto;
+        padding: 6rem 0;
     }
     
     .team-image-wrapper {
         width: 140px;
         height: 140px;
     }
+    
+    .medal-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 1.5rem;
+    }
 }
 
 @media (max-width: 480px) {
     .medal-stats-grid {
         grid-template-columns: 1fr;
-        max-width: 320px;
     }
-}
-
-/* Dynamic team header with texture overlay */
-.team-header-bg {
-    background: linear-gradient(135deg, 
-        rgba(var(--team-color-rgb-dark), 0.95), 
-        rgba(var(--team-color-rgb), 0.8)),
-        url('/images/texture-pattern.svg');
-    background-size: cover;
-    background-position: center;
-    position: relative;
-}
-
-.team-header-bg::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at 70% 30%, rgba(255,255,255,0.15), transparent 70%);
-}
-
-/* Modern card hover effects */
-.card-hover { 
-    @apply transition-all duration-300;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-.card-hover:hover { 
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.1), 0 5px 15px rgba(0,0,0,0.07);
-}
-
-/* Glassmorphism for medal count cards */
-.medal-count-card {
-    backdrop-filter: blur(16px);
-    background: rgba(255, 255, 255, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-}
-
-/* Sport card with custom border */
-.sport-card {
-    border-left: 5px solid var(--team-color);
-    transition: all 0.3s ease;
-}
-
-.sport-card:hover {
-    border-left-width: 8px;
-}
-
-/* Table row hover effect */
-.table-row-hover { 
-    @apply transition-all duration-200; 
-}
-.table-row-hover:hover { 
-    @apply bg-gray-50;
-    transform: translateX(3px);
-}
-
-/* Modern wave divider */
-.wave-divider {
-    height: 120px;
-    overflow: hidden;
-    position: relative;
-    margin-top: -20px;
 }
 
 /* Modern medal labels */
@@ -395,4 +411,49 @@
     opacity: 0.3;
     transform: scaleY(-1);
     z-index: -1;
+}
+
+/* Modern card hover effects */
+.card-hover { 
+    @apply transition-all duration-300;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-hover:hover { 
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1), 0 5px 15px rgba(0,0,0,0.07);
+}
+
+/* Glassmorphism for medal count cards */
+.medal-count-card {
+    backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Sport card with custom border */
+.sport-card {
+    border-left: 5px solid var(--team-color);
+    transition: all 0.3s ease;
+}
+
+.sport-card:hover {
+    border-left-width: 8px;
+}
+
+/* Table row hover effect */
+.table-row-hover { 
+    @apply transition-all duration-200; 
+}
+.table-row-hover:hover { 
+    @apply bg-gray-50;
+    transform: translateX(3px);
+}
+
+/* Modern wave divider */
+.wave-divider {
+    height: 120px;
+    overflow: hidden;
+    position: relative;
+    margin-top: -20px;
 }

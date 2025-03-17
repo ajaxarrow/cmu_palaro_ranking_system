@@ -110,6 +110,7 @@ class PublicTeamController extends Controller
             // Change from JSON response to view response
             return view('public.standings.show', [
                 'team' => $team,
+            
                 'medalTally' => $medalTally,
                 'overallTotal' => $overallTotal
             ]);

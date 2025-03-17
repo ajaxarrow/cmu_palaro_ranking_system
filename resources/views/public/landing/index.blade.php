@@ -23,6 +23,7 @@
     min-height: 100vh;
     background: url('{{ Vite::asset('resources/images/landingPageBkg.jpg') }}') center/cover no-repeat !important;
     overflow: hidden;
+    background-size: 10px;
 }
 
 
@@ -131,6 +132,8 @@
                         <div class="podium-item second-place" data-aos="fade-up" data-aos-delay="200">
                             @if(isset($medalTally[1]))
                             <div class="podium-content">
+                            <a href="{{ route('public.standings.details', $medalTally[1]['team_id']) }}">
+
                                 <div class="winner-image">
                                     <img src="{{ $medalTally[1]['team_image'] ? Vite::asset('storage/app/public/' . $medalTally[1]['team_image']) : Vite::asset('resources/images/05.webp') }}"
                                          alt="{{ $medalTally[1]['team'] }}"
@@ -138,6 +141,7 @@
                                     <div class="winner-badge silver">1st</div>
                                 </div>
                                 <h3 class="winner-name">{{ $medalTally[1]['team'] }}</h3>
+                                </a>
                                 <div class="medal-stats">
                                     <div class="medal gold" title="Gold Medals">
                                         <span class="medal-emoji">🥇</span>
@@ -166,6 +170,8 @@
                         <div class="podium-item champion" data-aos="fade-up">
                             @if(isset($medalTally[0]))
                             <div class="podium-content">
+                                <a href="{{ route('public.standings.details', $medalTally[0]['team_id']) }}">
+
                                 <div class="winner-image">
                                     <img src="{{ $medalTally[0]['team_image'] ? Vite::asset('storage/app/public/' . $medalTally[0]['team_image']) : Vite::asset('resources/images/05.webp') }}"
                                          alt="{{ $medalTally[0]['team'] }}"
@@ -173,6 +179,7 @@
                                     <div class="winner-badge gold">C</div>
                                 </div>
                                 <h3 class="winner-name">{{ $medalTally[0]['team'] }}</h3>
+                                </a>
                                 <div class="medal-stats">
                                     <div class="medal gold" title="Gold Medals">
                                         <span class="medal-emoji">🥇</span>
@@ -202,6 +209,8 @@
                         <div class="podium-item third-place" data-aos="fade-up" data-aos-delay="400">
                             @if(isset($medalTally[2]))
                             <div class="podium-content">
+                            <a href="{{ route('public.standings.details', $medalTally[2]['team_id']) }}">
+
                                 <div class="winner-image">
                                     <img src="{{ $medalTally[2]['team_image'] ? Vite::asset('storage/app/public/' . $medalTally[2]['team_image']) : Vite::asset('resources/images/05.webp') }}"
                                          alt="{{ $medalTally[2]['team'] }}"
@@ -209,6 +218,7 @@
                                     <div class="winner-badge bronze">2nd</div>
                                 </div>
                                 <h3 class="winner-name">{{ $medalTally[2]['team'] }}</h3>
+                                </a>
                                 <div class="medal-stats">
                                     <div class="medal gold" title="Gold Medals">
                                         <span class="medal-emoji">🥇</span>
@@ -243,6 +253,8 @@
                         <div class="mobile-podium-card champion" data-aos="fade-up">
                             <div class="card-content">
                                 <div class="position-marker">Champion</div>
+                                <a href="{{ route('public.standings.details', $medalTally[0]['team_id']) }}">
+                                
                                 <div class="team-image-wrapper">
                                     <img src="{{ $medalTally[0]['team_image'] ? Vite::asset('storage/app/public/' . $medalTally[0]['team_image']) : Vite::asset('resources/images/05.webp') }}"
                                          alt="{{ $medalTally[0]['team'] }}"
@@ -250,6 +262,7 @@
                                     <div class="champion-crown mobile">👑</div>
                                 </div>
                                 <h3 class="team-name">{{ $medalTally[0]['team'] }}</h3>
+                                </a>
                                 <div class="medal-counts">
                                     <div class="medal gold">
                                         <span>🥇 {{ $medalTally[0]['total']['gold_tally'] }}</span>
@@ -273,12 +286,15 @@
                         <div class="mobile-podium-card silver" data-aos="fade-up" data-aos-delay="100">
                             <div class="card-content">
                                 <div class="position-marker">1st Runner Up</div>
+                                <a href="{{ route('public.standings.details', $medalTally[1]['team_id']) }}">
                                 <div class="team-image-wrapper">
                                     <img src="{{ $medalTally[1]['team_image'] ? Vite::asset('storage/app/public/' . $medalTally[1]['team_image']) : Vite::asset('resources/images/05.webp') }}"
                                          alt="{{ $medalTally[1]['team'] }}"
                                          class="team-image">
                                 </div>
+                               
                                 <h3 class="team-name">{{ $medalTally[1]['team'] }}</h3>
+                                </a>
                                 <div class="medal-counts">
                                     <div class="medal gold">
                                         <span>🥇 {{ $medalTally[1]['total']['gold_tally'] }}</span>
@@ -423,56 +439,65 @@
                         </div>
                         
                         <div class="podium-container">
+
                             @if($event['gold_winner'] || $event['silver_winner'] || count($event['bronze_winners']) > 0)
                                 @if($event['gold_winner'])
                                 <div class="medal-tier gold-tier">
+                                <a href="{{ route('public.standings.details', $event['gold_winner']['team_id']) }}" >
+                                  
                                     <div class="medal-header">
-                                        <div class="medal-icon gold">1</div>
-                                        <div class="medal-title">Gold Medal</div>
+                                        <div class="medal-icon gold">C</div>
+                                        <img
+                                        src="{{ $event['gold_winner']['team_image'] ? Vite::asset('storage/app/public/' . $event['gold_winner']['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                        alt="{{ $event['gold_winner']['team_name'] }}"
+                                        class="h-[40px] w-[40px] mr-1"
+                                        crossorigin="anonymous"
+                                        loading="lazy">
+                                        <div class="medal-title">{{ $event['gold_winner']['team_name'] }}</div>
+                                     
                                     </div>
-                                    <div class="winner-details">
-                                        <div class="winner-team">{{ $event['gold_winner']['team_name'] }}</div>
-                                        <div class="winner-college">
-                                            @if(isset($event['gold_winner']['colleges']) && count($event['gold_winner']['colleges']) > 0)
-                                                {{ implode(', ', $event['gold_winner']['colleges']->toArray()) }}
-                                            @endif
-                                        </div>
-                                    </div>
+                                    </a>
+                                   
                                 </div>
                                 @endif
 
                                 @if($event['silver_winner'])
+
                                 <div class="medal-tier silver-tier">
+                                <a href="{{ route('public.standings.details', $event['silver_winner']['team_id']) }}" >
+                                  
                                     <div class="medal-header">
-                                        <div class="medal-icon silver">2</div>
-                                        <div class="medal-title">Silver Medal</div>
+                                        <div class="medal-icon silver">1</div>
+                                        <img
+                                        src="{{ $event['silver_winner']['team_image'] ? Vite::asset('storage/app/public/' . $event['silver_winner']['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                        alt="{{ $event['silver_winner']['team_name'] }}"
+                                        class="h-[40px] w-[40px] mr-1"
+                                        crossorigin="anonymous"
+                                        loading="lazy">
+                                        <div class="medal-title">{{ $event['silver_winner']['team_name'] }}</div>
                                     </div>
-                                    <div class="winner-details">
-                                        <div class="winner-team">{{ $event['silver_winner']['team_name'] }}</div>
-                                        <div class="winner-college">
-                                            @if(isset($event['silver_winner']['colleges']) && count($event['silver_winner']['colleges']) > 0)
-                                                {{ implode(', ', $event['silver_winner']['colleges']->toArray()) }}
-                                            @endif
-                                        </div>
-                                    </div>
+                                    </a>
                                 </div>
                                 @endif
 
                                 @if(count($event['bronze_winners']) > 0)
                                     @foreach($event['bronze_winners'] as $index => $bronzeWinner)
                                     <div class="medal-tier bronze-tier">
-                                        <div class="medal-header">
-                                            <div class="medal-icon bronze">3</div>
-                                            <div class="medal-title">Bronze Medal {{ count($event['bronze_winners']) > 1 ? ($index + 1) : '' }}</div>
+                                    <a href="{{ route('public.standings.details', $bronzeWinner['team_id']) }}" >
+                                    <div class="medal-header">
+                                            <div class="medal-icon bronze">2</div>
+                                            <img
+                                                src="{{ $bronzeWinner['team_image'] ? Vite::asset('storage/app/public/' . $bronzeWinner['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                                alt="{{ $bronzeWinner['team_name'] }}"
+                                                class="h-[40px] w-[40px] mr-1"
+                                                crossorigin="anonymous"
+                                                loading="lazy">
+                                            <div class="medal-title">{{ $bronzeWinner['team_name'] }}</div>
                                         </div>
-                                        <div class="winner-details">
-                                            <div class="winner-team">{{ $bronzeWinner['team_name'] }}</div>
-                                            <div class="winner-college">
-                                                @if(isset($bronzeWinner['colleges']) && count($bronzeWinner['colleges']) > 0)
-                                                    {{ implode(', ', $bronzeWinner['colleges']->toArray()) }}
-                                                @endif
-                                            </div>
-                                        </div>
+
+                                    </a>
+                                        
+                                        
                                     </div>
                                     @endforeach
                                 @endif
@@ -494,7 +519,7 @@
             <div class="swiper-button-prev"></div>
         </div>
     </div>
-</section>
+    </section>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -576,8 +601,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             <div class="team-header">
                                 <span class="team-label">Team</span>
                                 <a href="{{ route('public.standings.details', $team['team_id']) }}" class="team-name">
-        {{ $team['team'] }}
-    </a>
+                                    {{ $team['team'] }}
+                                </a>
 
                                 <div class="d-flex flex-column gap-0">
                                     @foreach($team['colleges'] as $college)
@@ -585,7 +610,6 @@ document.addEventListener('DOMContentLoaded', function() {
                                     @endforeach
                                 </div>
                             </div>
-
                                 <div class="team-description">
                                     <p>{{ $team['description'] ?? 'Representing excellence in sports and academics.' }}</p>
                                     <div class="rank-indicator">
@@ -603,6 +627,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                         #{{ $index + 1 }}
                                     </div>
                                     <div class="image-glow"></div>
+                                    <a href="{{ route('public.standings.details', $team['team_id']) }}" >
+                                  
                                     <img
                                         src="{{ $team['team_image'] ? Vite::asset('storage/app/public/' . $team['team_image']) : Vite::asset('resources/images/05.webp') }}"
                                         alt="{{ $team['team'] }}"
@@ -610,6 +636,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                         crossorigin="anonymous"
                                         loading="lazy"
                                     >
+                                  
+                                    </a>
                                 </div>
                             </div>
 
