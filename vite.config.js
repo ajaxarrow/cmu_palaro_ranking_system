@@ -10,7 +10,13 @@ export default defineConfig({
     },
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
+            input: [
+                'resources/css/app.css', 
+                'resources/js/app.js',
+                'resources/css/landingpage.css',
+                'resources/css/teamdetails.css',
+                'resources/js/teamdetails.js'
+            ],
             refresh: true,
         }),
     ],

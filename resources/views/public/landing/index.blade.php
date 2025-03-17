@@ -110,7 +110,7 @@
 
         <div class="hero-content container mx-auto px-4 pt-20 pb-32">
             <!-- Header -->
-            <div class="text-center mb-[150px]" data-aos="fade-down">
+            <div class="text-center mb-[50px]" data-aos="fade-down">
                 <h1 class="text-7xl font-extrabold text-white mb-6 tracking-tight">
                     <span class="title-accent">CMU PALARO {{ date('Y') }}</span>
                     <span class="block text-3xl mt-8 bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-200">
@@ -121,107 +121,115 @@
                 </h1>
             </div>
 
+       
             <!-- Podium Section -->
             <div class="podium-section max-w-6xl mx-auto mb-20" data-aos="fade-up">
                 <!-- Desktop Podium -->
                 <div class="podium-desktop">
                     <div class="flex justify-center items-end h-[400px] gap-4">
-                        <!-- Second Place -->
-                        <div class="podium-item second-place">
+                        <!-- Second Place (1st Runner Up) -->
+                        <div class="podium-item second-place" data-aos="fade-up" data-aos-delay="200">
                             @if(isset($medalTally[1]))
                             <div class="podium-content">
                                 <div class="winner-image">
                                     <img src="{{ $medalTally[1]['team_image'] ? Vite::asset('storage/app/public/' . $medalTally[1]['team_image']) : Vite::asset('resources/images/05.webp') }}"
-
+                                         alt="{{ $medalTally[1]['team'] }}"
                                          class="relative z-10">
-                                    <div class="winner-badge silver">2</div>
+                                    <div class="winner-badge silver">1st</div>
                                 </div>
                                 <h3 class="winner-name">{{ $medalTally[1]['team'] }}</h3>
                                 <div class="medal-stats">
-                                    <div class="medal gold">
-                                        <span>🥇</span>
-                                        <span>{{ $medalTally[1]['total']['gold_tally'] }}</span>
+                                    <div class="medal gold" title="Gold Medals">
+                                        <span class="medal-emoji">🥇</span>
+                                        <span class="medal-count">{{ $medalTally[1]['total']['gold_tally'] }}</span>
                                     </div>
-                                    <div class="medal silver">
-                                        <span>🥈</span>
-                                        <span>{{ $medalTally[1]['total']['silver_tally'] }}</span>
+                                    <div class="medal silver" title="Silver Medals">
+                                        <span class="medal-emoji">🥈</span>
+                                        <span class="medal-count">{{ $medalTally[1]['total']['silver_tally'] }}</span>
                                     </div>
-                                    <div class="medal bronze">
-                                        <span>🥉</span>
-                                        <span>{{ $medalTally[1]['total']['bronze_tally'] }}</span>
+                                    <div class="medal bronze" title="Bronze Medals">
+                                        <span class="medal-emoji">🥉</span>
+                                        <span class="medal-count">{{ $medalTally[1]['total']['bronze_tally'] }}</span>
                                     </div>
                                 </div>
                                 <div class="total-points">
                                     {{ number_format($medalTally[1]['total']['total_weight'], 2) }} pts
                                 </div>
                             </div>
-                            <div class="podium-stand silver"></div>
+                            <div class="podium-stand silver">
+                                <div class="podium-shine"></div>
+                            </div>
                             @endif
                         </div>
 
-                        <!-- First Place -->
-                        <div class="podium-item champion">
+                        <!-- Champion -->
+                        <div class="podium-item champion" data-aos="fade-up">
                             @if(isset($medalTally[0]))
                             <div class="podium-content">
                                 <div class="winner-image">
                                     <img src="{{ $medalTally[0]['team_image'] ? Vite::asset('storage/app/public/' . $medalTally[0]['team_image']) : Vite::asset('resources/images/05.webp') }}"
-
+                                         alt="{{ $medalTally[0]['team'] }}"
                                          class="relative z-10">
-                                    <div class="winner-badge gold">1</div>
+                                    <div class="winner-badge gold">C</div>
                                 </div>
                                 <h3 class="winner-name">{{ $medalTally[0]['team'] }}</h3>
                                 <div class="medal-stats">
-                                    <div class="medal gold">
-                                        <span>🥇</span>
-                                        <span>{{ $medalTally[0]['total']['gold_tally'] }}</span>
+                                    <div class="medal gold" title="Gold Medals">
+                                        <span class="medal-emoji">🥇</span>
+                                        <span class="medal-count">{{ $medalTally[0]['total']['gold_tally'] }}</span>
                                     </div>
-                                    <div class="medal silver">
-                                        <span>🥈</span>
-                                        <span>{{ $medalTally[0]['total']['silver_tally'] }}</span>
+                                    <div class="medal silver" title="Silver Medals">
+                                        <span class="medal-emoji">🥈</span>
+                                        <span class="medal-count">{{ $medalTally[0]['total']['silver_tally'] }}</span>
                                     </div>
-                                    <div class="medal bronze">
-                                        <span>🥉</span>
-                                        <span>{{ $medalTally[0]['total']['bronze_tally'] }}</span>
+                                    <div class="medal bronze" title="Bronze Medals">
+                                        <span class="medal-emoji">🥉</span>
+                                        <span class="medal-count">{{ $medalTally[0]['total']['bronze_tally'] }}</span>
                                     </div>
                                 </div>
                                 <div class="total-points champion">
                                     {{ number_format($medalTally[0]['total']['total_weight'], 2) }} pts
                                 </div>
+                                <div class="champion-crown">👑</div>
                             </div>
-                            <div class="podium-stand gold"></div>
+                            <div class="podium-stand gold">
+                                <div class="podium-shine"></div>
+                            </div>
                             @endif
                         </div>
 
-                        <!-- Third Place -->
-                        <div class="podium-item third-place">
+                        <!-- Third Place (2nd Runner Up) -->
+                        <div class="podium-item third-place" data-aos="fade-up" data-aos-delay="400">
                             @if(isset($medalTally[2]))
                             <div class="podium-content">
                                 <div class="winner-image">
-                                    <img src="{{ $medalTally[2]['team_image'] ? Vite::asset('storage/app/public/' .  $medalTally[2]['team_image']) : Vite::asset('resources/images/05.webp') }}"
-
+                                    <img src="{{ $medalTally[2]['team_image'] ? Vite::asset('storage/app/public/' . $medalTally[2]['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                         alt="{{ $medalTally[2]['team'] }}"
                                          class="relative z-10">
-                                    <div class="winner-badge bronze">3</div>
+                                    <div class="winner-badge bronze">2nd</div>
                                 </div>
                                 <h3 class="winner-name">{{ $medalTally[2]['team'] }}</h3>
                                 <div class="medal-stats">
-                                    <div class="medal gold">
-                                        <span>🥇</span>
-                                        <span>{{ $medalTally[2]['total']['gold_tally'] }}</span>
+                                    <div class="medal gold" title="Gold Medals">
+                                        <span class="medal-emoji">🥇</span>
+                                        <span class="medal-count">{{ $medalTally[2]['total']['gold_tally'] }}</span>
                                     </div>
-                                    <div class="medal silver">
-                                        <span>🥈</span>
-                                        <span>{{ $medalTally[2]['total']['silver_tally'] }}</span>
+                                    <div class="medal silver" title="Silver Medals">
+                                        <span class="medal-emoji">🥈</span>
+                                        <span class="medal-count">{{ $medalTally[2]['total']['silver_tally'] }}</span>
                                     </div>
-                                    <div class="medal bronze">
-                                        <span>🥉</span>
-                                        <span>{{ $medalTally[2]['total']['bronze_tally'] }}</span>
+                                    <div class="medal bronze" title="Bronze Medals">
+                                        <span class="medal-emoji">🥉</span>
+                                        <span class="medal-count">{{ $medalTally[2]['total']['bronze_tally'] }}</span>
                                     </div>
                                 </div>
                                 <div class="total-points">
                                     {{ number_format($medalTally[2]['total']['total_weight'], 2) }} pts
                                 </div>
                             </div>
-                            <div class="podium-stand bronze"></div>
+                            <div class="podium-stand bronze">
+                                <div class="podium-shine"></div>
+                            </div>
                             @endif
                         </div>
                     </div>
@@ -232,98 +240,87 @@
                     <div class="mobile-podium-grid">
                         <!-- Champion Card -->
                         @if(isset($medalTally[0]))
-                        <div class="mobile-podium-card champion">
+                        <div class="mobile-podium-card champion" data-aos="fade-up">
                             <div class="card-content">
-                                <div class="position-marker">1st</div>
+                                <div class="position-marker">Champion</div>
                                 <div class="team-image-wrapper">
                                     <img src="{{ $medalTally[0]['team_image'] ? Vite::asset('storage/app/public/' . $medalTally[0]['team_image']) : Vite::asset('resources/images/05.webp') }}"
-                                        >
+                                         alt="{{ $medalTally[0]['team'] }}"
+                                         class="team-image">
+                                    <div class="champion-crown mobile">👑</div>
                                 </div>
-                                <div class="team-info">
-                                    <h3>{{ $medalTally[0]['team'] }}</h3>
-                                    <div class="medal-row">
-                                        <div class="medal-cell">
-                                            <span class="medal-icon">🥇</span>
-                                            <span class="medal-count">{{ $medalTally[0]['total']['gold_tally'] }}</span>
-                                        </div>
-                                        <div class="medal-cell">
-                                            <span class="medal-icon">🥈</span>
-                                            <span class="medal-count">{{ $medalTally[0]['total']['silver_tally'] }}</span>
-                                        </div>
-                                        <div class="medal-cell">
-                                            <span class="medal-icon">🥉</span>
-                                            <span class="medal-count">{{ $medalTally[0]['total']['bronze_tally'] }}</span>
-                                        </div>
+                                <h3 class="team-name">{{ $medalTally[0]['team'] }}</h3>
+                                <div class="medal-counts">
+                                    <div class="medal gold">
+                                        <span>🥇 {{ $medalTally[0]['total']['gold_tally'] }}</span>
                                     </div>
-                                    <div class="total-score">
-                                        {{ number_format($medalTally[0]['total']['total_weight'], 2) }} pts
+                                    <div class="medal silver">
+                                        <span>🥈 {{ $medalTally[0]['total']['silver_tally'] }}</span>
                                     </div>
+                                    <div class="medal bronze">
+                                        <span>🥉 {{ $medalTally[0]['total']['bronze_tally'] }}</span>
+                                    </div>
+                                </div>
+                                <div class="total-score">
+                                    {{ number_format($medalTally[0]['total']['total_weight'], 2) }} pts
                                 </div>
                             </div>
                         </div>
                         @endif
 
-                        <!-- Second Place Card -->
+                        <!-- First Runner Up Card -->
                         @if(isset($medalTally[1]))
-                        <div class="mobile-podium-card silver">
+                        <div class="mobile-podium-card silver" data-aos="fade-up" data-aos-delay="100">
                             <div class="card-content">
-                                <div class="position-marker">2nd</div>
+                                <div class="position-marker">1st Runner Up</div>
                                 <div class="team-image-wrapper">
                                     <img src="{{ $medalTally[1]['team_image'] ? Vite::asset('storage/app/public/' . $medalTally[1]['team_image']) : Vite::asset('resources/images/05.webp') }}"
-                                         >
+                                         alt="{{ $medalTally[1]['team'] }}"
+                                         class="team-image">
                                 </div>
-                                <div class="team-info">
-                                    <h3>{{ $medalTally[1]['team'] }}</h3>
-                                    <div class="medal-row">
-                                        <div class="medal-cell">
-                                            <span class="medal-icon">🥇</span>
-                                            <span class="medal-count">{{ $medalTally[1]['total']['gold_tally'] }}</span>
-                                        </div>
-                                        <div class="medal-cell">
-                                            <span class="medal-icon">🥈</span>
-                                            <span class="medal-count">{{ $medalTally[1]['total']['silver_tally'] }}</span>
-                                        </div>
-                                        <div class="medal-cell">
-                                            <span class="medal-icon">🥉</span>
-                                            <span class="medal-count">{{ $medalTally[1]['total']['bronze_tally'] }}</span>
-                                        </div>
+                                <h3 class="team-name">{{ $medalTally[1]['team'] }}</h3>
+                                <div class="medal-counts">
+                                    <div class="medal gold">
+                                        <span>🥇 {{ $medalTally[1]['total']['gold_tally'] }}</span>
                                     </div>
-                                    <div class="total-score">
-                                        {{ number_format($medalTally[1]['total']['total_weight'], 2) }} pts
+                                    <div class="medal silver">
+                                        <span>🥈 {{ $medalTally[1]['total']['silver_tally'] }}</span>
                                     </div>
+                                    <div class="medal bronze">
+                                        <span>🥉 {{ $medalTally[1]['total']['bronze_tally'] }}</span>
+                                    </div>
+                                </div>
+                                <div class="total-score">
+                                    {{ number_format($medalTally[1]['total']['total_weight'], 2) }} pts
                                 </div>
                             </div>
                         </div>
                         @endif
 
-                        <!-- Third Place Card -->
+                        <!-- Second Runner Up Card -->
                         @if(isset($medalTally[2]))
-                        <div class="mobile-podium-card bronze">
+                        <div class="mobile-podium-card bronze" data-aos="fade-up" data-aos-delay="200">
                             <div class="card-content">
-                                <div class="position-marker">3rd</div>
+                                <div class="position-marker">2nd Runner Up</div>
                                 <div class="team-image-wrapper">
                                     <img src="{{ $medalTally[2]['team_image'] ? Vite::asset('storage/app/public/' . $medalTally[2]['team_image']) : Vite::asset('resources/images/05.webp') }}"
-                                         alt="{{ $medalTally[2]['team'] }}">
+                                         alt="{{ $medalTally[2]['team'] }}"
+                                         class="team-image">
                                 </div>
-                                <div class="team-info">
-                                    <h3>{{ $medalTally[2]['team'] }}</h3>
-                                    <div class="medal-row">
-                                        <div class="medal-cell">
-                                            <span class="medal-icon">🥇</span>
-                                            <span class="medal-count">{{ $medalTally[2]['total']['gold_tally'] }}</span>
-                                        </div>
-                                        <div class="medal-cell">
-                                            <span class="medal-icon">🥈</span>
-                                            <span class="medal-count">{{ $medalTally[2]['total']['silver_tally'] }}</span>
-                                        </div>
-                                        <div class="medal-cell">
-                                            <span class="medal-icon">🥉</span>
-                                            <span class="medal-count">{{ $medalTally[2]['total']['bronze_tally'] }}</span>
-                                        </div>
+                                <h3 class="team-name">{{ $medalTally[2]['team'] }}</h3>
+                                <div class="medal-counts">
+                                    <div class="medal gold">
+                                        <span>🥇 {{ $medalTally[2]['total']['gold_tally'] }}</span>
                                     </div>
-                                    <div class="total-score">
-                                        {{ number_format($medalTally[2]['total']['total_weight'], 2) }} pts
+                                    <div class="medal silver">
+                                        <span>🥈 {{ $medalTally[2]['total']['silver_tally'] }}</span>
                                     </div>
+                                    <div class="medal bronze">
+                                        <span>🥉 {{ $medalTally[2]['total']['bronze_tally'] }}</span>
+                                    </div>
+                                </div>
+                                <div class="total-score">
+                                    {{ number_format($medalTally[2]['total']['total_weight'], 2) }} pts
                                 </div>
                             </div>
                         </div>
@@ -331,7 +328,6 @@
                     </div>
                 </div>
             </div>
-            
 
             
 
@@ -1171,14 +1167,14 @@ document.addEventListener('DOMContentLoaded', function() {
                             colorCounts[key] = (colorCounts[key] || 0) + 1;
                         }
 
-                        // Find the most common color
+                        // Find the most common darker color
                         let maxCount = 0;
                         let dominantColor = { r: 0, g: 73, b: 30 }; // CMU green as fallback
 
                         for (const key in colorCounts) {
-                            if (colorCounts[key] > maxCount) {
+                            const [r, g, b] = key.split(',').map(Number);
+                            if (r + g + b < 200 && colorCounts[key] > maxCount) {
                                 maxCount = colorCounts[key];
-                                const [r, g, b] = key.split(',').map(Number);
                                 dominantColor = { r, g, b };
                             }
                         }
