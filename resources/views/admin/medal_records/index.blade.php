@@ -233,7 +233,7 @@
             @if($sportHasRecords)
                 <div class="sport-header mb-4 d-flex justify-content-between align-items-center" data-sport-id="{{ $sport->id }}">
                     <h4 class="fs-16 m-0">{{ $sport->name }}</h4>
-                    @if($user->role == 'admin')
+                    @if($user->role == 'admin' || $user->role == 'tournament_director')
                         @php
                             $hasUnapprovedRecords = \App\Models\MedalRecord::whereHas('eventCategory', function ($query) use ($sport) {
                                 $query->where('sport_id', $sport->id);
