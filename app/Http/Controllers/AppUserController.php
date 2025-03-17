@@ -14,17 +14,17 @@ class AppUserController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {   
+    {
 
         $users = User::where('is_deleted', false)->get();
         $user = auth()->user();
-        
+
         if ($user->role != 'admin' ) {
-            
-            return redirect()->route('teams.index')->with('error', 'You are not allowed u paking shiet!');
+
+            return redirect()->route('teams.index')->with('error', 'You are not allowed to access this!');
 
         }
-    
+
 
 
         return view('admin.users.index', compact('users'));
@@ -57,7 +57,7 @@ class AppUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
-            'password' => Hash::make($request->password1), 
+            'password' => Hash::make($request->password1),
         ]);
 
         // Mail::to($request->user())->send(new WelcomeMail($user));
@@ -101,7 +101,7 @@ class AppUserController extends Controller
         $user->email = $request->email;
         $user->role = $request->role;
 
-    
+
         // Save changes
         $user->save();
 

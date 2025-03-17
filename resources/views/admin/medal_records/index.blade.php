@@ -36,7 +36,7 @@
         cursor: wait;
         transform: none;
     }
-    
+
     /* Improved progress dialog */
     #exportProgress {
         position: fixed;
@@ -103,10 +103,44 @@
         <div class="d-flex align-items-center gap-3">
         @if(!$sportId)
             <div class="d-flex align-items-center gap-3">
-                <!-- Reset Filter Button (Initially Hidden) -->
                 <button id="resetFilterBtn" class="btn btn-light" onclick="resetFilter()" style="display: none;">
                     <i class="mdi mdi-refresh me-1"></i> Reset Filter
                 </button>
+                <!-- Add this right after the sport filter dropdown, before the close of the d-flex div -->
+                <div class="dropdown ms-2">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="postedFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="mdi mdi-check-circle-outline me-1"></i> Filter by Status
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="postedFilterDropdown">
+                        <li>
+                            <label class="dropdown-item">
+                                <input type="checkbox" class="posted-checkbox" value="all" onchange="filterByPosted()"> All Status
+                            </label>
+                        </li>
+                        <li>
+                            <label class="dropdown-item">
+                                <input type="checkbox" class="posted-checkbox" value="posted" onchange="filterByPosted()"> Posted
+                            </label>
+                        </li>
+                        <li>
+                            <label class="dropdown-item">
+                                <input type="checkbox" class="posted-checkbox" value="pending" onchange="filterByPosted()"> Pending
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Add search input -->
+                <div class="ms-2">
+                    <div class="input-group">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search events..." oninput="searchEvents()">
+                        <button class="btn btn-outline-secondary" type="button" onclick="clearSearch()">
+                            <i class="mdi mdi-close"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- Reset Filter Button (Initially Hidden) -->
+
                 <!-- Sport Filter Dropdown -->
                 <div class="dropdown">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sportFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -132,7 +166,7 @@
                             @if($sportHasRecords)
                                 <li>
                                     <label class="dropdown-item">
-                                        <input type="checkbox" class="sport-checkbox" value="{{ $sport->id }}" onchange="filterSport()"> 
+                                        <input type="checkbox" class="sport-checkbox" value="{{ $sport->id }}" onchange="filterSport()">
                                         {{ $sport->name }}
                                     </label>
                                 </li>
@@ -156,7 +190,7 @@
                     @if($medalRecords->where('event_category_id', $eventCategory->id)->count() > 0)
                         <li>
                             <label class="dropdown-item">
-                                <input type="checkbox" class="event-category-checkbox" value="{{ $eventCategory->id }}" onchange="filterCatRecords()"> 
+                                <input type="checkbox" class="event-category-checkbox" value="{{ $eventCategory->id }}" onchange="filterCatRecords()">
                                 {{ $eventCategory->name }}
                             </label>
                         </li>
@@ -167,7 +201,7 @@
 
 
         @endif
-      
+
         @if($user->role != 'user')
             <button type="button" class="btn btn-primary custom-primary-background" data-bs-toggle="modal" data-bs-target="#addRecordModal">
                 <i class="mdi mdi-plus me-1"></i> Add Record
@@ -387,7 +421,7 @@
                                                 title="Edit record">
                                                 <i class="mdi mdi-pencil"></i>
                                             </button>
-                                 
+
 
                                         @endif
 
@@ -402,7 +436,7 @@
                                                     title="Approve this record">
                                                 <i class="mdi mdi-check"></i>
                                             </button>
-                                   
+
                                         @endif
 
                                         @if($user->role == 'admin' || $user->role == 'tournament_director')
@@ -415,7 +449,7 @@
                                                 title="Delete this record">
                                                 <i class="mdi mdi-delete"></i>
                                             </button>
-                               
+
 
                                         @endif
                                     </div>
@@ -534,7 +568,7 @@
                             <select name="event_category_id" class="form-select" id="event" required onchange="handleEventChange(this)">
                                 <option value="">Select Event</option>
                                 @foreach ($events as $event)
-                                    
+
                                     <option value="{{ $event->id }}"
                                         data-double-bronze="{{ $event->is_double_bronze }}"
                                         data-medal-count="{{ $event->medal_count }}">
@@ -670,11 +704,11 @@
                 const optionValue = parseInt(selectElement.options[i].value);
                 if (optionValue && eventsWithRecords.includes(optionValue)) {
                     // Option 1: Remove the option completely
-                    // selectElement.remove(i);
+                    selectElement.remove(i);
 
                     // Option 2: Disable the option and indicate why
-                    selectElement.options[i].disabled = true;
-                    selectElement.options[i].text = selectElement.options[i].text + ' (Results Exist)';
+                    // selectElement.options[i].disabled = true;
+                    // selectElement.options[i].text = selectElement.options[i].text + ' (Results Exist)';
                 }
             }
         }
@@ -954,6 +988,15 @@ function setEventCategory(eventCategoryId, actionType) {
 
 
 // Initialize tooltips
+document.addEventListener('DOMContentLoaded', () => {
+    // Load filters from localStorage
+    loadFiltersFromStorage();
+
+    // Apply initial filters
+    applyAllFilters();
+});
+
+
 document.addEventListener("DOMContentLoaded", function() {
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -1099,7 +1142,7 @@ function updateEditTeamSelections() {
 </script>
 <script>
 
-    
+
 
 // Add this script to the script section at the bottom of the page
 // Run this function on page load to hide all sports if 'All' is selected by default
@@ -1110,7 +1153,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function filterSport() {
     const checkboxes = document.querySelectorAll('.sport-checkbox');
     const selectedSports = [];
-    
+
     checkboxes.forEach(checkbox => {
         if (checkbox.checked) {
             selectedSports.push(checkbox.value);
@@ -1134,7 +1177,7 @@ function filterSport() {
     sportSections.forEach(header => {
         // Find the nearest parent with sport-id attribute or data attribute
         const sportId = header.getAttribute('data-sport-id');
-        
+
         // Check if we should show this sport based on ID, not name
         const shouldShow = isAllSelected || selectedSports.includes(sportId);
 
@@ -1175,7 +1218,7 @@ function filterSport() {
         }
     }
 
-   
+
 
 }
 
@@ -1190,11 +1233,257 @@ document.addEventListener('DOMContentLoaded', () => {
     filterCatRecords() ;
 });
 
+// Variables to store filter states
+let currentSportFilters = [];
+let currentPostedStatus = [];
+let currentSearchTerm = '';
+
+// Run on page load to load stored filters
+
+// Save filters to local storage
+function saveFiltersToStorage() {
+    localStorage.setItem('sportFilters', JSON.stringify(currentSportFilters));
+    localStorage.setItem('postedStatus', JSON.stringify(currentPostedStatus));
+    localStorage.setItem('searchTerm', currentSearchTerm);
+}
+
+// Load filters from local storage
+function loadFiltersFromStorage() {
+    // Load sport filters
+    const storedSportFilters = localStorage.getItem('sportFilters');
+    if (storedSportFilters) {
+        currentSportFilters = JSON.parse(storedSportFilters);
+
+        // Set checkboxes based on stored values
+        document.querySelectorAll('.sport-checkbox').forEach(checkbox => {
+            checkbox.checked = currentSportFilters.includes(checkbox.value);
+        });
+
+        // Update sport filter dropdown text
+        updateSportFilterText();
+    }
+
+    // Load posted status filters
+    const storedPostedStatus = localStorage.getItem('postedStatus');
+    if (storedPostedStatus) {
+        currentPostedStatus = JSON.parse(storedPostedStatus);
+
+        // Set checkboxes based on stored values
+        document.querySelectorAll('.posted-checkbox').forEach(checkbox => {
+            checkbox.checked = currentPostedStatus.includes(checkbox.value);
+        });
+
+        // Update posted filter dropdown text
+        updatePostedFilterText();
+    }
+
+    // Load search term
+    const storedSearchTerm = localStorage.getItem('searchTerm');
+    if (storedSearchTerm) {
+        currentSearchTerm = storedSearchTerm;
+        document.getElementById('searchInput').value = currentSearchTerm;
+    }
+}
+
+// Apply all filters at once (sport, posted status, and search)
+function applyAllFilters() {
+    const cardView = document.getElementById('cardView');
+    const sportSections = cardView.querySelectorAll('.sport-header');
+    let anyVisibleSport = false;
+
+    // Process each sport section
+    sportSections.forEach(header => {
+        const sportId = header.getAttribute('data-sport-id');
+        const cardRow = header.nextElementSibling;
+
+        // Check if sport should be shown based on sport filter
+        const isAllSportsSelected = currentSportFilters.includes('all') || currentSportFilters.length === 0;
+        const shouldShowSport = isAllSportsSelected || currentSportFilters.includes(sportId);
+
+        // Initially mark the sport as hidden
+        header.style.display = 'none';
+        header.classList.add('d-none');
+        if (cardRow) cardRow.style.display = 'none';
+
+        // If sport is filtered out, skip further processing
+        if (!shouldShowSport) {
+            return;
+        }
+
+        // Process each card in this sport to see if any should be visible
+        let visibleCardsInSport = 0;
+
+        // Process each card in this sport
+        const cards = cardRow.querySelectorAll('.col');
+        cards.forEach(cardCol => {
+            const cardTitle = cardCol.querySelector('.card-title');
+            const statusBadge = cardCol.querySelector('.status-badge');
+
+            if (!cardTitle || !statusBadge) return;
+
+            const eventTitle = cardTitle.textContent.trim().toLowerCase();
+            const isPosted = statusBadge.classList.contains('status-posted');
+
+            // Check if card matches all filters
+            const matchesSearchTerm = currentSearchTerm === '' ||
+                                      eventTitle.includes(currentSearchTerm.toLowerCase());
+
+            const isAllStatusSelected = currentPostedStatus.includes('all') || currentPostedStatus.length === 0;
+            const matchesPostedStatus = isAllStatusSelected ||
+                                       (isPosted && currentPostedStatus.includes('posted')) ||
+                                       (!isPosted && currentPostedStatus.includes('pending'));
+
+            // Show/hide card based on all filters
+            if (matchesSearchTerm && matchesPostedStatus) {
+                cardCol.style.display = 'block';
+                visibleCardsInSport++;
+            } else {
+                cardCol.style.display = 'none';
+            }
+        });
+
+        // Show sport section only if it has visible cards
+        if (visibleCardsInSport > 0) {
+            header.style.display = 'flex';
+            header.classList.remove('d-none');
+            cardRow.style.display = 'flex';
+            anyVisibleSport = true;
+        }
+    });
+
+    // Handle "no data" message
+    handleNoDataMessage(anyVisibleSport);
+}
+
+// Filter by sport function
+function filterSport() {
+    const checkboxes = document.querySelectorAll('.sport-checkbox');
+    currentSportFilters = [];
+
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            currentSportFilters.push(checkbox.value);
+        }
+    });
+
+    // Update the dropdown button text
+    updateSportFilterText();
+
+    // Show/hide reset button
+    document.getElementById('resetFilterBtn').style.display =
+        (currentSportFilters.includes('all') || currentSportFilters.length === 0) ? 'none' : 'block';
+
+    // Save and apply all filters
+    saveFiltersToStorage();
+    applyAllFilters();
+}
+
+// Update sport filter dropdown text
+function updateSportFilterText() {
+    const dropdownButton = document.getElementById('sportFilterDropdown');
+    const isAllSelected = currentSportFilters.includes('all') || currentSportFilters.length === 0;
+    dropdownButton.innerHTML = `<i class="mdi mdi-filter-outline me-1"></i> ${isAllSelected ? 'All Sports' : currentSportFilters.length + ' Selected'}`;
+}
+
+// Filter by posted status
+function filterByPosted() {
+    const checkboxes = document.querySelectorAll('.posted-checkbox');
+    currentPostedStatus = [];
+
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            currentPostedStatus.push(checkbox.value);
+        }
+    });
+    const isAllSelected = currentPostedStatus.includes('all') || currentPostedStatus.length === 0;
+
+    document.getElementById('resetFilterBtn').style.display = isAllSelected ? 'none' : 'block';
+
+    // Update the dropdown button text
+    updatePostedFilterText();
+
+    // Save and apply all filters
+    saveFiltersToStorage();
+    applyAllFilters();
+}
+
+// Update posted filter dropdown text
+function updatePostedFilterText() {
+    const dropdownButton = document.getElementById('postedFilterDropdown');
+    const isAllSelected = currentPostedStatus.includes('all') || currentPostedStatus.length === 0;
+    dropdownButton.innerHTML = `<i class="mdi mdi-check-circle-outline me-1"></i> ${isAllSelected ? 'All Status' : currentPostedStatus.length + ' Selected'}`;
+}
+
+// Search events function
+function searchEvents() {
+    currentSearchTerm = document.getElementById('searchInput').value.trim();
+    const isInput = currentSearchTerm == '';
+
+    document.getElementById('resetFilterBtn').style.display = isInput ? 'none' : 'block';
+    saveFiltersToStorage();
+    applyAllFilters();
+}
+
+// Clear search function
+function clearSearch() {
+    document.getElementById('searchInput').value = '';
+    currentSearchTerm = '';
+    saveFiltersToStorage();
+    applyAllFilters();
+}
+
+// Reset all filters
+function resetFilter() {
+    // Reset sport filters
+    document.querySelectorAll('.sport-checkbox').forEach(checkbox => checkbox.checked = false);
+    currentSportFilters = [];
+    updateSportFilterText();
+
+    // Reset posted status filters
+    document.querySelectorAll('.posted-checkbox').forEach(checkbox => checkbox.checked = false);
+    currentPostedStatus = [];
+    updatePostedFilterText();
+
+    // Reset search
+    document.getElementById('searchInput').value = '';
+    currentSearchTerm = '';
+
+    // Save and apply all filters
+    saveFiltersToStorage();
+    applyAllFilters();
+
+    // Hide reset button
+    document.getElementById('resetFilterBtn').style.display = 'none';
+}
+
+// Handle no data message
+function handleNoDataMessage(anyVisibleSport) {
+    const cardView = document.getElementById('cardView');
+    const noDataCard = cardView.querySelector('.card.shadow-sm.no-data-filtered');
+
+    if (!anyVisibleSport) {
+        if (!noDataCard) {
+            const noDataElement = document.createElement('div');
+            noDataElement.className = 'card shadow-sm no-data-filtered';
+            noDataElement.innerHTML = `
+                <div class="card-body text-center p-5">
+                    <img src="/assets/images/no-data.svg" alt="No Data" class="img-fluid mb-3" style="max-width: 200px;">
+                    <h4>No Medal Records Found for this Filter</h4>
+                    <p class="text-muted">Try different filter settings or reset filters to view all records.</p>
+                </div>
+            `;
+            cardView.appendChild(noDataElement);
+        }
+    } else if (noDataCard) {
+        noDataCard.remove();
+    }
+}
+
 function filterCatRecords() {
     // Get all checked event category checkboxes
     const eventCategoryCheckboxes = document.querySelectorAll('.event-category-checkbox');
     const selectedEventCategories = [];
-    
+
     eventCategoryCheckboxes.forEach(checkbox => {
         if (checkbox.checked) {
             selectedEventCategories.push(checkbox.value);
@@ -1226,7 +1515,7 @@ function filterCatRecords() {
 
         // Check if we should show this card
         const shouldShowByCategory = isAllCategoriesSelected || selectedEventCategories.includes(eventCategoryId);
-        
+
         // Show/hide the card based on category filter
         const cardCol = card.closest('.col');
 
@@ -1288,16 +1577,16 @@ function filterCatRecords() {
 document.addEventListener('DOMContentLoaded', function() {
     const exportBtn = document.getElementById('exportPDF');
     if (!exportBtn) return; // Exit if button doesn't exist
-    
+
     const progressBar = document.getElementById('exportProgress');
     const progressFill = document.querySelector('.progress-fill');
     const progressText = document.getElementById('progressText');
     const exportOverlay = document.getElementById('exportOverlay');
-    
+
     // Only add this event listener once
     if (!exportBtn.hasAttribute('data-listener-attached')) {
         exportBtn.setAttribute('data-listener-attached', 'true');
-        
+
         exportBtn.addEventListener('click', function() {
             // Show overlay to block user interaction
             exportOverlay.style.display = 'block';
@@ -1305,17 +1594,17 @@ document.addEventListener('DOMContentLoaded', function() {
             exportBtn.disabled = true;
             progressFill.style.width = '70%';
             progressText.textContent = 'Preparing document...';
-            
+
             setTimeout(() => {
                 try {
                     // Check if jsPDF is available
                     if (!window.jspdf || !window.jspdf.jsPDF) {
                         throw new Error('PDF library not loaded. Please refresh the page and try again.');
                     }
-                    
+
                     const { jsPDF } = window.jspdf;
                     const doc = new jsPDF('l', 'mm', 'a4');
-                    
+
                     // Document styling constants
                     const colors = {
                         primary: [0, 73, 30],
@@ -1329,24 +1618,24 @@ document.addEventListener('DOMContentLoaded', function() {
                         lightText: [148, 163, 184],
                         darkText: [30, 41, 59]
                     };
-                    
+
                     // Create cover page
                     doc.setFillColor(...colors.primary);
                     doc.rect(0, 0, doc.internal.pageSize.width, doc.internal.pageSize.height, 'F');
-                    
+
                     // Add design element - white section at bottom
                     doc.setFillColor(...colors.white);
                     doc.roundedRect(0, doc.internal.pageSize.height - 110, doc.internal.pageSize.width, 110, 80, 0, 'F');
-                    
+
                     // Add header text
                     doc.setTextColor(...colors.white);
                     doc.setFont('helvetica', 'bold');
                     doc.setFontSize(38);
                     doc.text('Medal Tally Report', 30, 50);
-                    
+
                     doc.setFontSize(26);
                     doc.text('Event Results Summary', 30, 65);
-                    
+
                     // Add medal icons
                     doc.setFillColor(...colors.gold);
                     doc.circle(35, 100, 10, 'F');
@@ -1354,11 +1643,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     doc.circle(65, 100, 10, 'F');
                     doc.setFillColor(...colors.bronze);
                     doc.circle(95, 100, 10, 'F');
-                    
+
                     // Add date
                     doc.setTextColor(...colors.darkText);
                     doc.setFontSize(12);
-                    
+
                     // Format the current date
                     const now = new Date();
                     const day = String(now.getDate()).padStart(2, '0');
@@ -1370,45 +1659,45 @@ document.addEventListener('DOMContentLoaded', function() {
                     const formattedHours = String(hours12).padStart(2, '0');
                     const formattedMinutes = String(now.getMinutes()).padStart(2, '0');
                     const formattedDateTime = `${day}-${monthName}-${year} ${formattedHours}:${formattedMinutes} ${ampm}`;
-                    
+
                     doc.text(`Generated: ${formattedDateTime}`, 30, 140);
-                    
+
                     progressFill.style.width = '40%';
                     progressText.textContent = 'Extracting medal data...';
-                    
+
                     // Process medal data from the page - check for visible elements only
                     const medalData = [];
                     const sportHeaders = document.querySelectorAll('.sport-header:not([style*="display: none"])');
-                    
+
                     // Check if we have any visible sports
                     if (sportHeaders.length === 0) {
                         throw new Error('No visible data to export. Please adjust your filters to show some data first.');
                     }
-                    
+
                     sportHeaders.forEach(header => {
                         // Safely extract sport name
                         const sportNameEl = header.querySelector('h4');
                         if (!sportNameEl) return;
-                        
+
                         const sportName = sportNameEl.textContent.trim();
                         const cardContainer = header.nextElementSibling;
                         if (!cardContainer) return;
-                        
+
                         const medalCards = cardContainer.querySelectorAll('.medal-card');
-                        
+
                         medalCards.forEach(card => {
                             // Skip card if parent col is hidden
                             const cardCol = card.closest('.col');
                             if (cardCol && cardCol.style.display === 'none') return;
-                            
+
                             // Safely extract data with optional chaining
                             const cardTitle = card.querySelector('.card-title');
                             if (!cardTitle) return;
-                            
+
                             const eventName = cardTitle.textContent.trim();
                             const statusBadge = card.querySelector('.status-badge');
                             const status = statusBadge ? statusBadge.textContent.trim() : 'Unknown';
-                            
+
                             // Get gold winner - with safe access
                             let goldTeam = '-', goldCount = '0', goldWeight = '0';
                             const goldBadge = card.querySelector('.medal-badge.medal-gold');
@@ -1417,15 +1706,15 @@ document.addEventListener('DOMContentLoaded', function() {
                                 if (goldPosition) {
                                     const teamEl = goldPosition.querySelector('.team-name');
                                     if (teamEl) goldTeam = teamEl.textContent.trim();
-                                    
+
                                     const countEl = goldPosition.querySelector('.medal-stat-value:first-child');
                                     if (countEl) goldCount = countEl.textContent.trim();
-                                    
+
                                     const weightEl = goldPosition.querySelector('.medal-stat-value:last-child');
                                     if (weightEl) goldWeight = weightEl.textContent.trim();
                                 }
                             }
-                            
+
                             // Get silver winner - with safe access
                             let silverTeam = '-', silverCount = '0', silverWeight = '0';
                             const silverBadge = card.querySelector('.medal-badge.medal-silver');
@@ -1434,15 +1723,15 @@ document.addEventListener('DOMContentLoaded', function() {
                                 if (silverPosition) {
                                     const teamEl = silverPosition.querySelector('.team-name');
                                     if (teamEl) silverTeam = teamEl.textContent.trim();
-                                    
+
                                     const countEl = silverPosition.querySelector('.medal-stat-value:first-child');
                                     if (countEl) silverCount = countEl.textContent.trim();
-                                    
+
                                     const weightEl = silverPosition.querySelector('.medal-stat-value:last-child');
                                     if (weightEl) silverWeight = weightEl.textContent.trim();
                                 }
                             }
-                            
+
                             // Get bronze winner(s) - with safe access
                             let bronzeTeams = '-', bronzeCount = '0', bronzeWeight = '0';
                             const bronzeBadge = card.querySelector('.medal-badge.medal-bronze');
@@ -1454,15 +1743,15 @@ document.addEventListener('DOMContentLoaded', function() {
                                         const teams = Array.from(bronzeTeamElements).map(el => el.textContent.trim());
                                         bronzeTeams = teams.join(', ');
                                     }
-                                    
+
                                     const countEl = bronzePosition.querySelector('.medal-stat-value:first-child');
                                     if (countEl) bronzeCount = countEl.textContent.trim();
-                                    
+
                                     const weightEl = bronzePosition.querySelector('.medal-stat-value:last-child');
                                     if (weightEl) bronzeWeight = weightEl.textContent.trim();
                                 }
                             }
-                            
+
                             // Get participants count - with safe access
                             let participants = '0';
                             const participantsEl = card.querySelector('.card-footer .text-muted');
@@ -1471,7 +1760,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 const participantsMatch = participantsText.match(/(\d+)/);
                                 if (participantsMatch) participants = participantsMatch[1];
                             }
-                            
+
                             medalData.push({
                                 sportName,
                                 eventName,
@@ -1489,27 +1778,27 @@ document.addEventListener('DOMContentLoaded', function() {
                             });
                         });
                     });
-                    
+
                     // Ensure we have data to export
                     if (medalData.length === 0) {
                         throw new Error('No medal data found. Please make sure some data is visible.');
                     }
-                    
+
                     // Add medal data summary page
                     doc.addPage();
-                    
+
                     // Create header
                     doc.setFillColor(...colors.primary);
                     doc.rect(0, 0, doc.internal.pageSize.width, 20, 'F');
-                    
+
                     doc.setTextColor(...colors.white);
                     doc.setFontSize(12);
                     doc.setFont('helvetica', 'bold');
                     doc.text('Medal Tally Report', doc.internal.pageSize.width / 2, 13, { align: 'center' });
-                    
+
                     progressFill.style.width = '60%';
                     progressText.textContent = 'Creating medal summary table...';
-                    
+
                     // Group by sport
                     const sportGroups = {};
                     medalData.forEach(item => {
@@ -1518,37 +1807,37 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                         sportGroups[item.sportName].push(item);
                     });
-                    
+
                     let yPos = 30;
                     let currentPage = 2;
-                    
+
                     // Create tables for each sport
                     for (const sportName in sportGroups) {
                         // Check if we need a new page
                         if (yPos > doc.internal.pageSize.height - 60) {
                             doc.addPage();
                             currentPage++;
-                            
+
                             // Add header to new page
                             doc.setFillColor(...colors.primary);
                             doc.rect(0, 0, doc.internal.pageSize.width, 20, 'F');
-                            
+
                             doc.setTextColor(...colors.white);
                             doc.setFontSize(12);
                             doc.setFont('helvetica', 'bold');
                             doc.text('Medal Tally Report', doc.internal.pageSize.width / 2, 13, { align: 'center' });
-                            
+
                             yPos = 30;
                         }
-                        
+
                         // Add sport title
                         doc.setTextColor(...colors.darkText);
                         doc.setFontSize(14);
                         doc.setFont('helvetica', 'bold');
                         doc.text(sportName, 20, yPos);
-                        
+
                         yPos += 10;
-                        
+
                         // Create table data for this sport
                         const tableData = sportGroups[sportName].map(item => [
                             item.eventName,
@@ -1558,7 +1847,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             item.bronzeTeams,
                             item.participants
                         ]);
-                        
+
                         // Add table for this sport
                         doc.autoTable({
                             startY: yPos,
@@ -1605,52 +1894,52 @@ document.addEventListener('DOMContentLoaded', function() {
                             }
                         });
                     }
-                    
+
                     progressFill.style.width = '80%';
                     progressText.textContent = 'Finalizing document...';
-                    
+
                     // Add footers to all pages
                     const pageCount = doc.internal.getNumberOfPages();
                     for (let i = 1; i <= pageCount; i++) {
                         doc.setPage(i);
-                        
+
                         // Skip footer on cover page
                         if (i === 1) continue;
-                        
+
                         // Add footer line
                         doc.setDrawColor(...colors.light);
                         doc.setLineWidth(0.5);
                         doc.line(10, doc.internal.pageSize.height - 15, doc.internal.pageSize.width - 10, doc.internal.pageSize.height - 15);
-                        
+
                         // Add page number
                         doc.setFillColor(...colors.light);
                         doc.roundedRect(doc.internal.pageSize.width / 2 - 15, doc.internal.pageSize.height - 12, 30, 8, 4, 4, 'F');
-                        
+
                         doc.setTextColor(...colors.darkText);
                         doc.setFontSize(8);
                         doc.text(
-                            `Page ${i} of ${pageCount}`, 
-                            doc.internal.pageSize.width / 2, 
+                            `Page ${i} of ${pageCount}`,
+                            doc.internal.pageSize.width / 2,
                             doc.internal.pageSize.height - 7,
                             { align: 'center' }
                         );
-                        
+
                         // Add footer text
                         doc.setTextColor(...colors.secondary);
                         doc.text(
-                            'Medal Tally System', 
-                            20, 
+                            'Medal Tally System',
+                            20,
                             doc.internal.pageSize.height - 7
                         );
                     }
                     progressFill.style.width = '100%';
                     progressText.textContent = 'Download starting...';
-                    
+
                     // Save the PDF with formatted filename after a 2-second delay
-                   
+
                         const filename = `Medal_Tally_Report_${day}-${monthName}-${year}_${formattedHours}-${formattedMinutes}-${ampm}.pdf`;
                         doc.save(filename);
-               
+
                 } catch (error) {
                     console.error('Error generating PDF:', error);
                     alert(error.message || 'Error generating PDF. Please try again.');
