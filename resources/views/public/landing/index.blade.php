@@ -606,7 +606,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                                 <div class="d-flex flex-column gap-0">
                                     @foreach($team['colleges'] as $college)
-                                        <p class="college-name">College of {{ $college }}</p>
+                                        <p class="college-name">{{ $college }}</p>
                                     @endforeach
                                 </div>
                             </div>

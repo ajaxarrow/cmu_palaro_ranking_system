@@ -1,5 +1,5 @@
     {{-- resources/views/public/standings/show.blade.php --}}
-    @extends('public.layouts.app')
+@extends('public.layouts.app')
 
 @section('title', isset($team->name) ? $team->name . ' - Medal Details' : 'Team Details')
 
@@ -43,6 +43,7 @@
         
         <!-- Team Info -->
         <div class="text-center mb-[50px]" data-aos="fade-down">
+
             @if($team->image)
                 <div class="team-image-wrapper">
                     <img
@@ -55,9 +56,13 @@
                 </div>
             @endif
             <h1 class="team-title">{{ $team->name }}</h1>
-            @if($team->code)
-                <p class="team-subtitle">{{ $team->code }}</p>
-            @endif
+            <div class="d-flex flex-column lh-1 mt-5">
+            @foreach($team['colleges'] as $college)
+                <p class="college-name">{{ $college->name }} ({{ $college->acronym}})</p>
+            @endforeach
+            </div>
+           
+           
         </div>
         
         <!-- Medal Stats Grid -->

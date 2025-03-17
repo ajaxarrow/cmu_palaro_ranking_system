@@ -1478,6 +1478,7 @@ section {
 
 .podium-stand {
     position: relative;
+    margin : auto;
     width: 160px;
     border-radius: 12px 12px 0 0;
     transform-style: preserve-3d;
@@ -1736,6 +1737,7 @@ section {
   
   .podium-container {
     padding: 20px;
+    height: max-content;
     flex-grow: 1;
     background: #f9f9f9;
     display: flex;
@@ -1978,7 +1980,7 @@ section {
   
   @media (min-width: 768px) and (max-width: 1023px) {
     .event-card {
-      height: 350px;
+      height: max-content;
     }
     
     .podium-container {
@@ -1988,7 +1990,7 @@ section {
   
   @media (min-width: 1024px) {
     .event-card {
-      height: 420px;
+      height: max-content;
     }
     
     .podium-container {

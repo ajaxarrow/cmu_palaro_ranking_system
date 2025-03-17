@@ -191,6 +191,19 @@
     position: relative;
 }
 
+.college-name {
+    font-size: clamp(0.8rem, 4vw, 1.2rem);
+    font-weight: 100;
+
+    text-align: center;
+
+    color: #fff;
+    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3),
+                 0 0 30px rgba(var(--team-color-rgb), 0.5);
+
+    animation: fade-in-up 1s ease-out forwards;
+}
+
 
 @keyframes fade-in-up {
     from {
