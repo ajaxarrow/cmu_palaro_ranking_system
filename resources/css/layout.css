@@ -5,6 +5,39 @@
     --highlight-color: #ffc601;
 }
 
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.custom-toggle {
+    padding: 12px 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #e9ecef;
+}
+
+.custom-toggle .form-check-input {
+    width: 3rem;
+    height: 1.5rem;
+    margin-top: 0;
+    vertical-align: middle;
+}
+
+.custom-toggle .form-check-label {
+    font-weight: 600;
+    padding-left: 10px;
+    vertical-align: middle;
+}
+
+.custom-toggle .text-hint {
+    margin-top: 5px;
+    margin-left: 3.5rem;
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
 .btn-outline-secondary {
     border-color: var(--primary-color);
     color: var(--primary-color);

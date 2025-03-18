@@ -106,7 +106,6 @@ class MedalRecordController extends Controller
             'champion_team_id' => 'required|exists:teams,id',
             'first_runner_up_team_id' => 'required|exists:teams,id',
             'second_runner_up_team_id' => 'required|exists:teams,id',
-
             'number_of_participant' => 'required|integer|min:1'
         ]);
 
@@ -129,7 +128,7 @@ class MedalRecordController extends Controller
             $teams[] = $request->second_runner_up_team_id_2;
         }
 
-        if (count(array_unique($teams)) !== count($teams)) {
+        if (count(array_unique($teams)) !== count($teams) && !$request->allowTeamReuse) {
             return redirect()->back()->withErrors(['error' => 'Each medal position must have a different team.'])->withInput();
         }
 
@@ -237,6 +236,7 @@ class MedalRecordController extends Controller
             'medal_count' => 'required|integer|min:1',
             'number_of_participant' => 'required|integer|min:1',
             'is_double_bronze' => 'required|in:0,1',
+            'allow_team_reuse' => 'nullable|boolean',
             'is_posted' => 'nullable'
         ]);
 
@@ -249,39 +249,70 @@ class MedalRecordController extends Controller
             $existingRecords = MedalRecord::where('event_category_id', $eventCategoryId)->get();
             $isPosted = isset($validatedData['is_posted']) && $validatedData['is_posted'] == 1;
 
-            // Array to track updated team IDs
-            $updatedTeamIds = [];
+            // Delete all existing records for this event category
+            // We'll create new ones for all positions rather than trying to update existing ones
+            MedalRecord::where('event_category_id', $eventCategoryId)->delete();
 
-            // Process gold medal
-            $updatedTeamIds[] = $this->updateMedalRecord(
-                $existingRecords, $eventCategoryId, $validatedData['champion_team_id'],
-                $validatedData['medal_count'], 0, 0, $validatedData['number_of_participant'], $isPosted
-            )->team_id;
+            // Create gold medal record
+            $this->createMedalRecord(
+                $eventCategoryId,
+                $validatedData['champion_team_id'],
+                $validatedData['medal_count'],
+                0,
+                0,
+                $validatedData['number_of_participant'],
+                $isPosted
+            );
 
-            // Process silver medal
-            $updatedTeamIds[] = $this->updateMedalRecord(
-                $existingRecords, $eventCategoryId, $validatedData['first_runner_up_team_id'],
-                0, $validatedData['medal_count'], 0, $validatedData['number_of_participant'], $isPosted
-            )->team_id;
+            // Create silver medal record
+            $this->createMedalRecord(
+                $eventCategoryId,
+                $validatedData['first_runner_up_team_id'],
+                0,
+                $validatedData['medal_count'],
+                0,
+                $validatedData['number_of_participant'],
+                $isPosted
+            );
 
-            // Process bronze medal
-            $updatedTeamIds[] = $this->updateMedalRecord(
-                $existingRecords, $eventCategoryId, $validatedData['second_runner_up_team_id'],
-                0, 0, $validatedData['medal_count'], $validatedData['number_of_participant'], $isPosted
-            )->team_id;
+            // Process bronze medal(s)
+            if ($validatedData['is_double_bronze'] == '1') {
+                // Create two bronze medal records with half the medal count each
+                $bronzeTally = $validatedData['medal_count'] / 2;
 
-            // Process second bronze medal if applicable
-            if ($validatedData['is_double_bronze'] == '1' && !empty($validatedData['second_runner_up_team_id_2'])) {
-                $updatedTeamIds[] = $this->updateMedalRecord(
-                    $existingRecords, $eventCategoryId, $validatedData['second_runner_up_team_id_2'],
-                    0, 0, $validatedData['medal_count'], $validatedData['number_of_participant'], $isPosted
-                )->team_id;
+                $this->createMedalRecord(
+                    $eventCategoryId,
+                    $validatedData['second_runner_up_team_id'],
+                    0,
+                    0,
+                    $bronzeTally,
+                    $validatedData['number_of_participant'],
+                    $isPosted
+                );
+
+                if (!empty($validatedData['second_runner_up_team_id_2'])) {
+                    $this->createMedalRecord(
+                        $eventCategoryId,
+                        $validatedData['second_runner_up_team_id_2'],
+                        0,
+                        0,
+                        $bronzeTally,
+                        $validatedData['number_of_participant'],
+                        $isPosted
+                    );
+                }
+            } else {
+                // Create a single bronze medal record
+                $this->createMedalRecord(
+                    $eventCategoryId,
+                    $validatedData['second_runner_up_team_id'],
+                    0,
+                    0,
+                    $validatedData['medal_count'],
+                    $validatedData['number_of_participant'],
+                    $isPosted
+                );
             }
-
-            // Delete records that were not updated
-            MedalRecord::where('event_category_id', $eventCategoryId)
-                ->whereNotIn('team_id', $updatedTeamIds)
-                ->delete();
 
             DB::commit();
             return redirect()->route('medal_records.index')->with('success', 'Medal records updated successfully.');
@@ -289,6 +320,27 @@ class MedalRecordController extends Controller
             DB::rollBack();
             return redirect()->route('medal_records.index')->with('error', 'Error updating medal records: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Helper method to create medal records
+     */
+    private function createMedalRecord($eventCategoryId, $teamId, $goldTally, $silverTally, $bronzeTally, $participants, $isPosted)
+    {
+        $record = new MedalRecord();
+        $record->event_category_id = $eventCategoryId;
+        $record->team_id = $teamId;
+        $record->year = date('Y'); // Current year
+        $record->gold_tally = $goldTally;
+        $record->silver_tally = $silverTally;
+        $record->bronze_tally = $bronzeTally;
+        $record->number_of_participant = $participants;
+        $record->is_posted = $isPosted;
+        $record->entry_by = auth()->id();
+        $record->posted_by = auth()->id();
+        $record->save();
+
+        return $record;
     }
 
 
