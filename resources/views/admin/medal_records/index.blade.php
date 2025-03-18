@@ -408,35 +408,37 @@
                                     <div class="text-muted">
                                         <i class="mdi mdi-account-group me-1"></i> {{ $participants }} Participating Teams
                                     </div>
-                                    @if(!$isPosted)
+
                                     <div class="d-flex align-items-center gap-1">
-                                        @if($user->id == $record->posted_by && !$isPosted)
-                                            <button type="button"
-                                                class="btn btn-sm btn-outline-primary btn-floating"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#editRecordModal"
-                                                onclick="prepareEditForm('{{ $eventCategory->id }}')"
-                                                data-bs-toggle="tooltip"
-                                                data-bs-placement="top"
-                                                title="Edit record">
-                                                <i class="mdi mdi-pencil"></i>
-                                            </button>
-
-
-                                        @endif
-
-                                        @if($user->role == 'admin' || $user->role == 'tournament_director')
-                                            <!-- Approve Button -->
-                                            <button type="button"
-                                                    class="btn btn-sm btn-outline-success btn-floating"
+                                        @if(!$isPosted)
+                                            @if($user->id == $record->posted_by && !$isPosted)
+                                                <button type="button"
+                                                    class="btn btn-sm btn-outline-primary btn-floating"
                                                     data-bs-toggle="modal"
-                                                    data-bs-target="#approveRecordModal"
-                                                    {{ $isPosted ? 'disabled' : '' }}
-                                                    onclick="setEventCategory('{{ $eventCategory->id }}', 'approve')"
-                                                    title="Approve this record">
-                                                <i class="mdi mdi-check"></i>
-                                            </button>
+                                                    data-bs-target="#editRecordModal"
+                                                    onclick="prepareEditForm('{{ $eventCategory->id }}')"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="top"
+                                                    title="Edit record">
+                                                    <i class="mdi mdi-pencil"></i>
+                                                </button>
 
+
+                                            @endif
+
+                                            @if($user->role == 'admin' || $user->role == 'tournament_director')
+                                                <!-- Approve Button -->
+                                                <button type="button"
+                                                        class="btn btn-sm btn-outline-success btn-floating"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#approveRecordModal"
+                                                        {{ $isPosted ? 'disabled' : '' }}
+                                                        onclick="setEventCategory('{{ $eventCategory->id }}', 'approve')"
+                                                        title="Approve this record">
+                                                    <i class="mdi mdi-check"></i>
+                                                </button>
+
+                                            @endif
                                         @endif
 
                                         @if($user->role == 'admin' || $user->role == 'tournament_director')
@@ -450,10 +452,9 @@
                                                 <i class="mdi mdi-delete"></i>
                                             </button>
 
-
                                         @endif
                                     </div>
-                                    @endif
+
 
                                 </div>
                             </div>
@@ -576,6 +577,15 @@
                                     </option>
                                 @endforeach
                             </select>
+                        </div>
+
+                        <!-- Added Team Reuse Toggle -->
+                        <div class="custom-toggle">
+                            <div class="form-check form-switch">
+                                <input name="allowTeamReuse" class="form-check-input" type="checkbox" id="allowTeamReuse" onchange="updateTeamSelections()">
+                                <label class="form-check-label" for="allowTeamReuse">Allow team to win multiple medals</label>
+                                <p style="padding-left: 22px;"><small>Use this for sports that allow the same team to place in multiple positions</small></p>
+                            </div>
                         </div>
 
                         <div class="medal-card">
@@ -749,30 +759,42 @@
             resetTeamSelections();
         }
 
-        function updateTeamSelections() {
+        function updateTeamSelections(isEditModal = false) {
+            const prefix = isEditModal ? 'edit_' : '';
             const selects = [
-                document.getElementById('championTeam'),
-                document.getElementById('firstRunnerUp'),
-                document.getElementById('secondRunnerUp'),
-                document.getElementById('secondRunnerUp2')
+                document.getElementById(prefix + 'championTeam'),
+                document.getElementById(prefix + 'firstRunnerUp'),
+                document.getElementById(prefix + 'secondRunnerUp'),
+                document.getElementById(prefix + 'secondRunnerUp2')
             ];
 
-            const selectedValues = selects.map(select => select.value).filter(value => value !== '');
+            const allowTeamReuse = document.getElementById(prefix + 'allowTeamReuse').checked;
+            console.log(allowTeamReuse)
+            document.getElementById(prefix + 'allowTeamReuse').value = allowTeamReuse ? '1' : '0';
 
-            // For each select box
+            if (allowTeamReuse) {
+                // Enable all options when reuse is allowed
+                selects.forEach(select => {
+                    Array.from(select.options).forEach(option => option.disabled = false);
+                });
+                return;
+            }
+
+            const selectedValues = new Set(
+                selects.map(select => select.value).filter(value => value !== '')
+            );
+
             selects.forEach(currentSelect => {
-                // For each option in current select box
                 Array.from(currentSelect.options).forEach(option => {
                     if (option.value === '') return; // Skip empty option
 
-                    // If this option is selected in a different dropdown, disable it
-                    const isSelectedElsewhere = selectedValues.includes(option.value) &&
-                                               option.value !== currentSelect.value;
-
+                    // Disable if the option is selected in another dropdown
+                    const isSelectedElsewhere = selectedValues.has(option.value) && option.value !== currentSelect.value;
                     option.disabled = isSelectedElsewhere;
                 });
             });
         }
+
 
         function resetTeamSelections() {
             const selects = [
@@ -836,6 +858,16 @@
                         </select>
                         <small class="text-muted">Event cannot be changed once records exist</small>
                     </div>
+
+                    <!-- Added Team Reuse Toggle -->
+                    <div class="custom-toggle">
+                        <div class="form-check form-switch">
+                            <input name="allowTeamReuse" class="form-check-input" type="checkbox" id="edit_allowTeamReuse" onchange="updateTeamSelections(true)">
+                            <label class="form-check-label" for="allowTeamReuse">Allow team to win multiple medals</label>
+                            <p style="padding-left: 22px;"><small>Use this for sports that allow the same team to place in multiple positions</small></p>
+                        </div>
+                    </div>
+
 
                     <div class="medal-card">
                         <h6 class="section-title">Winners & Runners Up</h6>
@@ -1068,7 +1100,30 @@ async function prepareEditForm(eventCategoryId) {
 
     // Fetch existing medal records for this event
     await fetchMedalRecords(eventCategoryId);
-    updateEditTeamSelections();
+
+    // Check if there are duplicate team IDs
+    const selects = [
+        document.getElementById('edit_championTeam'),
+        document.getElementById('edit_firstRunnerUp'),
+        document.getElementById('edit_secondRunnerUp'),
+        document.getElementById('edit_secondRunnerUp2')
+    ];
+
+    const selectedTeams = selects.map(select => select.value).filter(value => value !== '');
+    const hasDuplicates = new Set(selectedTeams).size < selectedTeams.length;
+
+    // If duplicates are found, check the "allow team reuse" checkbox
+    const allowTeamReuseCheckbox = document.getElementById('edit_allowTeamReuse');
+    if (hasDuplicates) {
+        allowTeamReuseCheckbox.checked = true;
+        // Set the value to match the checked state
+        allowTeamReuseCheckbox.value = '1';
+    } else {
+        allowTeamReuseCheckbox.checked = false;
+        allowTeamReuseCheckbox.value = '0';
+    }
+
+    updateEditTeamSelections(true);
 }
 
 
