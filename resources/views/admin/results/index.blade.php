@@ -267,6 +267,506 @@
 
 <!-- Include ApexCharts from CDN -->
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<script>
+
+
+// Excel Export functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Create the Excel export button
+    const pdfExportBtn = document.getElementById('exportPDF');
+    
+    // Create new Excel export button
+    const excelExportBtn = document.createElement('button');
+    excelExportBtn.id = 'exportExcel';
+    excelExportBtn.className = 'export-btn excel-export-btn';
+    excelExportBtn.innerHTML = '<i class="mdi mdi-file-excel-outline"></i> Export to Excel';
+    excelExportBtn.style.bottom = '90px'; // Position above the PDF button
+    excelExportBtn.style.backgroundColor = '#107C41'; // Excel green
+    
+    // Insert the Excel button before the PDF button
+    pdfExportBtn.parentNode.insertBefore(excelExportBtn, pdfExportBtn);
+    
+    // Add click event listener
+    excelExportBtn.addEventListener('click', function() {
+        // Show progress and overlay
+        const exportOverlay = document.getElementById('exportOverlay');
+        const progressBar = document.getElementById('exportProgress');
+        const progressFill = document.querySelector('.progress-fill');
+        const progressText = document.getElementById('progressText');
+        
+        exportOverlay.style.display = 'block';
+        progressBar.style.display = 'block';
+        excelExportBtn.disabled = true;
+        progressFill.style.width = '10%';
+        progressText.textContent = 'Preparing Excel document...';
+        
+        // SURPRISE EASTER EGG: Random funny messages during export (appears 40% of the time)
+        if (Math.random() < 0.4) {
+            // Create floating medal animation
+            const medal = document.createElement('div');
+            medal.className = 'floating-medal';
+            
+            // Randomly select medal type
+            const medalTypes = ['🥇', '🥈', '🥉'];
+            const randomMedal = medalTypes[Math.floor(Math.random() * medalTypes.length)];
+            medal.textContent = randomMedal;
+            
+            // Random position
+            medal.style.left = Math.floor(Math.random() * 70) + 15 + '%';
+            
+            document.body.appendChild(medal);
+            
+            // Remove after animation completes
+            setTimeout(() => {
+                medal.remove();
+            }, 4000);
+            
+            // Array of funny loading messages
+            const funnyMessages = [
+                "Counting medals one by one...",
+                "Polishing gold medals for export...",
+                "Organizing silver medals alphabetically...",
+                "Convincing bronze medals they're still valuable...",
+                "Calculating if Excel can handle this much winning...",
+                "Teaching Excel about sports...",
+                "Awarding Excel a medal for patience...",
+                "Converting medal weights to digital format...",
+                "Applying anti-gravity to floating point numbers...",
+                "Training spreadsheet cells to hold medals properly..."
+            ];
+            
+            // Start funny message sequence
+            let messageIndex = 0;
+            const messageInterval = setInterval(() => {
+                progressText.textContent = funnyMessages[messageIndex];
+                messageIndex = (messageIndex + 1) % funnyMessages.length;
+            }, 1500);
+            
+            // Clear interval after reasonable time
+            setTimeout(() => {
+                clearInterval(messageInterval);
+            }, 7500);
+        }
+        
+        setTimeout(function() {
+            try {
+                // Update progress
+                progressFill.style.width = '30%';
+                progressText.textContent = 'Extracting medal data...';
+                
+                // Get the medal tally data
+                const table = document.getElementById('state-saving-datatable');
+                const rows = Array.from(table.querySelectorAll('tbody tr'));
+                
+                // Create workbook and worksheet
+                const wb = XLSX.utils.book_new();
+                
+                // Extract data for medal standings worksheet
+                const medalStandingsData = [
+                    ['Rank', 'Team', 'Gold', 'Gold Weight', 'Silver', 'Silver Weight', 
+                     'Bronze', 'Bronze Weight', 'Total Medals', 'Total Weight']
+                ];
+                
+                rows.forEach(row => {
+                    const cells = Array.from(row.cells);
+                    
+                    // Extract text and numeric data from cells
+                    const teamName = cells[1].querySelector('span') ? 
+                        cells[1].querySelector('span').textContent.trim() : 
+                        cells[1].textContent.trim();
+                    
+                    // Extract medal counts (remove any non-numeric characters)
+                    const goldCount = cells[2].querySelector('.badge') ? 
+                        parseInt(cells[2].querySelector('.badge').textContent.trim()) : 0;
+                    const goldWeight = cells[2].querySelector('.text-muted') ? 
+                        parseFloat(cells[2].querySelector('.text-muted').textContent.trim()) : 0;
+                    
+                    const silverCount = cells[3].querySelector('.badge') ? 
+                        parseInt(cells[3].querySelector('.badge').textContent.trim()) : 0;
+                    const silverWeight = cells[3].querySelector('.text-muted') ? 
+                        parseFloat(cells[3].querySelector('.text-muted').textContent.trim()) : 0;
+                    
+                    const bronzeCount = cells[4].querySelector('.badge') ? 
+                        parseInt(cells[4].querySelector('.badge').textContent.trim()) : 0;
+                    const bronzeWeight = cells[4].querySelector('.text-muted') ? 
+                        parseFloat(cells[4].querySelector('.text-muted').textContent.trim()) : 0;
+                    
+                    const totalMedals = parseInt(cells[5].textContent.trim());
+                    const totalWeight = parseFloat(cells[6].textContent.trim());
+                    
+                    medalStandingsData.push([
+                        parseInt(cells[0].textContent.trim()), // Rank
+                        teamName,
+                        goldCount,
+                        goldWeight,
+                        silverCount, 
+                        silverWeight,
+                        bronzeCount,
+                        bronzeWeight,
+                        totalMedals,
+                        totalWeight
+                    ]);
+                });
+                
+                // Update progress
+                progressFill.style.width = '50%';
+                progressText.textContent = 'Creating medal standings worksheet...';
+                
+                // Create medal standings worksheet
+                const medalStandingsWS = XLSX.utils.aoa_to_sheet(medalStandingsData);
+                
+                // Set column widths
+                const medalStandingsCols = [
+                    { wch: 7 },   // Rank
+                    { wch: 30 },  // Team
+                    { wch: 8 },   // Gold
+                    { wch: 12 },  // Gold Weight
+                    { wch: 8 },   // Silver
+                    { wch: 12 },  // Silver Weight
+                    { wch: 8 },   // Bronze
+                    { wch: 12 },  // Bronze Weight
+                    { wch: 14 },  // Total Medals
+                    { wch: 14 }   // Total Weight
+                ];
+                medalStandingsWS['!cols'] = medalStandingsCols;
+                
+                // Add medal standings worksheet to workbook
+                XLSX.utils.book_append_sheet(wb, medalStandingsWS, "Medal Standings");
+                
+                // Update progress
+                progressFill.style.width = '70%';
+                progressText.textContent = 'Creating medal distribution worksheet...';
+                
+                // Create Medal Distribution worksheet
+                const medalDistributionData = [
+                    ['Team', 'Gold', 'Silver', 'Bronze', 'Total Medals', 'Total Weight']
+                ];
+                
+                // Use seriesData which contains all team medal data
+                seriesData.forEach(team => {
+                    medalDistributionData.push([
+                        team.team,
+                        team.goldCount,
+                        team.silverCount,
+                        team.bronzeCount,
+                        team.totalMedals,
+                        team.total
+                    ]);
+                });
+                
+                // Create distribution worksheet
+                const medalDistributionWS = XLSX.utils.aoa_to_sheet(medalDistributionData);
+                
+                // Set column widths
+                const medalDistributionCols = [
+                    { wch: 30 },  // Team
+                    { wch: 8 },   // Gold
+                    { wch: 8 },   // Silver
+                    { wch: 8 },   // Bronze
+                    { wch: 14 },  // Total Medals
+                    { wch: 14 }   // Total Weight
+                ];
+                medalDistributionWS['!cols'] = medalDistributionCols;
+                
+                // Add distribution worksheet to workbook
+                XLSX.utils.book_append_sheet(wb, medalDistributionWS, "Medal Distribution");
+                
+                // Update progress
+                progressFill.style.width = '85%';
+                progressText.textContent = 'Creating summary dashboard...';
+                
+                // Create Summary Dashboard worksheet with medal percentages
+                const summaryData = [
+                    ['Medal Results Dashboard - Summary'],
+                    ['Generated on: ' + new Date().toLocaleString()],
+                    [],
+                    ['Top 3 Teams by Total Medals'],
+                    ['Rank', 'Team', 'Gold', 'Silver', 'Bronze', 'Total']
+                ];
+                
+                // Add top 3 teams
+                const top3Teams = [...seriesData]
+                    .sort((a, b) => b.totalMedals - a.totalMedals)
+                    .slice(0, 3);
+                
+                top3Teams.forEach((team, index) => {
+                    summaryData.push([
+                        index + 1,
+                        team.team,
+                        team.goldCount,
+                        team.silverCount,
+                        team.bronzeCount,
+                        team.totalMedals
+                    ]);
+                });
+                
+                // Add distribution summary
+                summaryData.push(
+                    [],
+                    ['Medal Distribution Summary'],
+                    ['Medal Type', 'Count', 'Weight', 'Percentage']
+                );
+                
+                // Calculate totals for all medals
+                const totalGoldCount = seriesData.reduce((sum, team) => sum + team.goldCount, 0);
+                const totalSilverCount = seriesData.reduce((sum, team) => sum + team.silverCount, 0);
+                const totalBronzeCount = seriesData.reduce((sum, team) => sum + team.bronzeCount, 0);
+                const totalMedalCount = totalGoldCount + totalSilverCount + totalBronzeCount;
+                
+                const totalGoldWeight = seriesData.reduce((sum, team) => sum + team.gold, 0);
+                const totalSilverWeight = seriesData.reduce((sum, team) => sum + team.silver, 0);
+                const totalBronzeWeight = seriesData.reduce((sum, team) => sum + team.bronze, 0);
+                const totalMedalWeight = totalGoldWeight + totalSilverWeight + totalBronzeWeight;
+                
+                // Add medal type distributions
+                summaryData.push(
+                    ['Gold', totalGoldCount, totalGoldWeight.toFixed(2), 
+                     ((totalGoldCount / totalMedalCount) * 100).toFixed(2) + '%'],
+                    ['Silver', totalSilverCount, totalSilverWeight.toFixed(2), 
+                     ((totalSilverCount / totalMedalCount) * 100).toFixed(2) + '%'],
+                    ['Bronze', totalBronzeCount, totalBronzeWeight.toFixed(2), 
+                     ((totalBronzeCount / totalMedalCount) * 100).toFixed(2) + '%'],
+                    ['Total', totalMedalCount, totalMedalWeight.toFixed(2), '100%']
+                );
+                
+                // Create summary worksheet
+                const summaryWS = XLSX.utils.aoa_to_sheet(summaryData);
+                
+                // Style the summary sheet with merged cells for headers
+                summaryWS['!merges'] = [
+                    { s: { r: 0, c: 0 }, e: { r: 0, c: 5 } }, // Title
+                    { s: { r: 1, c: 0 }, e: { r: 1, c: 5 } }, // Date
+                    { s: { r: 3, c: 0 }, e: { r: 3, c: 5 } }, // Top 3 Teams header
+                    { s: { r: 11, c: 0 }, e: { r: 11, c: 3 } } // Medal Distribution header
+                ];
+                
+                // Set column widths
+                const summaryCols = [
+                    { wch: 15 }, // First column
+                    { wch: 30 }, // Second column
+                    { wch: 15 }, // Third column
+                    { wch: 15 }, // Fourth column
+                    { wch: 15 }, // Fifth column
+                    { wch: 15 }  // Sixth column
+                ];
+                summaryWS['!cols'] = summaryCols;
+                
+                // Add summary worksheet to workbook
+                XLSX.utils.book_append_sheet(wb, summaryWS, "Dashboard Summary");
+                
+                // Update progress
+                progressFill.style.width = '85%';
+                progressText.textContent = 'Creating bonus visualization sheet...';
+                
+                // SURPRISE FEATURE: Create a special visualization-ready worksheet
+                // This will include pre-formatted data and named ranges that will automatically
+                // create charts when opened in Excel!
+                
+                // Create the chart data sheet
+                const chartData = [
+                    ['Medal Results - Interactive Dashboard'],
+                    ['Instructions: This sheet contains pre-formatted data for Excel charts. Select cells A4:G15 and insert a column chart to visualize medal counts.'],
+                    [],
+                    ['Team', 'Gold', 'Silver', 'Bronze', 'Total', 'Gold %', 'Team Color'],
+                ];
+                
+                // Get top 10 teams by total medals
+                const top10Teams = [...seriesData]
+                    .sort((a, b) => b.totalMedals - a.totalMedals)
+                    .slice(0, 10);
+                
+                // Add team data with proper Excel formulas for the excel sheet
+                top10Teams.forEach((team, index) => {
+                    // Generate a team color based on index
+                    const hue = (index * 36) % 360; // Distribute colors around the color wheel
+                    const teamColor = `#${Math.floor(Math.random()*16777215).toString(16).padStart(6, '0')}`;
+                    
+                    // Add row with text values for team name and medal counts
+                    chartData.push([
+                        team.team,
+                        team.goldCount,
+                        team.silverCount,
+                        team.bronzeCount,
+                        team.totalMedals, // Use actual value instead of formula
+                        team.goldCount / team.totalMedals * 100, // Use actual value instead of formula
+                        teamColor // Color for charts
+                    ]);
+                });
+                
+                // Add spacing
+                chartData.push([]);
+                chartData.push([]);
+                
+                // Add data for pie chart
+                chartData.push(['Medal Distribution (All Teams)']);
+                chartData.push(['Medal Type', 'Count', 'Color']);
+                chartData.push(['Gold', totalGoldCount, '#FFD700']);
+                chartData.push(['Silver', totalSilverCount, '#C0C0C0']);
+                chartData.push(['Bronze', totalBronzeCount, '#CD7F32']);
+                
+                // Create chart data worksheet
+                const chartWS = XLSX.utils.aoa_to_sheet(chartData);
+                
+                // Style the chart sheet with merged cells
+                chartWS['!merges'] = [
+                    { s: { r: 0, c: 0 }, e: { r: 0, c: 6 } }, // Title
+                    { s: { r: 1, c: 0 }, e: { r: 1, c: 6 } }, // Instructions
+                    { s: { r: 19, c: 0 }, e: { r: 19, c: 2 } } // Pie chart title
+                ];
+                
+                // Set column widths
+                const chartCols = [
+                    { wch: 30 }, // Team
+                    { wch: 10 }, // Gold
+                    { wch: 10 }, // Silver
+                    { wch: 10 }, // Bronze
+                    { wch: 10 }, // Total
+                    { wch: 10 }, // Gold %
+                    { wch: 10 }  // Team Color
+                ];
+                chartWS['!cols'] = chartCols;
+                
+                // Add chart data worksheet to workbook
+                XLSX.utils.book_append_sheet(wb, chartWS, "Interactive Dashboard");
+                
+                // Update progress
+                progressFill.style.width = '95%';
+                progressText.textContent = 'Finalizing Excel document...';
+                
+                // Format current date for filename
+                const now = new Date();
+                const day = String(now.getDate()).padStart(2, '0');
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const year = now.getFullYear();
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                
+                // Generate Excel file
+                const fileName = `Medal_Results_${day}-${month}-${year}_${hours}-${minutes}.xlsx`;
+                XLSX.writeFile(wb, fileName);
+                
+                // Complete progress
+                progressFill.style.width = '100%';
+                progressText.textContent = 'Excel file downloaded!';
+                
+                // Add a fancy animation to the button
+                excelExportBtn.classList.add('export-success');
+                setTimeout(() => {
+                    excelExportBtn.classList.remove('export-success');
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Error generating Excel:', error);
+                alert('Error generating Excel. Please try again.');
+            } finally {
+                // Hide progress and overlay after a short delay
+                setTimeout(() => {
+                    exportOverlay.style.display = 'none';
+                    progressBar.style.display = 'none';
+                    excelExportBtn.disabled = false;
+                }, 1500);
+            }
+        }, 500);
+    });
+    
+    // Add some CSS for the Excel button and animations
+    const style = document.createElement('style');
+    style.textContent = `
+        .excel-export-btn {
+            background-color: #107C41 !important;
+        }
+        .excel-export-btn:hover {
+            background-color: #0B5A30 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+        .export-success {
+            animation: pulse 1.5s ease;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); box-shadow: 0 0 20px rgba(16, 124, 65, 0.5); }
+            100% { transform: scale(1); }
+        }
+        /* Add space for multiple buttons */
+        .export-btn {
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        /* Floating medal animation */
+        .floating-medal {
+            position: fixed;
+            font-size: 80px;
+            z-index: 2000;
+            top: -80px;
+            animation: floatMedal 4s ease-in-out forwards;
+            text-shadow: 0 0 15px rgba(255,255,255,0.8);
+            transform-origin: center;
+        }
+        
+        @keyframes floatMedal {
+            0% { 
+                top: -80px; 
+                transform: rotate(0deg) scale(0.7);
+            }
+            10% {
+                transform: rotate(-20deg) scale(0.9);
+            }
+            25% { 
+                transform: rotate(15deg) scale(1); 
+            }
+            40% {
+                transform: rotate(-10deg) scale(1.1);
+            }
+            50% { 
+                top: 40%; 
+                transform: rotate(5deg) scale(1.2); 
+            }
+            60% {
+                transform: rotate(-5deg) scale(1.1);
+            }
+            75% { 
+                transform: rotate(0deg) scale(1); 
+            }
+            100% { 
+                top: 120%; 
+                transform: rotate(0deg) scale(0.7); 
+            }
+        }
+        
+        /* Improve progress bar animations */
+        .progress-fill {
+            transition: width 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) !important;
+            background-image: linear-gradient(90deg, #107C41 0%, #16A75C 100%) !important;
+            background-size: 200% 100% !important;
+            animation: gradientShift 2s infinite linear !important;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Improve export dialog */
+        #exportProgress {
+            border-radius: 15px !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
+            border-top: 5px solid #107C41 !important;
+        }
+        
+        /* Visual feedback when hovering both buttons */
+        #exportPDF:hover ~ #exportExcel,
+        #exportExcel:hover ~ #exportPDF {
+            opacity: 0.7;
+        }
+    `;
+    document.head.appendChild(style);
+});
+</script>
 
 <script>
 // Prepare data for charts

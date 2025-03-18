@@ -1004,8 +1004,381 @@
 
 @section('script-bottom')
 <script src="https://apexcharts.com/samples/assets/stock-prices.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
 @vite(['resources/js/pages/crm-dashboard.init.js'])
 <!-- Add this JavaScript function to prepare the edit form -->
+
+<script>
+ 
+    // Add Excel Export Button
+document.addEventListener('DOMContentLoaded', function() {
+    // Create Excel export button
+    const exportBtnContainer = document.createElement('div');
+    exportBtnContainer.style.position = 'fixed';
+    exportBtnContainer.style.bottom = '65px'; // Position much higher to avoid any existing buttons
+    exportBtnContainer.style.right = '1px';
+    exportBtnContainer.style.zIndex = '1000';
+
+    const exportExcelBtn = document.createElement('button');
+    exportExcelBtn.id = 'exportExcel';
+    exportExcelBtn.style.position = 'relative';
+    exportExcelBtn.className = 'export-btn';
+    exportExcelBtn.innerHTML = '<i class="mdi mdi-microsoft-excel me-1"></i> Export Excel';
+    exportExcelBtn.style.backgroundColor = '#217346'; // Excel green color
+    
+    // Don't modify other buttons, just position this one higher
+    exportBtnContainer.appendChild(exportExcelBtn);
+    document.body.appendChild(exportBtnContainer);
+
+    // Add event listener to Excel button
+    exportExcelBtn.addEventListener('click', function() {
+        // Show overlay and progress bar
+        const exportOverlay = document.getElementById('exportOverlay');
+        const progressBar = document.getElementById('exportProgress');
+        const progressFill = document.querySelector('.progress-fill');
+        const progressText = document.getElementById('progressText');
+        
+        exportOverlay.style.display = 'block';
+        progressBar.style.display = 'block';
+        exportExcelBtn.disabled = true;
+        progressFill.style.width = '30%';
+        progressText.textContent = 'Collecting medal data...';
+
+        setTimeout(() => {
+            try {
+                // Check if SheetJS library is available
+                if (typeof XLSX === 'undefined') {
+                    throw new Error('Excel library not loaded. Please refresh the page and try again.');
+                }
+
+                // Process medal data from the page - check for visible elements only
+                // Group data by sport
+                const sportGroups = {};
+                const sportHeaders = document.querySelectorAll('.sport-header:not([style*="display: none"])');
+
+                // Check if we have any visible sports
+                if (sportHeaders.length === 0) {
+                    throw new Error('No visible data to export. Please adjust your filters to show some data first.');
+                }
+
+                // First collect sport and event data
+                sportHeaders.forEach(header => {
+                    // Safely extract sport name
+                    const sportNameEl = header.querySelector('h4');
+                    if (!sportNameEl) return;
+
+                    const sportName = sportNameEl.textContent.trim();
+                    sportGroups[sportName] = [];
+                    
+                    const cardContainer = header.nextElementSibling;
+                    if (!cardContainer) return;
+
+                    const medalCards = cardContainer.querySelectorAll('.medal-card');
+
+                    medalCards.forEach(card => {
+                        // Skip card if parent col is hidden
+                        const cardCol = card.closest('.col');
+                        if (cardCol && cardCol.style.display === 'none') return;
+
+                        // Safely extract data with optional chaining
+                        const cardTitle = card.querySelector('.card-title');
+                        if (!cardTitle) return;
+
+                        const eventName = cardTitle.textContent.trim();
+                        const statusBadge = card.querySelector('.status-badge');
+                        const status = statusBadge ? statusBadge.textContent.trim() : 'Unknown';
+
+                        // Get gold winner
+                        let goldTeam = '-', goldCount = '0', goldWeight = '0';
+                        const goldBadge = card.querySelector('.medal-badge.medal-gold');
+                        if (goldBadge) {
+                            const goldPosition = goldBadge.closest('.medal-position');
+                            if (goldPosition) {
+                                const teamEl = goldPosition.querySelector('.team-name');
+                                if (teamEl) goldTeam = teamEl.textContent.trim();
+
+                                const countEl = goldPosition.querySelector('.medal-stat-value:first-child');
+                                if (countEl) goldCount = countEl.textContent.trim();
+
+                                const weightEl = goldPosition.querySelector('.medal-stat-value:last-child');
+                                if (weightEl) goldWeight = weightEl.textContent.trim();
+                            }
+                        }
+
+                        // Get silver winner
+                        let silverTeam = '-', silverCount = '0', silverWeight = '0';
+                        const silverBadge = card.querySelector('.medal-badge.medal-silver');
+                        if (silverBadge) {
+                            const silverPosition = silverBadge.closest('.medal-position');
+                            if (silverPosition) {
+                                const teamEl = silverPosition.querySelector('.team-name');
+                                if (teamEl) silverTeam = teamEl.textContent.trim();
+
+                                const countEl = silverPosition.querySelector('.medal-stat-value:first-child');
+                                if (countEl) silverCount = countEl.textContent.trim();
+
+                                const weightEl = silverPosition.querySelector('.medal-stat-value:last-child');
+                                if (weightEl) silverWeight = weightEl.textContent.trim();
+                            }
+                        }
+
+                        // Get bronze winner(s)
+                        let bronzeTeams = [], bronzeCount = '0', bronzeWeight = '0';
+                        const bronzeBadge = card.querySelector('.medal-badge.medal-bronze');
+                        if (bronzeBadge) {
+                            const bronzePosition = bronzeBadge.closest('.medal-position');
+                            if (bronzePosition) {
+                                const bronzeTeamElements = bronzePosition.querySelectorAll('.team-name');
+                                if (bronzeTeamElements && bronzeTeamElements.length > 0) {
+                                    bronzeTeams = Array.from(bronzeTeamElements)
+                                        .map(el => el.textContent.trim())
+                                        .filter(text => text !== '-');
+                                }
+
+                                const countEl = bronzePosition.querySelector('.medal-stat-value:first-child');
+                                if (countEl) bronzeCount = countEl.textContent.trim();
+
+                                const weightEl = bronzePosition.querySelector('.medal-stat-value:last-child');
+                                if (weightEl) bronzeWeight = weightEl.textContent.trim();
+                            }
+                        }
+
+                        // Combine bronze teams into a single string
+                        const bronzeTeamsStr = bronzeTeams.length > 0 ? bronzeTeams.join(', ') : '-';
+
+                        // Get participants count
+                        let participants = '0';
+                        const participantsEl = card.querySelector('.card-footer .text-muted');
+                        if (participantsEl) {
+                            const participantsText = participantsEl.textContent.trim();
+                            const participantsMatch = participantsText.match(/(\d+)/);
+                            if (participantsMatch) participants = participantsMatch[1];
+                        }
+
+                        // Store event data in sport group
+                        sportGroups[sportName].push({
+                            eventName,
+                            status,
+                            goldTeam,
+                            goldCount,
+                            goldWeight,
+                            silverTeam,
+                            silverCount,
+                            silverWeight,
+                            bronzeTeamsStr,
+                            bronzeCount,
+                            bronzeWeight,
+                            participants
+                        });
+                    });
+                });
+
+                // Ensure we have data to export
+                let hasData = false;
+                for (const sport in sportGroups) {
+                    if (sportGroups[sport].length > 0) {
+                        hasData = true;
+                        break;
+                    }
+                }
+                
+                if (!hasData) {
+                    throw new Error('No medal data found. Please make sure some data is visible.');
+                }
+
+                progressFill.style.width = '60%';
+                progressText.textContent = 'Creating Excel workbook...';
+
+                // Create a new workbook
+                const wb = XLSX.utils.book_new();
+                
+                // Create a summary sheet with all data in one organized table
+                const summaryData = [];
+                
+                // Add header row
+                summaryData.push([
+                    'Medal Tally Summary Report',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    ''
+                ]);
+                
+                summaryData.push([
+                    'Generated on:',
+                    new Date().toLocaleString(),
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    ''
+                ]);
+                
+                summaryData.push([]);  // Empty row for spacing
+                
+                // Add table headers
+                summaryData.push([
+                    'Sport',
+                    'Event',
+                    'Status',
+                    'Champion',
+                    'Count',
+                    'Weight',
+                    '1st Runner Up',
+                    'Count',
+                    'Weight',
+                    '2nd Runner Up',
+                    'Count',
+                    'Weight',
+                    'Teams'
+                ]);
+                
+                // Add data rows
+                for (const sportName in sportGroups) {
+                    if (sportGroups[sportName].length === 0) continue;
+                    
+                    // Add sport name as a section header
+                    summaryData.push([
+                        sportName,
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        ''
+                    ]);
+                    
+                    // Add event data rows
+                    sportGroups[sportName].forEach(event => {
+                        summaryData.push([
+                            '',  // Indent under sport
+                            event.eventName,
+                            event.status,
+                            event.goldTeam,
+                            event.goldCount,
+                            event.goldWeight,
+                            event.silverTeam,
+                            event.silverCount,
+                            event.silverWeight,
+                            event.bronzeTeamsStr,
+                            event.bronzeCount,
+                            event.bronzeWeight,
+                            event.participants
+                        ]);
+                    });
+                    
+                    // Add empty row between sports
+                    summaryData.push([]);
+                }
+                
+                // Create worksheet from aoa (array of arrays)
+                const ws = XLSX.utils.aoa_to_sheet(summaryData);
+                
+                // Add the worksheet to the workbook
+                XLSX.utils.book_append_sheet(wb, ws, 'Medal Tally');
+                
+                // Style the worksheet - set column widths
+                ws['!cols'] = [
+                    { wch: 20 },  // Sport
+                    { wch: 25 },  // Event
+                    { wch: 10 },  // Status
+                    { wch: 20 },  // Gold Team
+                    { wch: 8 },   // Gold Count
+                    { wch: 8 },   // Gold Weight
+                    { wch: 20 },  // Silver Team
+                    { wch: 8 },   // Silver Count
+                    { wch: 8 },   // Silver Weight
+                    { wch: 25 },  // Bronze Teams
+                    { wch: 8 },   // Bronze Count
+                    { wch: 8 },   // Bronze Weight
+                    { wch: 10 }   // Teams
+                ];
+
+                // Format current date for filename
+                 // Format the current date
+                 const now = new Date();
+                const day = String(now.getDate()).padStart(2, '0');
+                const year = now.getFullYear();
+                const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                const monthName = monthNames[now.getMonth()];
+                const hours12 = now.getHours() % 12 || 12;
+                const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
+                const formattedHours = String(hours12).padStart(2, '0');
+                const formattedMinutes = String(now.getMinutes()).padStart(2, '0');
+                const formattedDateTime = `${day}-${monthName}-${year} ${formattedHours}:${formattedMinutes} ${ampm}`;
+
+                
+                progressFill.style.width = '90%';
+                progressText.textContent = 'Finalizing Excel file...';
+
+                // Apply cell styling for better readability
+                // Get the range of cells
+                const range = XLSX.utils.decode_range(ws['!ref']);
+                
+                // Create cell style objects
+                const headerStyle = { font: { bold: true }, fill: { fgColor: { rgb: "00217346" }, patternType: "solid" }, alignment: { horizontal: "center" } };
+                const sportHeaderStyle = { font: { bold: true }, fill: { fgColor: { rgb: "00E2EFDA" }, patternType: "solid" } };
+                const dataRowStyle = { alignment: { horizontal: "left" } };
+                
+                // Define merged cell ranges
+                ws['!merges'] = [
+                    // Merge title cell across all columns
+                    { s: { r: 0, c: 0 }, e: { r: 0, c: 12 } },
+                    // Merge date cell
+                    { s: { r: 1, c: 0 }, e: { r: 1, c: 1 } },
+                    { s: { r: 1, c: 2 }, e: { r: 1, c: 12 } }
+                ];
+                
+                // Apply some basic styling (SheetJS doesn't have full styling support in the free version)
+                // But we can at least add some cell properties for Excel to interpret
+                // Format the title row - although limited in the community version
+                ws.A1 = { t: 's', v: 'Medal Tally Summary Report' };
+
+                
+                // Generate filename with date
+                const filename = `Medal_Tally_Report_${formattedDateTime}.xlsx`;
+                
+                // Create download
+                XLSX.writeFile(wb, filename);
+                
+                progressFill.style.width = '100%';
+                progressText.textContent = 'Download complete!';
+                
+            } catch (error) {
+                console.error('Error generating Excel:', error);
+                alert(error.message || 'Error generating Excel file. Please try again.');
+            } finally {
+                // Hide overlay and progress after a short delay
+                setTimeout(() => {
+                    exportOverlay.style.display = 'none';
+                    progressBar.style.display = 'none';
+                    exportExcelBtn.disabled = false;
+                }, 1000);
+            }
+        }, 500);
+    });
+});
+</script>
+
 <script>
 function setEventCategory(eventCategoryId, actionType) {
     if (actionType === 'approve') {
