@@ -83,6 +83,7 @@
                                                             <label for="role_id" class="form-label">Role</label>
                                                             <select name="role" class="form-control" id="role_id" required>
                                                                 <option value="">Select Role</option>
+                                                                <option value="encoder" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
                                                                 <option value="encoder" {{ $user->role == 'encoder' ? 'selected' : '' }}>Encoder</option>
                                                                 <option value="tournament_director" {{ $user->role == 'tournament_director' ? 'selected' : '' }}>Tournament Director</option>
                                                                 <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
