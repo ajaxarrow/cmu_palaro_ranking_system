@@ -7,70 +7,55 @@
 
 @section('content')
 <style>
-    .export-btn {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        z-index: 1000;
-        padding: 15px 30px;
-        background-color: #0d6efd;
-        color: white;
-        border: none;
-        border-radius: 50px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
-    .export-btn:hover {
-        background-color: #0b5ed7;
-    }
-    .export-btn:disabled {
-        background-color: #6c757d;
-        cursor: wait;
-    }
-    #exportProgress {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0,0,0,0.2);
-        display: none;
-        z-index: 1001;
-    }
-    .progress-bar {
-        width: 300px;
-        height: 20px;
-        background-color: #e9ecef;
-        border-radius: 10px;
-        overflow: hidden;
-        margin-top: 10px;
-    }
-    .progress-fill {
-        height: 100%;
-        background-color: #0d6efd;
-        transition: width 0.3s ease;
-    }
-    .export-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    display: none;
-    cursor: wait;
-}
-
-#exportProgress {
-    z-index: 1002; /* Make sure it's above the overlay */
-}
+        .export-btn {
+          
+            bottom: 30px;
+            right: 30px;
+          
+            padding: 10px 30px;
+            background-color: #00491e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .export-btn:hover {
+            background-color:rgb(5, 110, 49);
+        }
+        .export-btn:disabled {
+            background-color: #6c757d;
+            cursor: wait;
+        }
+        #exportProgress {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1001;
+        }
+        .progress-bar {
+            width: 300px;
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #00491e;
+            transition: width 0.3s ease;
+        }
 </style>
 <!-- Start Content-->
 <div class="container-fluid">
@@ -121,8 +106,16 @@
 
             <div id="chart-datatable" class="chart-container active">
                 <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title">Detailed Results</h5>
+
+                <div class="d-flex  gap-3">
+                    <button id="exportPDF" class="export-btn">
+                        <i class="mdi mdi-file-pdf-outline"></i>
+                        Export to PDF
+                    </button>
+
+                </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -245,10 +238,7 @@
         </div>
     </div>
     <div id="exportOverlay" class="export-overlay"></div>
-    <button id="exportPDF" class="export-btn">
-        <i class="mdi mdi-file-pdf-outline"></i>
-        Export to PDF
-    </button>
+ 
 
     <div id="exportProgress">
         <h4>Generating PDF Report...</h4>
