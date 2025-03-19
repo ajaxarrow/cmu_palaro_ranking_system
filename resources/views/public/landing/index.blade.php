@@ -9,10 +9,9 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
-    
+    <link href="https://api.fontshare.com/v2/css?f[]=dancing-script@400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
     @vite(['resources/css/landingpage.css'])
-
 
 </head>
 <body>
@@ -21,9 +20,118 @@
   .hero-section {
     position: relative;
     min-height: 100vh;
-    background: url('{{ Vite::asset('resources/images/landingPageBkg.jpg') }}') center/cover no-repeat !important;
+    background: url('{{ Vite::asset('resources/images/palaroBkg.png') }}') center/cover no-repeat !important;
     overflow: hidden;
     background-size: 10px;
+}
+
+.theme-slogan {
+  
+    color: white !important;
+    font-family: "Playfair", serif;
+     font-size: 1.5rem !important;
+      font-weight: 800; letter-spacing: 0.5px; line-height: 1.2;  
+
+}
+
+/* Feather styles */
+.feather {
+    position: absolute;
+    width: 300px;
+    height: 400px;
+    background: url('{{ Vite::asset('resources/images/feather.png') }}') no-repeat center center/contain;
+    filter:  saturate(150%);
+    --parallax-speed: 0.1;
+    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    z-index: 1000;
+    will-change: transform;
+}
+
+.feather-1 {
+    top: 5%;
+    left: 15%;
+    --parallax-speed: 0.08;
+    filter: blur(0.5px)  saturate(150%);
+    transform: rotate(25deg) scale(1.4) !important;
+    opacity: 0.85;
+}
+
+
+.feather-2 {
+    top: 35%;
+    right: 5%;
+    --parallax-speed: 0.12;
+    filter: blur(1px)  saturate(150%);
+    transform: rotate(-45deg) scale(0.8) scaleX(-1) !important; /* Flipped horizontally */
+    opacity: 0.95;
+}
+
+.feather-3 {
+    top: -50px;
+    right: -100px;
+    --parallax-speed: 0.1;
+    filter: blur(4px)  saturate(300%) ;
+    transform: rotate(-100deg) scale(2) scaleX(1.2) scaleY(1.2) !important; /* Flipped both ways */
+    opacity: 0.85;
+}
+
+.feather-4 {
+    top: 15%;
+    right: 20%;
+    --parallax-speed: 0.06;
+    filter: blur(1px)  saturate(150%);
+    transform: rotate(-15deg) scale(1.6) scaleY(-1) !important; /* Flipped vertically */
+    opacity: 0.8;
+}
+
+.feather-5 {
+    
+    top: -50px;
+    left: -100px;
+    --parallax-speed: 0.1;
+    filter: blur(2px)  saturate(150%);
+    transform: rotate(100deg) scale(1.5) scaleX(-1.2) scaleY(1.2) !important; /* Flipped both ways */
+    opacity: 0.85;
+    animation: float 3s ease-in-out infinite !important;
+}
+
+.feather-6 {
+    top: 60%;
+    left: 8%;
+    --parallax-speed: 0.09;
+    filter: blur(1.8px)  saturate(150%);
+    transform: rotate(35deg) scale(1.25) !important;
+    opacity: 0.9;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) rotate(var(--rotate, 0deg)) scale(var(--scale, 1)) !important;
+    }
+    50% {
+        transform: translateY(-15px) rotate(calc(var(--rotate, 0deg) + 2deg)) scale(var(--scale, 1)) !important;
+    }
+}
+
+@keyframes float-slow {
+    0%, 100% {
+        transform: translateY(0) rotate(var(--rotate, 0deg)) scale(var(--scale, 1)) !important;
+    }
+    50% {
+        transform: translateY(-8px) rotate(calc(var(--rotate, 0deg) + 1deg)) scale(var(--scale, 1)) !important;
+    }
+}
+
+.hero-3d-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    perspective: 1000px;
+    perspective-origin: center center;
+    pointer-events: none; /* Allow clicks to pass through */
 }
 
 
@@ -109,14 +217,24 @@
     <section class="hero-section">
         <div class="hero-overlay"></div>
 
+           <!-- 3D Feathers Container -->
+        <div class="hero-3d-container">
+            <div class="feather feather-1" data-depth="0.1" data-aos="fade"></div>
+            <div class="feather feather-2" data-depth="0.2" data-aos="fade"></div>
+            <div class="feather feather-3" data-depth="0.3" data-aos="fade"></div>
+            <div class="feather feather-4" data-depth="0.05" data-aos="fade"></div>
+            <div class="feather feather-5" data-depth="0.15" data-aos="fade"></div>
+            <div class="feather feather-6" data-depth="0.25" data-aos="fade"></div>
+        </div>
+
         <div class="hero-content container mx-auto px-4 pt-20 pb-32">
             <!-- Header -->
             <div class="text-center mb-[50px]" data-aos="fade-down">
-                <h1 class="text-7xl font-extrabold text-white mb-6 tracking-tight">
-                    <span class="title-accent">CMU PALARO {{ date('Y') }}</span>
-                    <span class="block text-3xl mt-8 bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-200">
+                <h1 class="theme-slogan text-7xl font-extrabold text-white mb-6 tracking-tight">
+                    <img class="hero-logo"  src="{{ Vite::asset('resources/images/palaroLogo.png') }}" alt=""  />
+                    <span  class="block mt-8 bg-clip-text ">
 
-                    Excellence Through Sports
+                    Lead Beyond Limits: Cultivate Global Mindset and Excellence Through Sports
 
                     </span>
                 </h1>
@@ -387,7 +505,7 @@
             <!-- Scroll Button -->
             <div class="text-center mt-16">
                 <a href="#standings"
-                   class="inline-flex items-center justify-center px-8 py-3 text-lg font-medium text-white bg-green-600 border border-transparent rounded-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                   class="custom-btn inline-flex items-center justify-center px-8 py-3 text-lg font-medium text-white  transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
                     View Full Standings
                     <svg class="w-5 h-5 ml-2 -mr-1 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
@@ -523,6 +641,86 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  // Initialize AOS with custom settings
+  AOS.init({
+    duration: 1000,
+    once: true,
+    offset: 100
+  });
+
+  // Parallax scrolling effect for feathers
+  const feathers = document.querySelectorAll('.feather');
+  let lastScrollY = window.scrollY;
+  let ticking = false;
+  let mouseX = 0;
+  let mouseY = 0;
+
+  // Track mouse position for additional movement effect
+  document.addEventListener('mousemove', function(e) {
+    mouseX = e.clientX / window.innerWidth - 0.5; // -0.5 to 0.5
+    mouseY = e.clientY / window.innerHeight - 0.5; // -0.5 to 0.5
+  
+    if (!ticking) {
+      window.requestAnimationFrame(function() {
+        updateFeathersOnMouseMove(mouseX, mouseY);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+
+  function updateFeathersOnMouseMove(mouseX, mouseY) {
+    feathers.forEach(feather => {
+      const speed = parseFloat(getComputedStyle(feather).getPropertyValue('--parallax-speed')) || 0.1;
+      const mouseEffect = speed * 20; // Amplify mouse effect based on parallax speed
+    
+      // Get current transform
+      const currentTransform = feather.style.transform || '';
+      const rotateMatch = currentTransform.match(/rotate\(([^)]+)\)/);
+      const scaleMatch = currentTransform.match(/scale\(([^)]+)\)/);
+      const translateYMatch = currentTransform.match(/translateY\(([^)]+)\)/);
+    
+      const rotate = rotateMatch ? parseFloat(rotateMatch[1]) : parseFloat(getComputedStyle(feather).getPropertyValue('--rotate')) || 0;
+      const scale = scaleMatch ? parseFloat(scaleMatch[1]) : parseFloat(getComputedStyle(feather).getPropertyValue('--scale')) || 1;
+      const translateY = translateYMatch ? parseFloat(translateYMatch[1]) : 0;
+    
+      // Apply mouse movement effect
+      const translateX = mouseX * mouseEffect;
+      const additionalRotate = mouseX * 5; // Subtle rotation based on mouse position
+    
+      feather.style.transform = `translateY(${translateY}px) translateX(${translateX}px) rotate(${rotate + additionalRotate}deg) scale(${scale})`;
+    });
+  }
+
+  window.addEventListener('scroll', function() {
+    lastScrollY = window.scrollY;
+  
+    if (!ticking) {
+      window.requestAnimationFrame(function() {
+        updateFeathersOnScroll(lastScrollY);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+
+  function updateFeathersOnScroll(scrollY) {
+    feathers.forEach(feather => {
+      const speed = parseFloat(getComputedStyle(feather).getPropertyValue('--parallax-speed')) || 0.1;
+      const yPos = -scrollY * speed;
+      const rotate = parseFloat(getComputedStyle(feather).getPropertyValue('--rotate')) || 0;
+      const scale = parseFloat(getComputedStyle(feather).getPropertyValue('--scale')) || 1;
+    
+      // Get current mouse effect
+      const mouseEffect = speed * 20;
+      const translateX = mouseX * mouseEffect;
+      const additionalRotate = mouseX * 5;
+    
+      feather.style.transform = `translateY(${yPos}px) translateX(${translateX}px) rotate(${rotate + additionalRotate}deg) scale(${scale})`;
+    });
+  }
+});
+
   // Initialize Swiper
   const sportsSwiper = new Swiper('.sports-championship-swiper', {
     slidesPerView: 1,
@@ -560,7 +758,7 @@ document.addEventListener('DOMContentLoaded', function() {
       },
     },
   });
-});
+
 </script>
 
 
@@ -790,6 +988,8 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         </div>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
 
     <script>
         // Initialize AOS with custom settings
@@ -1336,6 +1536,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+   
 </body>
 </html>
