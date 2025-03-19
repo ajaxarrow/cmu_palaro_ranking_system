@@ -7,15 +7,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <style>
         .export-btn {
-            position: fixed;
+          
             bottom: 30px;
             right: 30px;
-            z-index: 1000;
-            padding: 15px 30px;
-            background-color: #0d6efd;
+          
+            padding: 10px 30px;
+            background-color: #00491e;
             color: white;
             border: none;
-            border-radius: 50px;
+            border-radius: 5px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             display: flex;
             align-items: center;
@@ -24,7 +24,7 @@
             cursor: pointer;
         }
         .export-btn:hover {
-            background-color: #0b5ed7;
+            background-color:rgb(5, 110, 49);
         }
         .export-btn:disabled {
             background-color: #6c757d;
@@ -52,10 +52,10 @@
         }
         .progress-fill {
             height: 100%;
-            background-color: #0d6efd;
+            background-color: #00491e;
             transition: width 0.3s ease;
         }
-    </style>
+</style>
     @endsection
     @section('content')
 
@@ -213,12 +213,22 @@
                 <!-- Bar Chart Container -->
                 
                 <h3 class="p-2">Medal Distribution Charts</h3>
-                <div class="chart-toggle">
-                            <button class="chart-tab active me-2" data-target="sports-table">Sports Table</button>
-                            <button class="chart-tab" data-target="bar-chart">Medal Distribution</button>
-                            <button class="chart-tab" data-target="donut-chart">Medal Breakdown</button>
-                            <button class="chart-tab" data-target="sports-chart">Sports Analysis</button>
-                
+                <div class="chart-toggle flex justify-content-between align-items-center">
+                    <div class="">
+                        <button class="chart-tab active me-2" data-target="sports-table">Sports Table</button>
+                        <button class="chart-tab" data-target="bar-chart">Medal Distribution</button>
+                        <button class="chart-tab" data-target="donut-chart">Medal Breakdown</button>
+                        <button class="chart-tab" data-target="sports-chart">Sports Analysis</button>
+                    </div>
+                    
+                    <div class="d-flex gap-3">
+                        <button id="exportPDF" class="export-btn">
+                            <i class="mdi mdi-file-pdf-outline"></i>
+                            Export to PDF
+                        </button>
+
+                    </div>
+            
                 </div>
                 <div id="bar-chart" class="chart-container active">
                     <div class="card">
@@ -403,11 +413,7 @@
 
     </div>
 
-    <button id="exportPDF" class="export-btn">
-        <i class="mdi mdi-file-pdf-outline"></i>
-        Export to PDF
-    </button>
-
+   
     <div id="exportProgress">
         <h4>Generating PDF Report...</h4>
         <div class="progress-bar">
@@ -423,6 +429,269 @@
 
     <!-- Include ApexCharts -->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        // Add the SheetJS CDN link to the head section
+// Add the SheetJS CDN link to the head section
+document.addEventListener('DOMContentLoaded', function() {
+    // Add Excel export button next to PDF export button
+    const pdfButton = document.getElementById('exportPDF');
+    const buttonContainer = pdfButton.parentNode;
+    
+    const excelButton = document.createElement('button');
+    excelButton.id = 'exportExcel';
+    excelButton.className = 'export-btn';
+    excelButton.innerHTML = '<i class="mdi mdi-file-excel-outline"></i> Export to Excel';
+    
+    buttonContainer.appendChild(excelButton);
+    
+    // Add Excel export functionality
+    document.getElementById('exportExcel').addEventListener('click', function() {
+        exportToExcel();
+    });
+    
+    function exportToExcel() {
+        // Show progress indicator
+        const progressElement = document.getElementById('exportProgress');
+        const progressFill = progressElement.querySelector('.progress-fill');
+        const progressText = document.getElementById('progressText');
+        
+        progressElement.style.display = 'block';
+        progressFill.style.width = '10%';
+        progressText.textContent = 'Preparing data...';
+        
+        // Disable the export button
+        document.getElementById('exportExcel').disabled = true;
+        
+        setTimeout(() => {
+            try {
+                // Update progress
+                progressFill.style.width = '30%';
+                progressText.textContent = 'Extracting medal data...';
+                
+                // Create workbook
+                const wb = XLSX.utils.book_new();
+                
+                // Extract team name from heading
+                const teamName = document.querySelector('h3.fw-bold').textContent
+                    .trim()
+                    .replace('🏆', '')
+                    .replace('Medal Dashboard', '')
+                    .trim();
+                
+                // Get current date for filename
+                const today = new Date();
+                const dateStr = today.toISOString().split('T')[0]; // YYYY-MM-DD format
+                
+                // FIRST WORKSHEET: Summary
+                progressFill.style.width = '50%';
+                progressText.textContent = 'Creating medal summary...';
+                
+           
+                // SECOND WORKSHEET: Detailed breakdown
+                progressFill.style.width = '70%';
+                progressText.textContent = 'Creating detailed breakdown...';
+                
+                // Function to extract table data
+                function extractTableData() {
+                    const table = document.getElementById('saving-datatable-shesh');
+                    if (!table) {
+                        console.error("Table not found");
+                        return [];
+                    }
+                    
+                    // Get column headers
+                    const headers = [];
+                    const headerRow = table.querySelector('thead tr');
+                    headerRow.querySelectorAll('th').forEach(th => {
+                        // Extract text without the medal icons
+                        let headerText = th.textContent.trim();
+                        if (th.querySelector('.medal-icon')) {
+                            headerText = th.querySelector('.medal-icon').nextElementSibling.textContent.trim();
+                            // Add prefix based on medal type
+                            if (th.querySelector('.medal-gold')) {
+                                headerText = 'Gold ' + headerText;
+                            } else if (th.querySelector('.medal-silver')) {
+                                headerText = 'Silver ' + headerText;
+                            } else if (th.querySelector('.medal-bronze')) {
+                                headerText = 'Bronze ' + headerText;
+                            }
+                        }
+                        headers.push(headerText);
+                    });
+                    
+                    const tableData = [headers]; // Start with headers
+                    let currentSport = '';
+                    let sportRows = {};
+                    
+                    // Helper function to extract text, including from badges
+                    function getCellText(cell) {
+                        if (!cell) return '';
+                        
+                        // First try to get text from badge if it exists
+                        const badge = cell.querySelector('.badge');
+                        if (badge) {
+                            return badge.textContent.trim();
+                        }
+                        
+                        // Otherwise get the regular text
+                        return cell.textContent.trim();
+                    }
+                    
+                    // Process all rows
+                    const rows = Array.from(table.querySelectorAll('tbody tr'));
+                    
+                    for (let i = 0; i < rows.length; i++) {
+                        const row = rows[i];
+                        const cells = Array.from(row.cells);
+                        
+                        // Check row type
+                        if (row.classList.contains('table-primary')) {
+                            // Overall total row - has colspan="2" in first cell
+                            const rowData = ['Overall Total', ''];
+                            
+                            // Start from cell index 2 (because of colspan=2)
+                            for (let j = 2; j < cells.length; j++) {
+                                rowData.push(getCellText(cells[j]));
+                            }
+                            
+                            tableData.push(rowData);
+                        }
+                        else if (row.classList.contains('table-secondary')) {
+                            // Sport total row
+                            const sportName = getCellText(cells[0]).replace('Total for', '').trim();
+                            const rowData = ['Total for ' + sportName, ''];
+                            
+                            // Get values from remaining cells
+                            for (let j = 1; j < cells.length; j++) {
+                                rowData.push(getCellText(cells[j]));
+                            }
+                            
+                            // Store the sport total row to insert after all event rows
+                            if (sportRows[sportName]) {
+                                tableData.push(...sportRows[sportName]);
+                                tableData.push(rowData);
+                                delete sportRows[sportName];
+                            } else {
+                                tableData.push(rowData);
+                            }
+                        }
+                        else {
+                            // Check if it's a row with a rowspan (first row for a sport)
+                            if (cells[0] && cells[0].hasAttribute('rowspan')) {
+                                // This is the first row for a sport
+                                currentSport = getCellText(cells[0]);
+                                const eventCategory = getCellText(cells[1]);
+                                
+                                const rowData = [currentSport, eventCategory];
+                                
+                                // Add all medal data
+                                for (let j = 2; j < cells.length; j++) {
+                                    rowData.push(getCellText(cells[j]));
+                                }
+                                
+                                // Initialize array for this sport if it doesn't exist
+                                if (!sportRows[currentSport]) {
+                                    sportRows[currentSport] = [];
+                                }
+                                
+                                sportRows[currentSport].push(rowData);
+                            }
+                            else if (currentSport) {
+                                // This is a continued row for the current sport
+                                const eventCategory = getCellText(cells[0]);
+                                
+                                const rowData = [currentSport, eventCategory];
+                                
+                                // Add all medal data
+                                for (let j = 1; j < cells.length; j++) {
+                                    rowData.push(getCellText(cells[j]));
+                                }
+                                
+                                // Add to the sport's rows
+                                if (!sportRows[currentSport]) {
+                                    sportRows[currentSport] = [];
+                                }
+                                
+                                sportRows[currentSport].push(rowData);
+                            }
+                        }
+                    }
+                    
+                    // Add any remaining sport rows
+                    for (const sport in sportRows) {
+                        if (sportRows[sport].length > 0) {
+                            tableData.push(...sportRows[sport]);
+                        }
+                    }
+                    
+                    return tableData;
+                }
+                
+                const tableData = extractTableData();
+                const detailedWs = XLSX.utils.aoa_to_sheet(tableData);
+                XLSX.utils.book_append_sheet(wb, detailedWs, "Medal Breakdown");
+                
+                // Apply styling to detailed worksheet
+                progressFill.style.width = '90%';
+                progressText.textContent = 'Applying formatting...';
+                
+                // Set column widths
+                detailedWs['!cols'] = [
+                    { wch: 20 },  // Sports
+                    { wch: 25 },  // Event Categories
+                    { wch: 12 },  // Gold Count
+                    { wch: 12 },  // Gold Weight
+                    { wch: 12 },  // Silver Count
+                    { wch: 12 },  // Silver Weight
+                    { wch: 12 },  // Bronze Count
+                    { wch: 12 },  // Bronze Weight
+                    { wch: 12 },  // Total Medals
+                    { wch: 12 }   // Total Weight
+                ];
+                
+                // Generate the Excel file
+                progressFill.style.width = '95%';
+                progressText.textContent = 'Generating Excel file...';
+                
+                // Create the Excel file with formatted date/time
+                const now = new Date();
+                const day = String(now.getDate()).padStart(2, '0');
+                const year = now.getFullYear();
+                const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                const monthName = monthNames[now.getMonth()];
+
+                // Format hours for 12-hour clock with AM/PM
+                const hours12 = now.getHours() % 12 || 12;
+                const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
+                const formattedHours = String(hours12).padStart(2, '0');
+                const formattedMinutes = String(now.getMinutes()).padStart(2, '0');
+
+                // Create the formatted datetime string
+                const formattedDateTime = `${day}-${monthName}-${year}_${formattedHours}-${formattedMinutes}-${ampm}`;
+                const filename = `${teamName}_medal_report_${formattedDateTime}.xlsx`;
+                
+                XLSX.writeFile(wb, filename);
+                
+                // Complete progress
+                progressFill.style.width = '100%';
+                progressText.textContent = 'Excel export completed!';
+                
+                setTimeout(() => {
+                    // Hide progress and re-enable button
+                    progressElement.style.display = 'none';
+                    document.getElementById('exportExcel').disabled = false;
+                }, 1000);
+                
+            } catch (error) {
+                console.error('Error exporting to Excel:', error);
+                progressText.textContent = 'Error: ' + error.message;
+                document.getElementById('exportExcel').disabled = false;
+            }
+        }, 500); // Small delay to show initial progress
+    }
+});
+    </script>
 
     <script>
         // Prepare data for charts using PHP data
