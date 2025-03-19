@@ -152,20 +152,114 @@ class PalaroDataSeeder extends Seeder
             // ['name' => 'Arnis Men - Anyo, Traditional', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now],
             // ['name' => 'Arnis Men - Anyo, Non-Traditional', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now],
 
-            ['name' => 'Arnis Men - Anyo', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 40],
-            ['name' => 'Arnis Women - Anyo', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 40],
-            ['name' => 'Arnis Men - Labanan', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
-            ['name' => 'Arnis Women - Labanan', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+            // Arnis Events
+            // ANYO (Category 4)
+            // NON TRADITIONAL
+            ['name' => 'Arnis Men - Anyo Individual Weapon', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Anyo Individual Weapon', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Anyo Individual Double Weapon', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Anyo Individual Double Weapon', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Anyo Team Single Weapon', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Anyo Team Single Weapon', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Anyo Team Double Weapon', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Anyo Team Double Weapon', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+
+            // TRADITIONAL
+            ['name' => 'Arnis Men - Anyo Individual Open Weapon', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Anyo Individual Open Weapon', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Anyo Team Open Weapon', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Anyo Team Open Weapon', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+
+            // COMBATANT/LABANAN (Category 2)
+            // FULL CONTACT PADDED STICK - MEN
+            ['name' => 'Arnis Men - Combatant Padded Stick 47kg Below/Pin Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Combatant Padded Stick Over 47kg to 52kg/Bantam Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Combatant Padded Stick Over 52kg to 56kg/Feather Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Combatant Padded Stick Over 56kg to 61kg/Extra Light Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Combatant Padded Stick Over 61kg to 66kg/Half Light Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Combatant Padded Stick Over 66kg to 71kg/Light Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Combatant Padded Stick Over 71kg to 78kg/Half Middle Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Combatant Padded Stick Over 78kg to 86kg/Middle Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Combatant Padded Stick Over 86kg to 95kg/Light Heavy Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Combatant Padded Stick Over 95kg to 105kg/Heavy Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+
+            // FULL CONTACT PADDED STICK - WOMEN
+            ['name' => 'Arnis Women - Combatant Padded Stick 42kg Below/Pin Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Combatant Padded Stick Over 42kg to 45kg/Bantam Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Combatant Padded Stick Over 45kg to 48kg/Feather Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Combatant Padded Stick Over 48kg to 52kg/Extra Light Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Combatant Padded Stick Over 52kg to 56kg/Half Light Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Combatant Padded Stick Over 56kg to 61kg/Light Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Combatant Padded Stick Over 61kg to 66kg/Half Middle Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Combatant Padded Stick Over 66kg to 72kg/Middle Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Combatant Padded Stick Over 72kg to 78kg/Light Heavy Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Combatant Padded Stick Over 78kg to 88kg/Heavy Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+
+            // FULL CONTACT LIVE STICK - MEN
+            ['name' => 'Arnis Men - Combatant Live Stick 47kg Below/Pin Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Combatant Live Stick Over 47kg to 52kg/Bantam Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Combatant Live Stick Over 52kg to 56kg/Feather Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Combatant Live Stick Over 56kg to 61kg/Extra Light Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Combatant Live Stick Over 61kg to 66kg/Half Light Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Combatant Live Stick Over 66kg to 71kg/Light Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Combatant Live Stick Over 71kg to 78kg/Half Middle Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Combatant Live Stick Over 78kg to 86kg/Middle Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Combatant Live Stick Over 86kg to 95kg/Light Heavy Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Men - Combatant Live Stick Over 95kg to 105kg/Heavy Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+
+            // FULL CONTACT LIVE STICK - WOMEN
+            ['name' => 'Arnis Women - Combatant Live Stick 42kg Below/Pin Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Combatant Live Stick Over 42kg to 45kg/Bantam Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Combatant Live Stick Over 45kg to 48kg/Feather Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Combatant Live Stick Over 48kg to 52kg/Extra Light Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Combatant Live Stick Over 52kg to 56kg/Half Light Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Combatant Live Stick Over 56kg to 61kg/Light Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Combatant Live Stick Over 61kg to 66kg/Half Middle Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Combatant Live Stick Over 66kg to 72kg/Middle Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Combatant Live Stick Over 72kg to 78kg/Light Heavy Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Arnis Women - Combatant Live Stick Over 78kg to 88kg/Heavy Weight', 'sport_id' => $sports['Arnis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
 
             //Athletics
-            ['name' => 'Athletics Men - Category 1', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['High Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
-            ['name' => 'Athletics Women - Category 1', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['High Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
-            ['name' => 'Athletics Men - Category 2', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 4],
-            ['name' => 'Athletics Women - Category 2', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 4],
-            ['name' => 'Athletics Men - Category 3', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 38],
-            ['name' => 'Athletics Women - Category 3', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 38],
-            ['name' => 'Athletics Men - Category 4', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 16],
-            ['name' => 'Athletics Women - Category 4', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 16],
+            ['name' => 'Athletics Men - 5000 M', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['High Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Women - 5000 M', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['High Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Men - 10000 M', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['High Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+
+            // CATEGORY 2 - Moderate Complexity
+            ['name' => 'Athletics Men - 1500 M', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Women - 1500 M', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Men - 3000 M', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Women - 3000 M', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+
+            // CATEGORY 3 - Mid-Level Complexity
+            ['name' => 'Athletics Men - 400 M', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Women - 400 M', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Men - 800 M', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Women - 800 M', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Men - 4X400 M Relay', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Women - 4X400 M Relay', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Mixed - 4X400 M Relay', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Men - Classical Relay', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Women - Classical Relay', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Mixed - Classical Relay', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Men - Javelin', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Women - Javelin', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Men - Shot Put', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Women - Shot Put', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Men - Discus', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Women - Discus', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Men - Long Jump', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Women - Long Jump', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Men - Triple Jump', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Women - Triple Jump', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+
+            // CATEGORY 4 - Low Complexity
+            ['name' => 'Athletics Men - 100 M', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Women - 100 M', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Men - 200 M', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Women - 200 M', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Men - 4X100 M Relay', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Women - 4X100 M Relay', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Athletics Mixed - 4X100 M Relay', 'sport_id' => $sports['Athletics'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
 
 
             //Badminton
@@ -209,12 +303,55 @@ class PalaroDataSeeder extends Seeder
             ['name' => 'Futsal', 'sport_id' => $sports['Futsal'], 'medal_weight_category_id' => $medalCategories['High Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 15],
 
             //Karatedo
-            ['name' => 'Karatedo Men - Kumite', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 21],
-            ['name' => 'Karatedo Women - Kumite', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 21],
-            ['name' => 'Karatedo Men - Kata', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 10],
-            ['name' => 'Karatedo Women - Kata', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 10],
-            ['name' => 'Karatedo Men - Advance Kata', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 5],
-            ['name' => 'Karatedo Women - Advance Kata', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 5],
+            // KATA INDIVIDUAL (Category 4, except Advanced* which is Category 3)
+            ['name' => 'Karatedo Men - Novice Kata', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Karatedo Men - Intermediate Kata', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Karatedo Men - Advanced Kata', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+
+            ['name' => 'Karatedo Women - Novice Kata', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Karatedo Women - Intermediate Kata', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Karatedo Women - Advanced Kata', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+
+            // KATA TEAM (Mixed) (Category 4, except Advanced* which is Category 3)
+            ['name' => 'Karatedo Team - Novice Kata', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Karatedo Team - Intermediate Kata', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Karatedo Team - Advanced Kata', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+
+            // KUMITE INDIVIDUAL (Category 2)
+            // Novice Male
+            ['name' => 'Karatedo Men - Novice Kumite -60kg', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Karatedo Men - Novice Kumite +61kg', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Karatedo Men - Novice Kumite +68kg', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+
+            // Novice Female
+            ['name' => 'Karatedo Women - Novice Kumite -50kg', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Karatedo Women - Novice Kumite -55kg', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Karatedo Women - Novice Kumite +55kg', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+
+            // Intermediate Male
+            ['name' => 'Karatedo Men - Intermediate Kumite -60kg', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Karatedo Men - Intermediate Kumite +61kg', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Karatedo Men - Intermediate Kumite +68kg', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+
+            // Intermediate Female
+            ['name' => 'Karatedo Women - Intermediate Kumite -50kg', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Karatedo Women - Intermediate Kumite -55kg', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Karatedo Women - Intermediate Kumite +55kg', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+
+            // Advanced Male
+            ['name' => 'Karatedo Men - Advanced Kumite -60kg', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Karatedo Men - Advanced Kumite +61kg', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Karatedo Men - Advanced Kumite +68kg', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+
+            // Advanced Female
+            ['name' => 'Karatedo Women - Advanced Kumite -50kg', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Karatedo Women - Advanced Kumite -55kg', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Karatedo Women - Advanced Kumite +55kg', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+
+            // KUMITE TEAM
+            ['name' => 'Karatedo Team - Male Kumite', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+            ['name' => 'Karatedo Team - Female Kumite', 'sport_id' => $sports['Karatedo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 3],
+
 
             //Lawn Tennis
             ['name' => 'Lawn Tennis Men', 'sport_id' => $sports['Lawn Tennis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 10],
@@ -233,12 +370,50 @@ class PalaroDataSeeder extends Seeder
             ['name' => 'Softball Women', 'sport_id' => $sports['Softball'], 'medal_weight_category_id' => $medalCategories['High Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
 
             //Swimming
-            ['name' => 'Swimming Men - Category 1', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
-            ['name' => 'Swimming Women - Category 1', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
-            ['name' => 'Swimming Men - Category 2', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
-            ['name' => 'Swimming Women - Category 2', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
-            ['name' => 'Swimming Men - Category 3', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 68],
-            ['name' => 'Swimming Women - Category 3', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 68],
+            ['name' => 'Swimming Men - 4X50 MEDLEY RELAY', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Women - 4X50 MEDLEY RELAY', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Men - 100M BACKSTROKE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Women - 100M BACKSTROKE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Men - 200M FREESTYLE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Women - 200M FREESTYLE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Men - 100M BREASTROKE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Women - 100M BREASTROKE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Men - 100M INDIVIDUAL MEDLEY', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Women - 100M INDIVIDUAL MEDLEY', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Men - 200M BUTTERFLY', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Women - 200M BUTTERFLY', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Men - 50M FREESTYLE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Women - 50M FREESTYLE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Men - 4X100M FREESTYLE RELAY', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Women - 4X100M FREESTYLE RELAY', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Men - 1500M FREESTYLE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Women - 800M FREESTYLE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Men - 200M BACKSTROKE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Women - 200M BACKSTROKE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Men - 100M BUTTERFLY', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Women - 100M BUTTERFLY', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Men - 200M BREASTSTROKE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Women - 200M BREASTSTROKE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Men - 100M FREESTYLE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Women - 100M FREESTYLE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Men - 50M BACKSTROKE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Women - 50M BACKSTROKE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Men - 4X50M FREESTYLE RELAY', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Women - 4X50M FREESTYLE RELAY', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Men - 4X100M MEDLEY RELAY', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Women - 4X100M MEDLEY RELAY', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Men - 400M FREESTYLE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Women - 400M FREESTYLE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Men - 50M BUTTERFLY', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Women - 50M BUTTERFLY', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Men - 50M BREASTSTROKE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Women - 50M BREASTSTROKE', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Men - 200M INDIVIDUAL MEDLEY RELAY', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Women - 200M INDIVIDUAL MEDLEY RELAY', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Men - 4X200M FREESTYLE RELAY', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+            ['name' => 'Swimming Women - 4X200M FREESTYLE RELAY', 'sport_id' => $sports['Swimming'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 2],
+
+
 
             //Table Tennis
             ['name' => 'Table Tennis Men - TEAM', 'sport_id' => $sports['Table Tennis'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => true, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 10],
@@ -250,10 +425,38 @@ class PalaroDataSeeder extends Seeder
             ['name' => 'Table Tennis Mixed', 'sport_id' => $sports['Table Tennis'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => true, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 4],
 
             //Taekwondo
-            ['name' => 'Taekwondo Men - Kirogi', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 16],
-            ['name' => 'Taekwondo Women - Kirogi', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 16],
-            ['name' => 'Taekwondo Men - Poomsae', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 10],
-            ['name' => 'Taekwondo Women - Poomsae', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 10],
+
+            ['name' => 'Taekwondo Men - Kyorugi: Fin, 54 kg and below', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 16],
+            ['name' => 'Taekwondo Women - Kyorugi: Fin, 46 kg and below', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 16],
+
+            ['name' => 'Taekwondo Men - Kyorugi: Fly, over 54 kg to 58 kg', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 16],
+            ['name' => 'Taekwondo Women - Kyorugi: Fly, over 46 kg to 49 kg', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 16],
+
+            ['name' => 'Taekwondo Men - Kyorugi: Bantam, over 58 kg to 63 kg', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 16],
+            ['name' => 'Taekwondo Women - Kyorugi: Bantam, over 49 kg to 53 kg', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 16],
+
+            ['name' => 'Taekwondo Men - Kyorugi: Feather, over 63 kg to 68 kg', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 16],
+            ['name' => 'Taekwondo Women - Kyorugi: Feather, over 53 kg to 57 kg', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 16],
+
+            ['name' => 'Taekwondo Men - Kyorugi: Light, over 68 kg to 74 kg', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 16],
+            ['name' => 'Taekwondo Women - Kyorugi: Light, over 57 kg to 62 kg', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 16],
+
+            ['name' => 'Taekwondo Men - Kyorugi: Welter, over 74 kg to 80 kg', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 16],
+            ['name' => 'Taekwondo Women - Kyorugi: Welter, over 62 kg to 67 kg', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 16],
+
+            ['name' => 'Taekwondo Men - Kyorugi: Middle, over 80 kg to 87 kg', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 16],
+            ['name' => 'Taekwondo Women - Kyorugi: Middle, over 67 kg to 73 kg', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 16],
+
+            ['name' => 'Taekwondo Men - Kyorugi: Heavy, over 87 kg', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 16],
+            ['name' => 'Taekwondo Women - Kyorugi: Heavy, over 73 kg', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 16],
+
+
+            ['name' => 'Taekwondo Men - Poomsaem Individual', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 10],
+            ['name' => 'Taekwondo Women - Poomsae Individual', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 10],
+            ['name' => 'Taekwondo Men - Poomsaem Mixed', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 10],
+            ['name' => 'Taekwondo Women - Poomsae Mixed', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 10],
+            ['name' => 'Taekwondo Men - Poomsaem Team', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 10],
+            ['name' => 'Taekwondo Women - Poomsae Team', 'sport_id' => $sports['Taekwondo'], 'medal_weight_category_id' => $medalCategories['Low Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 10],
 
 
             //Volleyball
@@ -271,10 +474,43 @@ class PalaroDataSeeder extends Seeder
 
 
             //Pencak Silat
-            ['name' => 'Pencak Silat - Tanding', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
-            ['name' => 'Pencak Silat - Tanding', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
-            ['name' => 'Pencak Silat - Sine', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 4],
-            ['name' => 'Pencak Silat - Sine', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 4],
+           // Pencak Silat - Men
+            ['name' => 'Pencak Silat Men - Class S: 45 kg & below', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+            ['name' => 'Pencak Silat Men - Class A: 45 kg - 50 kg', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+            ['name' => 'Pencak Silat Men - Class B: 50 kg - 55 kg', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+            ['name' => 'Pencak Silat Men - Class C: 55 kg - 60 kg', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+            ['name' => 'Pencak Silat Men - Class D: 60 kg - 65 kg', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+            ['name' => 'Pencak Silat Men - Class E: 65 kg - 70 kg', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+            ['name' => 'Pencak Silat Men - Class F: 70 kg - 75 kg', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+            ['name' => 'Pencak Silat Men - Class G: 75 kg - 80 kg', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+            ['name' => 'Pencak Silat Men - Class H: 80 kg - 85 kg', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+            ['name' => 'Pencak Silat Men - Class I: 85 kg - 90 kg', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+            ['name' => 'Pencak Silat Men - Class J: 90 kg - 95 kg', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+            ['name' => 'Pencak Silat Men - Open 1: 95 kg - 110 kg', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+            ['name' => 'Pencak Silat Men - Open 2: 110 kg & above', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+
+
+        // Pencak Silat - Women
+
+        ['name' => 'Pencak Silat Women - Class S: 45 kg & below', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+        ['name' => 'Pencak Silat Women - Class A: 45 kg - 50 kg', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+        ['name' => 'Pencak Silat Women - Class B: 50 kg - 55 kg', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+        ['name' => 'Pencak Silat Women - Class C: 55 kg - 60 kg', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+        ['name' => 'Pencak Silat Women - Class D: 60 kg - 65 kg', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+        ['name' => 'Pencak Silat Women - Class E: 65 kg - 70 kg', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+        ['name' => 'Pencak Silat Women - Class F: 70 kg - 75 kg', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+        ['name' => 'Pencak Silat Women - Class G: 75 kg - 80 kg', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+        ['name' => 'Pencak Silat Women - Class H: 80 kg - 85 kg', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Moderate Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 24],
+
+
+            ['name' => 'Pencak Silat Men - Regu', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 4],
+            ['name' => 'Pencak Silat Women - Regu', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 4],
+            ['name' => 'Pencak Silat Men - Bebas', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 4],
+            ['name' => 'Pencak Silat Women - Bebas', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 4],
+            ['name' => 'Pencak Silat Men - Tunggal', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 4],
+            ['name' => 'Pencak Silat Women - Tunggal', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 4],
+            ['name' => 'Pencak Silat Men - Ganda', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 4],
+            ['name' => 'Pencak Silat Women - Ganda', 'sport_id' => $sports['Pencak Silat'], 'medal_weight_category_id' => $medalCategories['Mid-Level Complexity'], 'is_double_bronze' => false, 'created_at' => $now, 'updated_at' => $now, 'medal_count' => 4],
         ];
 
         DB::table('event_categories')->insert($eventCategories);
