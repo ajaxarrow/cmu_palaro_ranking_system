@@ -107,7 +107,11 @@ class TeamController extends Controller
             'total_medals' => 0, 'total_weight' => 0
         ];
 
-        foreach ($team->medalRecords as $record) {
+        $sortedMedalRecords = $team->medalRecords->sortBy(function ($record) {
+            return $record->eventCategory->sport->name;
+        });
+
+        foreach ($sortedMedalRecords as $record) {
 
             $sportName = $record->eventCategory->sport->name;
             $eventCategoryName = $record->eventCategory->name;
@@ -172,6 +176,12 @@ class TeamController extends Controller
             $overallTotal['total_medals'] += $totalMedals;
             $overallTotal['total_weight'] += $totalWeight;
         }
+
+        foreach ($medalTally as $sport => &$data) {
+            $data['events'] = collect($data['events'])->sortBy('event_category')->values()->toArray();
+        }
+
+
 
         return view('admin.teams.show', compact('team', 'medalTally', 'overallTotal'));
     }
