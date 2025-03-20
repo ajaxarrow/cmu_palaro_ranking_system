@@ -52,9 +52,9 @@
                                         <td>{{ $user->role }}</td>
                                         <td>
                                             <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editModal{{ $user->id }}">Edit</button>
-                                        
+
                                             <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $user->id }}}">Delete</button>
-                                           
+
                                         </td>
                                     </tr>
 
@@ -89,7 +89,7 @@
                                                                 <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
                                                             </select>
                                                         </div>
-                                                        
+
                                                         <div class="hstack gap-2 justify-content-end">
                                                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                                                             <button type="submit" class="btn btn-primary">Update</button>
@@ -101,7 +101,7 @@
                                     </div>
 
                                     <div class="modal fade" id="deleteModal{{ $user->id }}}"  tabindex="-1" aria-labelledby="deleteModal{{ $user->id }}">
-                                        <div class="modal-dialog">  
+                                        <div class="modal-dialog">
                                             <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="deleteModalLabel{{ $user->id }}">Delete Team</h5>
@@ -144,12 +144,10 @@
             <div class="modal-body">
                 <form action="{{ route('users.store')}}" method="POST" onsubmit="disableSubmitButton(this)">
                     @csrf
-
                     <div class="mb-3">
                         <label for="name_id" class="form-label">Name</label>
                         <input type="text" name="name" class="form-control" id="name_id" placeholder="Enter name" required>
                     </div>
-
                     <div class="mb-3">
                         <label for="email_id" class="form-label">Email</label>
                         <input type="email" name="email" class="form-control" id="email_id" placeholder="Enter email" required>
@@ -163,18 +161,26 @@
                             <option value="admin">Admin</option>
                         </select>
                     </div>
-
-                    <!-- Password -->
+                    <!-- Password with toggle -->
                     <div class="mb-3">
                         <label for="password1_id" class="form-label">Password</label>
-                        <input type="password" name="password1" class="form-control" id="password1_id" placeholder="password" required>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="password2_id" class="form-label">Confirm Password</label>
-                        <input type="password" name="password2" class="form-control" id="password2_id" placeholder="password" required>
+                        <div class="input-group">
+                            <input type="password" name="password1" class="form-control" id="password1_id" placeholder="password" required>
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword1" aria-label="Show/hide password">
+                                <i class="ph-duotone fs-24 ph-eye mb-0"></i>
+                            </button>
+                        </div>
                     </div>
 
+                    <div class="mb-3">
+                        <label for="password2_id" class="form-label">Confirm Password</label>
+                        <div class="input-group">
+                            <input type="password" name="password2" class="form-control" id="password2_id" placeholder="password" required>
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword2" aria-label="Show/hide password">
+                                <i class="ph-duotone fs-24 ph-eye mb-0"></i>
+                            </button>
+                        </div>
+                    </div>
                     <button type="button" id='gen_password' class="btn btn-light w-100 mb-4">Generate Password</button>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
@@ -191,6 +197,39 @@
 
 @section('script-bottom')
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Toggle visibility for first password field
+        const togglePassword1 = document.getElementById('togglePassword1');
+        const password1 = document.getElementById('password1_id');
+
+        if (togglePassword1) {
+            togglePassword1.addEventListener('click', function() {
+                // Toggle the type attribute
+                const type = password1.getAttribute('type') === 'password' ? 'text' : 'password';
+                password1.setAttribute('type', type);
+
+                // Toggle the icon
+                this.querySelector('i').classList.toggle('bi-eye');
+                this.querySelector('i').classList.toggle('bi-eye-slash');
+            });
+        }
+
+        // Toggle visibility for second password field
+        const togglePassword2 = document.getElementById('togglePassword2');
+        const password2 = document.getElementById('password2_id');
+
+        if (togglePassword2) {
+            togglePassword2.addEventListener('click', function() {
+                // Toggle the type attribute
+                const type = password2.getAttribute('type') === 'password' ? 'text' : 'password';
+                password2.setAttribute('type', type);
+
+                // Toggle the icon
+                this.querySelector('i').classList.toggle('bi-eye');
+                this.querySelector('i').classList.toggle('bi-eye-slash');
+            });
+        }
+    });
     function setEditFormAction(action, teamId, event, goldTally, silverTally, bronzeTally, medalWeight) {
         document.getElementById('editForm').action = action;
         document.getElementById('editTeamId').value = teamId;

@@ -22,8 +22,8 @@ class PublicTeamController extends Controller
             'medalRecords.eventCategory.medalWeightCategory'
         ])
         ->get()
-        ->sortByDesc(fn($team) => $team->medalRecords->sum('gold_tally') * 3 + 
-                                   $team->medalRecords->sum('silver_tally') * 2 + 
+        ->sortByDesc(fn($team) => $team->medalRecords->sum('gold_tally') * 3 +
+                                   $team->medalRecords->sum('silver_tally') * 2 +
                                    $team->medalRecords->sum('bronze_tally'));
 
         return view('public.standings.index', compact('teams'));
@@ -51,7 +51,11 @@ class PublicTeamController extends Controller
                 'total_medals' => 0, 'total_weight' => 0
             ];
 
-            foreach ($team->medalRecords as $record) {
+            $sortedMedalRecords = $team->medalRecords->sortBy(function ($record) {
+                return $record->eventCategory->sport->name;
+            });
+
+            foreach ($sortedMedalRecords as $record) {
                 $sportName = $record->eventCategory->sport->name;
                 $eventCategoryName = $record->eventCategory->name;
                 $medalWeights = $record->eventCategory->medalWeightCategory;
@@ -107,20 +111,24 @@ class PublicTeamController extends Controller
                 $overallTotal['total_weight'] += $totalWeight;
             }
 
+            foreach ($medalTally as $sport => &$data) {
+                $data['events'] = collect($data['events'])->sortBy('event_category')->values()->toArray();
+            }
+
             // Change from JSON response to view response
             return view('public.standings.show', [
                 'team' => $team,
-            
+
                 'medalTally' => $medalTally,
                 'overallTotal' => $overallTotal
             ]);
 
-        } catch (\Exception $e) {   
+        } catch (\Exception $e) {
             Log::error('Error fetching team standings: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine()
             ]);
-            
+
             // Create an empty team object to prevent undefined variable error
             $team = new Team();
             $medalTally = [];
@@ -130,7 +138,7 @@ class PublicTeamController extends Controller
                 'bronze_tally' => 0, 'bronze_weight' => 0,
                 'total_medals' => 0, 'total_weight' => 0
             ];
-            
+
             return view('public.standings.show', [
                 'team' => $team,
                 'medalTally' => $medalTally,
