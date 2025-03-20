@@ -23,91 +23,95 @@
        
     </div>
 @else
-<!-- Team Hero Section with Dynamic Background -->
-<section class="team-hero-section pt-[10vh]">
-    <!-- Background Elements -->
+<section class="team-hero-section">
+  <!-- Background Elements -->
+  <div class="hero-background">
     <img
-        src="{{ $team->image ? Vite::asset('storage/app/public/' . $team->image) : Vite::asset('resources/images/05.webp') }}"
-        alt="{{ $team['team'] }}"
-        class="hero-background-img"
-        crossorigin="anonymous"
-        loading="lazy"
+      src="{{ $team->image ? Vite::asset('storage/app/public/' . $team->image) : Vite::asset('resources/images/05.webp') }}"
+      alt="{{ $team['team'] }}"
+      class="hero-bg-image"
+      id="teamFlag"
+      crossorigin="anonymous"
+      loading="lazy"
     >
-    <div class="hero-overlay"></div>
-    <div class="hero-pattern"></div>
-    <div class="hero-lines"></div>
-    <div class="hero-diagonal"></div>
-    
-    <div class="hero-content container mx-auto px-4 pt-20 pb-32">
-      
-        
-        <!-- Team Info -->
-        <div class="text-center mb-[50px]" data-aos="fade-down">
-
-            @if($team->image)
-                <div class="team-image-wrapper">
-                    <img
-                        src="{{ $team->image ? Vite::asset('storage/app/public/' . $team->image) : Vite::asset('resources/images/05.webp') }}"
-                        alt="{{ $team['team'] }}"
-                        class="w-full h-full object-cover" id="teamFlag"
-                        crossorigin="anonymous"
-                        loading="lazy"
-                    >
-                </div>
-            @endif
-            <h1 class="team-title">{{ $team->name }}</h1>
-            <div class="d-flex flex-column lh-1 mt-5">
-            @foreach($team['colleges'] as $college)
-                <p class="college-name">{{ $college->name }} ({{ $college->acronym}})</p>
-            @endforeach
-            </div>
-           
-           
-        </div>
-        
-        <!-- Medal Stats Grid -->
-        <div class="medal-stats-grid">
-            <!-- Gold Medal Card -->
-            <div class="medal-stat-card">
-                <div class="text-center">
-                    <div class="medal-circle xl gold mx-auto mb-6"  >G</div>
-                    <div class="text-4xl font-bold text-white mb-2 animated-number" data-medal-count="{{ $overallTotal['gold_tally'] }}">0</div>
-                    <div class="text-sm uppercase tracking-wider text-white/70">Gold</div>
-                </div>
-            </div>
-            
-            <!-- Silver Medal Card -->
-            <div class="medal-stat-card">
-                <div class="text-center">
-                    <div class="medal-circle xl silver mx-auto mb-6" >S</div>
-                    <div class="text-4xl font-bold text-white mb-2 animated-number" data-medal-count="{{ $overallTotal['silver_tally'] }}">0</div>
-                    <div class="text-sm uppercase tracking-wider text-white/70">Silver</div>
-                </div>
-            </div>
-            
-            <!-- Bronze Medal Card -->
-            <div class="medal-stat-card">
-                <div class="text-center">
-                    <div class="medal-circle xl bronze mx-auto mb-6">B</div>
-                    <div class="text-4xl font-bold text-white mb-2 animated-number" data-medal-count="{{ $overallTotal['bronze_tally'] }}">0</div>
-                    <div class="text-sm uppercase tracking-wider text-white/70">Bronze</div>
-                </div>
-            </div>
-            
-            <!-- Total Medals Card -->
-            <div class="medal-stat-card" style="background: linear-gradient(135deg, rgba(var(--team-color-rgb), 0.5), rgba(var(--team-color-rgb), 0.2));">
-                <div class="text-center">
-                    <div class="medal-circle xl bg-white mx-auto mb-6"  style="color: var(--team-color)">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                    </div>
-                    <div class="text-4xl font-bold text-white mb-2 animated-number" data-medal-count="{{ $overallTotal['total_medals'] }}">0</div>
-                    <div class="text-sm uppercase tracking-wider text-white/70">Total</div>
-                </div>
-            </div>
-        </div>
+    <div class="hero-bg-overlay"></div>
+    <div class="hero-bg-pattern"></div>
+    <div class="hero-geometric-shape hero-shape-1"></div>
+    <div class="hero-geometric-shape hero-shape-2"></div>
+    <div class="hero-accent-line"></div>
+  </div>
+  
+  <div class="hero-content container mx-auto px-4 ">
+    <!-- Team Logo -->
+    <div class="team-logo-container mt-20" data-aos="zoom-in">
+      <div class="team-logo-wrapper">
+        @if($team->image)
+          <div class="team-logo ">
+            <img
+              src="{{ $team->image ? Vite::asset('storage/app/public/' . $team->image) : Vite::asset('resources/images/05.webp') }}"
+              alt="{{ $team['team'] }}"
+              crossorigin="anonymous"
+              loading="lazy"
+            >
+          </div>
+          <div class="team-glow"></div>
+        @endif
+      </div>
     </div>
+    
+    <!-- Team Info -->
+    <div class="team-title-container" data-aos="fade-up">
+      <h1 class="team-title" data-text="{{ $team->name }}">{{ $team->name }}</h1>
+      <div class="team-description">
+            <p>{{ $team->desc }}</p>
+           
+        </div>
+      <div class="college-names">
+        @foreach($team['colleges'] as $college)
+          <p class="college-name">{{ $college->name }} ({{ $college->acronym}})</p>
+        @endforeach
+      </div>
+    </div>
+    
+    <!-- Medal Stats -->
+    <div class="medal-stats-container" data-aos="fade-up">
+      <div class="medal-stats-grid">
+        <!-- Gold Medal Card -->
+        <div class="medal-stat-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="medal-circle gold">G</div>
+          <p class="medal-count" data-medal-count="{{ number_format($overallTotal['gold_weight'], 1) }}">0</p>
+          <p class="medal-label">Gold</p>
+        </div>
+
+        
+        
+        <!-- Silver Medal Card -->
+        <div class="medal-stat-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="medal-circle silver">S</div>
+          <p class="medal-count" data-medal-count="{{ number_format($overallTotal['silver_weight'], 1) }}">0</p>
+          <p class="medal-label">Silver</p>
+        </div>
+        
+        <!-- Bronze Medal Card -->
+        <div class="medal-stat-card" data-aos="fade-up" data-aos-delay="300">
+          <div class="medal-circle bronze">B</div>
+          <p class="medal-count" data-medal-count="{{ number_format($overallTotal['bronze_weight'], 1) }}">0</p>
+          <p class="medal-label">Bronze</p>
+        </div>
+        
+        <!-- Total Medals Card -->
+        <div class="medal-stat-card" data-aos="fade-up" data-aos-delay="400">
+          <div class="medal-circle total">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+          </div>
+          <p class="medal-count" data-medal-count="{{ number_format($overallTotal['total_weight'], 1) }}">0</p>
+          <p class="medal-label">Total</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
         <div class="container mx-auto px-6 py-12">
