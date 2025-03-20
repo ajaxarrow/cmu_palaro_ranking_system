@@ -166,7 +166,7 @@ class MedalRecordController extends Controller
                 'event_category_id' => $request->event_category_id,
                 'gold_tally' => 0,
                 'silver_tally' => 0,
-                'bronze_tally' => $medalCount / 2,
+                'bronze_tally' => $medalCount,
                 'number_of_participant' => $request->number_of_participant,
                 'year' => $currentYear,
                 'entry_by' => auth()->id(),
@@ -179,7 +179,7 @@ class MedalRecordController extends Controller
                 'event_category_id' => $request->event_category_id,
                 'gold_tally' => 0,
                 'silver_tally' => 0,
-                'bronze_tally' => $medalCount / 2,
+                'bronze_tally' => $medalCount,
                 'number_of_participant' => $request->number_of_participant,
                 'year' => $currentYear,
                 'entry_by' => auth()->id(),
@@ -277,15 +277,13 @@ class MedalRecordController extends Controller
 
             // Process bronze medal(s)
             if ($validatedData['is_double_bronze'] == '1') {
-                // Create two bronze medal records with half the medal count each
-                $bronzeTally = $validatedData['medal_count'] / 2;
 
                 $this->createMedalRecord(
                     $eventCategoryId,
                     $validatedData['second_runner_up_team_id'],
                     0,
                     0,
-                    $bronzeTally,
+                    $validatedData['medal_count'],
                     $validatedData['number_of_participant'],
                     $isPosted
                 );
@@ -296,7 +294,7 @@ class MedalRecordController extends Controller
                         $validatedData['second_runner_up_team_id_2'],
                         0,
                         0,
-                        $bronzeTally,
+                        $validatedData['medal_count'],
                         $validatedData['number_of_participant'],
                         $isPosted
                     );

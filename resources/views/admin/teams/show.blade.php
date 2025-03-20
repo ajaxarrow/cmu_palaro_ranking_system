@@ -7,10 +7,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <style>
         .export-btn {
-          
+
             bottom: 30px;
             right: 30px;
-          
+
             padding: 10px 30px;
             background-color: #00491e;
             color: white;
@@ -92,11 +92,11 @@
                                     <i class="mdi mdi-arrow-left me-1"></i> Back to Teams List
                                 </a>
                             <div>
-                            
+
                                 <h3 class="fw-bold mb-0">🏆 {{$team->name}} Medal Dashboard</h3>
                             </div>
 
-                        
+
                             <div class="d-flex align-items-center">
                                 <div class="d-flex align-items-center me-4">
                                     <div class="medal-icon medal-gold me-2">G</div>
@@ -133,13 +133,13 @@
                                     <span class="fs-3 fw-bold me-2">{{ $overallTotal['gold_tally'] }}</span>
                                     <span class="text-muted">medals</span>
                                 </div>
-                                <div class="text-muted">Weight: {{ number_format($overallTotal['gold_weight'], 2) }}</div>
+                                <div class="text-muted">Weight: {{ number_format($overallTotal['gold_weight'], 3) }}</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             <!-- Silver Medal Summary -->
             <div class="col-md-3">
                 <div class="card medal-summary-card">
@@ -154,13 +154,13 @@
                                     <span class="fs-3 fw-bold me-2">{{ $overallTotal['silver_tally'] }}</span>
                                     <span class="text-muted">medals</span>
                                 </div>
-                                <div class="text-muted">Weight: {{ number_format($overallTotal['silver_weight'], 2) }}</div>
+                                <div class="text-muted">Weight: {{ number_format($overallTotal['silver_weight'], 3) }}</div>
                             </div>
                         </div>
                     </div>
-                </div> 
+                </div>
             </div>
-            
+
             <!-- Bronze Medal Summary -->
             <div class="col-md-3">
                 <div class="card medal-summary-card">
@@ -175,13 +175,13 @@
                                     <span class="fs-3 fw-bold me-2">{{ $overallTotal['bronze_tally'] }}</span>
                                     <span class="text-muted">medals</span>
                                 </div>
-                                <div class="text-muted">Weight: {{ number_format($overallTotal['bronze_weight'], 2) }}</div>
+                                <div class="text-muted">Weight: {{ number_format($overallTotal['bronze_weight'], 3) }}</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             <!-- Total Medal Summary -->
             <div class="col-md-3">
                 <div class="card medal-summary-card custom-primary-background text-white">
@@ -196,7 +196,7 @@
                                     <span class="fs-3 fw-bold me-2">{{ $overallTotal['total_medals'] }}</span>
                                     <span>medals</span>
                                 </div>
-                                <div>Weight: {{ number_format($overallTotal['total_weight'], 2) }}</div>
+                                <div>Weight: {{ number_format($overallTotal['total_weight'], 3) }}</div>
                             </div>
                         </div>
                     </div>
@@ -204,14 +204,14 @@
             </div>
         </div>
 
-        
+
 
         <!-- Charts Row -->
         <div class="row mb-4">
-            
+
             <div class="col-12">
                 <!-- Bar Chart Container -->
-                
+
                 <h3 class="p-2">Medal Distribution Charts</h3>
                 <div class="chart-toggle flex justify-content-between align-items-center">
                     <div class="">
@@ -220,7 +220,7 @@
                         <button class="chart-tab" data-target="donut-chart">Medal Breakdown</button>
                         <button class="chart-tab" data-target="sports-chart">Sports Analysis</button>
                     </div>
-                    
+
                     <div class="d-flex gap-3">
                         <button id="exportPDF" class="export-btn">
                             <i class="mdi mdi-file-pdf-outline"></i>
@@ -228,7 +228,7 @@
                         </button>
 
                     </div>
-            
+
                 </div>
                 <div id="bar-chart" class="chart-container active">
                     <div class="card">
@@ -345,20 +345,20 @@
                                                 <td class="text-center">
                                                     <span class="badge bg-warning text-dark">{{ $event['gold_tally'] }}</span>
                                                 </td>
-                                                <td class="text-center">{{ number_format($event['gold_weight'], 2) }}</td>
+                                                <td class="text-center">{{ number_format($event['gold_weight'], 3) }}</td>
                                                 <td class="text-center">
                                                     <span class="badge bg-light text-dark">{{ $event['silver_tally'] }}</span>
                                                 </td>
-                                                <td class="text-center">{{ number_format($event['silver_weight'], 2) }}</td>
+                                                <td class="text-center">{{ number_format($event['silver_weight'], 3) }}</td>
                                                 <td class="text-center">
                                                     <span class="badge bg-danger-subtle text-dark">{{ $event['bronze_tally'] }}</span>
                                                 </td>
-                                                <td class="text-center">{{ number_format($event['bronze_weight'], 2) }}</td>
+                                                <td class="text-center">{{ number_format($event['bronze_weight'], 3) }}</td>
                                                 <td class="text-center">
                                                     <strong>{{ $event['total_medals'] }}</strong>
                                                 </td>
                                                 <td class="text-center">
-                                                    <strong>{{ number_format($event['total_weight'], 2) }}</strong>
+                                                    <strong>{{ number_format($event['total_weight'], 3) }}</strong>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -368,17 +368,17 @@
                                             <td class="text-center">
                                                 <span class="badge bg-warning text-dark">{{ $data['total']['gold_tally'] }}</span>
                                             </td>
-                                            <td class="text-center"><strong>{{ number_format($data['total']['gold_weight'], 2) }}</strong></td>
+                                            <td class="text-center"><strong>{{ number_format($data['total']['gold_weight'], 3) }}</strong></td>
                                             <td class="text-center">
                                                 <span class="badge bg-light text-dark">{{ $data['total']['silver_tally'] }}</span>
                                             </td>
-                                            <td class="text-center"><strong>{{ number_format($data['total']['silver_weight'], 2) }}</strong></td>
+                                            <td class="text-center"><strong>{{ number_format($data['total']['silver_weight'], 3) }}</strong></td>
                                             <td class="text-center">
                                                 <span class="badge bg-danger-subtle text-dark">{{ $data['total']['bronze_tally'] }}</span>
                                             </td>
-                                            <td class="text-center"><strong>{{ number_format($data['total']['bronze_weight'], 2) }}</strong></td>
+                                            <td class="text-center"><strong>{{ number_format($data['total']['bronze_weight'], 3) }}</strong></td>
                                             <td class="text-center"><strong>{{ $data['total']['total_medals'] }}</strong></td>
-                                            <td class="text-center"><strong>{{ number_format($data['total']['total_weight'], 2) }}</strong></td>
+                                            <td class="text-center"><strong>{{ number_format($data['total']['total_weight'], 3) }}</strong></td>
                                         </tr>
                                     @endforeach
                                     <!-- Overall Total Row -->
@@ -387,17 +387,17 @@
                                         <td class="text-center">
                                             <span class="badge bg-warning text-dark">{{ $overallTotal['gold_tally'] }}</span>
                                         </td>
-                                        <td class="text-center"><strong>{{ number_format($overallTotal['gold_weight'], 2) }}</strong></td>
+                                        <td class="text-center"><strong>{{ number_format($overallTotal['gold_weight'], 3) }}</strong></td>
                                         <td class="text-center">
                                             <span class="badge bg-light text-dark">{{ $overallTotal['silver_tally'] }}</span>
                                         </td>
-                                        <td class="text-center"><strong>{{ number_format($overallTotal['silver_weight'], 2) }}</strong></td>
+                                        <td class="text-center"><strong>{{ number_format($overallTotal['silver_weight'], 3) }}</strong></td>
                                         <td class="text-center">
                                             <span class="badge bg-danger-subtle text-dark">{{ $overallTotal['bronze_tally'] }}</span>
                                         </td>
-                                        <td class="text-center"><strong>{{ number_format($overallTotal['bronze_weight'], 2) }}</strong></td>
+                                        <td class="text-center"><strong>{{ number_format($overallTotal['bronze_weight'], 3) }}</strong></td>
                                         <td class="text-center"><strong>{{ $overallTotal['total_medals'] }}</strong></td>
-                                        <td class="text-center"><strong>{{ number_format($overallTotal['total_weight'], 2) }}</strong></td>
+                                        <td class="text-center"><strong>{{ number_format($overallTotal['total_weight'], 3) }}</strong></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -405,7 +405,7 @@
                     </div>
                 </div>
             </div>
-    
+
 
             </div>
         </div>
@@ -413,7 +413,7 @@
 
     </div>
 
-   
+
     <div id="exportProgress">
         <h4>Generating PDF Report...</h4>
         <div class="progress-bar">
@@ -437,61 +437,61 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add Excel export button next to PDF export button
     const pdfButton = document.getElementById('exportPDF');
     const buttonContainer = pdfButton.parentNode;
-    
+
     const excelButton = document.createElement('button');
     excelButton.id = 'exportExcel';
     excelButton.className = 'export-btn';
     excelButton.innerHTML = '<i class="mdi mdi-file-excel-outline"></i> Export to Excel';
-    
+
     buttonContainer.appendChild(excelButton);
-    
+
     // Add Excel export functionality
     document.getElementById('exportExcel').addEventListener('click', function() {
         exportToExcel();
     });
-    
+
     function exportToExcel() {
         // Show progress indicator
         const progressElement = document.getElementById('exportProgress');
         const progressFill = progressElement.querySelector('.progress-fill');
         const progressText = document.getElementById('progressText');
-        
+
         progressElement.style.display = 'block';
         progressFill.style.width = '10%';
         progressText.textContent = 'Preparing data...';
-        
+
         // Disable the export button
         document.getElementById('exportExcel').disabled = true;
-        
+
         setTimeout(() => {
             try {
                 // Update progress
                 progressFill.style.width = '30%';
                 progressText.textContent = 'Extracting medal data...';
-                
+
                 // Create workbook
                 const wb = XLSX.utils.book_new();
-                
+
                 // Extract team name from heading
                 const teamName = document.querySelector('h3.fw-bold').textContent
                     .trim()
                     .replace('🏆', '')
                     .replace('Medal Dashboard', '')
                     .trim();
-                
+
                 // Get current date for filename
                 const today = new Date();
                 const dateStr = today.toISOString().split('T')[0]; // YYYY-MM-DD format
-                
+
                 // FIRST WORKSHEET: Summary
                 progressFill.style.width = '50%';
                 progressText.textContent = 'Creating medal summary...';
-                
-           
+
+
                 // SECOND WORKSHEET: Detailed breakdown
                 progressFill.style.width = '70%';
                 progressText.textContent = 'Creating detailed breakdown...';
-                
+
                 // Function to extract table data
                 function extractTableData() {
                     const table = document.getElementById('saving-datatable-shesh');
@@ -499,7 +499,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         console.error("Table not found");
                         return [];
                     }
-                    
+
                     // Get column headers
                     const headers = [];
                     const headerRow = table.querySelector('thead tr');
@@ -519,54 +519,54 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                         headers.push(headerText);
                     });
-                    
+
                     const tableData = [headers]; // Start with headers
                     let currentSport = '';
                     let sportRows = {};
-                    
+
                     // Helper function to extract text, including from badges
                     function getCellText(cell) {
                         if (!cell) return '';
-                        
+
                         // First try to get text from badge if it exists
                         const badge = cell.querySelector('.badge');
                         if (badge) {
                             return badge.textContent.trim();
                         }
-                        
+
                         // Otherwise get the regular text
                         return cell.textContent.trim();
                     }
-                    
+
                     // Process all rows
                     const rows = Array.from(table.querySelectorAll('tbody tr'));
-                    
+
                     for (let i = 0; i < rows.length; i++) {
                         const row = rows[i];
                         const cells = Array.from(row.cells);
-                        
+
                         // Check row type
                         if (row.classList.contains('table-primary')) {
                             // Overall total row - has colspan="2" in first cell
                             const rowData = ['Overall Total', ''];
-                            
+
                             // Start from cell index 2 (because of colspan=2)
                             for (let j = 2; j < cells.length; j++) {
                                 rowData.push(getCellText(cells[j]));
                             }
-                            
+
                             tableData.push(rowData);
                         }
                         else if (row.classList.contains('table-secondary')) {
                             // Sport total row
                             const sportName = getCellText(cells[0]).replace('Total for', '').trim();
                             const rowData = ['Total for ' + sportName, ''];
-                            
+
                             // Get values from remaining cells
                             for (let j = 1; j < cells.length; j++) {
                                 rowData.push(getCellText(cells[j]));
                             }
-                            
+
                             // Store the sport total row to insert after all event rows
                             if (sportRows[sportName]) {
                                 tableData.push(...sportRows[sportName]);
@@ -582,60 +582,60 @@ document.addEventListener('DOMContentLoaded', function() {
                                 // This is the first row for a sport
                                 currentSport = getCellText(cells[0]);
                                 const eventCategory = getCellText(cells[1]);
-                                
+
                                 const rowData = [currentSport, eventCategory];
-                                
+
                                 // Add all medal data
                                 for (let j = 2; j < cells.length; j++) {
                                     rowData.push(getCellText(cells[j]));
                                 }
-                                
+
                                 // Initialize array for this sport if it doesn't exist
                                 if (!sportRows[currentSport]) {
                                     sportRows[currentSport] = [];
                                 }
-                                
+
                                 sportRows[currentSport].push(rowData);
                             }
                             else if (currentSport) {
                                 // This is a continued row for the current sport
                                 const eventCategory = getCellText(cells[0]);
-                                
+
                                 const rowData = [currentSport, eventCategory];
-                                
+
                                 // Add all medal data
                                 for (let j = 1; j < cells.length; j++) {
                                     rowData.push(getCellText(cells[j]));
                                 }
-                                
+
                                 // Add to the sport's rows
                                 if (!sportRows[currentSport]) {
                                     sportRows[currentSport] = [];
                                 }
-                                
+
                                 sportRows[currentSport].push(rowData);
                             }
                         }
                     }
-                    
+
                     // Add any remaining sport rows
                     for (const sport in sportRows) {
                         if (sportRows[sport].length > 0) {
                             tableData.push(...sportRows[sport]);
                         }
                     }
-                    
+
                     return tableData;
                 }
-                
+
                 const tableData = extractTableData();
                 const detailedWs = XLSX.utils.aoa_to_sheet(tableData);
                 XLSX.utils.book_append_sheet(wb, detailedWs, "Medal Breakdown");
-                
+
                 // Apply styling to detailed worksheet
                 progressFill.style.width = '90%';
                 progressText.textContent = 'Applying formatting...';
-                
+
                 // Set column widths
                 detailedWs['!cols'] = [
                     { wch: 20 },  // Sports
@@ -649,11 +649,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     { wch: 12 },  // Total Medals
                     { wch: 12 }   // Total Weight
                 ];
-                
+
                 // Generate the Excel file
                 progressFill.style.width = '95%';
                 progressText.textContent = 'Generating Excel file...';
-                
+
                 // Create the Excel file with formatted date/time
                 const now = new Date();
                 const day = String(now.getDate()).padStart(2, '0');
@@ -670,19 +670,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Create the formatted datetime string
                 const formattedDateTime = `${day}-${monthName}-${year}_${formattedHours}-${formattedMinutes}-${ampm}`;
                 const filename = `${teamName}_medal_report_${formattedDateTime}.xlsx`;
-                
+
                 XLSX.writeFile(wb, filename);
-                
+
                 // Complete progress
                 progressFill.style.width = '100%';
                 progressText.textContent = 'Excel export completed!';
-                
+
                 setTimeout(() => {
                     // Hide progress and re-enable button
                     progressElement.style.display = 'none';
                     document.getElementById('exportExcel').disabled = false;
                 }, 1000);
-                
+
             } catch (error) {
                 console.error('Error exporting to Excel:', error);
                 progressText.textContent = 'Error: ' + error.message;
@@ -736,16 +736,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
                     // Add active class to clicked tab
                     this.classList.add('active');
-                    
+
                     // Hide all chart containers
                     document.querySelectorAll('.chart-container').forEach(container => {
                         container.classList.remove('active');
                     });
-                    
+
                     // Show target chart container
                     const targetId = this.getAttribute('data-target');
                     document.getElementById(targetId).classList.add('active');
-                    
+
                     // Manually trigger resize for the visible chart
                     window.dispatchEvent(new Event('resize'));
                 });
@@ -756,19 +756,19 @@ document.addEventListener('DOMContentLoaded', function() {
         function renderMedalDistributionChart(showWeight = false) {
             const chartElement = document.querySelector("#medal-distribution-chart");
             if (!chartElement) return;
-            
+
             // Clear previous chart if it exists
             if (medalDistributionChart) {
                 medalDistributionChart.destroy();
             }
-            
-            const data = showWeight ? 
-                [medalData.goldWeight, medalData.silverWeight, medalData.bronzeWeight] : 
+
+            const data = showWeight ?
+                [medalData.goldWeight, medalData.silverWeight, medalData.bronzeWeight] :
                 [medalData.goldCount, medalData.silverCount, medalData.bronzeCount];
-            
+
             const labels = ['Gold', 'Silver', 'Bronze'];
             const colors = ['#FFB800', '#B7B7B7', '#CD7F32'];
-            
+
             const options = {
                 series: [{
                     name: showWeight ? 'Medal Weight' : 'Medal Count',
@@ -839,7 +839,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
             };
-            
+
             // Render chart
             medalDistributionChart = new ApexCharts(chartElement, options);
             medalDistributionChart.render();
@@ -849,9 +849,9 @@ document.addEventListener('DOMContentLoaded', function() {
         function renderDonutCharts() {
             const countElement = document.querySelector("#medal-count-chart");
             const weightElement = document.querySelector("#medal-weight-chart");
-            
+
             if (!countElement || !weightElement) return;
-            
+
             // Clear previous charts if they exist
             if (medalCountChart) {
                 medalCountChart.destroy();
@@ -859,7 +859,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (medalWeightChart) {
                 medalWeightChart.destroy();
             }
-            
+
             // Medal count donut chart
             const countOptions = {
                 series: [medalData.goldCount, medalData.silverCount, medalData.bronzeCount],
@@ -921,8 +921,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // Medal weight donut chart
             const weightOptions = {
                 series: [
-                    parseFloat(medalData.goldWeight.toFixed(2)), 
-                    parseFloat(medalData.silverWeight.toFixed(2)), 
+                    parseFloat(medalData.goldWeight.toFixed(2)),
+                    parseFloat(medalData.silverWeight.toFixed(2)),
                     parseFloat(medalData.bronzeWeight.toFixed(2))
                 ],
                 chart: {
@@ -979,11 +979,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }]
             };
-            
+
             // Render charts
             medalCountChart = new ApexCharts(countElement, countOptions);
             medalWeightChart = new ApexCharts(weightElement, weightOptions);
-            
+
             medalCountChart.render();
             medalWeightChart.render();
         }
@@ -992,15 +992,15 @@ document.addEventListener('DOMContentLoaded', function() {
         function renderSportsAnalysisChart() {
             const chartElement = document.querySelector("#sports-analysis-chart");
             if (!chartElement) return;
-            
+
             // Clear previous chart if it exists
             if (sportsAnalysisChart) {
                 sportsAnalysisChart.destroy();
             }
-            
+
             // Sort sports by total medals
             const sortedSports = [...sportsData].sort((a, b) => b.total - a.total);
-            
+
             const options = {
                 series: [{
                     name: 'Gold',
@@ -1079,7 +1079,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
             };
-            
+
             // Render chart
             sportsAnalysisChart = new ApexCharts(chartElement, options);
             sportsAnalysisChart.render();
@@ -1093,7 +1093,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Remove active class from all tabs and containers
                 document.querySelectorAll('.chart-tab').forEach(tab => tab.classList.remove('active'));
                 document.querySelectorAll('.chart-container').forEach(container => container.classList.remove('active'));
-                
+
                 // Add active class to sports table tab and container
                 sportsTableTab.classList.add('active');
                 document.getElementById('sports-table').classList.add('active');
@@ -1114,14 +1114,14 @@ document.addEventListener('DOMContentLoaded', function() {
         function initializeCharts() {
             // Set up the tab switching
             setupChartTabs();
-            
+
             // Render initial charts
             setTimeout(() => {
                 renderMedalDistributionChart(false);
                 renderDonutCharts();
                 renderSportsAnalysisChart();
             }, 100);
-            
+
             // Set up weight toggle for bar chart
             const toggleWeight = document.getElementById('toggleWeight');
             if (toggleWeight) {
@@ -1129,7 +1129,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     renderMedalDistributionChart(this.checked);
                 });
             }
-            
+
             // Add window resize handler to ensure charts are properly sized
             window.addEventListener('resize', function() {
                 if (medalDistributionChart) medalDistributionChart.render();
@@ -1147,24 +1147,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const progressBar = document.getElementById('exportProgress');
     const progressFill = document.querySelector('.progress-fill');
     const progressText = document.getElementById('progressText');
-    
+
     exportBtn.addEventListener('click', function() {
         progressBar.style.display = 'block';
         exportBtn.disabled = true;
         progressFill.style.width = '10%';
         progressText.textContent = 'Preparing document...';
-        
+
         setTimeout(() => {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('l', 'mm', 'a4');
-            
+
             // Get team name
             const teamName = document.querySelector('.fw-bold.mb-0').textContent
                 .trim()
                 .replace('🏆', '')
                 .replace('Medal Dashboard', '')
                 .trim();
-            
+
             // Document styling constants
             const colors = {
                 primary: [0, 73, 30],       // Dark Green #00491e
@@ -1178,24 +1178,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 lightText: [148, 163, 184],
                 darkText: [30, 41, 59]
             };
-            
+
             // Create cover page
             doc.setFillColor(...colors.primary);
             doc.rect(0, 0, doc.internal.pageSize.width, doc.internal.pageSize.height, 'F');
-            
+
             // Add design element - changed from blue to white
             doc.setFillColor(...colors.white);
             doc.roundedRect(0, doc.internal.pageSize.height - 110, doc.internal.pageSize.width, 110, 80, 0, 'F');
-            
+
             // Add header text (changed text color to dark for the bottom section)
             doc.setTextColor(...colors.white);
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(38);
             doc.text(teamName, 30, 50);
-            
+
             doc.setFontSize(26);
             doc.text('Medal Report', 30, 65);
-            
+
             // Add medal icons
             doc.setFillColor(...colors.gold);
             doc.circle(35, 100, 10, 'F');
@@ -1203,33 +1203,33 @@ document.addEventListener('DOMContentLoaded', function() {
             doc.circle(65, 100, 10, 'F');
             doc.setFillColor(...colors.bronze);
             doc.circle(95, 100, 10, 'F');
-            
+
             // Add date (dark text in the white section)
             doc.setTextColor(...colors.darkText);
             doc.setFontSize(12);
             doc.text(`Generated: ${new Date().toLocaleDateString()}`, 30, 140);
-            
+
             // Add content page
             doc.addPage();
-            
+
             // Create header
             doc.setFillColor(...colors.primary);
             doc.rect(0, 0, doc.internal.pageSize.width, 20, 'F');
-            
+
             doc.setTextColor(...colors.white);
             doc.setFontSize(12);
             doc.setFont('helvetica', 'bold');
             doc.text(teamName, doc.internal.pageSize.width / 2, 13, { align: 'center' });
-            
+
             progressFill.style.width = '30%';
             progressText.textContent = 'Adding medal summary...';
-            
+
             // Summary boxes
             const summaryStartY = 30;
             const boxWidth = 60;
             const boxHeight = 30;
             const gapBetweenBoxes = 10;
-            
+
             // Gold summary
             doc.setFillColor(...colors.gold);
             doc.roundedRect(20, summaryStartY, boxWidth, boxHeight, 3, 3, 'F');
@@ -1238,9 +1238,9 @@ document.addEventListener('DOMContentLoaded', function() {
             doc.setFont('helvetica', 'bold');
             doc.text('Gold Medals', 50, summaryStartY + 10, { align: 'center' });
             doc.setFontSize(18);
-            doc.text(document.querySelector('.col-md-3:nth-child(1) .fs-3.fw-bold').textContent.trim(), 
+            doc.text(document.querySelector('.col-md-3:nth-child(1) .fs-3.fw-bold').textContent.trim(),
                     50, summaryStartY + 22, { align: 'center' });
-            
+
             // Silver summary
             doc.setFillColor(...colors.silver);
             doc.roundedRect(20 + boxWidth + gapBetweenBoxes, summaryStartY, boxWidth, boxHeight, 3, 3, 'F');
@@ -1249,9 +1249,9 @@ document.addEventListener('DOMContentLoaded', function() {
             doc.setFont('helvetica', 'bold');
             doc.text('Silver Medals', 50 + boxWidth + gapBetweenBoxes, summaryStartY + 10, { align: 'center' });
             doc.setFontSize(18);
-            doc.text(document.querySelector('.col-md-3:nth-child(2) .fs-3.fw-bold').textContent.trim(), 
+            doc.text(document.querySelector('.col-md-3:nth-child(2) .fs-3.fw-bold').textContent.trim(),
                     50 + boxWidth + gapBetweenBoxes, summaryStartY + 22, { align: 'center' });
-            
+
             // Bronze summary
             doc.setFillColor(...colors.bronze);
             doc.roundedRect(20 + (boxWidth + gapBetweenBoxes) * 2, summaryStartY, boxWidth, boxHeight, 3, 3, 'F');
@@ -1260,9 +1260,9 @@ document.addEventListener('DOMContentLoaded', function() {
             doc.setFont('helvetica', 'bold');
             doc.text('Bronze Medals', 50 + (boxWidth + gapBetweenBoxes) * 2, summaryStartY + 10, { align: 'center' });
             doc.setFontSize(18);
-            doc.text(document.querySelector('.col-md-3:nth-child(3) .fs-3.fw-bold').textContent.trim(), 
+            doc.text(document.querySelector('.col-md-3:nth-child(3) .fs-3.fw-bold').textContent.trim(),
                     50 + (boxWidth + gapBetweenBoxes) * 2, summaryStartY + 22, { align: 'center' });
-            
+
             // Total summary
             doc.setFillColor(...colors.primary);
             doc.roundedRect(20 + (boxWidth + gapBetweenBoxes) * 3, summaryStartY, boxWidth, boxHeight, 3, 3, 'F');
@@ -1271,18 +1271,18 @@ document.addEventListener('DOMContentLoaded', function() {
             doc.setFont('helvetica', 'bold');
             doc.text('Total Medals', 50 + (boxWidth + gapBetweenBoxes) * 3, summaryStartY + 10, { align: 'center' });
             doc.setFontSize(18);
-            doc.text(document.querySelector('.col-md-3:nth-child(4) .fs-3.fw-bold').textContent.trim(), 
+            doc.text(document.querySelector('.col-md-3:nth-child(4) .fs-3.fw-bold').textContent.trim(),
                     50 + (boxWidth + gapBetweenBoxes) * 3, summaryStartY + 22, { align: 'center' });
-            
+
             // Section title
             doc.setTextColor(...colors.darkText);
             doc.setFontSize(14);
             doc.setFont('helvetica', 'bold');
             doc.text('Medal Breakdown by Sport & Event', 20, summaryStartY + boxHeight + 15);
-            
+
             progressFill.style.width = '60%';
             progressText.textContent = 'Processing table data...';
-            
+
             // COMPLETELY REWRITTEN TABLE DATA PROCESSING
             function extractTableData() {
                 const table = document.getElementById('saving-datatable-shesh');
@@ -1290,38 +1290,38 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.error("Table not found");
                     return [];
                 }
-                
+
                 const tableData = [];
                 let currentSport = '';
-                
+
                 // Helper function to extract text, including from badges
                 function getCellText(cell) {
                     if (!cell) return '';
-                    
+
                     // First try to get text from badge if it exists
                     const badge = cell.querySelector('.badge');
                     if (badge) {
                         return badge.textContent.trim();
                     }
-                    
+
                     // Otherwise get the regular text
                     return cell.textContent.trim();
                 }
-                
+
                 // Process all rows
                 const rows = Array.from(table.querySelectorAll('tbody tr'));
-                
+
                 for (let i = 0; i < rows.length; i++) {
                     const row = rows[i];
-                    
+
                     // Skip hidden rows
                     if (window.getComputedStyle(row).display === 'none') {
                         continue;
                     }
-                    
+
                     // Get all cells
                     const cells = Array.from(row.cells);
-                    
+
                     // Check row type and process accordingly
                     if (row.classList.contains('table-primary')) {
                         // Overall total row (has colspan=2 in first cell)
@@ -1329,48 +1329,48 @@ document.addEventListener('DOMContentLoaded', function() {
                             'Overall Total',
                             '',  // Empty cell for second column
                         ];
-                        
+
                         // Add all the medal data (start from index 2 because of colspan=2)
                         for (let j = 2; j < cells.length; j++) {
                             rowData.push(getCellText(cells[j]));
                         }
-                        
+
                         tableData.push(rowData);
                     }
                     else if (row.classList.contains('table-secondary')) {
                         // Sport total row
                         const sportTotalText = getCellText(cells[0]);
-                        
+
                         const rowData = [
                             sportTotalText,
                             '',  // Empty cell for event category
                         ];
-                        
+
                         // Add all the medal data (start from index 1)
                         for (let j = 1; j < cells.length; j++) {
                             rowData.push(getCellText(cells[j]));
                         }
-                        
+
                         tableData.push(rowData);
                     }
                     else {
                         // Regular event row or first sport row with rowspan
-                        
+
                         // Check if this is a row with rowspan (first row for a sport)
                         if (cells[0].hasAttribute('rowspan')) {
                             // Save the sport name for future rows
                             currentSport = getCellText(cells[0]);
-                            
+
                             const rowData = [
                                 currentSport,
                                 getCellText(cells[1]),  // Event name
                             ];
-                            
+
                             // Add all the medal data (start from index 2)
                             for (let j = 2; j < cells.length; j++) {
                                 rowData.push(getCellText(cells[j]));
                             }
-                            
+
                             tableData.push(rowData);
                         }
                         else {
@@ -1379,27 +1379,27 @@ document.addEventListener('DOMContentLoaded', function() {
                                 currentSport,  // Use the saved sport name
                                 getCellText(cells[0]),  // Event name is the first cell
                             ];
-                            
+
                             // Add all the medal data (start from index 1)
                             for (let j = 1; j < cells.length; j++) {
                                 rowData.push(getCellText(cells[j]));
                             }
-                            
+
                             tableData.push(rowData);
                         }
                     }
                 }
-                
+
                 return tableData;
             }
-            
+
             // Extract table data
             const tableData = extractTableData();
             console.log("Extracted table data:", tableData);
-            
+
             progressFill.style.width = '80%';
             progressText.textContent = 'Generating table...';
-            
+
             // Create table
             doc.autoTable({
                 startY: summaryStartY + boxHeight + 20,
@@ -1451,7 +1451,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 didParseCell: function(data) {
                     const rowData = data.row.raw;
                     const cellText = data.cell.text.join(' ');
-                    
+
                     // Style medal count cells
                     if (data.column.index === 2 && data.section === 'body') {
                         data.cell.styles.textColor = colors.gold;
@@ -1463,7 +1463,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         data.cell.styles.textColor = colors.bronze;
                         data.cell.styles.fontStyle = 'bold';
                     }
-                    
+
                     // Style total rows
                     if (rowData[0].includes('Total for')) {
                         data.cell.styles.fillColor = [240, 245, 250];
@@ -1487,53 +1487,53 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 margin: { top: 20, left: 10, right: 10 },
             });
-            
+
             // Add footers
             const pageCount = doc.internal.getNumberOfPages();
             for (let i = 1; i <= pageCount; i++) {
                 doc.setPage(i);
-                
+
                 // Skip footer on cover page
                 if (i === 1) continue;
-                
+
                 // Add footer line
                 doc.setDrawColor(...colors.light);
                 doc.setLineWidth(0.5);
                 doc.line(10, doc.internal.pageSize.height - 15, doc.internal.pageSize.width - 10, doc.internal.pageSize.height - 15);
-                
+
                 // Add page number
                 doc.setFillColor(...colors.light);
                 doc.roundedRect(doc.internal.pageSize.width / 2 - 15, doc.internal.pageSize.height - 12, 30, 8, 4, 4, 'F');
-                
+
                 doc.setTextColor(...colors.darkText);
                 doc.setFontSize(8);
                 doc.text(
-                    `Page ${i} of ${pageCount}`, 
-                    doc.internal.pageSize.width / 2, 
+                    `Page ${i} of ${pageCount}`,
+                    doc.internal.pageSize.width / 2,
                     doc.internal.pageSize.height - 7,
                     { align: 'center' }
                 );
-                
+
                 // Add footer text
                 doc.setTextColor(...colors.secondary);
                 doc.text(
-                    'Medal Tally System', 
-                    20, 
+                    'Medal Tally System',
+                    20,
                     doc.internal.pageSize.height - 7
                 );
-                
+
                 // Add team name
                 doc.text(
-                    teamName, 
-                    doc.internal.pageSize.width - 20, 
+                    teamName,
+                    doc.internal.pageSize.width - 20,
                     doc.internal.pageSize.height - 7,
                     { align: 'right' }
                 );
             }
-            
+
             progressFill.style.width = '100%';
             progressText.textContent = 'Download starting...';
-            
+
             setTimeout(() => {
                 const now = new Date();
                 const day = String(now.getDate()).padStart(2, '0');

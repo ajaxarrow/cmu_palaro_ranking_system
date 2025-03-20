@@ -9,7 +9,7 @@
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
         <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
-        
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
         @vite(['resources/css/landingpage.css'])
 
@@ -331,9 +331,9 @@
                         </div>
                     </div>
                 </div>
-                
 
-                
+
+
 
                 <!-- Stats Section -->
                 <div class="stats-container" data-aos="fade-up" data-aos-delay="200">
@@ -425,7 +425,7 @@
                                     @endif
                                 </div>
                             </div>
-                            
+
                             <div class="podium-container">
                                 @if($event['gold_winner'] || $event['silver_winner'] || count($event['bronze_winners']) > 0)
                                     @if($event['gold_winner'])
@@ -491,7 +491,7 @@
                     </div>
                     @endforeach
                 </div>
-                
+
                 <!-- Navigation Controls -->
                 <div class="swiper-pagination"></div>
                 <div class="swiper-button-next"></div>
@@ -544,7 +544,7 @@
 
 
 
-    
+
 
 
         <section id="standings" class="py-20 bg-gray-50">

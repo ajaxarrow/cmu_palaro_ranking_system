@@ -284,7 +284,7 @@
                                 if ($record->bronze_tally > 0) {
                                     $bronzeWinners[] = $team;
                                     if($eventCategory->is_double_bronze){
-                                        $bronzeWeight = $record->bronze_tally * $eventCategory->medalWeightCategory->bronze_weight;
+                                        $bronzeWeight = $record->bronze_tally * ($eventCategory->medalWeightCategory->bronze_weight/2);
                                     } else {
                                         $bronzeWeight = $record->bronze_tally * $eventCategory->medalWeightCategory->bronze_weight;
                                     }
@@ -1010,7 +1010,7 @@
 <!-- Add this JavaScript function to prepare the edit form -->
 
 <script>
- 
+
     // Add Excel Export Button
 document.addEventListener('DOMContentLoaded', function() {
     // Create Excel export button
@@ -1026,7 +1026,7 @@ document.addEventListener('DOMContentLoaded', function() {
     exportExcelBtn.className = 'export-btn';
     exportExcelBtn.innerHTML = '<i class="mdi mdi-microsoft-excel me-1"></i> Export Excel';
     exportExcelBtn.style.backgroundColor = '#217346'; // Excel green color
-    
+
     // Don't modify other buttons, just position this one higher
     exportBtnContainer.appendChild(exportExcelBtn);
     document.body.appendChild(exportBtnContainer);
@@ -1038,7 +1038,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const progressBar = document.getElementById('exportProgress');
         const progressFill = document.querySelector('.progress-fill');
         const progressText = document.getElementById('progressText');
-        
+
         exportOverlay.style.display = 'block';
         progressBar.style.display = 'block';
         exportExcelBtn.disabled = true;
@@ -1070,7 +1070,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     const sportName = sportNameEl.textContent.trim();
                     sportGroups[sportName] = [];
-                    
+
                     const cardContainer = header.nextElementSibling;
                     if (!cardContainer) return;
 
@@ -1182,7 +1182,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         break;
                     }
                 }
-                
+
                 if (!hasData) {
                     throw new Error('No medal data found. Please make sure some data is visible.');
                 }
@@ -1192,10 +1192,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Create a new workbook
                 const wb = XLSX.utils.book_new();
-                
+
                 // Create a summary sheet with all data in one organized table
                 const summaryData = [];
-                
+
                 // Add header row
                 summaryData.push([
                     'Medal Tally Summary Report',
@@ -1211,7 +1211,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     '',
                     ''
                 ]);
-                
+
                 summaryData.push([
                     'Generated on:',
                     new Date().toLocaleString(),
@@ -1226,9 +1226,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     '',
                     ''
                 ]);
-                
+
                 summaryData.push([]);  // Empty row for spacing
-                
+
                 // Add table headers
                 summaryData.push([
                     'Sport',
@@ -1245,11 +1245,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Weight',
                     'Teams'
                 ]);
-                
+
                 // Add data rows
                 for (const sportName in sportGroups) {
                     if (sportGroups[sportName].length === 0) continue;
-                    
+
                     // Add sport name as a section header
                     summaryData.push([
                         sportName,
@@ -1266,7 +1266,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         '',
                         ''
                     ]);
-                    
+
                     // Add event data rows
                     sportGroups[sportName].forEach(event => {
                         summaryData.push([
@@ -1285,17 +1285,17 @@ document.addEventListener('DOMContentLoaded', function() {
                             event.participants
                         ]);
                     });
-                    
+
                     // Add empty row between sports
                     summaryData.push([]);
                 }
-                
+
                 // Create worksheet from aoa (array of arrays)
                 const ws = XLSX.utils.aoa_to_sheet(summaryData);
-                
+
                 // Add the worksheet to the workbook
                 XLSX.utils.book_append_sheet(wb, ws, 'Medal Tally');
-                
+
                 // Style the worksheet - set column widths
                 ws['!cols'] = [
                     { wch: 20 },  // Sport
@@ -1326,19 +1326,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 const formattedMinutes = String(now.getMinutes()).padStart(2, '0');
                 const formattedDateTime = `${day}-${monthName}-${year} ${formattedHours}:${formattedMinutes} ${ampm}`;
 
-                
+
                 progressFill.style.width = '90%';
                 progressText.textContent = 'Finalizing Excel file...';
 
                 // Apply cell styling for better readability
                 // Get the range of cells
                 const range = XLSX.utils.decode_range(ws['!ref']);
-                
+
                 // Create cell style objects
                 const headerStyle = { font: { bold: true }, fill: { fgColor: { rgb: "00217346" }, patternType: "solid" }, alignment: { horizontal: "center" } };
                 const sportHeaderStyle = { font: { bold: true }, fill: { fgColor: { rgb: "00E2EFDA" }, patternType: "solid" } };
                 const dataRowStyle = { alignment: { horizontal: "left" } };
-                
+
                 // Define merged cell ranges
                 ws['!merges'] = [
                     // Merge title cell across all columns
@@ -1347,22 +1347,22 @@ document.addEventListener('DOMContentLoaded', function() {
                     { s: { r: 1, c: 0 }, e: { r: 1, c: 1 } },
                     { s: { r: 1, c: 2 }, e: { r: 1, c: 12 } }
                 ];
-                
+
                 // Apply some basic styling (SheetJS doesn't have full styling support in the free version)
                 // But we can at least add some cell properties for Excel to interpret
                 // Format the title row - although limited in the community version
                 ws.A1 = { t: 's', v: 'Medal Tally Summary Report' };
 
-                
+
                 // Generate filename with date
                 const filename = `Medal_Tally_Report_${formattedDateTime}.xlsx`;
-                
+
                 // Create download
                 XLSX.writeFile(wb, filename);
-                
+
                 progressFill.style.width = '100%';
                 progressText.textContent = 'Download complete!';
-                
+
             } catch (error) {
                 console.error('Error generating Excel:', error);
                 alert(error.message || 'Error generating Excel file. Please try again.');
