@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
     <link href="https://api.fontshare.com/v2/css?f[]=dancing-script@400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+
+    <link href="https://api.fontshare.com/v2/css?f[]=rosaline@400&display=swap" rel="stylesheet">
     @vite(['resources/css/landingpage.css'])
 
 </head>
@@ -20,18 +22,23 @@
   .hero-section {
     position: relative;
     min-height: 100vh;
-    background: url('{{ Vite::asset('resources/images/palaroBkg.png') }}') center/cover no-repeat !important;
+    background: url('{{ Vite::asset('resources/images/palaroBkg.jpg') }}') center/cover no-repeat !important;
     overflow: hidden;
     background-size: 10px;
 }
 
-.theme-slogan {
-  
-    color: white !important;
-    font-family: "Playfair", serif;
-     font-size: 1.5rem !important;
-      font-weight: 800; letter-spacing: 0.5px; line-height: 1.2;  
 
+
+.theme-slogan span{
+    width: 400px;
+    margin: 0 auto;
+    color: white !important;
+    font-family: 'Rosaline', cursive;
+ 
+      font-weight:100;
+
+       letter-spacing: 0.5px; line-height: 1.2;  
+    font-size: 1.4rem !important;
 }
 
 /* Feather styles */
@@ -51,8 +58,9 @@
     top: 5%;
     left: 15%;
     --parallax-speed: 0.08;
-    filter: blur(0.5px)  saturate(150%);
+    filter: drop-shadow(0 0 20px #ffd000) blur(0.5px) saturate(300%);
     transform: rotate(25deg) scale(1.4) !important;
+    
     opacity: 0.85;
 }
 
@@ -61,7 +69,7 @@
     top: 35%;
     right: 5%;
     --parallax-speed: 0.12;
-    filter: blur(1px)  saturate(150%);
+    filter: blur(1px)  saturate(100%) drop-shadow(0 0 20px #ffd000);
     transform: rotate(-45deg) scale(0.8) scaleX(-1) !important; /* Flipped horizontally */
     opacity: 0.95;
 }
@@ -70,7 +78,7 @@
     top: -50px;
     right: -100px;
     --parallax-speed: 0.1;
-    filter: blur(4px)  saturate(300%) ;
+    filter: blur(4px)  saturate(300%) drop-shadow(0 0 20px #ffd000);
     transform: rotate(-100deg) scale(2) scaleX(1.2) scaleY(1.2) !important; /* Flipped both ways */
     opacity: 0.85;
 }
@@ -79,7 +87,7 @@
     top: 15%;
     right: 20%;
     --parallax-speed: 0.06;
-    filter: blur(1px)  saturate(150%);
+    filter: blur(1px)  saturate(150%)drop-shadow(0 0 20px #ffd000);
     transform: rotate(-15deg) scale(1.6) scaleY(-1) !important; /* Flipped vertically */
     opacity: 0.8;
 }
@@ -89,7 +97,7 @@
     top: -50px;
     left: -100px;
     --parallax-speed: 0.1;
-    filter: blur(2px)  saturate(150%);
+    filter: blur(2px)  saturate(150%) drop-shadow(0 0 20px #ffd000);
     transform: rotate(100deg) scale(1.5) scaleX(-1.2) scaleY(1.2) !important; /* Flipped both ways */
     opacity: 0.85;
     animation: float 3s ease-in-out infinite !important;
@@ -99,7 +107,7 @@
     top: 60%;
     left: 8%;
     --parallax-speed: 0.09;
-    filter: blur(1.8px)  saturate(150%);
+    filter: blur(1.8px)  saturate(150%) drop-shadow(0 0 20px #ffd000);
     transform: rotate(35deg) scale(1.25) !important;
     opacity: 0.9;
 }
@@ -227,7 +235,7 @@
             <div class="feather feather-6" data-depth="0.25" data-aos="fade"></div>
         </div>
 
-        <div class="hero-content container mx-auto px-4 pt-20 pb-32">
+        <div class="hero-content container mx-auto px-4 pt-5 pb-32">
             <!-- Header -->
             <div class="text-center mb-[50px]" data-aos="fade-down">
                 <h1 class="theme-slogan text-7xl font-extrabold text-white mb-6 tracking-tight">
@@ -516,19 +524,22 @@
     </section>
 
     <section class="championship-carousel py-24 bg-gradient-to-b from-white to-gray-50">
+            <!-- <div class="feather feather-4" style="z-index: 2" data-depth="0.3" data-aos="fade"></div> -->
+            <div class="feather feather-4" style="z-index: 2; top: 100px;" data-depth="0.3" data-aos="fade"></div>
+
     <div class="container mx-auto px-4">
         <!-- Section Header -->
-        <div class="text-center mb-16" data-aos="fade-up">
-            <h2 class="text-5xl font-black text-gray-800 mb-4 tracking-tight">
-                Championship Results
-                <span class="block text-lg font-medium text-gray-500 mt-2">
+        <div class="carousel-header text-center mb-16 z-[10] relative" data-aos="fade-up">
+            <h2 class="text-5xl mb-4 font-black tracking-tight">
+                Sports Event Results
+                <span class="block text-lg font-medium mt-2">
                     Celebrating excellence in sports
                 </span>
             </h2>
             <div class="flex justify-center items-center gap-2 mt-4">
-                <span class="w-8 h-1 bg-green-600 rounded-full"></span>
-                <span class="w-3 h-1 bg-green-400 rounded-full"></span>
-                <span class="w-2 h-1 bg-green-200 rounded-full"></span>
+                <span class="w-8 h-1 bg-yellow-600 rounded-full"></span>
+                <span class="w-3 h-1 bg-yellow-400 rounded-full"></span>
+                <span class="w-2 h-1 bg-yellow-200 rounded-full"></span>
             </div>
         </div>
 
@@ -638,6 +649,9 @@
         </div>
     </div>
     </section>
+
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -770,7 +784,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="container mx-auto px-4">
             <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-up">
                 Team Standings
-                <div class="w-20 h-1 bg-green-600 mx-auto mt-4"></div>
+                <div class="w-20 h-1  mx-auto mt-4"></div>
             </h2>
 
 
@@ -809,7 +823,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </div>
                             </div>
                                 <div class="team-description">
-                                    <p>{{ $team['description'] ?? 'Representing excellence in sports and academics.' }}</p>
+                                    <p>{{ $team['description'] ?? '' }}</p>
                                     <div class="rank-indicator">
                                         <span class="rank-pill font-bold">
                                             Rank #{{ $index + 1 }}
@@ -989,8 +1003,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
-
+   
     <script>
         // Initialize AOS with custom settings
         AOS.init({
