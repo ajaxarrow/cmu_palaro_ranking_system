@@ -1,0 +1,37 @@
+name: Build_Project
+# 1234567
+on:
+  push:
+    branches:
+      - docker_deploy # Run the workflow on push to the main branch
+  pull_request:
+    branches:
+      - docker_deploy  # Run the workflow on pull requests targeting the main branch
+
+jobs:
+  build:
+    runs-on: self-hosted  # Change to 'ubuntu-latest' if you're not using a self-hosted runner
+
+    steps:
+      # Checkout the repository code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Pull Latest Changes
+        run: |
+          git fetch --all
+          git reset --hard origin/docker_deploy
+      
+      - name: Build Container
+        run: docker compose build --no-cache
+        
+      - name: Run Container
+        run: docker compose up -d
+
+      # Save build artifacts (optional)
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+
+        with:
+          name: build-output
+          path: build/  # Adjust this to your actual build output folder
