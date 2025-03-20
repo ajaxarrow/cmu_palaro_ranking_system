@@ -34,10 +34,10 @@
     margin: 0 auto;
     color: white !important;
     font-family: 'Rosaline', cursive;
- 
+
       font-weight:100;
 
-       letter-spacing: 0.5px; line-height: 1.2;  
+       letter-spacing: 0.5px; line-height: 1.2;
     font-size: 1.4rem !important;
 }
 
@@ -60,7 +60,7 @@
     --parallax-speed: 0.08;
     filter: drop-shadow(0 0 20px #ffd000) blur(0.5px) saturate(300%);
     transform: rotate(25deg) scale(1.4) !important;
-    
+
     opacity: 0.85;
 }
 
@@ -93,7 +93,7 @@
 }
 
 .feather-5 {
-    
+
     top: -50px;
     left: -100px;
     --parallax-speed: 0.1;
@@ -248,7 +248,7 @@
                 </h1>
             </div>
 
-       
+
             <!-- Podium Section -->
             <div class="podium-section max-w-6xl mx-auto mb-20" data-aos="fade-up">
                 <!-- Desktop Podium -->
@@ -283,7 +283,7 @@
                                     </div>
                                 </div>
                                 <div class="total-points">
-                                    {{ number_format($medalTally[1]['total']['total_weight'], 2) }} pts
+                                    {{ number_format($medalTally[1]['total']['total_weight'], 3) }} pts
                                 </div>
                             </div>
                             <div class="podium-stand silver">
@@ -321,7 +321,7 @@
                                     </div>
                                 </div>
                                 <div class="total-points champion">
-                                    {{ number_format($medalTally[0]['total']['total_weight'], 2) }} pts
+                                    {{ number_format($medalTally[0]['total']['total_weight'], 3) }} pts
                                 </div>
                                 <div class="champion-crown">👑</div>
                             </div>
@@ -360,7 +360,7 @@
                                     </div>
                                 </div>
                                 <div class="total-points">
-                                    {{ number_format($medalTally[2]['total']['total_weight'], 2) }} pts
+                                    {{ number_format($medalTally[2]['total']['total_weight'], 3) }} pts
                                 </div>
                             </div>
                             <div class="podium-stand bronze">
@@ -380,7 +380,7 @@
                             <div class="card-content">
                                 <div class="position-marker">Champion</div>
                                 <a href="{{ route('public.standings.details', $medalTally[0]['team_id']) }}">
-                                
+
                                 <div class="team-image-wrapper">
                                     <img src="{{ $medalTally[0]['team_image'] ? Vite::asset('storage/app/public/' . $medalTally[0]['team_image']) : Vite::asset('resources/images/05.webp') }}"
                                          alt="{{ $medalTally[0]['team'] }}"
@@ -401,7 +401,7 @@
                                     </div>
                                 </div>
                                 <div class="total-score">
-                                    {{ number_format($medalTally[0]['total']['total_weight'], 2) }} pts
+                                    {{ number_format($medalTally[0]['total']['total_weight'], 3) }} pts
                                 </div>
                             </div>
                         </div>
@@ -418,7 +418,7 @@
                                          alt="{{ $medalTally[1]['team'] }}"
                                          class="team-image">
                                 </div>
-                               
+
                                 <h3 class="team-name">{{ $medalTally[1]['team'] }}</h3>
                                 </a>
                                 <div class="medal-counts">
@@ -433,7 +433,7 @@
                                     </div>
                                 </div>
                                 <div class="total-score">
-                                    {{ number_format($medalTally[1]['total']['total_weight'], 2) }} pts
+                                    {{ number_format($medalTally[1]['total']['total_weight'], 3) }} pts
                                 </div>
                             </div>
                         </div>
@@ -462,7 +462,7 @@
                                     </div>
                                 </div>
                                 <div class="total-score">
-                                    {{ number_format($medalTally[2]['total']['total_weight'], 2) }} pts
+                                    {{ number_format($medalTally[2]['total']['total_weight'], 3) }} pts
                                 </div>
                             </div>
                         </div>
@@ -471,7 +471,7 @@
                 </div>
             </div>
 
-            
+
 
             <!-- Stats Section -->
             <div class="stats-container" data-aos="fade-up" data-aos-delay="200">
@@ -566,14 +566,14 @@
                                 @endif
                             </div>
                         </div>
-                        
+
                         <div class="podium-container">
 
                             @if($event['gold_winner'] || $event['silver_winner'] || count($event['bronze_winners']) > 0)
                                 @if($event['gold_winner'])
                                 <div class="medal-tier gold-tier">
                                 <a href="{{ route('public.standings.details', $event['gold_winner']['team_id']) }}" >
-                                  
+
                                     <div class="medal-header">
                                         <div class="medal-icon gold">C</div>
                                         <img
@@ -583,10 +583,10 @@
                                         crossorigin="anonymous"
                                         loading="lazy">
                                         <div class="medal-title">{{ $event['gold_winner']['team_name'] }}</div>
-                                     
+
                                     </div>
                                     </a>
-                                   
+
                                 </div>
                                 @endif
 
@@ -594,7 +594,7 @@
 
                                 <div class="medal-tier silver-tier">
                                 <a href="{{ route('public.standings.details', $event['silver_winner']['team_id']) }}" >
-                                  
+
                                     <div class="medal-header">
                                         <div class="medal-icon silver">1</div>
                                         <img
@@ -625,8 +625,8 @@
                                         </div>
 
                                     </a>
-                                        
-                                        
+
+
                                     </div>
                                     @endforeach
                                 @endif
@@ -641,7 +641,7 @@
                 </div>
                 @endforeach
             </div>
-            
+
             <!-- Navigation Controls -->
             <div class="swiper-pagination"></div>
             <div class="swiper-button-next"></div>
@@ -673,7 +673,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.addEventListener('mousemove', function(e) {
     mouseX = e.clientX / window.innerWidth - 0.5; // -0.5 to 0.5
     mouseY = e.clientY / window.innerHeight - 0.5; // -0.5 to 0.5
-  
+
     if (!ticking) {
       window.requestAnimationFrame(function() {
         updateFeathersOnMouseMove(mouseX, mouseY);
@@ -687,28 +687,28 @@ document.addEventListener('DOMContentLoaded', function() {
     feathers.forEach(feather => {
       const speed = parseFloat(getComputedStyle(feather).getPropertyValue('--parallax-speed')) || 0.1;
       const mouseEffect = speed * 20; // Amplify mouse effect based on parallax speed
-    
+
       // Get current transform
       const currentTransform = feather.style.transform || '';
       const rotateMatch = currentTransform.match(/rotate\(([^)]+)\)/);
       const scaleMatch = currentTransform.match(/scale\(([^)]+)\)/);
       const translateYMatch = currentTransform.match(/translateY\(([^)]+)\)/);
-    
+
       const rotate = rotateMatch ? parseFloat(rotateMatch[1]) : parseFloat(getComputedStyle(feather).getPropertyValue('--rotate')) || 0;
       const scale = scaleMatch ? parseFloat(scaleMatch[1]) : parseFloat(getComputedStyle(feather).getPropertyValue('--scale')) || 1;
       const translateY = translateYMatch ? parseFloat(translateYMatch[1]) : 0;
-    
+
       // Apply mouse movement effect
       const translateX = mouseX * mouseEffect;
       const additionalRotate = mouseX * 5; // Subtle rotation based on mouse position
-    
+
       feather.style.transform = `translateY(${translateY}px) translateX(${translateX}px) rotate(${rotate + additionalRotate}deg) scale(${scale})`;
     });
   }
 
   window.addEventListener('scroll', function() {
     lastScrollY = window.scrollY;
-  
+
     if (!ticking) {
       window.requestAnimationFrame(function() {
         updateFeathersOnScroll(lastScrollY);
@@ -724,12 +724,12 @@ document.addEventListener('DOMContentLoaded', function() {
       const yPos = -scrollY * speed;
       const rotate = parseFloat(getComputedStyle(feather).getPropertyValue('--rotate')) || 0;
       const scale = parseFloat(getComputedStyle(feather).getPropertyValue('--scale')) || 1;
-    
+
       // Get current mouse effect
       const mouseEffect = speed * 20;
       const translateX = mouseX * mouseEffect;
       const additionalRotate = mouseX * 5;
-    
+
       feather.style.transform = `translateY(${yPos}px) translateX(${translateX}px) rotate(${rotate + additionalRotate}deg) scale(${scale})`;
     });
   }
@@ -777,7 +777,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
- 
+
 
 
     <section id="standings" class="py-20 bg-gray-50">
@@ -840,7 +840,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     </div>
                                     <div class="image-glow"></div>
                                     <a href="{{ route('public.standings.details', $team['team_id']) }}" >
-                                  
+
                                     <img
                                         src="{{ $team['team_image'] ? Vite::asset('storage/app/public/' . $team['team_image']) : Vite::asset('resources/images/05.webp') }}"
                                         alt="{{ $team['team'] }}"
@@ -848,7 +848,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                         crossorigin="anonymous"
                                         loading="lazy"
                                     >
-                                  
+
                                     </a>
                                 </div>
                             </div>
@@ -863,7 +863,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                         <div class="stat-content">
                                             <div class="stat-value">{{ $team['total']['gold_tally'] }}</div>
                                             <div class="stat-label">Gold</div>
-                                            <div class="stat-points">{{ number_format($team['total']['gold_weight'], 2) }} pts</div>
+                                            <div class="stat-points">{{ number_format($team['total']['gold_weight'], 3) }} pts</div>
                                         </div>
                                     </div>
                                     <div class="modern-stat-pill silver">
@@ -871,7 +871,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                         <div class="stat-content">
                                             <div class="stat-value">{{ $team['total']['silver_tally'] }}</div>
                                             <div class="stat-label">Silver</div>
-                                            <div class="stat-points">{{ number_format($team['total']['silver_weight'], 2) }} pts</div>
+                                            <div class="stat-points">{{ number_format($team['total']['silver_weight'], 3) }} pts</div>
                                         </div>
                                     </div>
                                     <div class="modern-stat-pill bronze">
@@ -879,7 +879,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                         <div class="stat-content">
                                             <div class="stat-value">{{ $team['total']['bronze_tally'] }}</div>
                                             <div class="stat-label">Bronze</div>
-                                            <div class="stat-points">{{ number_format($team['total']['bronze_weight'], 2) }} pts</div>
+                                            <div class="stat-points">{{ number_format($team['total']['bronze_weight'], 3 )}} pts</div>
                                         </div>
                                     </div>
                                 </div>
@@ -888,7 +888,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <div class="modern-score-container">
                                     <div class="score-display">
                                         <div class="score-value">
-                                            {{ number_format($team['total']['total_weight'], 2) }}
+                                            {{ number_format($team['total']['total_weight'], 3) }}
                                         </div>
                                         <div class="score-label">Total Points</div>
                                     </div>
@@ -1003,7 +1003,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </footer>
 
-   
+
     <script>
         // Initialize AOS with custom settings
         AOS.init({
@@ -1549,6 +1549,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     </script>
-   
+
 </body>
 </html>

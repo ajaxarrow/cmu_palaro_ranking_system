@@ -29,10 +29,10 @@ class LandingPageController extends Controller
             },
             'medalRecords.team.colleges'
         ])->get();
-        
+
         // Prepare sportResults array
         $sportResults = [];
-        
+
         // Initialize sports structure
         $sports = Sport::all();
         foreach ($sports as $sport) {
@@ -49,7 +49,7 @@ class LandingPageController extends Controller
             $eventId = $eventCategory->id;
             $medalWeights = $eventCategory->medalWeightCategory;
             $isDoubleBronze = $eventCategory->is_double_bronze;
-            
+
             // Initialize event in sport results
             $sportResults[$sportId]['events'][$eventId] = [
                 'id' => $eventId,
@@ -59,7 +59,7 @@ class LandingPageController extends Controller
                 'bronze_winners' => [],
                 'medal_records' => []
             ];
-            
+
             // Group medal records by team
             $teamMedals = [];
             foreach ($eventCategory->medalRecords as $record) {
@@ -72,36 +72,40 @@ class LandingPageController extends Controller
                         'medal_weight' => 0
                     ];
                 }
-                
+
+                $bronzeMedalWeight = 0;
                 // Calculate medal weights
                 $bronzeWeight = $medalWeights->bronze_weight;
-                if ($isDoubleBronze && $record->bronze_tally > 0) {
-                    $bronzeWeight = $bronzeWeight / 2;
+                $isDoubleBronze = $record->eventCategory->is_double_bronze;
+                if ($isDoubleBronze) {
+                    $bronzeMedalWeight = $medalWeights-> bronze_weight /2;
+                } else {
+                    $bronzeMedalWeight = $medalWeights-> bronze_weight;
                 }
-                
+
                 $goldWeight = $record->gold_tally * $medalWeights->gold_weight;
                 $silverWeight = $record->silver_tally * $medalWeights->silver_weight;
-                $bronzeWeight = $record->bronze_tally * $bronzeWeight;
+                $bronzeWeight = $record->bronze_tally * $bronzeMedalWeight;
                 $totalWeight = $goldWeight + $silverWeight + $bronzeWeight;
-                
+
                 // Update team medals for this event
                 $teamMedals[$record->team_id]['gold_tally'] += $record->gold_tally;
                 $teamMedals[$record->team_id]['silver_tally'] += $record->silver_tally;
                 $teamMedals[$record->team_id]['bronze_tally'] += $record->bronze_tally;
                 $teamMedals[$record->team_id]['medal_weight'] += $totalWeight;
-                
+
                 // Add record to event's medal records
                 $sportResults[$sportId]['events'][$eventId]['medal_records'][] = [
                     'id' => $record->id,
                     'team_id' => $record->team_id,
                     'team_name' => $record->team->name,
                     'gold_tally' => $record->gold_tally,
-                    'silver_tally' => $record->silver_tally, 
+                    'silver_tally' => $record->silver_tally,
                     'bronze_tally' => $record->bronze_tally,
                     'total_weight' => $totalWeight
                 ];
             }
-            
+
             // Sort teams by medals (gold first, then silver, then bronze)
             uasort($teamMedals, function($a, $b) {
                 if ($a['gold_tally'] != $b['gold_tally']) {
@@ -112,7 +116,7 @@ class LandingPageController extends Controller
                 }
                 return $b['bronze_tally'] <=> $a['bronze_tally'];
             });
-            
+
             // Assign winners
             $winners = array_values($teamMedals);
             if (count($winners) > 0) {
@@ -124,7 +128,7 @@ class LandingPageController extends Controller
                         'colleges' => $winners[0]['team']->colleges->pluck('name'),
                     ];
                 }
-                
+
                 if (count($winners) > 1 && $winners[1]['silver_tally'] > 0) {
                     $sportResults[$sportId]['events'][$eventId]['silver_winner'] = [
                         'team_id' => $winners[1]['team']->id,
@@ -133,7 +137,7 @@ class LandingPageController extends Controller
                         'colleges' => $winners[1]['team']->colleges->pluck('name'),
                     ];
                 }
-                
+
                 // For bronze, we might have multiple winners (especially with double bronze)
                 $bronzeWinners = [];
                 for ($i = 2; $i < count($winners); $i++) {
@@ -148,6 +152,7 @@ class LandingPageController extends Controller
                 }
                 $sportResults[$sportId]['events'][$eventId]['bronze_winners'] = $bronzeWinners;
             }
+            $bronzeMedalWeight = 0;
         }
 
         // Now calculate the overall team totals as before
@@ -171,15 +176,19 @@ class LandingPageController extends Controller
             foreach ($team->medalRecords as $record) {
                 $medalWeights = $record->eventCategory->medalWeightCategory;
 
+                $bronzeMedalWeight = 0;
+                // Calculate medal weights
+                $bronzeWeight = $medalWeights->bronze_weight;
                 $isDoubleBronze = $record->eventCategory->is_double_bronze;
-                if ($isDoubleBronze && $record->bronze_tally > 0) {
-                    $medalWeights->bronze_weight = $medalWeights->bronze_weight / 2;
+                if ($isDoubleBronze) {
+                    $bronzeMedalWeight = $medalWeights-> bronze_weight /2;
+                } else {
+                    $bronzeMedalWeight = $medalWeights-> bronze_weight;
                 }
-
                 // Calculate weighted tallies
                 $goldWeight = $record->gold_tally * $medalWeights->gold_weight;
                 $silverWeight = $record->silver_tally * $medalWeights->silver_weight;
-                $bronzeWeight = $record->bronze_tally * $medalWeights->bronze_weight;
+                $bronzeWeight = $record->bronze_tally * $bronzeMedalWeight;
                 $totalWeight = $goldWeight + $silverWeight + $bronzeWeight;
                 $totalMedals = $record->gold_tally + $record->silver_tally + $record->bronze_tally;
 
@@ -202,6 +211,8 @@ class LandingPageController extends Controller
                 $overallTotal['bronze_weight'] += $bronzeWeight;
                 $overallTotal['total_medals'] += $totalMedals;
                 $overallTotal['total_weight'] += $totalWeight;
+
+                $bronzeMedalWeight = 0;
             }
 
             $medalTally[$team->id] = [
@@ -247,7 +258,7 @@ class LandingPageController extends Controller
         }
 
         return view('public.landing.index', [
-            'medalTally' => $medalTally, 
+            'medalTally' => $medalTally,
             'overallTotal' => $overallTotal,
             'sportResults' => $sportResults,
             'flattenedEvents' => $flattenedEvents,  // Add this line

@@ -39,17 +39,21 @@ class ResultsController extends Controller
             ];
 
             foreach ($team->medalRecords as $record) {
+                $bronzeMedalWeight = 0;
+
                 $medalWeights = $record->eventCategory->medalWeightCategory;
 
                 $isDoubleBronze = $record->eventCategory->is_double_bronze;
-                if ($isDoubleBronze && $record->bronze_tally > 0) {
-                    $medalWeights->bronze_weight = $medalWeights->bronze_weight / 2;
+                if ($isDoubleBronze) {
+                    $bronzeMedalWeight = $medalWeights-> bronze_weight /2;
+                } else {
+                    $bronzeMedalWeight = $medalWeights-> bronze_weight;
                 }
 
                 // Calculate weighted tallies
                 $goldWeight = $record->gold_tally * $medalWeights->gold_weight;
                 $silverWeight = $record->silver_tally * $medalWeights->silver_weight;
-                $bronzeWeight = $record->bronze_tally * $medalWeights->bronze_weight;
+                $bronzeWeight = $record->bronze_tally * $bronzeMedalWeight;
                 $totalWeight = $goldWeight + $silverWeight + $bronzeWeight;
                 $totalMedals = $record->gold_tally + $record->silver_tally + $record->bronze_tally;
 
@@ -72,6 +76,8 @@ class ResultsController extends Controller
                 $overallTotal['bronze_weight'] += $bronzeWeight;
                 $overallTotal['total_medals'] += $totalMedals;
                 $overallTotal['total_weight'] += $totalWeight;
+
+                $bronzeMedalWeight = 0;
             }
 
             // Store total per team

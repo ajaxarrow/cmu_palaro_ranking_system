@@ -20,7 +20,7 @@
             </div>
             <p class="mt-2">{{ $error }}</p>
         </div>
-       
+
     </div>
 @else
 <section class="team-hero-section">
@@ -40,7 +40,7 @@
     <div class="hero-geometric-shape hero-shape-2"></div>
     <div class="hero-accent-line"></div>
   </div>
-  
+
   <div class="hero-content container mx-auto px-4 ">
     <!-- Team Logo -->
     <div class="team-logo-container mt-20" data-aos="zoom-in">
@@ -58,13 +58,13 @@
         @endif
       </div>
     </div>
-    
+
     <!-- Team Info -->
     <div class="team-title-container" data-aos="fade-up">
       <h1 class="team-title" data-text="{{ $team->name }}">{{ $team->name }}</h1>
       <div class="team-description">
             <p>{{ $team->desc }}</p>
-           
+
         </div>
       <div class="college-names">
         @foreach($team['colleges'] as $college)
@@ -72,33 +72,33 @@
         @endforeach
       </div>
     </div>
-    
+
     <!-- Medal Stats -->
     <div class="medal-stats-container" data-aos="fade-up">
       <div class="medal-stats-grid">
         <!-- Gold Medal Card -->
         <div class="medal-stat-card" data-aos="fade-up" data-aos-delay="100">
           <div class="medal-circle gold">G</div>
-          <p class="medal-count" data-medal-count="{{ number_format($overallTotal['gold_weight'], 1) }}">0</p>
-          <p class="medal-label">Gold</p>
+          <p class="medal-count" >{{ number_format($overallTotal['gold_weight'], 3) }}</p>
+          <p class="medal-label">Gold Weight</p>
         </div>
 
-        
-        
+
+
         <!-- Silver Medal Card -->
         <div class="medal-stat-card" data-aos="fade-up" data-aos-delay="200">
           <div class="medal-circle silver">S</div>
-          <p class="medal-count" data-medal-count="{{ number_format($overallTotal['silver_weight'], 1) }}">0</p>
-          <p class="medal-label">Silver</p>
+          <p class="medal-count" >{{ number_format($overallTotal['silver_weight'], 3) }}</p>
+          <p class="medal-label">Silver Weight</p>
         </div>
-        
+
         <!-- Bronze Medal Card -->
         <div class="medal-stat-card" data-aos="fade-up" data-aos-delay="300">
           <div class="medal-circle bronze">B</div>
-          <p class="medal-count" data-medal-count="{{ number_format($overallTotal['bronze_weight'], 1) }}">0</p>
-          <p class="medal-label">Bronze</p>
+          <p class="medal-count" >{{ number_format($overallTotal['bronze_weight'], 3) }}</p>
+          <p class="medal-label">Bronze Weight</p>
         </div>
-        
+
         <!-- Total Medals Card -->
         <div class="medal-stat-card" data-aos="fade-up" data-aos-delay="400">
           <div class="medal-circle total">
@@ -106,7 +106,7 @@
               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
             </svg>
           </div>
-          <p class="medal-count" data-medal-count="{{ number_format($overallTotal['total_weight'], 1) }}">0</p>
+          <p class="medal-count" >{{ number_format($overallTotal['total_weight'], 3) }}</p>
           <p class="medal-label">Total</p>
         </div>
       </div>
@@ -115,7 +115,7 @@
 </section>
 
         <div class="container mx-auto px-6 py-12">
-     
+
 
             <!-- Medal Distribution -->
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-16 card-hover" data-aos="fade-up" style="border-top: 4px solid var(--team-color)">
@@ -137,7 +137,7 @@
                                         <span class="font-medium">Gold</span>
                                     </div>
                                     <span class="text-sm font-semibold px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full">
-                                        {{ $overallTotal['gold_tally'] }} 
+                                        {{ $overallTotal['gold_tally'] }}
                                         ({{ $overallTotal['total_medals'] > 0 ? round(($overallTotal['gold_tally'] / $overallTotal['total_medals']) * 100) : 0 }}%)
                                     </span>
                                 </div>
@@ -152,7 +152,7 @@
                                         <span class="font-medium">Silver</span>
                                     </div>
                                     <span class="text-sm font-semibold px-3 py-1 bg-gray-100 text-gray-800 rounded-full">
-                                        {{ $overallTotal['silver_tally'] }} 
+                                        {{ $overallTotal['silver_tally'] }}
                                         ({{ $overallTotal['total_medals'] > 0 ? round(($overallTotal['silver_tally'] / $overallTotal['total_medals']) * 100) : 0 }}%)
                                     </span>
                                 </div>
@@ -167,7 +167,7 @@
                                         <span class="font-medium">Bronze</span>
                                     </div>
                                     <span class="text-sm font-semibold px-3 py-1 bg-yellow-50 text-yellow-800 rounded-full">
-                                        {{ $overallTotal['bronze_tally'] }} 
+                                        {{ $overallTotal['bronze_tally'] }}
                                         ({{ $overallTotal['total_medals'] > 0 ? round(($overallTotal['bronze_tally'] / $overallTotal['total_medals']) * 100) : 0 }}%)
                                     </span>
                                 </div>
@@ -179,23 +179,23 @@
                         <div>
                             <div class="bg-gray-50 rounded-2xl p-6 h-full flex flex-col justify-between shadow-inner">
                                 <h3 class="text-lg font-semibold mb-4" style="color: var(--team-color)">Medal Stats</h3>
-                                
+
                                 <div class="space-y-4">
                                     <div class="flex justify-between items-center py-3 border-b border-gray-200">
                                         <span class="font-medium">Total Medal Weight:</span>
-                                        <span class="font-bold text-lg" data-count="{{ number_format($overallTotal['total_weight'], 1) }}">0.0</span>
+                                        <span class="font-bold text-lg">{{ number_format($overallTotal['total_weight'], 3) }}</span>
                                     </div>
                                     <div class="flex justify-between items-center py-3 border-b border-gray-200">
                                         <span class="font-medium">Gold Weight:</span>
-                                        <span class="font-bold text-lg text-yellow-600" data-count="{{ number_format($overallTotal['gold_weight'], 1) }}">0.0</span>
+                                        <span class="font-bold text-lg text-yellow-600" >{{ number_format($overallTotal['gold_weight'], 3) }}</span>
                                     </div>
                                     <div class="flex justify-between items-center py-3 border-b border-gray-200">
                                         <span class="font-medium">Silver Weight:</span>
-                                        <span class="font-bold text-lg text-gray-600" data-count="{{ number_format($overallTotal['silver_weight'], 1) }}">0.0</span>
+                                        <span class="font-bold text-lg text-gray-600">{{ number_format($overallTotal['silver_weight'], 3) }}</span>
                                     </div>
                                     <div class="flex justify-between items-center py-3">
                                         <span class="font-medium">Bronze Weight:</span>
-                                        <span class="font-bold text-lg text-yellow-800" data-count="{{ number_format($overallTotal['bronze_weight'], 1) }}">0.0</span>
+                                        <span class="font-bold text-lg text-yellow-800">{{ number_format($overallTotal['bronze_weight'], 3) }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -229,15 +229,15 @@
                         <div class="flex items-center space-x-4">
                             <div class="flex items-center">
                                 <div class="medal-circle sm gold text-xs mr-2 flex items-center justify-center">{{ $sportData['total']['gold_tally'] }}</div>
-                                <span class="text-sm font-medium">Gold</span>
+                                <span class="text-sm font-medium">Gold Count</span>
                             </div>
                             <div class="flex items-center">
                                 <div class="medal-circle sm silver text-xs mr-2 flex items-center justify-center">{{ $sportData['total']['silver_tally'] }}</div>
-                                <span class="text-sm font-medium">Silver</span>
+                                <span class="text-sm font-medium">Silver Count</span>
                             </div>
                             <div class="flex items-center">
                                 <div class="medal-circle sm bronze text-xs mr-2 flex items-center justify-center">{{ $sportData['total']['bronze_tally'] }}</div>
-                                <span class="text-sm font-medium">Bronze</span>
+                                <span class="text-sm font-medium">Bronze Count</span>
                             </div>
                         </div>
                     </div>
@@ -247,9 +247,9 @@
                                 <thead>
                                     <tr>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Event</th>
-                                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Gold</th>
-                                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Silver</th>
-                                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Bronze</th>
+                                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Gold Weight</th>
+                                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Silver Weight</th>
+                                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Bronze Weight</th>
                                         <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
                                         <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Points</th>
                                     </tr>
@@ -261,7 +261,7 @@
                                             <td class="px-4 py-4 text-sm text-center">
                                                 @if($event['gold_tally'] > 0)
                                                     <span class="medal-label bg-yellow-100 text-yellow-800">
-                                                        {{ $event['gold_tally'] }}
+                                                        {{ number_format($event['gold_weight'], 3) }}
                                                     </span>
                                                 @else
                                                     <span class="text-gray-400">-</span>
@@ -270,7 +270,7 @@
                                             <td class="px-4 py-4 text-sm text-center">
                                                 @if($event['silver_tally'] > 0)
                                                     <span class="medal-label bg-gray-100 text-gray-800">
-                                                        {{ $event['silver_tally'] }}
+                                                        {{ number_format($event['silver_weight'], 3) }}
                                                     </span>
                                                 @else
                                                     <span class="text-gray-400">-</span>
@@ -279,7 +279,7 @@
                                             <td class="px-4 py-4 text-sm text-center">
                                                 @if($event['bronze_tally'] > 0)
                                                     <span class="medal-label bg-yellow-50 text-yellow-800">
-                                                        {{ $event['bronze_tally'] }}
+                                                        {{ number_format($event['bronze_weight'], 3) }}
                                                     </span>
                                                 @else
                                                     <span class="text-gray-400">-</span>
@@ -289,7 +289,7 @@
                                                 {{ $event['gold_tally'] + $event['silver_tally'] + $event['bronze_tally'] }}
                                             </td>
                                             <td class="px-4 py-4 text-sm text-center font-semibold" style="color: var(--team-color)">
-                                                {{ number_format($event['total_weight'], 1) }}
+                                                {{ number_format($event['total_weight'], 3) }}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -308,7 +308,7 @@
                 </div>
             @endforelse
 
-         
+
         </div>
 @endif
 @endsection
