@@ -441,7 +441,7 @@
                                             @endif
                                         @endif
 
-                                        @if($user->role == 'admin' || $user->role == 'tournament_director')
+                                        @if($user->role == 'admin')
                                             <!-- Delete Button -->
                                             <button type="button"
                                                 class="btn btn-sm btn-outline-danger btn-floating"
