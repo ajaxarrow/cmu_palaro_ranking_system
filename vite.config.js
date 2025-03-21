@@ -3,8 +3,8 @@ import laravel from 'laravel-vite-plugin';
 
 export default defineConfig({
     server: {
-        host: '0.0.0.0',  // Allow connections from any IP
-        port: 5173,       // Use the standard Vite port (different from Nginx port 9000)
+        host: '0.0.0.0', 
+        port: 5173,
         strictPort: true,
         cors: {
             origin: '*',  // Allow all origins

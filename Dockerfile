@@ -23,35 +23,25 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring zip exif pcntl
-
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
+RUN docker-php-ext-install pdo pdo_mysql
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy composer.json and composer.lock first to leverage Docker cache
+# Copy composer files first for better layer caching
 COPY composer.json composer.lock ./
 
-# Set proper permissions for Composer
-RUN chown -R www-data:www-data /var/www
+RUN chmod -R 777 /var/www
+RUN composer install --no-dev --prefer-dist --no-interaction
+RUN ls -la vendor
 
-# Switch to www-data user
-USER www-data
+# Copy the application code
+COPY . .
+RUN ls -la /var/www
 
-# Install dependencies
-RUN composer install --no-scripts --no-autoloader
 
-# Copy the rest of the application code
-COPY --chown=www-data:www-data . .
-
-# Generate the autoloader
-RUN composer dump-autoload --optimize
-
-# Set appropriate file permissions
-RUN chmod -R 775 storage bootstrap/cache
+# Set permissions for storage and cache directories
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000

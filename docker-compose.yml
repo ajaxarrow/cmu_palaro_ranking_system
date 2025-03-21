@@ -3,11 +3,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: laravel-app
-    container_name: laravel-app
+    image: cmu-palaro-image
+    container_name: cmu-palaro-image
     restart: unless-stopped
     tty: true
-    environment:
+    environment:  
       SERVICE_NAME: app
       SERVICE_TAGS: dev
     working_dir: /var/www
@@ -21,7 +21,7 @@ services:
 
   vite:
       image: node:18
-      container_name: vite-service
+      container_name: cmu-palaro-vite-service
       restart: unless-stopped
       tty: true
       ports:
@@ -35,13 +35,12 @@ services:
       extra_hosts:
         - "host.docker.internal:host-gateway"
 
-
   webserver:
     image: nginx:alpine
-    container_name: nginx-webserver
+    container_name: cmu-palaro-nginx-webserver
     restart: unless-stopped
     ports:
-      - "9000:80"
+      - "9000:9000"
     volumes:
       - .:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d/
@@ -49,6 +48,7 @@ services:
       - app-network
     extra_hosts:
       - "host.docker.internal:host-gateway"
+  
 
 networks:
   app-network:
