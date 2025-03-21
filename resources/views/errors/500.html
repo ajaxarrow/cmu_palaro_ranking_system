@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - Server Error</title>
+    <style>
+        :root {
+            --primary-color: #380505;
+            --secondary-color: #fef202;
+            --tertiary-color: #ff7605;
+            --quaternary-color: #920000;
+            --quinary-color: #fff7f7;
+            --liner-gradient: linear-gradient(
+                to bottom,
+                rgba(78, 3, 3, 0.788) 0%,
+                rgba(43, 1, 1, 0.986) 80%,
+                rgba(43, 1, 1, 0.986) 100%
+            );
+            --champ-section-top-fade: linear-gradient(rgba(43, 1, 1, 0.986), rgba(255, 166, 0, 0));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: var(--primary-color);
+            color: var(--quinary-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .error-card {
+            background-color: rgba(56, 5, 5, 0.4);
+            border-left: 4px solid var(--secondary-color);
+            border-radius: 12px;
+            padding: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pulse {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--quaternary-color);
+            opacity: 0;
+            top: 30%;
+            right: -20px;
+            animation: pulse 4s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0); opacity: 0.3; }
+            50% { transform: scale(1); opacity: 0; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        .error-code {
+            font-size: 6rem;
+            font-weight: 800;
+            color: var(--quinary-color);
+            letter-spacing: -2px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .error-code span {
+            color: var(--secondary-color);
+        }
+
+        .error-message {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--tertiary-color);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .error-description {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            color: var(--quinary-color);
+            opacity: 0.8;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .status-display {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 30px 0;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        .component {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .component-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .component-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-down {
+            background-color: var(--quaternary-color);
+            color: var(--quinary-color);
+        }
+
+        .status-working {
+            background-color: var(--tertiary-color);
+            color: var(--primary-color);
+        }
+
+        .status-operational {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+        .icon {
+            margin: 30px 0;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(254, 242, 2, 0.2);
+            border-radius: 50%;
+        }
+
+        .icon svg {
+            width: 30px;
+            height: 30px;
+            fill: var(--secondary-color);
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: transparent;
+            color: var(--quinary-color);
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            border: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--tertiary-color);
+        }
+
+        @media (max-width: 768px) {
+            .error-card {
+                padding: 30px 20px;
+            }
+            
+            .error-code {
+                font-size: 4rem;
+            }
+            
+            .error-message {
+                font-size: 1.2rem;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error-card">
+            <div class="pulse"></div>
+            <div class="error-code">5<span>0</span>0</div>
+            <div class="error-message">Server Error</div>
+            <div class="error-description">
+                Our system is currently experiencing technical difficulties. Our team is working to restore service as quickly as possible.
+            </div>
+            
+            <div class="status-display">
+                <div class="status-item">
+                    <div class="component">
+                        <div class="component-icon">S</div>
+                        <div class="component-label">Server</div>
+                    </div>
+                    <div class="status-badge status-down">Down</div>
+                </div>
+                
+                <div class="status-item">
+                    <div class="component">
+                        <div class="component-icon">DB</div>
+                        <div class="component-label">Database</div>
+                    </div>
+                    <div class="status-badge status-working">Recovering</div>
+                </div>
+                
+                <div class="status-item">
+                    <div class="component">
+                        <div class="component-icon">API</div>
+                        <div class="component-label">API</div>
+                    </div>
+                    <div class="status-badge status-operational">Operational</div>
+                </div>
+            </div>
+            
+            <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12 16a1 1 0 100 2 1 1 0 000-2zm10.67 1.47l-8.05-14a3 3 0 00-5.24 0l-8.05 14A3 3 0 004 24h16a3 3 0 002.67-4.53zM20 22H4a1 1 0 01-.87-1.5l8.05-14a1 1 0 011.74 0l8.05 14A1 1 0 0120 22zm-8-7a1 1 0 00-1 1v1a1 1 0 002 0v-1a1 1 0 00-1-1zm0-7.5a1.46 1.46 0 00-1.5 1.5 1.5 1.5 0 103 0c0-.83-.67-1.5-1.5-1.5z"/>
+                </svg>
+            </div>
+            
+            <div class="actions">
+                <a href="/" class="btn btn-primary">Return to Homepage</a>
+                <a href="javascript:location.reload()" class="btn">Retry</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
