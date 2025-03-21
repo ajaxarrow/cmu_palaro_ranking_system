@@ -30,6 +30,6 @@ jobs:
         
       - name: Install Dependencies
         run: |
-          docker exec -it laravel-app composer install --no-dev --prefer-dist --no-interaction
+          docker exec laravel-app composer install --no-dev --prefer-dist --no-interaction
     
 
