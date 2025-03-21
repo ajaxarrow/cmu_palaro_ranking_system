@@ -38,11 +38,8 @@ COPY composer.json composer.lock ./
 # Set proper permissions for Composer
 RUN chown -R www-data:www-data /var/www
 
-# Switch to www-data user
-USER www-data
-
 # Install dependencies
-RUN composer install --no-scripts --no-autoloader
+RUN composer install
 
 # Copy the rest of the application code
 COPY --chown=www-data:www-data . .
