@@ -27,11 +27,14 @@ jobs:
         
       - name: Run Container
         run: docker compose up -d
+        
+      - name: Set Permissions Inside Container
+        run: |
+          docker exec -it cmu-palaro-image chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+          docker exec -it cmu-palaro-image chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
-      # Save build artifacts (optional)
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
+      - name: Install Dependencies
+        run: |
+          docker exec -it cmu-palaro-image composer install --no-dev --prefer-dist --no-interaction
+    
 
-        with:
-          name: build-output
-          path: build/  # Adjust this to your actual build output folder
