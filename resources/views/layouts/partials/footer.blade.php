@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col fs-13 text-muted text-center">
-               SDD
+               CMU Palaro Ranking System
             </div>
         </div>
     </div>
