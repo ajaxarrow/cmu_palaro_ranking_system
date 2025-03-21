@@ -551,7 +551,7 @@
                             <span class="sport-badge">{{ $event['sport_name'] }}</span>
                             <div class="event-header-content">
                                 <h3 class="event-name">{{ $event['name'] }}</h3>
-                                <div class="event-description">Championship {{ date('Y') }}</div>
+                                <div class="event-description">CMU Palaro {{ date('Y') }}</div>
                             </div>
                             <div class="sport-icon">
                                 @if($event['sport_icon'])
