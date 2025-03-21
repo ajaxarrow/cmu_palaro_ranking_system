@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Niconne&display=swap');
 
 :root {
     --primary-color: #380505;
@@ -56,22 +57,12 @@ section {
 
 
 .hero-gradient {
-    background: linear-gradient(135deg, #49000028 0%, #68020221 60%,  #ec373727 100%);
+    background: linear-gradient(135deg, #490000 0%, #680202ec 60%,  #740505ce 100%);
     position: relative;
     overflow: hidden;
 }
 
-.hero-gradient::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('') repeat;
-    opacity: 0.1;
-    animation: patternMove 20s linear infinite;
-}
+
 
 .medal-count-container span { 
     width: 50px;
@@ -108,10 +99,10 @@ section {
     transform-origin: left;
 } */
 
-.team-card:hover {
+/* .team-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-}
+} */
 
 /* .team-card:hover::before {
     transform: scaleX(1);
@@ -990,7 +981,7 @@ section {
 }
 
 #standings .team-description p {
-    font-family: 'Rosaline', cursive;
+    font-family: "Niconne", cursive;
     font-size: 1.4rem;
     text-decoration: wavy !important;
     font-weight: 500;
@@ -1121,7 +1112,7 @@ section {
 #standings .rank-1::before {
     background: conic-gradient(
         from 45deg,
-        #FFD700,
+        #ffd9005b,
         #ffc1076b,
         #ffa20070,
         #ffd9005e
@@ -1131,7 +1122,7 @@ section {
 #standings .rank-2::before {
     background: conic-gradient(
         from 45deg,
-        #C0C0C0,
+        #c0c0c06e,
         #9e9e9ea1,
         #bdbdbd85,
         #c0c0c06e
@@ -1141,17 +1132,17 @@ section {
 #standings .rank-3::before {
     background: conic-gradient(
         from 45deg,
-        #CD7F32,
+        #cd80329c,
         #a0512da2,
         #bf651680,
         #cd803260
     );
 }
 
-@keyframes spin {
+/* @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-}
+} */
 
 #standings .modern-image-container:hover .rank-badge {
     transform: scale(1.15);
@@ -1429,7 +1420,7 @@ section {
     animation-delay: -5s;
 }
 
-@keyframes morph {
+/* @keyframes morph {
     0% {
         border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
     }
@@ -1445,7 +1436,7 @@ section {
     100% {
         border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
     }
-}
+} */
 
 /* Responsive adjustments */
 @media (max-width: 1024px) {
@@ -2033,14 +2024,14 @@ section {
     /* animation: spin 20s linear infinite; */
 }
 
-@keyframes spin {
+/* @keyframes spin {
     from {
         transform: rotateY(0deg);
     }
     to {
         transform: rotateY(360deg);
     }
-}
+} */
 
 .medal-count {
     font-size: 1rem;
@@ -2465,11 +2456,11 @@ section {
     border-color: rgba(205,127,50,0.3);
   }
   
-  @keyframes spin {
+  /* @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
-  
+   */
   .medal-title {
     font-weight: 700;
     font-size: 1.1rem;

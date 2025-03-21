@@ -9,12 +9,10 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
-    <link href="https://api.fontshare.com/v2/css?f[]=dancing-script@400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+    
 
-    <link href="https://api.fontshare.com/v2/css?f[]=rosaline@400&display=swap" rel="stylesheet">
     @vite(['resources/css/landingpage.css'])
-
 </head>
 <body>
 
@@ -30,15 +28,13 @@
 
 
 .theme-slogan span{
-    width: 400px;
+    /* width: 800px; */
     margin: 0 auto;
     color: white !important;
-    font-family: 'Rosaline', cursive;
-
-      font-weight:100;
-
-       letter-spacing: 0.5px; line-height: 1.2;
-    font-size: 1.4rem !important;
+    font-family: "Niconne", cursive;
+    font-weight:400;
+    letter-spacing: 0.5px; line-height: 1.2;
+    font-size: clamp(1.8rem, 2vw, 2.2rem);
 }
 
 /* Feather styles */
@@ -474,9 +470,9 @@
 
 
             <!-- Stats Section -->
-            <div class="stats-container" data-aos="fade-up" data-aos-delay="200">
+            <div class="stats-container" >
                 <div class="stats-grid">
-                    <div class="stat-card" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="stat-card" >
                         <div class="stat-icon" style="background: linear-gradient(135deg, #00491e, #02681e)">🏅</div>
                         <div class="stat-number animated-number">
                             {{ $overallTotal['total_medals'] }}
@@ -484,7 +480,7 @@
                         <div class="stat-label">Total Medals</div>
                     </div>
 
-                    <div class="stat-card" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="stat-card" >
                         <div class="stat-icon" style="background: linear-gradient(135deg, #FFD700, #FFA500)">🥇</div>
                         <div class="stat-number animated-number" style="background: linear-gradient(135deg, #FFD700, #FFA500); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
                             {{ $overallTotal['gold_tally'] }}
@@ -492,7 +488,7 @@
                         <div class="stat-label">Gold Medals</div>
                     </div>
 
-                    <div class="stat-card" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="stat-card" >
                         <div class="stat-icon" style="background: linear-gradient(135deg, #C0C0C0, #A9A9A9)">🥈</div>
                         <div class="stat-number animated-number" style="background: linear-gradient(135deg, #C0C0C0, #A9A9A9); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
                             {{ $overallTotal['silver_tally'] }}
@@ -500,7 +496,7 @@
                         <div class="stat-label">Silver Medals</div>
                     </div>
 
-                    <div class="stat-card" data-aos="zoom-in" data-aos-delay="400">
+                    <div class="stat-card" >
                         <div class="stat-icon" style="background: linear-gradient(135deg, #CD7F32, #8B4513)">🥉</div>
                         <div class="stat-number animated-number" style="background: linear-gradient(135deg, #CD7F32, #8B4513); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
                             {{ $overallTotal['bronze_tally'] }}
@@ -529,7 +525,7 @@
 
     <div class="container mx-auto px-4">
         <!-- Section Header -->
-        <div class="carousel-header text-center mb-16 z-[10] relative" data-aos="fade-up">
+        <div class="carousel-header text-center mb-16 z-[10] relative">
             <h2 class="text-5xl mb-4 font-black tracking-tight">
                 Sports Event Results
                 <span class="block text-lg font-medium mt-2">
@@ -547,6 +543,7 @@
         <div class="swiper sports-championship-swiper">
             <div class="swiper-wrapper">
                 @foreach($flattenedEvents as $event)
+                @if($event['gold_winner'] || $event['silver_winner'] || count($event['bronze_winners']) > 0)
                 <div class="swiper-slide">
                     <div class="event-card">
                         <div class="event-header">
@@ -639,6 +636,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 @endforeach
             </div>
 
@@ -662,77 +660,7 @@ document.addEventListener('DOMContentLoaded', function() {
     offset: 100
   });
 
-  // Parallax scrolling effect for feathers
-  const feathers = document.querySelectorAll('.feather');
-  let lastScrollY = window.scrollY;
-  let ticking = false;
-  let mouseX = 0;
-  let mouseY = 0;
-
-  // Track mouse position for additional movement effect
-  document.addEventListener('mousemove', function(e) {
-    mouseX = e.clientX / window.innerWidth - 0.5; // -0.5 to 0.5
-    mouseY = e.clientY / window.innerHeight - 0.5; // -0.5 to 0.5
-
-    if (!ticking) {
-      window.requestAnimationFrame(function() {
-        updateFeathersOnMouseMove(mouseX, mouseY);
-        ticking = false;
-      });
-      ticking = true;
-    }
-  });
-
-  function updateFeathersOnMouseMove(mouseX, mouseY) {
-    feathers.forEach(feather => {
-      const speed = parseFloat(getComputedStyle(feather).getPropertyValue('--parallax-speed')) || 0.1;
-      const mouseEffect = speed * 20; // Amplify mouse effect based on parallax speed
-
-      // Get current transform
-      const currentTransform = feather.style.transform || '';
-      const rotateMatch = currentTransform.match(/rotate\(([^)]+)\)/);
-      const scaleMatch = currentTransform.match(/scale\(([^)]+)\)/);
-      const translateYMatch = currentTransform.match(/translateY\(([^)]+)\)/);
-
-      const rotate = rotateMatch ? parseFloat(rotateMatch[1]) : parseFloat(getComputedStyle(feather).getPropertyValue('--rotate')) || 0;
-      const scale = scaleMatch ? parseFloat(scaleMatch[1]) : parseFloat(getComputedStyle(feather).getPropertyValue('--scale')) || 1;
-      const translateY = translateYMatch ? parseFloat(translateYMatch[1]) : 0;
-
-      // Apply mouse movement effect
-      const translateX = mouseX * mouseEffect;
-      const additionalRotate = mouseX * 5; // Subtle rotation based on mouse position
-
-      feather.style.transform = `translateY(${translateY}px) translateX(${translateX}px) rotate(${rotate + additionalRotate}deg) scale(${scale})`;
-    });
-  }
-
-  window.addEventListener('scroll', function() {
-    lastScrollY = window.scrollY;
-
-    if (!ticking) {
-      window.requestAnimationFrame(function() {
-        updateFeathersOnScroll(lastScrollY);
-        ticking = false;
-      });
-      ticking = true;
-    }
-  });
-
-  function updateFeathersOnScroll(scrollY) {
-    feathers.forEach(feather => {
-      const speed = parseFloat(getComputedStyle(feather).getPropertyValue('--parallax-speed')) || 0.1;
-      const yPos = -scrollY * speed;
-      const rotate = parseFloat(getComputedStyle(feather).getPropertyValue('--rotate')) || 0;
-      const scale = parseFloat(getComputedStyle(feather).getPropertyValue('--scale')) || 1;
-
-      // Get current mouse effect
-      const mouseEffect = speed * 20;
-      const translateX = mouseX * mouseEffect;
-      const additionalRotate = mouseX * 5;
-
-      feather.style.transform = `translateY(${yPos}px) translateX(${translateX}px) rotate(${rotate + additionalRotate}deg) scale(${scale})`;
-    });
-  }
+ 
 });
 
   // Initialize Swiper
@@ -782,7 +710,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <section id="standings" class="py-20 bg-gray-50">
         <div class="container mx-auto px-4">
-            <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-up">
+            <h2 class="text-4xl font-bold text-center mb-16">
                 Team Standings
                 <div class="w-20 h-1  mx-auto mt-4"></div>
             </h2>
@@ -794,8 +722,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 @foreach($medalTally as $index => $team)
 
                 <div class="team-card"
-                     data-aos="{{ $index % 2 == 0 ? 'fade-right' : 'fade-left' }}"
-                     data-aos-delay="{{ $index * 100 }}"
+                     
                      data-team-id="{{ $index }}">
                     <div class="modern-card-wrapper">
                         <!-- Add gradient background -->
@@ -809,7 +736,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="flex flex-col lg:flex-row items-center gap-8">
 
                             <!-- Team Info Left Side -->
-                            <div class="flex-1 text-left">
+                            <div class="flex-1 text-left w-full">
                             <div class="team-header">
                                 <span class="team-label">Team</span>
                                 <a href="{{ route('public.standings.details', $team['team_id']) }}" class="team-name">
@@ -911,7 +838,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <section class="analytics-section py-24 bg-gradient-to-b from-gray-50 via-white to-gray-50">
         <div class="container mx-auto px-4">
             <!-- Modern Header -->
-            <div class="text-center mb-20" data-aos="fade-up">
+            <div class="text-center mb-20">
                 <h2 class="text-5xl font-black text-gray-800 mb-4 tracking-tight">
                     Performance Analytics
                     <span class="block text-lg font-medium text-gray-500 mt-2">
@@ -928,7 +855,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <!-- Main Analytics Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
                 <!-- Featured Chart - Medal Distribution -->
-                <div class="lg:col-span-8" data-aos="fade-right">
+                <div class="lg:col-span-8" >
                     <div class="chart-card featured-chart">
                         <div class="chart-header">
                             <h3 class="chart-title">Medal Distribution</h3>
@@ -945,7 +872,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
 
                 <!-- Performance Radar -->
-                <div class="lg:col-span-4" data-aos="fade-left">
+                <div class="lg:col-span-4" >
                     <div class="chart-card">
                         <div class="chart-header">
                             <h3 class="chart-title">Team Performance</h3>
@@ -958,7 +885,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <!-- Secondary Analytics Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- Points Progress -->
-                <div data-aos="fade-up">
+                <div >
                     <div class="chart-card">
                         <div class="chart-header">
                             <h3 class="chart-title">Points Progression</h3>
@@ -969,7 +896,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
 
                 <!-- Medal Distribution Pie -->
-                <div data-aos="fade-up" data-aos-delay="100">
+                <div >
                     <div class="chart-card">
                         <div class="chart-header">
                             <h3 class="chart-title">Medal Breakdown</h3>
@@ -982,23 +909,17 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </section>
 
-    <!-- Modern Footer -->
-    <footer class="bg-gradient-to-b from-gray-900 to-green-900 text-white py-16">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
-        </div>
-    </section>
 
     <!-- Footer -->
     <footer class="hero-gradient text-white py-12">
-        <div class="container mx-auto px-4 text-center">
+        <div class="mx-auto px-4 text-center">
             <div class="mb-6">
-                <h3 class="text-3xl font-bold mb-2">CMU PALARO 2024</h3>
-                <p class="text-gray-300">Excellence Through Sports</p>
+            <img class="w-[200px] mx-auto mb-6"  src="{{ Vite::asset('resources/images/palaroLogo.png') }}" alt=""  />
+                <p class="text-gray-300">  Lead Beyond Limits: Cultivate Global Mindset and Excellence Through Sports</p>
             </div>
             <div class="text-sm text-gray-300">
-                <p>&copy; {{ date('Y') }} Central Mindanao University. All rights reserved.</p>
+                <p>&copy; {{ date('Y') }} CMU Palaro 2025 All rights reserved.</p>
             </div>
         </div>
     </footer>
