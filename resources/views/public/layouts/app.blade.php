@@ -134,19 +134,19 @@
                             <i class="ph ph-map-pin mr-3 text-cmu-400"></i>
                             Central Mindanao University, Musuan, Bukidnon
                         </li>
-                        <li class="flex items-center">
+                        <!-- <li class="flex items-center">
                             <i class="ph ph-envelope mr-3 text-cmu-400"></i>
                             palaro@cmu.edu.ph
                         </li>
                         <li class="flex items-center">
                             <i class="ph ph-phone mr-3 text-cmu-400"></i>
                             +63 (88) 123-4567
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </div>
             <div class="border-t border-neutral-800 mt-12 pt-8 text-center text-neutral-500">
-                <p>&copy; {{ date('Y') }} CMU PALARO Medal Tracker. All rights reserved.</p>
+                <p>&copy; {{ date('Y') }} CMU PALARO 2025. All rights reserved.</p>
             </div>
         </div>
     </footer>
