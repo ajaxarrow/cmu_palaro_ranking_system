@@ -32,22 +32,24 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy composer.json and composer.lock first to leverage Docker cache
+# Copy composer files first for better layer caching
 COPY composer.json composer.lock ./
 
-# Set proper permissions for Composer
-RUN chown -R www-data:www-data /var/www
+# Create directory structure with correct permissions
+RUN mkdir -p /var/www/storage /var/www/bootstrap/cache
 
-# Install dependencies
-RUN composer install
+# Install dependencies as the root user to avoid permission issues
+RUN composer install --no-scripts --no-autoloader
 
-# Copy the rest of the application code
-COPY --chown=www-data:www-data . .
+# Copy the application code
+COPY . .
 
-# Generate the autoloader
+# Generate the autoloader and run scripts now that all code is available
 RUN composer dump-autoload --optimize
+RUN composer run-script post-autoload-dump
 
 # Set appropriate file permissions
+RUN chown -R www-data:www-data /var/www
 RUN chmod -R 775 storage bootstrap/cache
 
 # Expose port 9000 and start php-fpm server
