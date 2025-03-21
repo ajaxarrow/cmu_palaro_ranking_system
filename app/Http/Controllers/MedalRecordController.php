@@ -31,10 +31,25 @@ class MedalRecordController extends Controller
     {
         $user = auth()->user();
         $sportId = null;
-        // Get all sports with their event categories
-        $sports = Sport::with(['eventCategories' => function($query) {
-            $query->orderBy('name');
-        }])->orderBy('name')->get();
+        $sports = collect();
+
+        if ($user->role == 'tournament_director') {
+            // Filter sports to only show the sport associated with this tournament director
+            $sport_data_id = $user->sport_id;
+            $sports = Sport::where('id', $sport_data_id)
+                ->with(['eventCategories' => function($query) {
+                    $query->orderBy('name');
+                }])
+                ->orderBy('name')
+                ->get();
+        } else {
+            // For other roles, show all sports
+            $sports = Sport::with(['eventCategories' => function($query) {
+                $query->orderBy('name');
+            }])
+            ->orderBy('name')
+            ->get();
+        }
 
         // Get all teams
         $teams = Team::orderBy('name')->get();

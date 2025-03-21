@@ -64,7 +64,7 @@
                     </a>
                 </li>
 
-                @if($user->role == 'admin')
+                @if(Auth::user()->role == 'admin')
                 <li class="menu-title mt-2">Management</li>
 
                 <li>

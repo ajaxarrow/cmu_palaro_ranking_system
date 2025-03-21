@@ -49,7 +49,12 @@
                                     <tr>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
-                                        <td>{{ $user->role }}</td>
+                                        <td>
+                                            {{ $user->role }}
+                                            @if($user->role === 'tournament_director' && $user->sport)
+                                                ({{ $user->sport->name }})
+                                            @endif
+                                        </td>
                                         <td>
                                             <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editModal{{ $user->id }}">Edit</button>
 
@@ -81,12 +86,23 @@
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="role_id" class="form-label">Role</label>
-                                                            <select name="role" class="form-control" id="role_id" required>
+                                                            <select name="role" class="form-control role-select" id="role_id_edit_{{ $user->id }}" required>
+
                                                                 <option value="">Select Role</option>
                                                                 <option value="encoder" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
                                                                 <option value="encoder" {{ $user->role == 'encoder' ? 'selected' : '' }}>Encoder</option>
                                                                 <option value="tournament_director" {{ $user->role == 'tournament_director' ? 'selected' : '' }}>Tournament Director</option>
                                                                 <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="mb-3 sport-field" id="sport_field_edit_{{ $user->id }}" style="display: none;">
+                                                            <label for="sport_id_edit_{{ $user->id }}" class="form-label">Sport</label>
+                                                            <select name="sport_id" class="form-control" id="sport_id_edit_{{ $user->id }}" required>
+                                                                <option value="">Select Sport</option>
+                                                                @foreach($sports as $sport)
+                                                                    <option value="{{ $sport->id }}" {{ ($user->sport_id == $sport->id) ? 'selected' : '' }}>{{ $sport->name }}</option>
+                                                                @endforeach
                                                             </select>
                                                         </div>
 
@@ -161,6 +177,15 @@
                             <option value="admin">Admin</option>
                         </select>
                     </div>
+                    <div class="mb-3 sport-field" id="sport_field_add" style="display: none;">
+                        <label for="sport_id_add" class="form-label">Sport</label>
+                        <select name="sport_id" class="form-control" id="sport_id_add" required>
+                            <option value="">Select Sport</option>
+                            @foreach($sports as $sport)
+                                <option value="{{ $sport->id }}">{{ $sport->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <!-- Password with toggle -->
                     <div class="mb-3">
                         <label for="password1_id" class="form-label">Password</label>
@@ -196,7 +221,40 @@
 
 
 @section('script-bottom')
+
+
 <script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        function toggleSportField(selectElement, sportFieldId) {
+            let sportField = document.getElementById(sportFieldId);
+            if (selectElement.value === "tournament_director") {
+                sportField.style.display = "block";
+            } else {
+                sportField.style.display = "none";
+            }
+        }
+
+        // For Add User Modal
+        let roleSelectAdd = document.getElementById("role_id");
+        let sportFieldAdd = document.getElementById("sport_field_add");
+        roleSelectAdd.addEventListener("change", function () {
+            toggleSportField(this, "sport_field_add");
+        });
+
+        // For Edit User Modals (handles multiple users)
+        document.querySelectorAll("select[name='role']").forEach((select) => {
+            select.addEventListener("change", function () {
+                let userId = this.closest("form").querySelector("input[name='id']").value;
+                toggleSportField(this, `sport_field_edit_${userId}`);
+            });
+
+            // Initialize the sport field visibility on page load
+            let userId = select.closest("form").querySelector("input[name='id']").value;
+            toggleSportField(select, `sport_field_edit_${userId}`);
+        });
+    });
+
     document.addEventListener('DOMContentLoaded', function() {
         // Toggle visibility for first password field
         const togglePassword1 = document.getElementById('togglePassword1');
@@ -245,11 +303,6 @@
         submitButton.disabled = true; // Disable the button
         submitButton.innerText = 'Submitting...'; // Change button text
     }
-</script>
-
-
-<script>
-
     document.getElementById('gen_password').addEventListener('click', function() {
         const password1 = document.getElementById('password1_id');
         const password2 = document.getElementById('password2_id');

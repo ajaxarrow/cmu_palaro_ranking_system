@@ -5,7 +5,6 @@
     @include('layouts.partials/title-meta', ['title' => 'CMU Palaro Ranking System'])
 
     @include('layouts.partials/head-css')
-    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@1&display=swap" rel="stylesheet">
     @vite(['resources/css/layout.css'])
     @vite(['resources/css/override.css'])
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
