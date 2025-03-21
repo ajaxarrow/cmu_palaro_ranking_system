@@ -31,7 +31,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY composer.json composer.lock ./
 
 RUN chmod -R 777 /var/www
-RUN composer install --no-dev --prefer-dist --no-interaction
+
+RUN composer install --no-scripts --no-dev --prefer-dist --no-interaction
 RUN ls -la vendor
 
 # Copy the application code

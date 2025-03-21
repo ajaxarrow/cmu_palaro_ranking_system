@@ -27,11 +27,9 @@ jobs:
         
       - name: Run Container
         run: docker compose up -d
+        
+      - name: Install Dependencies
+        run: |
+          docker exec laravel-app composer install --no-dev --prefer-dist --no-interaction
+    
 
-      # Save build artifacts (optional)
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
-
-        with:
-          name: build-output
-          path: build/  # Adjust this to your actual build output folder
