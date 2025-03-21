@@ -139,7 +139,7 @@ section {
 }
 
 .stat-card {
-    backdrop-filter: blur(10px);
+    /* backdrop-filter: blur(10px); */
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 16px;
@@ -248,7 +248,7 @@ section {
     margin: 0 auto;
     padding: 2rem;
     background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(10px);
+    /* backdrop-filter: blur(10px); */
     border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
@@ -404,7 +404,7 @@ section {
 
 .hero-logo {
 
-    height: 300px;
+    height: clamp(100px, 200px, 300px);
     margin: auto;
     transition: all 0.3s ease;
 }
@@ -469,7 +469,7 @@ section {
 .stat-card {
     position: relative;
     padding: 1.5rem;
-    background: rgba(255, 255, 255, 0.05);
+    /* background: rgba(255, 255, 255, 0.05); */
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
@@ -483,7 +483,7 @@ section {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    /* background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent); */
     transform: translateX(-100%);
     transition: transform 0.6s;
 }
@@ -1099,7 +1099,7 @@ section {
     content: attr(data-content);
     position: absolute;
     inset: 3px;
-    background: white;
+    /* background: white; */
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -2150,7 +2150,7 @@ section {
     
     .mobile-podium-card {
         background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
+        
         border-radius: 20px;
         padding: 1.5rem;
         border: 1px solid rgba(255, 255, 255, 0.2);
@@ -2218,7 +2218,19 @@ section {
         font-weight: 600;
         color: rgba(255, 255, 255, 0.9);
     }
+
+    .feather-1 {
+        top: 10% !important;
+    }
 }
+
+@media (max-width: 425px) {
+    .team-image-wrapper {
+        width: 150px;
+        height: 150px;
+    }
+}
+
 
 /* Sports Championship Carousel Styles */
 .championship-carousel {

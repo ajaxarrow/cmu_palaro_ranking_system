@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CMU PALARO {{ date('Y') }} - Medal Tally</title>
+    <meta name="theme-color" content="#380505">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -722,7 +723,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 @foreach($medalTally as $index => $team)
 
                 <div class="team-card"
-                     
+                data-aos="{{ $index % 2 == 0 ? 'fade-right' : 'fade-left' }}"
+                     data-aos-delay="{{ $index * 100 }}"
                      data-team-id="{{ $index }}">
                     <div class="modern-card-wrapper">
                         <!-- Add gradient background -->
