@@ -1,4 +1,4 @@
-@extends('layouts.admin', ['title' => 'Medal Tally'])
+@extends('layouts.admin', ['title' => 'Results Tally'])
 
 @section('css')
 @vite(['node_modules/simple-datatables/dist/style.css'])
@@ -97,7 +97,7 @@
 
     <div class="py-4 d-flex align-items-sm-center flex-sm-row flex-column">
         <div class="flex-grow-1">
-            <h3 class="fw-bold mb-0">Medal Tally</h3>
+            <h3 class="fw-bold mb-0">Results Tally</h3>
             <p class="text-muted">Track medal performances across all events</p>
         </div>
         <div class="d-flex align-items-center gap-3">
@@ -552,13 +552,13 @@
 </div>
 
 
-@if($user->role != 'user')
+@if($user->role == 'admin')
     <!-- Add Record Modal -->
     <div class="modal fade" id="addRecordModal" tabindex="-1" aria-labelledby="addRecordModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addRecordModalLabel">Add Medal Record</h5>
+                    <h5 class="modal-title" id="addRecordModalLabel">Add Result</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -1198,7 +1198,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Add header row
                 summaryData.push([
-                    'Medal Tally Summary Report',
+                    'Results Tally Summary Report',
                     '',
                     '',
                     '',
@@ -1294,7 +1294,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const ws = XLSX.utils.aoa_to_sheet(summaryData);
 
                 // Add the worksheet to the workbook
-                XLSX.utils.book_append_sheet(wb, ws, 'Medal Tally');
+                XLSX.utils.book_append_sheet(wb, ws, 'Results Tally');
 
                 // Style the worksheet - set column widths
                 ws['!cols'] = [
@@ -1351,7 +1351,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Apply some basic styling (SheetJS doesn't have full styling support in the free version)
                 // But we can at least add some cell properties for Excel to interpret
                 // Format the title row - although limited in the community version
-                ws.A1 = { t: 's', v: 'Medal Tally Summary Report' };
+                ws.A1 = { t: 's', v: 'Results Tally Summary Report' };
 
 
                 // Generate filename with date
@@ -2059,7 +2059,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     doc.setTextColor(...colors.white);
                     doc.setFont('helvetica', 'bold');
                     doc.setFontSize(38);
-                    doc.text('Medal Tally Report', 30, 50);
+                    doc.text('Results Tally Report', 30, 50);
 
                     doc.setFontSize(26);
                     doc.text('Event Results Summary', 30, 65);
@@ -2222,7 +2222,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     doc.setTextColor(...colors.white);
                     doc.setFontSize(12);
                     doc.setFont('helvetica', 'bold');
-                    doc.text('Medal Tally Report', doc.internal.pageSize.width / 2, 13, { align: 'center' });
+                    doc.text('Results Tally Report', doc.internal.pageSize.width / 2, 13, { align: 'center' });
 
                     progressFill.style.width = '60%';
                     progressText.textContent = 'Creating medal summary table...';
@@ -2253,7 +2253,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             doc.setTextColor(...colors.white);
                             doc.setFontSize(12);
                             doc.setFont('helvetica', 'bold');
-                            doc.text('Medal Tally Report', doc.internal.pageSize.width / 2, 13, { align: 'center' });
+                            doc.text('Results Tally Report', doc.internal.pageSize.width / 2, 13, { align: 'center' });
 
                             yPos = 30;
                         }
@@ -2355,7 +2355,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         // Add footer text
                         doc.setTextColor(...colors.secondary);
                         doc.text(
-                            'Medal Tally System',
+                            'Results Tally System',
                             20,
                             doc.internal.pageSize.height - 7
                         );

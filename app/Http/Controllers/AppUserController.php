@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Sport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -18,6 +19,7 @@ class AppUserController extends Controller
 
         $users = User::where('is_deleted', false)->get();
         $user = auth()->user();
+        $sports = Sport::all();
 
         if ($user->role != 'admin' ) {
 
@@ -27,7 +29,7 @@ class AppUserController extends Controller
 
 
 
-        return view('admin.users.index', compact('users'));
+        return view('admin.users.index', compact('users', 'sports'));
     }
 
     /**
@@ -44,24 +46,36 @@ class AppUserController extends Controller
     public function store(Request $request)
     {
         // Validate request data
-        $request->validate([
+        $validationRules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password1' => 'required|min:8',
             'password2' => 'required|same:password1',
             'role' => 'required|string|in:admin,encoder,tournament_director',
-        ]);
+        ];
+
+        // Add conditional validation for sport_id
+        if ($request->role === 'tournament_director') {
+            $validationRules['sport_id'] = 'required|exists:sports,id';
+        }
+
+        $request->validate($validationRules);
 
         // Create new user
-        $user = User::create([
+        $userData = [
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
             'password' => Hash::make($request->password1),
-        ]);
+        ];
 
-        // Mail::to($request->user())->send(new WelcomeMail($user));
-        // Redirect with success message
+
+        if ($request->role === 'tournament_director') {
+            $userData['sport_id'] = $request->sport_id;
+        }
+
+        $user = User::create($userData);
+
         return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
 
@@ -85,30 +99,41 @@ class AppUserController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-        // Validate request data
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $id,
-            'role' => 'required|string|in:admin,encoder,tournament_director',
-        ]);
+{
+    // Validate request data
+    $validationRules = [
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $id,
+        'role' => 'required|string|in:admin,encoder,tournament_director',
+    ];
 
-        // Find user by ID
-        $user = User::findOrFail($id);
-
-        // Update user data
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->role = $request->role;
-
-
-        // Save changes
-        $user->save();
-
-        // Redirect with success message
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+    // Add conditional validation for sport_id
+    if ($request->role === 'tournament_director') {
+        $validationRules['sport_id'] = 'required|exists:sports,id';
     }
 
+    $request->validate($validationRules);
+
+    // Find user by ID
+    $user = User::findOrFail($id);
+
+    // Update user data
+    $user->name = $request->name;
+    $user->email = $request->email;
+    $user->role = $request->role;
+
+    // Update sport_id if role is tournament_director
+    if ($request->role === 'tournament_director') {
+        $user->sport_id = $request->sport_id;
+    } else {
+        $user->sport_id = null; // Clear sport_id if role is not tournament_director
+    }
+
+    // Save changes
+    $user->save();
+
+    return redirect()->route('users.index')->with('success', 'User updated successfully.');
+}
     /**
      * Remove the specified resource from storage.
      */

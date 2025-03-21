@@ -20,9 +20,14 @@
                        <div class="d-flex align-items-center gap-2">
                         <div class="mt-3" style="line-height: 0px; ">
                             <p style="font-weight: 500;">
-                                {{ $user->name }}
+                                {{ Auth::user()->name }}
                             </p>
-                            <p style="font-size: 12px">{{ ucfirst($user->role) }}</p>
+                            <p style="font-size: 12px">
+                                {{ ucfirst(Auth::user()->role) }}
+                                @if(Auth::user()->role === 'tournament_director' && Auth::user()->sport)
+                                    ({{ Auth::user()->sport->name }})
+                                @endif
+                            </p>
                             </div>
                             <i class="mdi mdi-chevron-down"></i>
                        </div>
