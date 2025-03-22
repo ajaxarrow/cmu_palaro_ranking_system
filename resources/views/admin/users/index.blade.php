@@ -1,8 +1,6 @@
 @extends('layouts.admin', ['title' => 'Tally'])
 
-@section('css')
-@vite(['node_modules/simple-datatables/dist/style.css'])
-@endsection
+
 
 @section('content')
 
@@ -172,6 +170,7 @@
                         <label for="role_id" class="form-label">Role</label>
                         <select name="role" class="form-control" id="role_id" required>
                             <option value="">Select Role</option>
+                            <option value="user">User</option>
                             <option value="encoder">Encoder</option>
                             <option value="tournament_director">Tournament Director</option>
                             <option value="admin">Admin</option>
