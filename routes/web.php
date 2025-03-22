@@ -22,9 +22,9 @@ Route::get('/', [LandingPageController::class, 'index'])->name('public.landing.i
 // Route::get('/standings', [PublicTeamController::class, 'index'])->name('public.standings');
 Route::get('/standings/{id}', [PublicTeamController::class, 'show'])->name('public.standings.details');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
