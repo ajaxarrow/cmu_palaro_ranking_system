@@ -64,6 +64,210 @@ section {
 
 
 
+/* ============ EMPTY STATE STYLES ============ */
+/* Add these to your existing CSS file */
+
+/* Empty state for desktop podium */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0.8;
+}
+
+.empty-winner-image {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed rgba(255, 255, 255, 0.4);
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    margin-bottom: 1rem;
+}
+
+.empty-winner-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+}
+
+.empty-icon {
+    font-size: 3rem;
+    opacity: 0.7;
+    animation: pulse 2s infinite ease-in-out;
+}
+
+.empty-badge {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 1.25rem;
+    z-index: 10;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    border: 2px dashed rgba(255, 255, 255, 0.4);
+}
+
+.empty-name {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0.5rem 0;
+    font-weight: 600;
+}
+
+.medal-stats.empty {
+    opacity: 0.6;
+}
+
+.champion-crown.empty {
+    opacity: 0.5;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+/* ============ MOBILE PODIUM REDESIGN ============ */
+/* Replace your existing mobile podium styles with these */
+
+.empty-state-container {
+    background: rgba(255, 255, 255, 0.1);
+    /* backdrop-filter: blur(10px); */
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.empty-state-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: bounce 2s infinite ease-in-out;
+}
+
+.empty-state-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state-message {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+    max-width: 80%;
+    margin: 0 auto 2rem;
+}
+
+.empty-mobile-podium {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 180px;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.empty-podium-pedestal {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    width: 80px;
+}
+
+.empty-podium-pedestal.gold {
+    height: 120px;
+    z-index: 3;
+}
+
+.empty-podium-pedestal.silver {
+    height: 90px;
+    z-index: 2;
+}
+
+.empty-podium-pedestal.bronze {
+    height: 70px;
+    z-index: 1;
+}
+
+.pedestal-label {
+    position: absolute;
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.pedestal-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    animation: shine 3s infinite;
+}
+
+.pedestal-crown {
+    position: absolute;
+    top: -25px;
+    font-size: 1.8rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Gold, Silver, Bronze styles for empty pedestals */
+.empty-podium-pedestal.gold {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.8), rgba(255, 165, 0, 0.8));
+    border: 1px solid rgba(255, 215, 0, 0.5);
+}
+
+.empty-podium-pedestal.silver {
+    background: linear-gradient(135deg, rgba(192, 192, 192, 0.8), rgba(169, 169, 169, 0.8));
+    border: 1px solid rgba(192, 192, 192, 0.5);
+}
+
+.empty-podium-pedestal.bronze {
+    background: linear-gradient(135deg, rgba(205, 127, 50, 0.8), rgba(139, 69, 19, 0.8));
+    border: 1px solid rgba(205, 127, 50, 0.5);
+}
+
+@keyframes shine {
+    0% { left: -100%; }
+    40% { left: 100%; }
+    100% { left: 100%; }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+
 .medal-count-container span { 
     width: 50px;
     height: 50px;
@@ -2638,6 +2842,7 @@ section {
       border-radius: 3px;
     }
   }
+
 
 
 

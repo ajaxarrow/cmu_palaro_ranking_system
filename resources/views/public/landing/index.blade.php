@@ -255,6 +255,8 @@
 
             <!-- Podium Section -->
             <div class="podium-section max-w-6xl mx-auto mb-20" data-aos="fade-up">
+
+            @if(count($medalTally) < 0)
                 <!-- Desktop Podium -->
                 <div class="podium-desktop">
                     <div class="flex justify-center items-end h-[400px] gap-4">
@@ -473,6 +475,133 @@
                         @endif
                     </div>
                 </div>
+            @else
+
+                            <!-- Empty State for Podium (Desktop) -->
+                <div class="podium-desktop">
+                    <div class="flex justify-center items-end h-[400px] gap-4">
+                        <!-- Second Place Empty -->
+                        <div class="podium-item second-place" data-aos="fade-up" data-aos-delay="200">
+                            <div class="podium-content empty-state">
+                                <div class="empty-winner-image">
+                                    <div class="empty-badge silver">1st</div>
+                                    <div class="empty-icon">🏆</div>
+                                </div>
+                                <h3 class="empty-name">Results Pending</h3>
+                                <div class="medal-stats empty">
+                                    <div class="medal gold" title="Gold Medals">
+                                        <span class="medal-emoji">🥇</span>
+                                        <span class="medal-count">-</span>
+                                    </div>
+                                    <div class="medal silver" title="Silver Medals">
+                                        <span class="medal-emoji">🥈</span>
+                                        <span class="medal-count">-</span>
+                                    </div>
+                                    <div class="medal bronze" title="Bronze Medals">
+                                        <span class="medal-emoji">🥉</span>
+                                        <span class="medal-count">-</span>
+                                    </div>
+                                </div>
+                                <div class="total-points">
+                                    Coming Soon
+                                </div>
+                            </div>
+                            <div class="podium-stand silver">
+                                <div class="podium-shine"></div>
+                            </div>
+                        </div>
+
+                        <!-- Champion Empty -->
+                        <div class="podium-item champion" data-aos="fade-up">
+                            <div class="podium-content empty-state">
+                                <div class="empty-winner-image">
+                                    <div class="empty-badge gold">C</div>
+                                    <div class="empty-icon">👑</div>
+                                </div>
+                                <h3 class="empty-name">Results Pending</h3>
+                                <div class="medal-stats empty">
+                                    <div class="medal gold" title="Gold Medals">
+                                        <span class="medal-emoji">🥇</span>
+                                        <span class="medal-count">-</span>
+                                    </div>
+                                    <div class="medal silver" title="Silver Medals">
+                                        <span class="medal-emoji">🥈</span>
+                                        <span class="medal-count">-</span>
+                                    </div>
+                                    <div class="medal bronze" title="Bronze Medals">
+                                        <span class="medal-emoji">🥉</span>
+                                        <span class="medal-count">-</span>
+                                    </div>
+                                </div>
+                                <div class="total-points champion">
+                                    Stay Tuned!
+                                </div>
+                                <!-- <div class="champion-crown empty">👑</div> -->
+                            </div>
+                            <div class="podium-stand gold">
+                                <div class="podium-shine"></div>
+                            </div>
+                        </div>
+
+                        <!-- Third Place Empty -->
+                        <div class="podium-item third-place" data-aos="fade-up" data-aos-delay="400">
+                            <div class="podium-content empty-state">
+                                <div class="empty-winner-image">
+                                    <div class="empty-badge bronze">2nd</div>
+                                    <div class="empty-icon">🏆</div>
+                                </div>
+                                <h3 class="empty-name">Results Pending</h3>
+                                <div class="medal-stats empty">
+                                    <div class="medal gold" title="Gold Medals">
+                                        <span class="medal-emoji">🥇</span>
+                                        <span class="medal-count">-</span>
+                                    </div>
+                                    <div class="medal silver" title="Silver Medals">
+                                        <span class="medal-emoji">🥈</span>
+                                        <span class="medal-count">-</span>
+                                    </div>
+                                    <div class="medal bronze" title="Bronze Medals">
+                                        <span class="medal-emoji">🥉</span>
+                                        <span class="medal-count">-</span>
+                                    </div>
+                                </div>
+                                <div class="total-points">
+                                    Coming Soon
+                                </div>
+                            </div>
+                            <div class="podium-stand bronze">
+                                <div class="podium-shine"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State for Podium (Mobile) - Redesigned -->
+                <div class="podium-mobile">
+                    <div class="empty-state-container" data-aos="fade-up">
+                        <div class="empty-state-icon">🏆</div>
+                        <h2 class="empty-state-title">Results Coming Soon</h2>
+                        <p class="empty-state-message">The competition is still ongoing. Check back later for final standings!</p>
+                        
+                        <div class="empty-mobile-podium">
+                            <div class="empty-podium-pedestal silver" data-position="1st">
+                                <div class="pedestal-label">1st</div>
+                                <div class="pedestal-shine"></div>
+                            </div>
+                            <div class="empty-podium-pedestal gold" data-position="C">
+                                <div class="pedestal-label">C</div>
+                                <div class="pedestal-shine"></div>
+                                <!-- <div class="pedestal-crown">👑</div> -->
+                            </div>
+                            <div class="empty-podium-pedestal bronze" data-position="2nd">
+                                <div class="pedestal-label">2nd</div>
+                                <div class="pedestal-shine"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            @endif
             </div>
 
 
