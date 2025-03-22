@@ -256,7 +256,7 @@
             <!-- Podium Section -->
             <div class="podium-section max-w-6xl mx-auto mb-20" data-aos="fade-up">
 
-            @if(count($medalTally) < 0)
+            @if(count($medalTally) > 0)
                 <!-- Desktop Podium -->
                 <div class="podium-desktop">
                     <div class="flex justify-center items-end h-[400px] gap-4">
@@ -677,8 +677,11 @@
         </div>
 
         <!-- Carousel Container -->
+        @if($flattenedEvents)
         <div class="swiper sports-championship-swiper">
+       
             <div class="swiper-wrapper">
+               
                 @foreach($flattenedEvents as $event)
                 @if($event['gold_winner'] || $event['silver_winner'] || count($event['bronze_winners']) > 0)
                 <div class="swiper-slide">
@@ -775,13 +778,24 @@
                 </div>
                 @endif
                 @endforeach
+                
+              
             </div>
+
+            
 
             <!-- Navigation Controls -->
             <div class="swiper-pagination"></div>
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
         </div>
+        @else
+                <div class="no-results m-auto">
+                    <div class="no-results-icon">🏆</div>
+                    <div>Results coming soon</div>
+                </div>
+
+            @endif
     </div>
     </section>
 
@@ -856,6 +870,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             <div class="grid grid-cols-1 gap-[40px]">
 
+            @if($medalTally)
                 @foreach($medalTally as $index => $team)
 
                 <div class="team-card"
@@ -968,6 +983,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
 
                 @endforeach
+            @else
+               <!-- Empty State Component -->
+            
+                    <div class="modern-empty-card">
+                        <!-- Background elements -->
+                        <div class="empty-gradient-bg"></div>
+                        <div class="empty-gradient-bg right"></div>
+                        <div class="empty-glass-effect"></div>
+                        
+                        <!-- Animated shapes -->
+                        <div class="floating-shape shape1"></div>
+                        <div class="floating-shape shape2"></div>
+                        <div class="floating-shape shape3"></div>
+                        
+                        <!-- Content -->
+                        <div class="empty-content">
+                            <div class="empty-icon-container">
+                                <div class="empty-icon-glow"></div>
+                                <div class="empty-icon">🏆</div>
+                            </div>
+                            <h3 class="empty-title">No Posted Results Found</h3>
+                            <p class="empty-description">There are currently no Posted Results. Check back later for updates.</p>
+                            <a href="/" class="empty-action-btn">Refresh Results</a>
+                        </div>
+                    </div>
+                
+            @endif
             </div>
         </div>
     </section>
