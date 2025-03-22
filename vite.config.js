@@ -13,6 +13,7 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/js/app.js',
+                'resources/js/pages/loader.js',
                 'resources/css/landingpage.css',
                 'resources/css/teamdetails.css',
                 'resources/js/teamdetails.js',

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ Vite::asset('resources/images/palaroLogo.png') }}">
     <title>CMU PALARO {{ date('Y') }} - Medal Tally</title>
     <meta name="theme-color" content="#380505">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -218,6 +219,12 @@
     color: #00491E;
 }
 </style>
+
+
+
+@include('public.includes.loader')
+
+
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="hero-overlay"></div>
@@ -1472,6 +1479,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     </script>
+
+    <script src="{{ Vite::asset('resources/js/pages/loader.js') }}"></script>
 
 </body>
 </html>
