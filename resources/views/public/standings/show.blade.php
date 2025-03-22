@@ -27,7 +27,7 @@
   <!-- Background Elements -->
   <div class="hero-background">
     <img
-      src="{{ $team->image ? Vite::asset('storage/app/public/' . $team->image) : Vite::asset('resources/images/05.webp') }}"
+      src="{{ $team->image ? asset('storage/' . $team->image) : Vite::asset('resources/images/05.webp') }}"
       alt="{{ $team['team'] }}"
       class="hero-bg-image"
       id="teamFlag"
@@ -48,7 +48,7 @@
         @if($team->image)
           <div class="team-logo ">
             <img
-              src="{{ $team->image ? Vite::asset('storage/app/public/' . $team->image) : Vite::asset('resources/images/05.webp') }}"
+              src="{{ $team->image ?  asset('storage/' . $team->image) : Vite::asset('resources/images/05.webp') }}"
               alt="{{ $team['team'] }}"
               crossorigin="anonymous"
               loading="lazy"

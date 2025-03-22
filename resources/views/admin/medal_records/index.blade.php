@@ -1,8 +1,6 @@
 @extends('layouts.admin', ['title' => 'Results Tally'])
 
-@section('css')
-@vite(['node_modules/simple-datatables/dist/style.css'])
-@endsection
+
 
 @section('content')
 <style>

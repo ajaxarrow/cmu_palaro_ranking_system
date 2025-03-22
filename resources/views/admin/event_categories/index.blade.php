@@ -1,8 +1,6 @@
 @extends('layouts.admin', ['title' => 'Event Categories'])
 
-@section('css')
-@vite(['node_modules/simple-datatables/dist/style.css'])
-@endsection
+
 
 @section('content')
 

@@ -1,7 +1,6 @@
     @extends('layouts.admin', ['title' => $team->name])
 
     @section('css')
-    @vite(['node_modules/simple-datatables/dist/style.css'])
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
