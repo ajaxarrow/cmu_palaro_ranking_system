@@ -8,7 +8,7 @@
     .export-btn {
         position: fixed;
         bottom: 30px;
-        left: 5px;
+        right: 5px;
         z-index: 2;
         padding: 10px 20px;
         background-color: #00491e; /* Use your primary color */
@@ -179,7 +179,7 @@
 
                 @if($user->role != 'user' || $user->role == 'tournament_director')
                 <button type="button" class="btn btn-primary custom-primary-background" data-bs-toggle="modal" data-bs-target="#addRecordModal">
-                    <i class="mdi mdi-plus me-1"></i> <span class="d-none d-lg-block d-xl-none">Add Record</span> 
+                    <i class="mdi mdi-plus me-1"></i> <span class="d-none d-md-block">Add Record</span> 
                 </button>
                 @endif
                </div>
@@ -983,7 +983,7 @@
 
 <!-- Add this button to the header section near the top of your page, right after the d-flex align-items-center gap-3 div -->
 <button id="exportPDF" class="export-btn">
-    <i class="mdi mdi-file-pdf-box me-1"></i> <span class="d-none d-md-block">Export PDF</span>
+    <i class="mdi mdi-file-pdf-box me-1"></i> <span class="d-none d-md-block ">Export PDF</span>
 </button>
 
 <!-- Progress Overlay and Dialog (Keep these) -->
@@ -1028,7 +1028,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const exportBtnContainer = document.createElement('div');
     exportBtnContainer.style.position = 'fixed';
     exportBtnContainer.style.bottom = '55px'; // Position much higher to avoid any existing buttons
-    exportBtnContainer.style.left = '0px';
+    exportBtnContainer.style.right = '0px';
     exportBtnContainer.style.zIndex = '2';
 
     const exportExcelBtn = document.createElement('button');
