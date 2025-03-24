@@ -1,5 +1,5 @@
 import './bootstrap';
-
+import '@phosphor-icons/web/index.js';
 import Alpine from 'alpinejs';
 
 import $ from 'jquery'
