@@ -13,7 +13,7 @@ class LandingPageController extends Controller
 {
     public function index()
     {
-        $results = MedalRecord::all();
+        $results = MedalRecord::where('is_posted', true)->get();
         $medalTally = [];
         $overallTotal = [
             'gold_tally' => 0, 'gold_weight' => 0,
