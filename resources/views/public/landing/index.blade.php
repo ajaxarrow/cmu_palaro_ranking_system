@@ -677,7 +677,7 @@
         </div>
 
         <!-- Carousel Container -->
-        @if($results)
+        @if(count($results) > 0)
         <div class="swiper sports-championship-swiper">
 
             <div class="swiper-wrapper">
@@ -870,7 +870,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             <div class="grid grid-cols-1 gap-[40px]">
 
-            @if($results)
+            @if(count($results) > 0)
                 @foreach($medalTally as $index => $team)
 
                 <div class="team-card"
@@ -986,7 +986,7 @@ document.addEventListener('DOMContentLoaded', function() {
             @else
                <!-- Empty State Component -->
 
-                    <div class="modern-empty-card">
+                    <div class="modern-empty-card mx-auto">
                         <!-- Background elements -->
                         <div class="empty-gradient-bg"></div>
                         <div class="empty-gradient-bg right"></div>
