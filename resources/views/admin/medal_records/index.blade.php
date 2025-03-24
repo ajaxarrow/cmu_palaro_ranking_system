@@ -550,7 +550,7 @@
 </div>
 
 
-@if($user->role == 'admin')
+@if($user->role != 'user')
     <!-- Add Record Modal -->
     <div class="modal fade" id="addRecordModal" tabindex="-1" aria-labelledby="addRecordModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">

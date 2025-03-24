@@ -87,7 +87,7 @@
                                                             <select name="role" class="form-control role-select" id="role_id_edit_{{ $user->id }}" required>
 
                                                                 <option value="">Select Role</option>
-                                                                <option value="encoder" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
+                                                                <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
                                                                 <option value="encoder" {{ $user->role == 'encoder' ? 'selected' : '' }}>Encoder</option>
                                                                 <option value="tournament_director" {{ $user->role == 'tournament_director' ? 'selected' : '' }}>Tournament Director</option>
                                                                 <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
@@ -244,7 +244,7 @@
         document.querySelectorAll(".role-select").forEach((select) => {
             const userId = select.id.split('_')[3]; // Get user ID from select ID
             const sportFieldId = `sport_field_edit_${userId}`;
-            
+
             // Add change event listener
             select.addEventListener("change", function () {
                 toggleSportField(this, sportFieldId);
