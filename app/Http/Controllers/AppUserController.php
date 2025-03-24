@@ -51,7 +51,8 @@ class AppUserController extends Controller
             'email' => 'required|email|unique:users,email',
             'password1' => 'required|min:8',
             'password2' => 'required|same:password1',
-            'role' => 'required|string|in:admin,encoder,tournament_director',
+            'role' => 'required|string|in:admin,encoder,tournament_director,user',
+
         ];
 
         // Add conditional validation for sport_id
