@@ -256,7 +256,7 @@
             <!-- Podium Section -->
             <div class="podium-section max-w-6xl mx-auto mb-20" data-aos="fade-up">
 
-            @if(count($medalTally) > 0)
+            @if(count($results) > 0)
                 <!-- Desktop Podium -->
                 <div class="podium-desktop">
                     <div class="flex justify-center items-end h-[400px] gap-4">
@@ -582,7 +582,7 @@
                         <div class="empty-state-icon">🏆</div>
                         <h2 class="empty-state-title">Results Coming Soon</h2>
                         <p class="empty-state-message">The competition is still ongoing. Check back later for final standings!</p>
-                        
+
                         <div class="empty-mobile-podium">
                             <div class="empty-podium-pedestal silver" data-position="1st">
                                 <div class="pedestal-label">1st</div>
@@ -677,11 +677,11 @@
         </div>
 
         <!-- Carousel Container -->
-        @if($flattenedEvents)
+        @if($results)
         <div class="swiper sports-championship-swiper">
-       
+
             <div class="swiper-wrapper">
-               
+
                 @foreach($flattenedEvents as $event)
                 @if($event['gold_winner'] || $event['silver_winner'] || count($event['bronze_winners']) > 0)
                 <div class="swiper-slide">
@@ -778,11 +778,11 @@
                 </div>
                 @endif
                 @endforeach
-                
-              
+
+
             </div>
 
-            
+
 
             <!-- Navigation Controls -->
             <div class="swiper-pagination"></div>
@@ -870,7 +870,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             <div class="grid grid-cols-1 gap-[40px]">
 
-            @if($medalTally)
+            @if($results)
                 @foreach($medalTally as $index => $team)
 
                 <div class="team-card"
@@ -985,18 +985,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 @endforeach
             @else
                <!-- Empty State Component -->
-            
+
                     <div class="modern-empty-card">
                         <!-- Background elements -->
                         <div class="empty-gradient-bg"></div>
                         <div class="empty-gradient-bg right"></div>
                         <div class="empty-glass-effect"></div>
-                        
+
                         <!-- Animated shapes -->
                         <div class="floating-shape shape1"></div>
                         <div class="floating-shape shape2"></div>
                         <div class="floating-shape shape3"></div>
-                        
+
                         <!-- Content -->
                         <div class="empty-content">
                             <div class="empty-icon-container">
@@ -1008,7 +1008,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <a href="/" class="empty-action-btn">Refresh Results</a>
                         </div>
                     </div>
-                
+
             @endif
             </div>
         </div>
