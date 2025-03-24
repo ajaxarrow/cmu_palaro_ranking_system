@@ -320,11 +320,11 @@
                                                 </div>
                                                 <div class="medal-stats">
                                                     <div class="medal-stat-item">
-                                                        <span class="medal-stat-value">{{ $goldTally }}</span>
+                                                        <span class="medal-stat-value" id="gold-count-value">{{ $goldTally }}</span>
                                                         <span class="medal-stat-label">Count</span>
                                                     </div>
                                                     <div class="medal-stat-item">
-                                                        <span class="medal-stat-value">{{ $goldWeight }}</span>
+                                                        <span class="medal-stat-value" id="gold-weight-value">{{ $goldWeight }}</span>
                                                         <span class="medal-stat-label">Weight</span>
                                                     </div>
                                                 </div>
@@ -346,11 +346,11 @@
                                                 </div>
                                                 <div class="medal-stats">
                                                     <div class="medal-stat-item">
-                                                        <span class="medal-stat-value">{{ $silverTally }}</span>
+                                                        <span class="medal-stat-value" id="silver-count-value">{{ $silverTally }}</span>
                                                         <span class="medal-stat-label">Count</span>
                                                     </div>
                                                     <div class="medal-stat-item">
-                                                        <span class="medal-stat-value">{{ $silverWeight }}</span>
+                                                        <span class="medal-stat-value" id="silver-weight-value">{{ $silverWeight }}</span>
                                                         <span class="medal-stat-label">Weight</span>
                                                     </div>
                                                 </div>
@@ -374,11 +374,11 @@
                                                         </div>
                                                         <div class="medal-stats">
                                                             <div class="medal-stat-item">
-                                                                <span class="medal-stat-value">{{ $bronzeTally }}</span>
+                                                                <span class="medal-stat-value bronze-count-value">{{ $bronzeTally }}</span>
                                                                 <span class="medal-stat-label">Count</span>
                                                             </div>
                                                             <div class="medal-stat-item">
-                                                                <span class="medal-stat-value">{{ $bronzeWeight }}</span>
+                                                                <span class="medal-stat-value bronze-weight-value">{{ $bronzeWeight }}</span>
                                                                 <span class="medal-stat-label">Weight</span>
                                                             </div>
                                                         </div>
@@ -389,11 +389,11 @@
                                                     <span class="team-name">-</span>
                                                     <div class="medal-stats">
                                                         <div class="medal-stat-item">
-                                                            <span class="medal-stat-value">{{ $bronzeTally }}</span>
+                                                            <span class="medal-stat-value bronze-count-value">{{ $bronzeTally }}</span>
                                                             <span class="medal-stat-label">Count</span>
                                                         </div>
                                                         <div class="medal-stat-item">
-                                                            <span class="medal-stat-value">{{ $bronzeWeight }}</span>
+                                                            <span class="medal-stat-value bronze-weight-value">{{ $bronzeWeight }}</span>
                                                             <span class="medal-stat-label">Weight</span>
                                                         </div>
                                                     </div>
@@ -1096,10 +1096,10 @@ document.addEventListener('DOMContentLoaded', function() {
                                 const teamEl = goldPosition.querySelector('.team-name');
                                 if (teamEl) goldTeam = teamEl.textContent.trim();
 
-                                const countEl = goldPosition.querySelector('.medal-stat-value:first-child');
+                                const countEl = goldPosition.querySelector('#gold-count-value');
                                 if (countEl) goldCount = countEl.textContent.trim();
 
-                                const weightEl = goldPosition.querySelector('.medal-stat-value:last-child');
+                                const weightEl = goldPosition.querySelector('#gold-weight-value');
                                 if (weightEl) goldWeight = weightEl.textContent.trim();
                             }
                         }
@@ -1113,10 +1113,10 @@ document.addEventListener('DOMContentLoaded', function() {
                                 const teamEl = silverPosition.querySelector('.team-name');
                                 if (teamEl) silverTeam = teamEl.textContent.trim();
 
-                                const countEl = silverPosition.querySelector('.medal-stat-value:first-child');
+                                const countEl = silverPosition.querySelector('#silver-count-value');
                                 if (countEl) silverCount = countEl.textContent.trim();
 
-                                const weightEl = silverPosition.querySelector('.medal-stat-value:last-child');
+                                const weightEl = silverPosition.querySelector('#silver-weight-value');
                                 if (weightEl) silverWeight = weightEl.textContent.trim();
                             }
                         }
@@ -1134,10 +1134,10 @@ document.addEventListener('DOMContentLoaded', function() {
                                         .filter(text => text !== '-');
                                 }
 
-                                const countEl = bronzePosition.querySelector('.medal-stat-value:first-child');
-                                if (countEl) bronzeCount = countEl.textContent.trim();
+                                const countEl = bronzePosition.querySelector('.bronze-count-value');
+                                    if (countEl) bronzeCount = countEl.textContent.trim();
 
-                                const weightEl = bronzePosition.querySelector('.medal-stat-value:last-child');
+                                const weightEl = bronzePosition.querySelector('.bronze-weight-value');
                                 if (weightEl) bronzeWeight = weightEl.textContent.trim();
                             }
                         }
@@ -2133,10 +2133,10 @@ document.addEventListener('DOMContentLoaded', function() {
                                     const teamEl = goldPosition.querySelector('.team-name');
                                     if (teamEl) goldTeam = teamEl.textContent.trim();
 
-                                    const countEl = goldPosition.querySelector('.medal-stat-value:first-child');
+                                    const countEl = goldPosition.querySelector('#gold-count-value');
                                     if (countEl) goldCount = countEl.textContent.trim();
 
-                                    const weightEl = goldPosition.querySelector('.medal-stat-value:last-child');
+                                    const weightEl = goldPosition.querySelector('#gold-weight-value');
                                     if (weightEl) goldWeight = weightEl.textContent.trim();
                                 }
                             }
@@ -2150,10 +2150,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                     const teamEl = silverPosition.querySelector('.team-name');
                                     if (teamEl) silverTeam = teamEl.textContent.trim();
 
-                                    const countEl = silverPosition.querySelector('.medal-stat-value:first-child');
+                                    const countEl =  silverPosition.querySelector('#silver-count-value');
                                     if (countEl) silverCount = countEl.textContent.trim();
 
-                                    const weightEl = silverPosition.querySelector('.medal-stat-value:last-child');
+                                    const weightEl =  silverPosition.querySelector('#silver-weight-value');
+                                    console.log(weightEl)
                                     if (weightEl) silverWeight = weightEl.textContent.trim();
                                 }
                             }
@@ -2170,10 +2171,10 @@ document.addEventListener('DOMContentLoaded', function() {
                                         bronzeTeams = teams.join(', ');
                                     }
 
-                                    const countEl = bronzePosition.querySelector('.medal-stat-value:first-child');
+                                    const countEl = bronzePosition.querySelector('.bronze-count-value');
                                     if (countEl) bronzeCount = countEl.textContent.trim();
 
-                                    const weightEl = bronzePosition.querySelector('.medal-stat-value:last-child');
+                                    const weightEl = bronzePosition.querySelector('.bronze-weight-value');
                                     if (weightEl) bronzeWeight = weightEl.textContent.trim();
                                 }
                             }
@@ -2268,9 +2269,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         const tableData = sportGroups[sportName].map(item => [
                             item.eventName,
                             item.status,
-                            `${item.goldTeam} (${item.goldCount})`,
-                            `${item.silverTeam} (${item.silverCount})`,
-                            item.bronzeTeams,
+                            `${item.goldTeam} Count: (${item.goldCount}) Weight: (${item.goldWeight})`,
+                            `${item.silverTeam} Count: (${item.silverCount}) Weight: (${item.silverWeight})`,
+                            `${item.bronzeTeams} Count: (${item.bronzeCount}) Weight: (${item.bronzeWeight})`,
                             item.participants
                         ]);
 
