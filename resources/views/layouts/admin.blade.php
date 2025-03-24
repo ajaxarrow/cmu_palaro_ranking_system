@@ -10,7 +10,7 @@
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script> --}}
 
-    <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+
 </head>
 
 <body data-menu-color="light" data-sidebar="default">
