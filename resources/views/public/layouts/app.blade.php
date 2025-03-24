@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'CMU PALARO Medal Tracker')</title>
-    
+    <link rel="icon" type="image/png" href="{{ Vite::asset('resources/images/palaroLogo.png') }}">
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -87,6 +88,8 @@
     @yield('styles')
 </head>
 <body class="bg-neutral-50 text-neutral-800">
+@include('public.includes.loader')
+
     <!-- Modern Navbar with Glass Effect -->
     <nav class="bg-white/10 backdrop-blur-md mt-2 fixed w-[200px] top-0 left-[50%] -translate-x-1/2 z-50 shadow-soft rounded-2xl overflow-hidden">
         <div class="container mx-auto px-6 py-4 flex justify-center items-center shadow-[0_0_20px_5px_rgba(0,0,0,0.1)]">
@@ -183,5 +186,8 @@
     </script>
     
     @yield('scripts')
+    <script src="{{ Vite::asset('resources/js/pages/loader.js') }}"></script>
+
+    
 </body>
 </html>

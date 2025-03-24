@@ -3,7 +3,7 @@
 
 <head>
     @include('layouts.partials/title-meta', ['title' => 'CMU Palaro Ranking System'])
-
+    <link rel="icon" type="image/png" href="{{ Vite::asset('resources/images/palaroLogo.png') }}">
     @include('layouts.partials/head-css')
     @vite(['resources/css/layout.css'])
     @vite(['resources/css/override.css'])
