@@ -8,13 +8,13 @@
     .export-btn {
         position: fixed;
         bottom: 30px;
-        right: 30px;
-        z-index: 1000;
-        padding: 15px 30px;
+        right: 5px;
+        z-index: 2;
+        padding: 10px 20px;
         background-color: #00491e; /* Use your primary color */
         color: white;
         border: none;
-        border-radius: 50px;
+        border-radius: 10px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         display: flex;
         align-items: center;
@@ -93,16 +93,27 @@
 
 <div class="container-fluid">
 
-    <div class="py-4 d-flex align-items-sm-center flex-sm-row flex-column">
+    <div class="py-4 d-flex align-items-sm-start flex-sm-column flex-column">
         <div class="flex-grow-1">
             <h3 class="fw-bold mb-0">Results Tally</h3>
             <p class="text-muted">Track medal performances across all events</p>
         </div>
-        <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center gap-3 flex-col">
         @if(!$sportId)
-            <div class="d-flex align-items-center gap-3">
-                <button id="resetFilterBtn" class="btn btn-light" onclick="resetFilter()" style="display: none;">
-                    <i class="mdi mdi-refresh me-1"></i> Reset Filter
+            <div class="d-flex align-items-center gap-3 flex-column">
+
+            <!-- Add search input -->
+       
+                    <div class="input-group">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search events..." oninput="searchEvents()">
+                        <button class="btn btn-outline-secondary" type="button" onclick="clearSearch()">
+                            <i class="mdi mdi-close"></i>
+                        </button>
+                    </div>
+       
+               <div class="d-flex gap-2">
+               <button id="resetFilterBtn" class="btn btn-light" onclick="resetFilter()" style="display: none;">
+                    <i class="mdi mdi-refresh me-1"></i>
                 </button>
                 <!-- Add this right after the sport filter dropdown, before the close of the d-flex div -->
                 <div class="dropdown ms-2">
@@ -125,17 +136,10 @@
                                 <input type="checkbox" class="posted-checkbox" value="pending" onchange="filterByPosted()"> Pending
                             </label>
                         </li>
+                        <li>
+                            
+                        </li>
                     </ul>
-                </div>
-
-                <!-- Add search input -->
-                <div class="ms-2">
-                    <div class="input-group">
-                        <input type="text" id="searchInput" class="form-control" placeholder="Search events..." oninput="searchEvents()">
-                        <button class="btn btn-outline-secondary" type="button" onclick="clearSearch()">
-                            <i class="mdi mdi-close"></i>
-                        </button>
-                    </div>
                 </div>
                 <!-- Reset Filter Button (Initially Hidden) -->
 
@@ -172,6 +176,19 @@
                         @endforeach
                     </ul>
                 </div>
+
+                @if($user->role != 'user' || $user->role == 'tournament_director')
+                <button type="button" class="btn btn-primary custom-primary-background" data-bs-toggle="modal" data-bs-target="#addRecordModal">
+                    <i class="mdi mdi-plus me-1"></i> <span class="d-none d-md-block">Add Record</span> 
+                </button>
+                @endif
+               </div>
+
+         
+
+          
+
+
             </div>
         @else
         <div class="dropdown">
@@ -200,11 +217,7 @@
 
         @endif
 
-        @if($user->role != 'user')
-            <button type="button" class="btn btn-primary custom-primary-background" data-bs-toggle="modal" data-bs-target="#addRecordModal">
-                <i class="mdi mdi-plus me-1"></i> Add Record
-            </button>
-        @endif
+      
 
         </div>
     </div>
@@ -970,7 +983,7 @@
 
 <!-- Add this button to the header section near the top of your page, right after the d-flex align-items-center gap-3 div -->
 <button id="exportPDF" class="export-btn">
-    <i class="mdi mdi-file-pdf-outline me-1"></i> Export PDF
+    <i class="mdi mdi-file-pdf-box me-1"></i> <span class="d-none d-md-block ">Export PDF</span>
 </button>
 
 <!-- Progress Overlay and Dialog (Keep these) -->
@@ -1014,15 +1027,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Create Excel export button
     const exportBtnContainer = document.createElement('div');
     exportBtnContainer.style.position = 'fixed';
-    exportBtnContainer.style.bottom = '65px'; // Position much higher to avoid any existing buttons
-    exportBtnContainer.style.right = '1px';
-    exportBtnContainer.style.zIndex = '1000';
+    exportBtnContainer.style.bottom = '55px'; // Position much higher to avoid any existing buttons
+    exportBtnContainer.style.right = '0px';
+    exportBtnContainer.style.zIndex = '2';
 
     const exportExcelBtn = document.createElement('button');
     exportExcelBtn.id = 'exportExcel';
     exportExcelBtn.style.position = 'relative';
     exportExcelBtn.className = 'export-btn';
-    exportExcelBtn.innerHTML = '<i class="mdi mdi-microsoft-excel me-1"></i> Export Excel';
+    exportExcelBtn.innerHTML = '<i class="mdi mdi-microsoft-excel me-1"></i> <span class="d-none d-md-block ">Export Excel</span>';
     exportExcelBtn.style.backgroundColor = '#217346'; // Excel green color
 
     // Don't modify other buttons, just position this one higher

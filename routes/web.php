@@ -4,6 +4,7 @@ use App\Http\Controllers\AppUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\EventCategoryController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\MedalRecordController;
 use App\Http\Controllers\MedalWeightCategoryController;
 use App\Http\Controllers\PublicTeamController;
@@ -21,6 +22,8 @@ Route::get('/', [LandingPageController::class, 'index'])->name('public.landing.i
 // Public team standings routes
 // Route::get('/standings', [PublicTeamController::class, 'index'])->name('public.standings');
 Route::get('/standings/{id}', [PublicTeamController::class, 'show'])->name('public.standings.details');
+Route::get('/password/reset', [PasswordResetController::class, 'showResetForm'])->name('password.reset.form');
+Route::post('/password/reset', [PasswordResetController::class, 'resetPassword'])->name('password.reset.process');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
@@ -32,7 +35,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::prefix('admin')->middleware('auth')->group(function () {
+
+
+
+Route::prefix('admin')->middleware(['auth', 'force.password.reset'])->group(function () {
 
     // Team Routes
     Route::get('/teams', [TeamController::class, 'index'])->name('teams.index');
