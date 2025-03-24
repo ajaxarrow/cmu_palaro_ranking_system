@@ -105,7 +105,7 @@ class AppUserController extends Controller
     $validationRules = [
         'name' => 'required|string|max:255',
         'email' => 'required|email|unique:users,email,' . $id,
-        'role' => 'required|string|in:admin,encoder,tournament_director',
+        'role' => 'required|string|in:admin,encoder,tournament_director,user',
     ];
 
     // Add conditional validation for sport_id
