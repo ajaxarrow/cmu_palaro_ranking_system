@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Team;
 use App\Models\Sport;
+use App\Models\MedalRecord;
 use App\Models\EventCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Vite;
@@ -12,6 +13,7 @@ class LandingPageController extends Controller
 {
     public function index()
     {
+        $results = MedalRecord::where('is_posted', true)->get();
         $medalTally = [];
         $overallTotal = [
             'gold_tally' => 0, 'gold_weight' => 0,
@@ -258,6 +260,7 @@ class LandingPageController extends Controller
         }
 
         return view('public.landing.index', [
+            'results' => $results,
             'medalTally' => $medalTally,
             'overallTotal' => $overallTotal,
             'sportResults' => $sportResults,

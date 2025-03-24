@@ -87,7 +87,7 @@
                                                             <select name="role" class="form-control role-select" id="role_id_edit_{{ $user->id }}" required>
 
                                                                 <option value="">Select Role</option>
-                                                                <option value="encoder" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
+                                                                <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
                                                                 <option value="encoder" {{ $user->role == 'encoder' ? 'selected' : '' }}>Encoder</option>
                                                                 <option value="tournament_director" {{ $user->role == 'tournament_director' ? 'selected' : '' }}>Tournament Director</option>
                                                                 <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
@@ -96,7 +96,7 @@
 
                                                         <div class="mb-3 sport-field" id="sport_field_edit_{{ $user->id }}" style="display: none;">
                                                             <label for="sport_id_edit_{{ $user->id }}" class="form-label">Sport</label>
-                                                            <select name="sport_id" class="form-control" id="sport_id_edit_{{ $user->id }}" required>
+                                                            <select name="sport_id" class="form-control" id="sport_id_edit_{{ $user->id }}" >
                                                                 <option value="">Select Sport</option>
                                                                 @foreach($sports as $sport)
                                                                     <option value="{{ $sport->id }}" {{ ($user->sport_id == $sport->id) ? 'selected' : '' }}>{{ $sport->name }}</option>
@@ -178,7 +178,7 @@
                     </div>
                     <div class="mb-3 sport-field" id="sport_field_add" style="display: none;">
                         <label for="sport_id_add" class="form-label">Sport</label>
-                        <select name="sport_id" class="form-control" id="sport_id_add" required>
+                        <select name="sport_id" class="form-control" id="sport_id_add">
                             <option value="">Select Sport</option>
                             @foreach($sports as $sport)
                                 <option value="{{ $sport->id }}">{{ $sport->name }}</option>
@@ -223,7 +223,6 @@
 
 
 <script>
-
     document.addEventListener("DOMContentLoaded", function () {
         function toggleSportField(selectElement, sportFieldId) {
             let sportField = document.getElementById(sportFieldId);
@@ -241,76 +240,61 @@
             toggleSportField(this, "sport_field_add");
         });
 
-        // For Edit User Modals (handles multiple users)
-        document.querySelectorAll("select[name='role']").forEach((select) => {
+        // For Edit User Modals
+        document.querySelectorAll(".role-select").forEach((select) => {
+            const userId = select.id.split('_')[3]; // Get user ID from select ID
+            const sportFieldId = `sport_field_edit_${userId}`;
+
+            // Add change event listener
             select.addEventListener("change", function () {
-                let userId = this.closest("form").querySelector("input[name='id']").value;
-                toggleSportField(this, `sport_field_edit_${userId}`);
+                toggleSportField(this, sportFieldId);
             });
 
-            // Initialize the sport field visibility on page load
-            let userId = select.closest("form").querySelector("input[name='id']").value;
-            toggleSportField(select, `sport_field_edit_${userId}`);
+            // Initialize visibility based on current role
+            toggleSportField(select, sportFieldId);
         });
-    });
 
-    document.addEventListener('DOMContentLoaded', function() {
-        // Toggle visibility for first password field
+        // Password toggle functionality
         const togglePassword1 = document.getElementById('togglePassword1');
         const password1 = document.getElementById('password1_id');
 
         if (togglePassword1) {
             togglePassword1.addEventListener('click', function() {
-                // Toggle the type attribute
                 const type = password1.getAttribute('type') === 'password' ? 'text' : 'password';
                 password1.setAttribute('type', type);
-
-                // Toggle the icon
-                this.querySelector('i').classList.toggle('bi-eye');
-                this.querySelector('i').classList.toggle('bi-eye-slash');
+                this.querySelector('i').classList.toggle('ph-eye');
+                this.querySelector('i').classList.toggle('ph-eye-slash');
             });
         }
 
-        // Toggle visibility for second password field
         const togglePassword2 = document.getElementById('togglePassword2');
         const password2 = document.getElementById('password2_id');
 
         if (togglePassword2) {
             togglePassword2.addEventListener('click', function() {
-                // Toggle the type attribute
                 const type = password2.getAttribute('type') === 'password' ? 'text' : 'password';
                 password2.setAttribute('type', type);
-
-                // Toggle the icon
-                this.querySelector('i').classList.toggle('bi-eye');
-                this.querySelector('i').classList.toggle('bi-eye-slash');
+                this.querySelector('i').classList.toggle('ph-eye');
+                this.querySelector('i').classList.toggle('ph-eye-slash');
             });
         }
+
+        // Password generator
+        document.getElementById('gen_password').addEventListener('click', function() {
+            const password1 = document.getElementById('password1_id');
+            const password2 = document.getElementById('password2_id');
+            const randomPassword = Math.random().toString(36).slice(-8);
+            password1.value = randomPassword;
+            password2.value = randomPassword;
+        });
+
+        // Form submission handling
+        function disableSubmitButton(form) {
+            const submitButton = form.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.innerText = 'Submitting...';
+        }
     });
-    function setEditFormAction(action, teamId, event, goldTally, silverTally, bronzeTally, medalWeight) {
-        document.getElementById('editForm').action = action;
-        document.getElementById('editTeamId').value = teamId;
-        document.getElementById('editEvent').value = event;
-        document.getElementById('editGoldTally').value = goldTally;
-        document.getElementById('editSilverTally').value = silverTally;
-        document.getElementById('editBronzeTally').value = bronzeTally;
-        document.getElementById('editMedalWeight').value = medalWeight;
-    }
-
-    function disableSubmitButton(form) {
-        const submitButton = form.querySelector('button[type="submit"]');
-        submitButton.disabled = true; // Disable the button
-        submitButton.innerText = 'Submitting...'; // Change button text
-    }
-    document.getElementById('gen_password').addEventListener('click', function() {
-        const password1 = document.getElementById('password1_id');
-        const password2 = document.getElementById('password2_id');
-        const randomPassword = Math.random().toString(36).slice(-8);
-        password1.value = randomPassword;
-        password2.value = randomPassword;
-    });
-
-
 </script>
 
 @endsection
