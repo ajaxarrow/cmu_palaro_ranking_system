@@ -11,7 +11,7 @@ class PasswordResetController extends Controller
     public function showResetForm()
     {
         $user = Auth::user();
-        if ($user && in_array($user->role, ['tournament_director', 'user', 'encoder']) &&
+        if ($user && in_array($user->role, ['assistant_tournament_director', 'tournament_director', 'user', 'encoder']) &&
         $user->is_changed && !$user->is_first_time) {
         return redirect()->route('teams.index');
     }
@@ -21,7 +21,7 @@ class PasswordResetController extends Controller
     public function resetPassword(Request $request)
     {
         $user = Auth::user();
-        if ($user && in_array($user->role, ['tournament_director', 'user', 'encoder']) &&
+        if ($user && in_array($user->role, ['assistant_tournament_director', 'tournament_director', 'user', 'encoder']) &&
             $user->is_changed && !$user->is_first_time) {
             return redirect()->route('teams.index');
         }

@@ -48,8 +48,8 @@
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>
-                                            {{ $user->role }}
-                                            @if($user->role === 'tournament_director' && $user->sport)
+                                            {{ ucwords(str_replace('_', ' ', $user->role)) }}
+                                            @if(($user->role === 'tournament_director' || $user->role == 'assistant_tournament_director') && $user->sport)
                                                 ({{ $user->sport->name }})
                                             @endif
                                         </td>
@@ -89,6 +89,7 @@
                                                                 <option value="">Select Role</option>
                                                                 <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
                                                                 <option value="encoder" {{ $user->role == 'encoder' ? 'selected' : '' }}>Encoder</option>
+                                                                <option value="assistant_tournament_director" {{ $user->role == 'assistant_tournament_director' ? 'selected' : '' }}>Assistant Tournament Director</option>
                                                                 <option value="tournament_director" {{ $user->role == 'tournament_director' ? 'selected' : '' }}>Tournament Director</option>
                                                                 <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
                                                             </select>
@@ -172,6 +173,7 @@
                             <option value="">Select Role</option>
                             <option value="user">User</option>
                             <option value="encoder">Encoder</option>
+                            <option value="assistant_tournament_director">Assistant Tournament Director</option>
                             <option value="tournament_director">Tournament Director</option>
                             <option value="admin">Admin</option>
                         </select>
@@ -226,7 +228,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         function toggleSportField(selectElement, sportFieldId) {
             let sportField = document.getElementById(sportFieldId);
-            if (selectElement.value === "tournament_director") {
+            if (selectElement.value === "tournament_director" || selectElement.value === "assistant_tournament_director") {
                 sportField.style.display = "block";
             } else {
                 sportField.style.display = "none";

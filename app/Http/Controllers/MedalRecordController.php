@@ -33,7 +33,7 @@ class MedalRecordController extends Controller
         $sportId = null;
         $sports = collect();
 
-        if ($user->role == 'tournament_director') {
+        if ($user->role == 'tournament_director' || $user->role == 'assistant_tournament_director') {
             // Filter sports to only show the sport associated with this tournament director
             $sport_data_id = $user->sport_id;
             $sports = Sport::where('id', $sport_data_id)

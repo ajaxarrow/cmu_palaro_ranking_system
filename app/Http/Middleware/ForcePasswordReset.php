@@ -17,7 +17,7 @@ class ForcePasswordReset
         $user = Auth::user();
 
         // Check if user has required roles and needs to reset password
-        if ($user && in_array($user->role, ['tournament_director', 'user', 'encoder']) &&
+        if ($user && in_array($user->role, ['assistant_tournament_director', 'tournament_director', 'user', 'encoder']) &&
             !$user->is_changed && $user->is_first_time) {
             return redirect()->route('password.reset.form');
         }
