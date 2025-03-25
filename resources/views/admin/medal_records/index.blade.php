@@ -177,7 +177,7 @@
                     </ul>
                 </div>
 
-                @if($user->role != 'user' || $user->role != 'tournament_director' || $user->role != 'assistant_tournament_director')
+                @if($user->role == 'encoder' || $user->role == 'admin')
                 <button type="button" class="btn btn-primary custom-primary-background" data-bs-toggle="modal" data-bs-target="#addRecordModal">
                     <i class="ph ph-plus me-1"></i> <span class="d-none d-md-inline">Add Record</span>
                 </button>
@@ -585,7 +585,9 @@
                                 @endforeach
                             </select>
                         </div>
+
                         <div class="mb-4">
+
                             <label for="event" class="form-label">Event Category</label>
 
                             <select name="event_category_id" class="form-select" id="event" required onchange="handleEventChange(this)">
@@ -713,27 +715,28 @@
     <!-- JavaScript for handling team selections and double bronze -->
     <script>
         function filterEventsBySport(sportSelect) {
-    const selectedSportId = sportSelect.value;
-    const eventSelect = document.getElementById('event');
+            const selectedSportId = sportSelect.value;
+            const eventSelect = document.getElementById('event');
 
-    // Reset event dropdown
-    eventSelect.innerHTML = '<option value="">Select Event</option>';
+            // Reset event dropdown
+            eventSelect.innerHTML = '<option value="">Select Event</option>';
 
-    // If no sport is selected, return
-    if (!selectedSportId) return;
+            // If no sport is selected, return
+            if (!selectedSportId) return;
 
-    // Filter events based on selected sport
-    @foreach ($events as $event)
-        if ({{ $event->sport_id }} == selectedSportId) {
-            const option = document.createElement('option');
-            option.value = "{{ $event->id }}";
-            option.setAttribute('data-double-bronze', "{{ $event->is_double_bronze }}");
-            option.setAttribute('data-medal-count', "{{ $event->medal_count }}");
-            option.textContent = "{{ $event->name }}";
-            eventSelect.appendChild(option);
+            // Filter events based on selected sport
+            @foreach ($events as $event)
+                if ({{ $event->sport_id }} == selectedSportId) {
+                    const option = document.createElement('option');
+                    option.value = "{{ $event->id }}";
+                    option.setAttribute('data-double-bronze', "{{ $event->is_double_bronze }}");
+                    option.setAttribute('data-medal-count', "{{ $event->medal_count }}");
+                    option.textContent = "{{ $event->name }}";
+                    eventSelect.appendChild(option);
+                }
+            @endforeach
+            updateEventCategoryOptions()
         }
-    @endforeach
-}
         function updateEventCategoryOptions() {
             const selectElement = document.getElementById('event');
 
