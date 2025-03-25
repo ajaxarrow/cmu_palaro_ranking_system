@@ -86,15 +86,15 @@
 
                                                 <div class="d-flex justify-content-end">
                                                     <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" href="{{ route('medal_records.by_sport', $sport->id) }}">
-                                                        <i class="mdi mdi-eye-outline fs-14 text-primary"></i>
+                                                        <i class="ph ph-eye fs-14 text-primary"></i>
                                                     </a>
 
                                                     <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editModal-{{$sport->id}}">
-                                                        <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
+                                                        <i class="ph ph-pencil fs-14 text-primary"></i>
                                                     </a>
                                                     <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="modal" data-bs-target="#deleteModal-{{$sport->id}}"
                                                     onclick="setDeleteFormAction('{{ route('sports.destroy', $sport->id) }}')">
-                                                        <i class="mdi mdi-delete fs-14 text-danger"></i>
+                                                        <i class="ph-bold ph-trash fs-14 text-danger"></i>
                                                     </a>
                                                 </div>
                                             </td>

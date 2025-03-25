@@ -107,18 +107,18 @@
                     <div class="input-group">
                         <input type="text" id="searchInput" class="form-control" placeholder="Search events..." oninput="searchEvents()">
                         <button class="btn btn-outline-secondary" type="button" onclick="clearSearch()">
-                            <i class="mdi mdi-close"></i>
+                            <i class="ph-bold ph-x"></i>
                         </button>
                     </div>
 
                <div class="d-flex gap-2">
                <button id="resetFilterBtn" class="btn btn-light" onclick="resetFilter()" style="display: none;">
-                    <i class="mdi mdi-refresh me-1"></i>
+                    <i class="ph ph-arrow-clockwise me-1"></i>
                 </button>
                 <!-- Add this right after the sport filter dropdown, before the close of the d-flex div -->
                 <div class="dropdown ms-2">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="postedFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="mdi mdi-check-circle-outline me-1"></i> Filter by Status
+                        <i class="ph ph-check-circle me-1"></i> Filter by Status
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="postedFilterDropdown">
                         <li>
@@ -146,7 +146,7 @@
                 <!-- Sport Filter Dropdown -->
                 <div class="dropdown">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sportFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="mdi mdi-filter-outline me-1"></i> Filter by Sport
+                        <i class="ph ph-funnel me-1"></i> Filter by Sport
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="sportFilterDropdown">
                         <li>
@@ -179,7 +179,7 @@
 
                 @if($user->role != 'user' || $user->role == 'tournament_director' || $user->role == 'assistant_tournament_director')
                 <button type="button" class="btn btn-primary custom-primary-background" data-bs-toggle="modal" data-bs-target="#addRecordModal">
-                    <i class="mdi mdi-plus me-1"></i> <span class="d-none d-md-inline">Add Record</span>
+                    <i class="ph ph-plus me-1"></i> <span class="d-none d-md-inline">Add Record</span>
                 </button>
                 @endif
                </div>
@@ -193,7 +193,7 @@
         @else
         <div class="dropdown">
             <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="eventCategoryFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="mdi mdi-filter-outline me-1" ></i> Filter by Event Category
+                <i class="ph ph-funnel me-1" ></i> Filter by Event Category
             </button>
             <ul class="dropdown-menu" aria-labelledby="eventCategoryFilterDropdown">
                 <li>
@@ -320,7 +320,7 @@
                                     <div class="mb-2">
                                         <div class="medal-position mb-3">
                                             <span class="medal-badge medal-gold">
-                                                <i class="mdi mdi-medal medal-icon"></i> Champion
+                                                <i class="ph ph-medal medal-icon"></i> Champion
                                             </span>
                                             <div class="d-flex justify-content-between align-items-center mt-2">
                                                 <div class="d-flex align-items-center gap-1">
@@ -346,7 +346,7 @@
 
                                         <div class="medal-position mb-3">
                                             <span class="medal-badge medal-silver">
-                                                <i class="mdi mdi-medal medal-icon"></i> 1st Runner Up
+                                                <i class="ph ph-medal medal-icon"></i> 1st Runner Up
                                             </span>
                                             <div class="d-flex justify-content-between align-items-center mt-2">
                                                 <div class="d-flex align-items-center gap-1">
@@ -372,7 +372,7 @@
 
                                         <div class="medal-position">
                                             <span class="medal-badge medal-bronze">
-                                                <i class="mdi mdi-medal medal-icon"></i> 2nd Runner Up
+                                                <i class="ph ph-medal medal-icon"></i> 2nd Runner Up
                                             </span>
                                             @if(count($bronzeWinners) > 0)
                                                 @foreach($bronzeWinners as $bronzeWinner)
@@ -417,7 +417,7 @@
                                 </div>
                                 <div class="card-footer bg-white d-flex justify-content-between align-items-center">
                                     <div class="text-muted">
-                                        <i class="mdi mdi-account-group me-1"></i> {{ $participants }} Participating Teams
+                                        <i class="ph ph-users-three me-1"></i> {{ $participants }} Participating Teams
                                     </div>
 
                                     <div class="d-flex align-items-center gap-1">
@@ -431,7 +431,7 @@
                                                     data-bs-toggle="tooltip"
                                                     data-bs-placement="top"
                                                     title="Edit record">
-                                                    <i class="mdi mdi-pencil"></i>
+                                                    <i class="ph ph-pencil"></i>
                                                 </button>
 
 
@@ -446,7 +446,7 @@
                                                         {{ $isPosted ? 'disabled' : '' }}
                                                         onclick="setEventCategory('{{ $eventCategory->id }}', 'approve')"
                                                         title="Approve this record">
-                                                    <i class="mdi mdi-check"></i>
+                                                    <i class="ph ph-check"></i>
                                                 </button>
 
                                             @endif
@@ -460,7 +460,7 @@
                                                 data-bs-target="#deleteRecordModal"
                                                 onclick="setEventCategory('{{ $eventCategory->id }}', 'delete')"
                                                 title="Delete this record">
-                                                <i class="mdi mdi-delete"></i>
+                                                <i class="ph-bold ph-trash"></i>
                                             </button>
 
                                         @endif
@@ -983,7 +983,7 @@
 
 <!-- Add this button to the header section near the top of your page, right after the d-flex align-items-center gap-3 div -->
 <button id="exportPDF" class="export-btn">
-    <i class="mdi mdi-file-pdf-box me-1"></i> <span class="d-none d-md-block ">Export PDF</span>
+    <i class="ph ph-file-pdf me-1"></i> <span class="d-none d-md-block ">Export PDF</span>
 </button>
 
 <!-- Progress Overlay and Dialog (Keep these) -->
@@ -1035,7 +1035,7 @@ document.addEventListener('DOMContentLoaded', function() {
     exportExcelBtn.id = 'exportExcel';
     exportExcelBtn.style.position = 'relative';
     exportExcelBtn.className = 'export-btn';
-    exportExcelBtn.innerHTML = '<i class="mdi mdi-microsoft-excel me-1"></i> <span class="d-none d-md-block ">Export Excel</span>';
+    exportExcelBtn.innerHTML = '<i class="ph ph-file-xls me-1"></i> <span class="d-none d-md-block ">Export Excel</span>';
     exportExcelBtn.style.backgroundColor = '#217346'; // Excel green color
 
     // Don't modify other buttons, just position this one higher
@@ -1603,7 +1603,7 @@ function filterSport() {
 
     // Update the dropdown button text
     const dropdownButton = document.getElementById('sportFilterDropdown');
-    dropdownButton.innerHTML = `<i class="mdi mdi-filter-outline me-1"></i> ${isAllSelected ? 'All Sports' : selectedSports.length + ' Selected'}`;
+    dropdownButton.innerHTML = `<i class="ph ph-funnel me-1"></i> ${isAllSelected ? 'All Sports' : selectedSports.length + ' Selected'}`;
 
     // Show/hide reset button
     document.getElementById('resetFilterBtn').style.display = isAllSelected ? 'none' : 'block';
@@ -1821,7 +1821,7 @@ function filterSport() {
 function updateSportFilterText() {
     const dropdownButton = document.getElementById('sportFilterDropdown');
     const isAllSelected = currentSportFilters.includes('all') || currentSportFilters.length === 0;
-    dropdownButton.innerHTML = `<i class="mdi mdi-filter-outline me-1"></i> ${isAllSelected ? 'All Sports' : currentSportFilters.length + ' Selected'}`;
+    dropdownButton.innerHTML = `<i class="ph ph-funnel me-1"></i> ${isAllSelected ? 'All Sports' : currentSportFilters.length + ' Selected'}`;
 }
 
 // Filter by posted status
@@ -1850,7 +1850,7 @@ function filterByPosted() {
 function updatePostedFilterText() {
     const dropdownButton = document.getElementById('postedFilterDropdown');
     const isAllSelected = currentPostedStatus.includes('all') || currentPostedStatus.length === 0;
-    dropdownButton.innerHTML = `<i class="mdi mdi-check-circle-outline me-1"></i> ${isAllSelected ? 'All Status' : currentPostedStatus.length + ' Selected'}`;
+    dropdownButton.innerHTML = `<i class="ph ph-check-circle me-1"></i> ${isAllSelected ? 'All Status' : currentPostedStatus.length + ' Selected'}`;
 }
 
 // Search events function
@@ -1934,7 +1934,7 @@ function filterCatRecords() {
 
     // Update the dropdown button text
     const dropdownButton = document.getElementById('eventCategoryFilterDropdown');
-    dropdownButton.innerHTML = `<i class="mdi mdi-filter-outline me-1"></i> ${isAllCategoriesSelected ? 'All Categories' : selectedEventCategories.length + ' Selected'}`;
+    dropdownButton.innerHTML = `<i class="ph ph-funnel me-1"></i> ${isAllCategoriesSelected ? 'All Categories' : selectedEventCategories.length + ' Selected'}`;
 
     // Get all medal cards
     const medalCards = document.querySelectorAll('.medal-card');

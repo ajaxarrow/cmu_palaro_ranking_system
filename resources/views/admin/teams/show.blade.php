@@ -88,7 +88,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <a class="btn btn-outline-primary mb-2" href="{{route('teams.index')}}">
-                                    <i class="mdi mdi-arrow-left me-1"></i> Back to Teams List
+                                    <i class="ph ph-arrow-left me-1"></i> Back to Teams List
                                 </a>
                             <div>
 
@@ -222,7 +222,7 @@
 
                     <div class="d-flex gap-3">
                         <button id="exportPDF" class="export-btn">
-                            <i class="mdi mdi-file-pdf-outline"></i>
+                            <i class="ph ph-file-pdf"></i>
                             Export to PDF
                         </button>
 
@@ -440,7 +440,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const excelButton = document.createElement('button');
     excelButton.id = 'exportExcel';
     excelButton.className = 'export-btn';
-    excelButton.innerHTML = '<i class="mdi mdi-file-excel-outline"></i> Export to Excel';
+    excelButton.innerHTML = '<i class="ph ph-file-xls"></i> Export to Excel';
 
     buttonContainer.appendChild(excelButton);
 

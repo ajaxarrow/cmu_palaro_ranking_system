@@ -108,11 +108,11 @@
                                         <td class="text-end">
                                             <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editModal"
                                                onclick="setEditFormAction('{{ route('colleges.update', $college->id) }}', '{{ $college->name }}', '{{ $college->acronym }}', '{{ $college->image }}')">
-                                                <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
+                                                <i class="ph ph-pencil fs-14 text-primary"></i>
                                             </a>
                                             <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="modal" data-bs-target="#deleteModal"
                                                onclick="setDeleteFormAction('{{ route('colleges.destroy', $college->id) }}')">
-                                                <i class="mdi mdi-delete fs-14 text-danger"></i>
+                                                <i class="ph-bold ph-trash fs-14 text-danger"></i>
                                             </a>
                                         </td>
                                         @endif
