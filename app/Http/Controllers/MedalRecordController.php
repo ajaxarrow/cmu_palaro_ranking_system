@@ -30,6 +30,7 @@ class MedalRecordController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $allSportsData = Sport::all();
         $sportId = null;
         $sports = collect();
 
@@ -68,7 +69,8 @@ class MedalRecordController extends Controller
             'sports',
             'teams',
             'events',
-            'medalRecords'
+            'medalRecords',
+            'allSportsData'
         ));
     }
 
