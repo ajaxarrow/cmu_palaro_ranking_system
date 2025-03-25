@@ -103,14 +103,14 @@
             <div class="d-flex align-items-center gap-3 flex-column">
 
             <!-- Add search input -->
-       
+
                     <div class="input-group">
                         <input type="text" id="searchInput" class="form-control" placeholder="Search events..." oninput="searchEvents()">
                         <button class="btn btn-outline-secondary" type="button" onclick="clearSearch()">
                             <i class="mdi mdi-close"></i>
                         </button>
                     </div>
-       
+
                <div class="d-flex gap-2">
                <button id="resetFilterBtn" class="btn btn-light" onclick="resetFilter()" style="display: none;">
                     <i class="mdi mdi-refresh me-1"></i>
@@ -137,7 +137,7 @@
                             </label>
                         </li>
                         <li>
-                            
+
                         </li>
                     </ul>
                 </div>
@@ -177,16 +177,16 @@
                     </ul>
                 </div>
 
-                @if($user->role != 'user' || $user->role == 'tournament_director')
+                @if($user->role != 'user' || $user->role == 'tournament_director' || $user->role == 'assistant_tournament_director')
                 <button type="button" class="btn btn-primary custom-primary-background" data-bs-toggle="modal" data-bs-target="#addRecordModal">
-                    <i class="mdi mdi-plus me-1"></i> <span class="d-none d-md-inline">Add Record</span> 
+                    <i class="mdi mdi-plus me-1"></i> <span class="d-none d-md-inline">Add Record</span>
                 </button>
                 @endif
                </div>
 
-         
 
-          
+
+
 
 
             </div>
@@ -217,7 +217,7 @@
 
         @endif
 
-      
+
 
         </div>
     </div>
@@ -244,7 +244,7 @@
             @if($sportHasRecords)
                 <div class="sport-header mb-4 d-flex justify-content-between align-items-center" data-sport-id="{{ $sport->id }}">
                     <h4 class="fs-16 m-0">{{ $sport->name }}</h4>
-                    @if($user->role == 'admin' || $user->role == 'tournament_director')
+                    @if($user->role == 'admin' || $user->role == 'tournament_director' || $user->role == 'assistant_tournament_director')
                         @php
                             $hasUnapprovedRecords = \App\Models\MedalRecord::whereHas('eventCategory', function ($query) use ($sport) {
                                 $query->where('sport_id', $sport->id);
@@ -437,7 +437,7 @@
 
                                             @endif
 
-                                            @if($user->role == 'admin' || $user->role == 'tournament_director')
+                                            @if($user->role == 'admin' || $user->role == 'tournament_director' || $user->role == 'assistant_tournament_director')
                                                 <!-- Approve Button -->
                                                 <button type="button"
                                                         class="btn btn-sm btn-outline-success btn-floating"

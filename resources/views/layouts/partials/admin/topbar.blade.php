@@ -23,8 +23,8 @@
                                 {{ Auth::user()->name }}
                             </p>
                             <p style="font-size: 12px">
-                                {{ ucfirst(Auth::user()->role) }}
-                                @if(Auth::user()->role === 'tournament_director' && Auth::user()->sport)
+                                {{ ucwords(str_replace('_', ' ', Auth::user()->role)) }}
+                                @if((Auth::user()->role === 'tournament_director' || Auth::user()->role === 'assistant_director') && Auth::user()->sport)
                                     ({{ Auth::user()->sport->name }})
                                 @endif
                             </p>

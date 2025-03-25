@@ -43,6 +43,15 @@ class PalaroDataSeeder extends Seeder
             'password' => Hash::make('_adMin_palar0_$$_aXl'),
         ]);
 
+        User::factory()->create([
+            'name' => '',
+            'email' => '',
+            'role' => 'tournament_director',
+            'password' => Hash::make('CMUpalaroTD@2025'),
+        ]);
+
+
+
 
         $now = now(); // Get current timestamp once to use across inserts
 
@@ -160,6 +169,34 @@ class PalaroDataSeeder extends Seeder
 
         DB::table('sports')->insert($sports);
         $sports = DB::table('sports')->pluck('id', 'name');
+
+        $directors = [
+            ['name' => 'Mindell Rey C. Aguirre', 'email' => 'aguirremindell@cmu.edu.ph', 'sport' => 'Table Tennis'],
+            ['name' => 'Flordeliza N. Aguirre', 'email' => 'f.flordeliza.aguirre@cmu.edu.ph', 'sport' => 'Table Tennis'],
+            ['name' => 'Jose Hermis P. Patricio', 'email' => 'f.josehermis.patricio@cmu.edu.ph', 'sport' => 'Volleyball'],
+            ['name' => 'Rhandie S. Balane', 'email' => 'f.rhandie.balane@cmu.edu.ph', 'sport' => 'Dancesports'],
+            ['name' => 'Mark Bryan T. Inso', 'email' => 'f.markbryan.inso@cmu.edu.ph', 'sport' => 'Pickleball'],
+            ['name' => 'Dianne Salvaleon', 'email' => 'f.dianne.salvaleon@cmu.edu.ph', 'sport' => 'Swimming'],
+            ['name' => 'Princes Dhe L. Perez', 'email' => 'f.princesdhe.perez@cmu.edu.ph', 'sport' => 'Karatedo'],
+            ['name' => 'Kara Angela E. Opiso', 'email' => 'f.kara.egdalin@gmail.com', 'sport' => 'Football'],
+            ['name' => 'Shaira L. Ganancial', 'email' => 'f.shaira.ganancial@cmu.edu.ph', 'sport' => 'Sepak Takraw'],
+            ['name' => 'Griezl Jean H. Bercero', 'email' => 'f.griezljean@cmu.edu.ph', 'sport' => 'Taekwondo'],
+            ['name' => 'Pamela Christine H. Escañr', 'email' => 'f.pamelachristine.escaner@cmu.edu.ph', 'sport' => 'Futsal'],
+            ['name' => 'Felito A. Batoctoy', 'email' => 'batoctoyfelito@gmail.com', 'sport' => 'Basketball'],
+            ['name' => 'Nonilon G. Obedencio', 'email' => 'doodz61@cmu.edu.ph', 'sport' => 'Lawn Tennis'],
+            ['name' => 'Neptune Roy B. Comoda', 'email' => 'neptune.comoda@cmu.edu.ph', 'sport' => 'COD-M'],
+            ['name' => 'Dana Rica P. Cabahug', 'email' => 'danaricacabahug@gmail.com', 'sport' => 'Beach Volleyball'],
+        ];
+
+        foreach ($directors as $director) {
+            User::factory()->create([
+                'name' => $director['name'],
+                'email' => $director['email'],
+                'role' => 'tournament_director',
+                'password' => Hash::make('CMUpalaroTD@2025'),
+                'sport_id' => $sports[$director['sport']],
+            ]);
+        }
 
 
         $eventCategories = [
