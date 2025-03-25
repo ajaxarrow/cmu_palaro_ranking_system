@@ -854,20 +854,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 
-
-
-
-
-
     <section id="standings" class="py-20 bg-gray-50">
         <div class="container mx-auto px-4">
             <h2 class="text-4xl font-bold text-center mb-16">
                 Team Standings
                 <div class="w-20 h-1  mx-auto mt-4"></div>
             </h2>
-
-
-
+            
             <div class="grid grid-cols-1 gap-[40px]">
 
             @if(count($results) > 0)
