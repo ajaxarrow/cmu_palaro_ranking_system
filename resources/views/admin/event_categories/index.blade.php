@@ -104,7 +104,7 @@
                                         </td>
                                         <td class="">
                                             <i class="fe  fs-14"></i>
-                                            <span class=" {{ $eventCategory->is_double_bronze ? 'mdi mdi-check-bold text-primary' : 'mdi mdi-close-thick text-danger' }}"> </span>
+                                            <span class=" {{ $eventCategory->is_double_bronze ? 'ph-bold ph-check text-primary' : 'ph-bold ph-x text-danger' }}"> </span>
 
 
                                         </td>
@@ -122,10 +122,10 @@
 
 
                                                 <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editModal{{ $eventCategory->id }}">
-                                                    <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
+                                                    <i class="ph ph-pencil fs-14 text-primary"></i>
                                                 </a>
                                                 <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $eventCategory->id }}">
-                                                    <i class="mdi mdi-delete fs-14 text-danger"></i>
+                                                    <i class="ph-bold ph-trash fs-14 text-danger"></i>
                                                 </a>
                                             </td>
                                         @endif

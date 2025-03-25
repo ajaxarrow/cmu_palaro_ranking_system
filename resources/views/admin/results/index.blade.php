@@ -108,7 +108,7 @@
 
                 <div class="d-flex  gap-3">
                     <button id="exportPDF" class="export-btn">
-                        <i class="mdi mdi-file-pdf-outline"></i>
+                        <i class="ph ph-file-pdf"></i>
                         Export to PDF
                     </button>
 
@@ -268,7 +268,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const excelExportBtn = document.createElement('button');
     excelExportBtn.id = 'exportExcel';
     excelExportBtn.className = 'export-btn excel-export-btn';
-    excelExportBtn.innerHTML = '<i class="mdi mdi-file-excel-outline"></i> Export to Excel';
+    excelExportBtn.innerHTML = '<i class="ph ph-file-xls"></i> Export to Excel';
     excelExportBtn.style.bottom = '90px'; // Position above the PDF button
     excelExportBtn.style.backgroundColor = '#107C41'; // Excel green
 
