@@ -177,7 +177,7 @@
                     </ul>
                 </div>
 
-                @if($user->role != 'user' || $user->role == 'tournament_director' || $user->role == 'assistant_tournament_director')
+                @if($user->role != 'user' || $user->role != 'tournament_director' || $user->role != 'assistant_tournament_director')
                 <button type="button" class="btn btn-primary custom-primary-background" data-bs-toggle="modal" data-bs-target="#addRecordModal">
                     <i class="ph ph-plus me-1"></i> <span class="d-none d-md-inline">Add Record</span>
                 </button>
