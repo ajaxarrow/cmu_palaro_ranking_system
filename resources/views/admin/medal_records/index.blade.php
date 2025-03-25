@@ -609,7 +609,7 @@
                                         <span class="medal-badge medal-gold">Champion</span>
                                     </div>
                                     <div class="col-8">
-                                        <select name="champion_team_id" class="form-select" id="championTeam" required onchange="updateTeamSelections()">
+                                        <select name="champion_team_id" class="form-select" id="championTeam"  onchange="updateTeamSelections()">
                                             <option value="">Select Team</option>
                                             @foreach ($teams as $team)
                                                 <option value="{{ $team->id }}">{{ $team->name }}</option>
@@ -626,7 +626,7 @@
                                         <span class="medal-badge medal-silver">1st Runner Up</span>
                                     </div>
                                     <div class="col-8">
-                                        <select name="first_runner_up_team_id" class="form-select" id="firstRunnerUp" required onchange="updateTeamSelections()">
+                                        <select name="first_runner_up_team_id" class="form-select" id="firstRunnerUp" onchange="updateTeamSelections()">
                                             <option value="">Select Team</option>
                                             @foreach ($teams as $team)
                                                 <option value="{{ $team->id }}">{{ $team->name }}</option>
@@ -643,7 +643,7 @@
                                         <span class="medal-badge medal-bronze">2nd Runner Up</span>
                                     </div>
                                     <div class="col-8">
-                                        <select name="second_runner_up_team_id" class="form-select" id="secondRunnerUp" required onchange="updateTeamSelections()">
+                                        <select name="second_runner_up_team_id" class="form-select" id="secondRunnerUp" onchange="updateTeamSelections()">
                                             <option value="">Select Team</option>
                                             @foreach ($teams as $team)
                                                 <option value="{{ $team->id }}">{{ $team->name }}</option>
@@ -759,7 +759,7 @@
 
             if (isDoubleBronze) {
                 secondBronzeDiv.style.display = 'block';
-                document.getElementById('secondRunnerUp2').setAttribute('required', 'required');
+                // document.getElementById('secondRunnerUp2').setAttribute('required', 'required');
             } else {
                 secondBronzeDiv.style.display = 'none';
                 document.getElementById('secondRunnerUp2').removeAttribute('required');
@@ -890,7 +890,7 @@
                                     <span class="medal-badge medal-gold">Champion</span>
                                 </div>
                                 <div class="col-8">
-                                    <select name="champion_team_id" class="form-select" id="edit_championTeam" required onchange="updateEditTeamSelections()">
+                                    <select name="champion_team_id" class="form-select" id="edit_championTeam" onchange="updateEditTeamSelections()">
                                         <option value="">Select Team</option>
                                         @foreach ($teams as $team)
                                             <option value="{{ $team->id }}">{{ $team->name }}</option>
@@ -907,7 +907,7 @@
                                     <span class="medal-badge medal-silver">1st Runner Up</span>
                                 </div>
                                 <div class="col-8">
-                                    <select name="first_runner_up_team_id" class="form-select" id="edit_firstRunnerUp" required onchange="updateEditTeamSelections()">
+                                    <select name="first_runner_up_team_id" class="form-select" id="edit_firstRunnerUp"  onchange="updateEditTeamSelections()">
                                         <option value="">Select Team</option>
                                         @foreach ($teams as $team)
                                             <option value="{{ $team->id }}">{{ $team->name }}</option>
@@ -924,7 +924,7 @@
                                     <span class="medal-badge medal-bronze">2nd Runner Up</span>
                                 </div>
                                 <div class="col-8">
-                                    <select name="second_runner_up_team_id" class="form-select" id="edit_secondRunnerUp" required onchange="updateEditTeamSelections()">
+                                    <select name="second_runner_up_team_id" class="form-select" id="edit_secondRunnerUp"  onchange="updateEditTeamSelections()">
                                         <option value="">Select Team</option>
                                         @foreach ($teams as $team)
                                             <option value="{{ $team->id }}">{{ $team->name }}</option>

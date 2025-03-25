@@ -43,12 +43,6 @@ class PalaroDataSeeder extends Seeder
             'password' => Hash::make('_adMin_palar0_$$_aXl'),
         ]);
 
-        User::factory()->create([
-            'name' => '',
-            'email' => '',
-            'role' => 'tournament_director',
-            'password' => Hash::make('CMUpalaroTD@2025'),
-        ]);
 
 
 
