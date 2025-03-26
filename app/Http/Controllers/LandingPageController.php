@@ -101,80 +101,70 @@ class LandingPageController extends Controller
                 if (!isset($teamMedals[$team->id])) {
                     $teamMedals[$team->id] = [
                         'team' => $team,
-                        'gold_entries' => [],
-                        'silver_entries' => [],
-                        'bronze_entries' => [],
+                        'records' => [],
                         'medal_weight' => 0
                     ];
                 }
 
-                // Add medal entries for each medal type
-                if ($record->gold_tally > 0) {
-                    $teamMedals[$team->id]['gold_entries'][] = [
-                        'gold_tally' => $record->gold_tally,
-                        'silver_tally' => 0,
-                        'bronze_tally' => 0
-                    ];
-                }
-                if ($record->silver_tally > 0) {
-                    $teamMedals[$team->id]['silver_entries'][] = [
-                        'gold_tally' => 0,
-                        'silver_tally' => $record->silver_tally,
-                        'bronze_tally' => 0
-                    ];
-                }
-                if ($record->bronze_tally > 0) {
-                    $teamMedals[$team->id]['bronze_entries'][] = [
-                        'gold_tally' => 0,
-                        'silver_tally' => 0,
-                        'bronze_tally' => $record->bronze_tally
-                    ];
-                }
+                // Add this record to the team's records
+                $teamMedals[$team->id]['records'][] = [
+                    'id' => $record->id,
+                    'gold_tally' => $record->gold_tally,
+                    'silver_tally' => $record->silver_tally,
+                    'bronze_tally' => $record->bronze_tally,
+                    'record_id' => $record->id
+                ];
 
                 $teamMedals[$team->id]['medal_weight'] += $totalWeight;
             }
 
-            // Assign winners based on medal entries
+            // Assign winners based on records
             foreach ($teamMedals as $teamId => $teamData) {
                 $team = $teamData['team'];
                 
-                // Add gold winner entries
-                foreach ($teamData['gold_entries'] as $entry) {
-                    $sportResults[$sportId]['events'][$eventId]['gold_winners'][] = [
-                        'team_id' => $team->id,
-                        'team_name' => $team->name,
-                        'team_image' => $team->image,
-                        'colleges' => $team->colleges->pluck('name'),
-                        'gold_tally' => $entry['gold_tally'],
-                        'silver_tally' => $entry['silver_tally'],
-                        'bronze_tally' => $entry['bronze_tally']
-                    ];
-                }
+                // Process each record separately
+                foreach ($teamData['records'] as $record) {
+                    // Add gold winner entry if there are gold medals
+                    if ($record['gold_tally'] > 0) {
+                        $sportResults[$sportId]['events'][$eventId]['gold_winners'][] = [
+                            'team_id' => $team->id,
+                            'team_name' => $team->name,
+                            'team_image' => $team->image,
+                            'colleges' => $team->colleges->pluck('name'),
+                            'gold_tally' => $record['gold_tally'],
+                            'silver_tally' => 0,
+                            'bronze_tally' => 0,
+                            'record_id' => $record['record_id']
+                        ];
+                    }
 
-                // Add silver winner entries
-                foreach ($teamData['silver_entries'] as $entry) {
-                    $sportResults[$sportId]['events'][$eventId]['silver_winners'][] = [
-                        'team_id' => $team->id,
-                        'team_name' => $team->name,
-                        'team_image' => $team->image,
-                        'colleges' => $team->colleges->pluck('name'),
-                        'gold_tally' => $entry['gold_tally'],
-                        'silver_tally' => $entry['silver_tally'],
-                        'bronze_tally' => $entry['bronze_tally']
-                    ];
-                }
+                    // Add silver winner entry if there are silver medals
+                    if ($record['silver_tally'] > 0) {
+                        $sportResults[$sportId]['events'][$eventId]['silver_winners'][] = [
+                            'team_id' => $team->id,
+                            'team_name' => $team->name,
+                            'team_image' => $team->image,
+                            'colleges' => $team->colleges->pluck('name'),
+                            'gold_tally' => 0,
+                            'silver_tally' => $record['silver_tally'],
+                            'bronze_tally' => 0,
+                            'record_id' => $record['record_id']
+                        ];
+                    }
 
-                // Add bronze winner entries
-                foreach ($teamData['bronze_entries'] as $entry) {
-                    $sportResults[$sportId]['events'][$eventId]['bronze_winners'][] = [
-                        'team_id' => $team->id,
-                        'team_name' => $team->name,
-                        'team_image' => $team->image,
-                        'colleges' => $team->colleges->pluck('name'),
-                        'gold_tally' => $entry['gold_tally'],
-                        'silver_tally' => $entry['silver_tally'],
-                        'bronze_tally' => $entry['bronze_tally']
-                    ];
+                    // Add bronze winner entry if there are bronze medals
+                    if ($record['bronze_tally'] > 0) {
+                        $sportResults[$sportId]['events'][$eventId]['bronze_winners'][] = [
+                            'team_id' => $team->id,
+                            'team_name' => $team->name,
+                            'team_image' => $team->image,
+                            'colleges' => $team->colleges->pluck('name'),
+                            'gold_tally' => 0,
+                            'silver_tally' => 0,
+                            'bronze_tally' => $record['bronze_tally'],
+                            'record_id' => $record['record_id']
+                        ];
+                    }
                 }
             }
         }
@@ -279,11 +269,24 @@ class LandingPageController extends Controller
                     $event['medal_records']
                 );
 
-                // Add all winners without checking for duplicates
+                // Add all winners
                 foreach (['gold', 'silver', 'bronze'] as $medalType) {
                     if (isset($event[$medalType . '_winners']) && is_array($event[$medalType . '_winners'])) {
                         foreach ($event[$medalType . '_winners'] as $winner) {
-                            $consolidatedEvents[$eventName][$medalType . '_winners'][] = $winner;
+                            // Only add if this exact entry doesn't exist
+                            $exists = false;
+                            foreach ($consolidatedEvents[$eventName][$medalType . '_winners'] as $existingWinner) {
+                                if ($existingWinner['team_id'] === $winner['team_id'] &&
+                                    $existingWinner['gold_tally'] === $winner['gold_tally'] &&
+                                    $existingWinner['silver_tally'] === $winner['silver_tally'] &&
+                                    $existingWinner['bronze_tally'] === $winner['bronze_tally']) {
+                                    $exists = true;
+                                    break;
+                                }
+                            }
+                            if (!$exists) {
+                                $consolidatedEvents[$eventName][$medalType . '_winners'][] = $winner;
+                            }
                         }
                     }
                 }
