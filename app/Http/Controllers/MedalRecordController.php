@@ -255,10 +255,10 @@ class MedalRecordController extends Controller
     public function update(Request $request, int $eventCategoryId)
     {
         $validatedData = $request->validate([
-            // 'champion_team_id' => 'required|exists:teams,id',
-            // 'first_runner_up_team_id' => 'required|exists:teams,id',
-            // 'second_runner_up_team_id' => 'required|exists:teams,id',
-            // 'second_runner_up_team_id_2' => 'nullable|exists:teams,id',
+            'champion_team_id' => 'nullable|exists:teams,id',
+            'first_runner_up_team_id' => 'nullable|exists:teams,id',
+            'second_runner_up_team_id' => 'nullable|exists:teams,id',
+            'second_runner_up_team_id_2' => 'nullable|exists:teams,id',
             'event_category_id' => 'required|exists:event_categories,id',
             'medal_count' => 'required|integer|min:1',
             'number_of_participant' => 'required|integer|min:1',
@@ -281,6 +281,7 @@ class MedalRecordController extends Controller
             MedalRecord::where('event_category_id', $eventCategoryId)->delete();
 
             // Create gold medal record
+            if (!empty($validatedData['champion_team_id'])) {
             $this->createMedalRecord(
                 $eventCategoryId,
                 $validatedData['champion_team_id'],
@@ -289,9 +290,10 @@ class MedalRecordController extends Controller
                 0,
                 $validatedData['number_of_participant'],
                 $isPosted
-            );
+            );}
 
             // Create silver medal record
+            if (!empty($validatedData['first_runner_up_team_id'])) {
             $this->createMedalRecord(
                 $eventCategoryId,
                 $validatedData['first_runner_up_team_id'],
@@ -300,7 +302,7 @@ class MedalRecordController extends Controller
                 0,
                 $validatedData['number_of_participant'],
                 $isPosted
-            );
+            );}
 
             // Process bronze medal(s)
             if ($validatedData['is_double_bronze'] == '1') {

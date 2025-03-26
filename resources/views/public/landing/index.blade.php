@@ -657,8 +657,7 @@
     </section>
 
     <section class="championship-carousel py-24 bg-gradient-to-b from-white to-gray-50">
-            <!-- <div class="feather feather-4" style="z-index: 2" data-depth="0.3" data-aos="fade"></div> -->
-            <div class="feather feather-4" style="z-index: 2; top: 100px;" data-depth="0.3" data-aos="fade"></div>
+    <div class="feather feather-4" style="z-index: 2; top: 100px;" data-depth="0.3" data-aos="fade"></div>
 
     <div class="container mx-auto px-4">
         <!-- Section Header -->
@@ -677,13 +676,11 @@
         </div>
 
         <!-- Carousel Container -->
-        @if(count($results) > 0)
+        @if(count($flattenedEvents) > 0)
         <div class="swiper sports-championship-swiper">
-
             <div class="swiper-wrapper">
-
                 @foreach($flattenedEvents as $event)
-                @if($event['gold_winner'] || $event['silver_winner'] || count($event['bronze_winners']) > 0)
+                @if($event['gold_winners'] || $event['silver_winners'] || count($event['bronze_winners']) > 0)
                 <div class="swiper-slide">
                     <div class="event-card">
                         <div class="event-header">
@@ -705,52 +702,49 @@
                         </div>
 
                         <div class="podium-container">
-
-                            @if($event['gold_winner'] || $event['silver_winner'] || count($event['bronze_winners']) > 0)
-                                @if($event['gold_winner'])
+                            @if(count($event['gold_winners']) > 0)
+                                @foreach($event['gold_winners'] as $goldWinner)
                                 <div class="medal-tier gold-tier">
-                                <a href="{{ route('public.standings.details', $event['gold_winner']['team_id']) }}" >
-
-                                    <div class="medal-header">
-                                        <div class="medal-icon gold">C</div>
-                                        <img
-                                        src="{{ $event['gold_winner']['team_image'] ? asset('storage/' . $event['gold_winner']['team_image']) : Vite::asset('resources/images/05.webp') }}"
-                                        alt="{{ $event['gold_winner']['team_name'] }}"
-                                        class="h-[40px] w-[40px] mr-1"
-                                        crossorigin="anonymous"
-                                        loading="lazy">
-                                        <div class="medal-title">{{ $event['gold_winner']['team_name'] }}</div>
-
-                                    </div>
+                                    <a href="{{ route('public.standings.details', $goldWinner['team_id']) }}" >
+                                        <div class="medal-header">
+                                            <div class="medal-icon gold">C</div>
+                                            <img
+                                            src="{{ $goldWinner['team_image'] ? asset('storage/' . $goldWinner['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                            alt="{{ $goldWinner['team_name'] }}"
+                                            class="h-[40px] w-[40px] mr-1"
+                                            crossorigin="anonymous"
+                                            loading="lazy">
+                                            <div class="medal-title">{{ $goldWinner['team_name'] }}</div>
+                                        </div>
                                     </a>
-
                                 </div>
-                                @endif
+                                @endforeach
+                            @endif
 
-                                @if($event['silver_winner'])
-
+                            @if(count($event['silver_winners']) > 0)
+                                @foreach($event['silver_winners'] as $silverWinner)
                                 <div class="medal-tier silver-tier">
-                                <a href="{{ route('public.standings.details', $event['silver_winner']['team_id']) }}" >
-
-                                    <div class="medal-header">
-                                        <div class="medal-icon silver">1</div>
-                                        <img
-                                        src="{{ $event['silver_winner']['team_image'] ? asset('storage/' . $event['silver_winner']['team_image']) : Vite::asset('resources/images/05.webp') }}"
-                                        alt="{{ $event['silver_winner']['team_name'] }}"
-                                        class="h-[40px] w-[40px] mr-1"
-                                        crossorigin="anonymous"
-                                        loading="lazy">
-                                        <div class="medal-title">{{ $event['silver_winner']['team_name'] }}</div>
-                                    </div>
+                                    <a href="{{ route('public.standings.details', $silverWinner['team_id']) }}" >
+                                        <div class="medal-header">
+                                            <div class="medal-icon silver">1</div>
+                                            <img
+                                            src="{{ $silverWinner['team_image'] ? asset('storage/' . $silverWinner['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                            alt="{{ $silverWinner['team_name'] }}"
+                                            class="h-[40px] w-[40px] mr-1"
+                                            crossorigin="anonymous"
+                                            loading="lazy">
+                                            <div class="medal-title">{{ $silverWinner['team_name'] }}</div>
+                                        </div>
                                     </a>
                                 </div>
-                                @endif
+                                @endforeach
+                            @endif
 
-                                @if(count($event['bronze_winners']) > 0)
-                                    @foreach($event['bronze_winners'] as $index => $bronzeWinner)
-                                    <div class="medal-tier bronze-tier">
+                            @if(count($event['bronze_winners']) > 0)
+                                @foreach($event['bronze_winners'] as $bronzeWinner)
+                                <div class="medal-tier bronze-tier">
                                     <a href="{{ route('public.standings.details', $bronzeWinner['team_id']) }}" >
-                                    <div class="medal-header">
+                                        <div class="medal-header">
                                             <div class="medal-icon bronze">2</div>
                                             <img
                                                 src="{{ $bronzeWinner['team_image'] ? asset('storage/' . $bronzeWinner['team_image']) : Vite::asset('resources/images/05.webp') }}"
@@ -760,14 +754,12 @@
                                                 loading="lazy">
                                             <div class="medal-title">{{ $bronzeWinner['team_name'] }}</div>
                                         </div>
-
                                     </a>
+                                </div>
+                                @endforeach
+                            @endif
 
-
-                                    </div>
-                                    @endforeach
-                                @endif
-                            @else
+                            @if(count($event['gold_winners']) == 0 && count($event['silver_winners']) == 0 && count($event['bronze_winners']) == 0)
                                 <div class="no-results">
                                     <div class="no-results-icon">🏆</div>
                                     <div>Results coming soon</div>
@@ -778,11 +770,7 @@
                 </div>
                 @endif
                 @endforeach
-
-
             </div>
-
-
 
             <!-- Navigation Controls -->
             <div class="swiper-pagination"></div>
@@ -790,14 +778,13 @@
             <div class="swiper-button-prev"></div>
         </div>
         @else
-                <div class="no-results m-auto">
-                    <div class="no-results-icon">🏆</div>
-                    <div>Results coming soon</div>
-                </div>
-
-            @endif
+            <div class="no-results m-auto">
+                <div class="no-results-icon">🏆</div>
+                <div>Results coming soon</div>
+            </div>
+        @endif
     </div>
-    </section>
+</section>
 
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
