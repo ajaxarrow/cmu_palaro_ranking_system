@@ -270,7 +270,7 @@
                                     <img src="{{ $medalTally[1]['team_image'] ? asset('storage/' . $medalTally[1]['team_image']) : Vite::asset('resources/images/05.webp') }}"
                                          alt="{{ $medalTally[1]['team'] }}"
                                          class="relative z-10">
-                                    <div class="winner-badge silver">1st</div>
+                                    <div class="winner-badge silver">2nd</div>
                                 </div>
                                 <h3 class="winner-name">{{ $medalTally[1]['team'] }}</h3>
                                 </a>
@@ -308,7 +308,7 @@
                                     <img src="{{ $medalTally[0]['team_image'] ? asset('storage/' . $medalTally[0]['team_image']) : Vite::asset('resources/images/05.webp') }}"
                                          alt="{{ $medalTally[0]['team'] }}"
                                          class="relative z-10">
-                                    <div class="winner-badge gold">C</div>
+                                    <div class="winner-badge gold">1st</div>
                                 </div>
                                 <h3 class="winner-name">{{ $medalTally[0]['team'] }}</h3>
                                 </a>
@@ -347,7 +347,7 @@
                                     <img src="{{ $medalTally[2]['team_image'] ? asset('storage/' . $medalTally[2]['team_image']) : Vite::asset('resources/images/05.webp') }}"
                                          alt="{{ $medalTally[2]['team'] }}"
                                          class="relative z-10">
-                                    <div class="winner-badge bronze">2nd</div>
+                                    <div class="winner-badge bronze">3rd</div>
                                 </div>
                                 <h3 class="winner-name">{{ $medalTally[2]['team'] }}</h3>
                                 </a>
@@ -384,7 +384,7 @@
                         @if(isset($medalTally[0]))
                         <div class="mobile-podium-card champion" data-aos="fade-up">
                             <div class="card-content">
-                                <div class="position-marker">Champion</div>
+                                <div class="position-marker">1st Runner Up</div>
                                 <a href="{{ route('public.standings.details', $medalTally[0]['team_id']) }}">
 
                                 <div class="team-image-wrapper">
@@ -417,7 +417,7 @@
                         @if(isset($medalTally[1]))
                         <div class="mobile-podium-card silver" data-aos="fade-up" data-aos-delay="100">
                             <div class="card-content">
-                                <div class="position-marker">1st Runner Up</div>
+                                <div class="position-marker">2nd Runner Up</div>
                                 <a href="{{ route('public.standings.details', $medalTally[1]['team_id']) }}">
                                 <div class="team-image-wrapper">
                                     <img src="{{ $medalTally[1]['team_image'] ? asset('storage/' . $medalTally[1]['team_image']) : Vite::asset('resources/images/05.webp') }}"
@@ -449,7 +449,7 @@
                         @if(isset($medalTally[2]))
                         <div class="mobile-podium-card bronze" data-aos="fade-up" data-aos-delay="200">
                             <div class="card-content">
-                                <div class="position-marker">2nd Runner Up</div>
+                                <div class="position-marker">3rd Runner Up</div>
                                 <div class="team-image-wrapper">
                                     <img src="{{ $medalTally[2]['team_image'] ? asset('storage/' . $medalTally[2]['team_image']) : Vite::asset('resources/images/05.webp') }}"
                                          alt="{{ $medalTally[2]['team'] }}"
