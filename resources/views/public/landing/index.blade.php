@@ -655,6 +655,7 @@ sss
             </div>
         </div>
     </section>
+
     <section class="championship-carousel py-24 bg-gradient-to-b from-white to-gray-50">
     <div class="feather feather-4" style="z-index: 2; top: 100px;" data-depth="0.3" data-aos="fade"></div>
 
@@ -675,11 +676,11 @@ sss
         </div>
 
         <!-- Carousel Container -->
-        @if(count($results) > 0)
+        @if(count($flattenedEvents) > 0)
         <div class="swiper sports-championship-swiper">
             <div class="swiper-wrapper">
                 @foreach($flattenedEvents as $event)
-                @if(count($event['gold_winners']) > 0 || count($event['silver_winners']) > 0 || count($event['bronze_winners']) > 0)
+                @if($event['gold_winners'] || $event['silver_winners'] || count($event['bronze_winners']) > 0)
                 <div class="swiper-slide">
                     <div class="event-card">
                         <div class="event-header">
@@ -704,15 +705,15 @@ sss
                             @if(count($event['gold_winners']) > 0)
                                 @foreach($event['gold_winners'] as $goldWinner)
                                 <div class="medal-tier gold-tier">
-                                    <a href="{{ route('public.standings.details', $goldWinner['team_id']) }}">
+                                    <a href="{{ route('public.standings.details', $goldWinner['team_id']) }}" >
                                         <div class="medal-header">
                                             <div class="medal-icon gold">C</div>
                                             <img
-                                                src="{{ $goldWinner['team_image'] ? asset('storage/' . $goldWinner['team_image']) : Vite::asset('resources/images/05.webp') }}"
-                                                alt="{{ $goldWinner['team_name'] }}"
-                                                class="h-[40px] w-[40px] mr-1"
-                                                crossorigin="anonymous"
-                                                loading="lazy">
+                                            src="{{ $goldWinner['team_image'] ? asset('storage/' . $goldWinner['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                            alt="{{ $goldWinner['team_name'] }}"
+                                            class="h-[40px] w-[40px] mr-1"
+                                            crossorigin="anonymous"
+                                            loading="lazy">
                                             <div class="medal-title">{{ $goldWinner['team_name'] }}</div>
                                         </div>
                                     </a>
@@ -723,15 +724,15 @@ sss
                             @if(count($event['silver_winners']) > 0)
                                 @foreach($event['silver_winners'] as $silverWinner)
                                 <div class="medal-tier silver-tier">
-                                    <a href="{{ route('public.standings.details', $silverWinner['team_id']) }}">
+                                    <a href="{{ route('public.standings.details', $silverWinner['team_id']) }}" >
                                         <div class="medal-header">
                                             <div class="medal-icon silver">1</div>
                                             <img
-                                                src="{{ $silverWinner['team_image'] ? asset('storage/' . $silverWinner['team_image']) : Vite::asset('resources/images/05.webp') }}"
-                                                alt="{{ $silverWinner['team_name'] }}"
-                                                class="h-[40px] w-[40px] mr-1"
-                                                crossorigin="anonymous"
-                                                loading="lazy">
+                                            src="{{ $silverWinner['team_image'] ? asset('storage/' . $silverWinner['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                            alt="{{ $silverWinner['team_name'] }}"
+                                            class="h-[40px] w-[40px] mr-1"
+                                            crossorigin="anonymous"
+                                            loading="lazy">
                                             <div class="medal-title">{{ $silverWinner['team_name'] }}</div>
                                         </div>
                                     </a>
@@ -742,7 +743,7 @@ sss
                             @if(count($event['bronze_winners']) > 0)
                                 @foreach($event['bronze_winners'] as $bronzeWinner)
                                 <div class="medal-tier bronze-tier">
-                                    <a href="{{ route('public.standings.details', $bronzeWinner['team_id']) }}">
+                                    <a href="{{ route('public.standings.details', $bronzeWinner['team_id']) }}" >
                                         <div class="medal-header">
                                             <div class="medal-icon bronze">2</div>
                                             <img
@@ -756,6 +757,13 @@ sss
                                     </a>
                                 </div>
                                 @endforeach
+                            @endif
+
+                            @if(count($event['gold_winners']) == 0 && count($event['silver_winners']) == 0 && count($event['bronze_winners']) == 0)
+                                <div class="no-results">
+                                    <div class="no-results-icon">🏆</div>
+                                    <div>Results coming soon</div>
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -777,6 +785,7 @@ sss
         @endif
     </div>
 </section>
+
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
 

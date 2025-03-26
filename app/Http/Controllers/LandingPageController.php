@@ -54,36 +54,31 @@ class LandingPageController extends Controller
             $isDoubleBronze = $eventCategory->is_double_bronze;
 
             // Initialize event in sport results
-            $sportResults[$sportId]['events'][$eventId] = [
-                'id' => $eventId,
-                'name' => $eventCategory->name,
-                'gold_winner' => null,
-                'silver_winner' => null,
-                'bronze_winners' => [],
-                'medal_records' => []
-            ];
+            if (!isset($sportResults[$sportId]['events'][$eventId])) {
+                $sportResults[$sportId]['events'][$eventId] = [
+                    'id' => $eventId,
+                    'name' => $eventCategory->name,
+                    'sport_name' => $eventCategory->sport->name,
+                    'sport_icon' => $eventCategory->sport->icon,
+                    'gold_winners' => [],
+                    'silver_winners' => [],
+                    'bronze_winners' => [],
+                    'medal_records' => []
+                ];
+            }
 
-            // Group medal records by team
+            // Process medal records
             $teamMedals = [];
             foreach ($eventCategory->medalRecords as $record) {
-                if (!isset($teamMedals[$record->team_id])) {
-                    $teamMedals[$record->team_id] = [
-                        'team' => $record->team,
-                        'gold_tally' => 0,
-                        'silver_tally' => 0,
-                        'bronze_tally' => 0,
-                        'medal_weight' => 0
-                    ];
-                }
-
-                $bronzeMedalWeight = 0;
+                $team = $record->team;
+                
                 // Calculate medal weights
+                $bronzeMedalWeight = 0;
                 $bronzeWeight = $medalWeights->bronze_weight;
-                $isDoubleBronze = $record->eventCategory->is_double_bronze;
                 if ($isDoubleBronze) {
-                    $bronzeMedalWeight = $medalWeights-> bronze_weight /2;
+                    $bronzeMedalWeight = $medalWeights->bronze_weight / 2;
                 } else {
-                    $bronzeMedalWeight = $medalWeights-> bronze_weight;
+                    $bronzeMedalWeight = $medalWeights->bronze_weight;
                 }
 
                 $goldWeight = $record->gold_tally * $medalWeights->gold_weight;
@@ -91,71 +86,102 @@ class LandingPageController extends Controller
                 $bronzeWeight = $record->bronze_tally * $bronzeMedalWeight;
                 $totalWeight = $goldWeight + $silverWeight + $bronzeWeight;
 
-                // Update team medals for this event
-                $teamMedals[$record->team_id]['gold_tally'] += $record->gold_tally;
-                $teamMedals[$record->team_id]['silver_tally'] += $record->silver_tally;
-                $teamMedals[$record->team_id]['bronze_tally'] += $record->bronze_tally;
-                $teamMedals[$record->team_id]['medal_weight'] += $totalWeight;
-
                 // Add record to event's medal records
                 $sportResults[$sportId]['events'][$eventId]['medal_records'][] = [
                     'id' => $record->id,
-                    'team_id' => $record->team_id,
-                    'team_name' => $record->team->name,
+                    'team_id' => $team->id,
+                    'team_name' => $team->name,
                     'gold_tally' => $record->gold_tally,
                     'silver_tally' => $record->silver_tally,
                     'bronze_tally' => $record->bronze_tally,
                     'total_weight' => $totalWeight
                 ];
-            }
 
-            // Sort teams by medals (gold first, then silver, then bronze)
-            uasort($teamMedals, function($a, $b) {
-                if ($a['gold_tally'] != $b['gold_tally']) {
-                    return $b['gold_tally'] <=> $a['gold_tally'];
-                }
-                if ($a['silver_tally'] != $b['silver_tally']) {
-                    return $b['silver_tally'] <=> $a['silver_tally'];
-                }
-                return $b['bronze_tally'] <=> $a['bronze_tally'];
-            });
-
-            // Assign winners
-            $winners = array_values($teamMedals);
-            if (count($winners) > 0) {
-                if ($winners[0]['gold_tally'] > 0) {
-                    $sportResults[$sportId]['events'][$eventId]['gold_winner'] = [
-                        'team_id' => $winners[0]['team']->id,
-                        'team_name' => $winners[0]['team']->name,
-                        'team_image' => $winners[0]['team']->image,
-                        'colleges' => $winners[0]['team']->colleges->pluck('name'),
+                // Track team medals for winner assignment
+                if (!isset($teamMedals[$team->id])) {
+                    $teamMedals[$team->id] = [
+                        'team' => $team,
+                        'gold_entries' => [],
+                        'silver_entries' => [],
+                        'bronze_entries' => [],
+                        'medal_weight' => 0
                     ];
                 }
 
-                if (count($winners) > 1 && $winners[1]['silver_tally'] > 0) {
-                    $sportResults[$sportId]['events'][$eventId]['silver_winner'] = [
-                        'team_id' => $winners[1]['team']->id,
-                        'team_name' => $winners[1]['team']->name,
-                        'team_image' => $winners[1]['team']->image,
-                        'colleges' => $winners[1]['team']->colleges->pluck('name'),
+                // Add medal entries for each medal type
+                if ($record->gold_tally > 0) {
+                    $teamMedals[$team->id]['gold_entries'][] = [
+                        'gold_tally' => $record->gold_tally,
+                        'silver_tally' => 0,
+                        'bronze_tally' => 0
+                    ];
+                }
+                if ($record->silver_tally > 0) {
+                    $teamMedals[$team->id]['silver_entries'][] = [
+                        'gold_tally' => 0,
+                        'silver_tally' => $record->silver_tally,
+                        'bronze_tally' => 0
+                    ];
+                }
+                if ($record->bronze_tally > 0) {
+                    $teamMedals[$team->id]['bronze_entries'][] = [
+                        'gold_tally' => 0,
+                        'silver_tally' => 0,
+                        'bronze_tally' => $record->bronze_tally
                     ];
                 }
 
-                // For bronze, we might have multiple winners (especially with double bronze)
-                $bronzeWinners = [];
-                for ($i = 2; $i < count($winners); $i++) {
-                    if ($winners[$i]['bronze_tally'] > 0) {
-                        $bronzeWinners[] = [
-                            'team_id' => $winners[$i]['team']->id,
-                            'team_name' => $winners[$i]['team']->name,
-                            'team_image' => $winners[$i]['team']->image,
-                            'colleges' => $winners[$i]['team']->colleges->pluck('name'),
-                        ];
-                    }
-                }
-                $sportResults[$sportId]['events'][$eventId]['bronze_winners'] = $bronzeWinners;
+                $teamMedals[$team->id]['medal_weight'] += $totalWeight;
             }
-            $bronzeMedalWeight = 0;
+
+            // Assign winners based on medal entries
+            foreach ($teamMedals as $teamId => $teamData) {
+                $team = $teamData['team'];
+                
+                // Add gold winner entries
+                foreach ($teamData['gold_entries'] as $entry) {
+                    $sportResults[$sportId]['events'][$eventId]['gold_winners'][] = [
+                        'team_id' => $team->id,
+                        'team_name' => $team->name,
+                        'team_image' => $team->image,
+                        'colleges' => $team->colleges->pluck('name'),
+                        'gold_tally' => $entry['gold_tally'],
+                        'silver_tally' => $entry['silver_tally'],
+                        'bronze_tally' => $entry['bronze_tally']
+                    ];
+                }
+
+                // Add silver winner entries
+                foreach ($teamData['silver_entries'] as $entry) {
+                    $sportResults[$sportId]['events'][$eventId]['silver_winners'][] = [
+                        'team_id' => $team->id,
+                        'team_name' => $team->name,
+                        'team_image' => $team->image,
+                        'colleges' => $team->colleges->pluck('name'),
+                        'gold_tally' => $entry['gold_tally'],
+                        'silver_tally' => $entry['silver_tally'],
+                        'bronze_tally' => $entry['bronze_tally']
+                    ];
+                }
+
+                // Add bronze winner entries
+                foreach ($teamData['bronze_entries'] as $entry) {
+                    $sportResults[$sportId]['events'][$eventId]['bronze_winners'][] = [
+                        'team_id' => $team->id,
+                        'team_name' => $team->name,
+                        'team_image' => $team->image,
+                        'colleges' => $team->colleges->pluck('name'),
+                        'gold_tally' => $entry['gold_tally'],
+                        'silver_tally' => $entry['silver_tally'],
+                        'bronze_tally' => $entry['bronze_tally']
+                    ];
+                }
+            }
+        }
+
+        // Convert events from associative to indexed arrays
+        foreach ($sportResults as &$sport) {
+            $sport['events'] = array_values($sport['events']);
         }
 
         // Now calculate the overall team totals as before
@@ -184,9 +210,9 @@ class LandingPageController extends Controller
                 $bronzeWeight = $medalWeights->bronze_weight;
                 $isDoubleBronze = $record->eventCategory->is_double_bronze;
                 if ($isDoubleBronze) {
-                    $bronzeMedalWeight = $medalWeights-> bronze_weight /2;
+                    $bronzeMedalWeight = $medalWeights->bronze_weight / 2;
                 } else {
-                    $bronzeMedalWeight = $medalWeights-> bronze_weight;
+                    $bronzeMedalWeight = $medalWeights->bronze_weight;
                 }
                 // Calculate weighted tallies
                 $goldWeight = $record->gold_tally * $medalWeights->gold_weight;
@@ -228,10 +254,45 @@ class LandingPageController extends Controller
             ];
         }
 
-        // Convert events from associative to indexed arrays
-        foreach ($sportResults as &$sport) {
-            $sport['events'] = array_values($sport['events']);
+        // Consolidate events
+        $consolidatedEvents = [];
+        foreach ($sportResults as $sport) {
+            foreach ($sport['events'] as $event) {
+                
+                $eventName = $event['name'];
+                
+                // If event doesn't exist in consolidated events, create it
+                if (!isset($consolidatedEvents[$eventName])) {
+                    $consolidatedEvents[$eventName] = [
+                        'name' => $eventName,
+                        'sport_name' => $sport['name'],
+                        'sport_icon' => $sport['icon'],
+                        'gold_winners' => [],
+                        'silver_winners' => [],
+                        'bronze_winners' => [],
+                        'medal_records' => []
+                    ];
+                }
+
+                // Merge medal records
+                $consolidatedEvents[$eventName]['medal_records'] = array_merge(
+                    $consolidatedEvents[$eventName]['medal_records'],
+                    $event['medal_records']
+                );
+
+                // Add all winners
+                foreach (['gold', 'silver', 'bronze'] as $medalType) {
+                    if (isset($event[$medalType . '_winners']) && is_array($event[$medalType . '_winners'])) {
+                        foreach ($event[$medalType . '_winners'] as $winner) {
+                            $consolidatedEvents[$eventName][$medalType . '_winners'][] = $winner;
+                        }
+                    }
+                }
+            }
         }
+
+        // Convert consolidated events to a flat array
+        $flattenedEvents = array_values($consolidatedEvents);
 
         // Sort by total weight in descending order
         usort($medalTally, function ($a, $b) {
@@ -247,76 +308,6 @@ class LandingPageController extends Controller
             $team['rank'] = $this->ordinal($rank);
             $rank++;
         }
-
-// Add this code right before the return statement in the index() method
-// This will flatten the nested sports/events structure into a single array of events
-         $consolidatedEvents = [];
-        foreach ($sportResults as $sport) {
-            foreach ($sport['events'] as $event) {
-                $eventName = $event['name'];
-                
-                // If event doesn't exist in consolidated events, create it
-                if (!isset($consolidatedEvents[$eventName])) {
-                    $consolidatedEvents[$eventName] = [
-                        'name' => $eventName,
-                        'sport_name' => $sport['name'],
-                        'sport_icon' => $sport['icon'],
-                        'gold_winners' => [],
-                        'silver_winners' => [],
-                        'bronze_winners' => [],
-                        'medal_records' => $event['medal_records']
-                    ];
-                }
-
-                // Consolidate gold winners
-                if ($event['gold_winner']) {
-                    // Check if this gold winner is already in the list
-                    $goldExists = false;
-                    foreach ($consolidatedEvents[$eventName]['gold_winners'] as $existingGold) {
-                        if ($existingGold['team_id'] === $event['gold_winner']['team_id']) {
-                            $goldExists = true;
-                            break;
-                        }
-                    }
-                    if (!$goldExists) {
-                        $consolidatedEvents[$eventName]['gold_winners'][] = $event['gold_winner'];
-                    }
-                }
-
-                // Consolidate silver winners
-                if ($event['silver_winner']) {
-                    // Check if this silver winner is already in the list
-                    $silverExists = false;
-                    foreach ($consolidatedEvents[$eventName]['silver_winners'] as $existingSilver) {
-                        if ($existingSilver['team_id'] === $event['silver_winner']['team_id']) {
-                            $silverExists = true;
-                            break;
-                        }
-                    }
-                    if (!$silverExists) {
-                        $consolidatedEvents[$eventName]['silver_winners'][] = $event['silver_winner'];
-                    }
-                }
-
-                // Consolidate bronze winners
-                foreach ($event['bronze_winners'] as $bronzeWinner) {
-                    // Check if this bronze winner is already in the list
-                    $bronzeExists = false;
-                    foreach ($consolidatedEvents[$eventName]['bronze_winners'] as $existingBronze) {
-                        if ($existingBronze['team_id'] === $bronzeWinner['team_id']) {
-                            $bronzeExists = true;
-                            break;
-                        }
-                    }
-                    if (!$bronzeExists) {
-                        $consolidatedEvents[$eventName]['bronze_winners'][] = $bronzeWinner;
-                    }
-                }
-            }
-        }
-
-        // Convert consolidated events to a flat array
-        $flattenedEvents = array_values($consolidatedEvents);
 
         return view('public.landing.index', [
             'results' => $results,
