@@ -279,24 +279,11 @@ class LandingPageController extends Controller
                     $event['medal_records']
                 );
 
-                // Add all winners
+                // Add all winners without checking for duplicates
                 foreach (['gold', 'silver', 'bronze'] as $medalType) {
                     if (isset($event[$medalType . '_winners']) && is_array($event[$medalType . '_winners'])) {
                         foreach ($event[$medalType . '_winners'] as $winner) {
-                            // Only add if this exact entry doesn't exist
-                            $exists = false;
-                            foreach ($consolidatedEvents[$eventName][$medalType . '_winners'] as $existingWinner) {
-                                if ($existingWinner['team_id'] === $winner['team_id'] &&
-                                    $existingWinner['gold_tally'] === $winner['gold_tally'] &&
-                                    $existingWinner['silver_tally'] === $winner['silver_tally'] &&
-                                    $existingWinner['bronze_tally'] === $winner['bronze_tally']) {
-                                    $exists = true;
-                                    break;
-                                }
-                            }
-                            if (!$exists) {
-                                $consolidatedEvents[$eventName][$medalType . '_winners'][] = $winner;
-                            }
+                            $consolidatedEvents[$eventName][$medalType . '_winners'][] = $winner;
                         }
                     }
                 }
