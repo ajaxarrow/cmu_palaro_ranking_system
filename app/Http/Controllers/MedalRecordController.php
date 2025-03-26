@@ -30,10 +30,11 @@ class MedalRecordController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $allSportsData = Sport::all();
         $sportId = null;
         $sports = collect();
 
-        if ($user->role == 'tournament_director') {
+        if ($user->role == 'tournament_director' || $user->role == 'assistant_tournament_director') {
             // Filter sports to only show the sport associated with this tournament director
             $sport_data_id = $user->sport_id;
             $sports = Sport::where('id', $sport_data_id)
@@ -68,7 +69,8 @@ class MedalRecordController extends Controller
             'sports',
             'teams',
             'events',
-            'medalRecords'
+            'medalRecords',
+            'allSportsData'
         ));
     }
 
@@ -118,9 +120,9 @@ class MedalRecordController extends Controller
     {
         $validatedData = $request->validate([
             'event_category_id' => 'required|exists:event_categories,id',
-            'champion_team_id' => 'required|exists:teams,id',
-            'first_runner_up_team_id' => 'required|exists:teams,id',
-            'second_runner_up_team_id' => 'required|exists:teams,id',
+            // 'champion_team_id' => 'required|exists:teams,id',
+            // 'first_runner_up_team_id' => 'required|exists:teams,id',
+            // 'second_runner_up_team_id' => 'required|exists:teams,id',
             'number_of_participant' => 'required|integer|min:1'
         ]);
 
@@ -143,11 +145,12 @@ class MedalRecordController extends Controller
             $teams[] = $request->second_runner_up_team_id_2;
         }
 
-        if (count(array_unique($teams)) !== count($teams) && !$request->allowTeamReuse) {
-            return redirect()->back()->withErrors(['error' => 'Each medal position must have a different team.'])->withInput();
-        }
+        // if (!$request->allowTeamReuse) {
+        //     return redirect()->back()->withErrors(['error' => 'Each medal position must have a different team.'])->withInput();
+        // }
 
         // Create champion (gold) record
+        if (!empty($request->champion_team_id)) {
         MedalRecord::create([
             'team_id' => $request->champion_team_id,
             'event_category_id' => $request->event_category_id,
@@ -159,60 +162,69 @@ class MedalRecordController extends Controller
             'entry_by' => auth()->id(),
             'posted_by' => auth()->id()
         ]);
+    }
 
         // Create 1st runner up (silver) record
-        MedalRecord::create([
-            'team_id' => $request->first_runner_up_team_id,
-            'event_category_id' => $request->event_category_id,
-            'gold_tally' => 0,
-            'silver_tally' => $medalCount,
-            'bronze_tally' => 0,
-            'number_of_participant' => $request->number_of_participant,
-            'year' => $currentYear,
-            'entry_by' => auth()->id(),
-            'posted_by' => auth()->id()
-        ]);
+        if (!empty($request->first_runner_up_team_id)) {
+            MedalRecord::create([
+                'team_id' => $request->first_runner_up_team_id,
+                'event_category_id' => $request->event_category_id,
+                'gold_tally' => 0,
+                'silver_tally' => $medalCount,
+                'bronze_tally' => 0,
+                'number_of_participant' => $request->number_of_participant,
+                'year' => $currentYear,
+                'entry_by' => auth()->id(),
+                'posted_by' => auth()->id()
+            ]);
+        }
 
         // Create 2nd runner up (bronze) record(s)
         if ($isDoubleBronze) {
             // Create first bronze record - split the bronze medal count
-            MedalRecord::create([
-                'team_id' => $request->second_runner_up_team_id,
-                'event_category_id' => $request->event_category_id,
-                'gold_tally' => 0,
-                'silver_tally' => 0,
-                'bronze_tally' => $medalCount,
-                'number_of_participant' => $request->number_of_participant,
-                'year' => $currentYear,
-                'entry_by' => auth()->id(),
-                'posted_by' => auth()->id()
-            ]);
+            if (!empty($request->second_runner_up_team_id)) {
+                MedalRecord::create([
+                    'team_id' => $request->second_runner_up_team_id,
+                    'event_category_id' => $request->event_category_id,
+                    'gold_tally' => 0,
+                    'silver_tally' => 0,
+                    'bronze_tally' => $medalCount,
+                    'number_of_participant' => $request->number_of_participant,
+                    'year' => $currentYear,
+                    'entry_by' => auth()->id(),
+                    'posted_by' => auth()->id()
+                ]);
+            }
 
             // Create second bronze record - split the bronze medal count
-            MedalRecord::create([
-                'team_id' => $request->second_runner_up_team_id_2,
-                'event_category_id' => $request->event_category_id,
-                'gold_tally' => 0,
-                'silver_tally' => 0,
-                'bronze_tally' => $medalCount,
-                'number_of_participant' => $request->number_of_participant,
-                'year' => $currentYear,
-                'entry_by' => auth()->id(),
-                'posted_by' => auth()->id()
-            ]);
+            if (!empty($request->second_runner_up_team_id_2)) {
+                MedalRecord::create([
+                    'team_id' => $request->second_runner_up_team_id_2,
+                    'event_category_id' => $request->event_category_id,
+                    'gold_tally' => 0,
+                    'silver_tally' => 0,
+                    'bronze_tally' => $medalCount,
+                    'number_of_participant' => $request->number_of_participant,
+                    'year' => $currentYear,
+                    'entry_by' => auth()->id(),
+                    'posted_by' => auth()->id()
+                ]);
+            }
         } else {
             // Create single bronze record
-            MedalRecord::create([
-                'team_id' => $request->second_runner_up_team_id,
-                'event_category_id' => $request->event_category_id,
-                'gold_tally' => 0,
-                'silver_tally' => 0,
-                'bronze_tally' => $medalCount,
-                'number_of_participant' => $request->number_of_participant,
-                'year' => $currentYear,
-                'entry_by' => auth()->id(),
-                'posted_by' => auth()->id()
-            ]);
+            if (!empty($request->second_runner_up_team_id)) {
+                MedalRecord::create([
+                    'team_id' => $request->second_runner_up_team_id,
+                    'event_category_id' => $request->event_category_id,
+                    'gold_tally' => 0,
+                    'silver_tally' => 0,
+                    'bronze_tally' => $medalCount,
+                    'number_of_participant' => $request->number_of_participant,
+                    'year' => $currentYear,
+                    'entry_by' => auth()->id(),
+                    'posted_by' => auth()->id()
+                ]);
+            }
         }
 
         return redirect()->route('medal_records.index')->with('success', 'Medal records created successfully.');
@@ -243,10 +255,10 @@ class MedalRecordController extends Controller
     public function update(Request $request, int $eventCategoryId)
     {
         $validatedData = $request->validate([
-            'champion_team_id' => 'required|exists:teams,id',
-            'first_runner_up_team_id' => 'required|exists:teams,id',
-            'second_runner_up_team_id' => 'required|exists:teams,id',
-            'second_runner_up_team_id_2' => 'nullable|exists:teams,id',
+            // 'champion_team_id' => 'required|exists:teams,id',
+            // 'first_runner_up_team_id' => 'required|exists:teams,id',
+            // 'second_runner_up_team_id' => 'required|exists:teams,id',
+            // 'second_runner_up_team_id_2' => 'nullable|exists:teams,id',
             'event_category_id' => 'required|exists:event_categories,id',
             'medal_count' => 'required|integer|min:1',
             'number_of_participant' => 'required|integer|min:1',

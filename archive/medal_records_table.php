@@ -150,7 +150,7 @@
                                                             </button>
                                                         @endif
 
-                                                        @if($user->role == 'admin' || $user->role == 'tournament_director')
+                                                        @if($user->role == 'admin' || $user->role == 'tournament_director' || $user->role == 'assistant_tournament_director')
                                                             <!-- Approve Button -->
                                                             <button type="button"
                                                                     class="btn btn-sm btn-outline-success btn-floating"
@@ -163,7 +163,7 @@
                                                             </button>
                                                         @endif
 
-                                                        @if($user->role == 'admin' || $user->role == 'tournament_director')
+                                                        @if($user->role == 'admin' || $user->role == 'tournament_director' || $user->role == 'assistant_tournament_director')
                                                             <!-- Delete Button -->
                                                             <button type="button"
                                                                 class="btn btn-sm btn-outline-danger btn-floating"

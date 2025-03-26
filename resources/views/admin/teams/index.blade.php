@@ -143,14 +143,14 @@
                                             <td class="text-end">
                                                 <div class="d-flex">
                                                     <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" href="{{ route('teams.show', $team->id) }}">
-                                                        <i class="mdi mdi-eye-outline fs-14 text-primary"></i>
+                                                        <i class="ph ph-eye fs-14 text-primary"></i>
                                                     </a>
                                                     @if($user->role == 'admin')
                                                     <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="modal" data-bs-target="#editModal{{ $team->id }}">
-                                                        <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
+                                                        <i class="ph ph-pencil fs-14 text-primary"></i>
                                                     </a>
                                                     <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $team->id }}">
-                                                        <i class="mdi mdi-delete fs-14 text-danger"></i>
+                                                        <i class="ph-bold ph-trash fs-14 text-danger"></i>
                                                     </a>
                                                     @endif
                                                 </div>

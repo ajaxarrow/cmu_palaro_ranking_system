@@ -8,13 +8,13 @@
     .export-btn {
         position: fixed;
         bottom: 30px;
-        right: 30px;
-        z-index: 1000;
-        padding: 15px 30px;
+        right: 5px;
+        z-index: 2;
+        padding: 10px 20px;
         background-color: #00491e; /* Use your primary color */
         color: white;
         border: none;
-        border-radius: 50px;
+        border-radius: 10px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         display: flex;
         align-items: center;
@@ -93,21 +93,32 @@
 
 <div class="container-fluid">
 
-    <div class="py-4 d-flex align-items-sm-center flex-sm-row flex-column">
+    <div class="py-4 d-flex align-items-sm-start flex-sm-column flex-column">
         <div class="flex-grow-1">
             <h3 class="fw-bold mb-0">Results Tally</h3>
             <p class="text-muted">Track medal performances across all events</p>
         </div>
-        <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center gap-3 flex-col">
         @if(!$sportId)
-            <div class="d-flex align-items-center gap-3">
-                <button id="resetFilterBtn" class="btn btn-light" onclick="resetFilter()" style="display: none;">
-                    <i class="mdi mdi-refresh me-1"></i> Reset Filter
+            <div class="d-flex align-items-center gap-3 flex-column">
+
+            <!-- Add search input -->
+
+                    <div class="input-group">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search events..." oninput="searchEvents()">
+                        <button class="btn btn-outline-secondary" type="button" onclick="clearSearch()">
+                            <i class="ph-bold ph-x"></i>
+                        </button>
+                    </div>
+
+               <div class="d-flex gap-2">
+               <button id="resetFilterBtn" class="btn btn-light" onclick="resetFilter()" style="display: none;">
+                    <i class="ph ph-arrow-clockwise me-1"></i>
                 </button>
                 <!-- Add this right after the sport filter dropdown, before the close of the d-flex div -->
                 <div class="dropdown ms-2">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="postedFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="mdi mdi-check-circle-outline me-1"></i> Filter by Status
+                        <i class="ph ph-check-circle me-1"></i> Filter by Status
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="postedFilterDropdown">
                         <li>
@@ -125,24 +136,17 @@
                                 <input type="checkbox" class="posted-checkbox" value="pending" onchange="filterByPosted()"> Pending
                             </label>
                         </li>
-                    </ul>
-                </div>
+                        <li>
 
-                <!-- Add search input -->
-                <div class="ms-2">
-                    <div class="input-group">
-                        <input type="text" id="searchInput" class="form-control" placeholder="Search events..." oninput="searchEvents()">
-                        <button class="btn btn-outline-secondary" type="button" onclick="clearSearch()">
-                            <i class="mdi mdi-close"></i>
-                        </button>
-                    </div>
+                        </li>
+                    </ul>
                 </div>
                 <!-- Reset Filter Button (Initially Hidden) -->
 
                 <!-- Sport Filter Dropdown -->
                 <div class="dropdown">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sportFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="mdi mdi-filter-outline me-1"></i> Filter by Sport
+                        <i class="ph ph-funnel me-1"></i> Filter by Sport
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="sportFilterDropdown">
                         <li>
@@ -172,11 +176,24 @@
                         @endforeach
                     </ul>
                 </div>
+
+                @if($user->role == 'encoder' || $user->role == 'admin')
+                <button type="button" class="btn btn-primary custom-primary-background" data-bs-toggle="modal" data-bs-target="#addRecordModal">
+                    <i class="ph ph-plus me-1"></i> <span class="d-none d-md-inline">Add Record</span>
+                </button>
+                @endif
+               </div>
+
+
+
+
+
+
             </div>
         @else
         <div class="dropdown">
             <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="eventCategoryFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="mdi mdi-filter-outline me-1" ></i> Filter by Event Category
+                <i class="ph ph-funnel me-1" ></i> Filter by Event Category
             </button>
             <ul class="dropdown-menu" aria-labelledby="eventCategoryFilterDropdown">
                 <li>
@@ -200,11 +217,7 @@
 
         @endif
 
-        @if($user->role != 'user')
-            <button type="button" class="btn btn-primary custom-primary-background" data-bs-toggle="modal" data-bs-target="#addRecordModal">
-                <i class="mdi mdi-plus me-1"></i> Add Record
-            </button>
-        @endif
+
 
         </div>
     </div>
@@ -231,7 +244,7 @@
             @if($sportHasRecords)
                 <div class="sport-header mb-4 d-flex justify-content-between align-items-center" data-sport-id="{{ $sport->id }}">
                     <h4 class="fs-16 m-0">{{ $sport->name }}</h4>
-                    @if($user->role == 'admin' || $user->role == 'tournament_director')
+                    @if($user->role == 'admin' || $user->role == 'tournament_director' || $user->role == 'assistant_tournament_director')
                         @php
                             $hasUnapprovedRecords = \App\Models\MedalRecord::whereHas('eventCategory', function ($query) use ($sport) {
                                 $query->where('sport_id', $sport->id);
@@ -259,6 +272,8 @@
                             // Find gold, silver, and bronze winners
                             $goldWinner = $silverWinner = null;
                             $bronzeWinners = [];
+                            $silverWinners = [];
+                            $goldWinners = [];
                             $goldWeight = $silverWeight = $bronzeWeight = null;
                             $goldTally = $silverTally = $bronzeTally = 0;
                             $participants = 0;
@@ -268,13 +283,13 @@
                                 $team = $teams->find($record->team_id);
 
                                 if ($record->gold_tally > 0) {
-                                    $goldWinner = $team;
+                                    $goldWinners[] = $team;
                                     $goldWeight = $record->gold_tally * $eventCategory->medalWeightCategory->gold_weight;
                                     $goldTally = $record->gold_tally;
                                 }
 
                                 if ($record->silver_tally > 0) {
-                                    $silverWinner = $team;
+                                    $silverWinners[] = $team;
                                     $silverWeight = $record->silver_tally * $eventCategory->medalWeightCategory->silver_weight;
                                     $silverTally = $record->silver_tally;
                                 }
@@ -305,35 +320,56 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="mb-2">
-                                        <div class="medal-position mb-3">
-                                            <span class="medal-badge medal-gold">
-                                                <i class="mdi mdi-medal medal-icon"></i> Champion
-                                            </span>
-                                            <div class="d-flex justify-content-between align-items-center mt-2">
-                                                <div class="d-flex align-items-center gap-1">
-                                                    @if($goldWinner->image)
-                                                        <img src="{{ asset('storage/' . $goldWinner->image) }}" width="36" height="36" class="rounded-circle object-cover" style="object-fit: cover; object-position: top;">
-                                                    @else
-                                                        <i class="ph-duotone fs-24 ph-ranking mb-0"></i>
-                                                    @endif
-                                                    <span class="team-name">{{ $goldWinner ? $goldWinner->name : '-' }}</span>
-                                                </div>
-                                                <div class="medal-stats">
-                                                    <div class="medal-stat-item">
-                                                        <span class="medal-stat-value" id="gold-count-value">{{ $goldTally }}</span>
-                                                        <span class="medal-stat-label">Count</span>
-                                                    </div>
-                                                    <div class="medal-stat-item">
-                                                        <span class="medal-stat-value" id="gold-weight-value">{{ $goldWeight }}</span>
-                                                        <span class="medal-stat-label">Weight</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
 
-                                        <div class="medal-position mb-3">
+                                        @if(count($goldWinners) > 0)
+                                        <div class="medal-position">
+                                            <span class="medal-badge medal-gold">
+                                                <i class="ph ph-medal medal-icon"></i> Champion
+                                            </span>
+                                            @if(count($goldWinners) > 0)
+                                                @foreach($goldWinners as $goldWinner)
+                                                    <div class="d-flex justify-content-between align-items-center mt-2">
+                                                        <div class="d-flex align-items-center gap-1">
+                                                            @if($goldWinner->image)
+                                                                <img src="{{ asset('storage/' . $goldWinner->image) }}" width="36" height="36" class="rounded-circle object-cover" style="object-fit: cover; object-position: top;">
+                                                            @else
+                                                                <i class="ph-duotone fs-24 ph-ranking mb-0"></i>
+                                                            @endif
+                                                            <span class="team-name">{{ $goldWinner ? $goldWinner->name : '-' }}</span>
+                                                        </div>
+                                                        <div class="medal-stats">
+                                                            <div class="medal-stat-item">
+                                                                <span class="medal-stat-value gold-count-value">{{ $goldTally }}</span>
+                                                                <span class="medal-stat-label">Count</span>
+                                                            </div>
+                                                            <div class="medal-stat-item">
+                                                                <span class="medal-stat-value gold-weight-value">{{ $goldWeight }}</span>
+                                                                <span class="medal-stat-label">Weight</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            @else
+                                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                                    <span class="team-name">-</span>
+                                                    <div class="medal-stats">
+                                                        <div class="medal-stat-item">
+                                                            <span class="medal-stat-value gold-count-value">{{ $silverCount }}</span>
+                                                            <span class="medal-stat-label">Count</span>
+                                                        </div>
+                                                        <div class="medal-stat-item">
+                                                            <span class="medal-stat-value gold-weight-value">{{ $silverTally }}</span>
+                                                            <span class="medal-stat-label">Weight</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        @endif
+
+                                        {{-- <div class="medal-position mb-3">
                                             <span class="medal-badge medal-silver">
-                                                <i class="mdi mdi-medal medal-icon"></i> 1st Runner Up
+                                                <i class="ph ph-medal medal-icon"></i> 1st Runner Up
                                             </span>
                                             <div class="d-flex justify-content-between align-items-center mt-2">
                                                 <div class="d-flex align-items-center gap-1">
@@ -355,11 +391,56 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div> --}}
+                                        @if(count($silverWinners) > 0)
+                                        <div class="medal-position">
+                                            <span class="medal-badge medal-silver">
+                                                <i class="ph ph-medal medal-icon"></i> 1st Runner Up
+                                            </span>
+                                            @if(count($silverWinners) > 0)
+                                                @foreach($silverWinners as $silverWinner)
+                                                    <div class="d-flex justify-content-between align-items-center mt-2">
+                                                        <div class="d-flex align-items-center gap-1">
+                                                            @if($silverWinner->image)
+                                                                <img src="{{ asset('storage/' . $silverWinner->image) }}" width="36" height="36" class="rounded-circle object-cover" style="object-fit: cover; object-position: top;">
+                                                            @else
+                                                                <i class="ph-duotone fs-24 ph-ranking mb-0"></i>
+                                                            @endif
+                                                            <span class="team-name">{{ $silverWinner ? $silverWinner->name : '-' }}</span>
+                                                        </div>
+                                                        <div class="medal-stats">
+                                                            <div class="medal-stat-item">
+                                                                <span class="medal-stat-value silver-count-value">{{ $silverTally }}</span>
+                                                                <span class="medal-stat-label">Count</span>
+                                                            </div>
+                                                            <div class="medal-stat-item">
+                                                                <span class="medal-stat-value silver-weight-value">{{ $silverWeight }}</span>
+                                                                <span class="medal-stat-label">Weight</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            @else
+                                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                                    <span class="team-name">-</span>
+                                                    <div class="medal-stats">
+                                                        <div class="medal-stat-item">
+                                                            <span class="medal-stat-value silver-count-value">{{ $silverCount }}</span>
+                                                            <span class="medal-stat-label">Count</span>
+                                                        </div>
+                                                        <div class="medal-stat-item">
+                                                            <span class="medal-stat-value silver-weight-value">{{ $silverTally }}</span>
+                                                            <span class="medal-stat-label">Weight</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
-
+                                        @endif
+                                        @if(count($bronzeWinners) > 0)
                                         <div class="medal-position">
                                             <span class="medal-badge medal-bronze">
-                                                <i class="mdi mdi-medal medal-icon"></i> 2nd Runner Up
+                                                <i class="ph ph-medal medal-icon"></i> 2nd Runner Up
                                             </span>
                                             @if(count($bronzeWinners) > 0)
                                                 @foreach($bronzeWinners as $bronzeWinner)
@@ -400,11 +481,12 @@
                                                 </div>
                                             @endif
                                         </div>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="card-footer bg-white d-flex justify-content-between align-items-center">
                                     <div class="text-muted">
-                                        <i class="mdi mdi-account-group me-1"></i> {{ $participants }} Participating Teams
+                                        <i class="ph ph-users-three me-1"></i> {{ $participants }} Participating Teams
                                     </div>
 
                                     <div class="d-flex align-items-center gap-1">
@@ -418,13 +500,13 @@
                                                     data-bs-toggle="tooltip"
                                                     data-bs-placement="top"
                                                     title="Edit record">
-                                                    <i class="mdi mdi-pencil"></i>
+                                                    <i class="ph ph-pencil"></i>
                                                 </button>
 
 
                                             @endif
 
-                                            @if($user->role == 'admin' || $user->role == 'tournament_director')
+                                            @if($user->role == 'admin' || $user->role == 'tournament_director' || $user->role == 'assistant_tournament_director')
                                                 <!-- Approve Button -->
                                                 <button type="button"
                                                         class="btn btn-sm btn-outline-success btn-floating"
@@ -433,7 +515,7 @@
                                                         {{ $isPosted ? 'disabled' : '' }}
                                                         onclick="setEventCategory('{{ $eventCategory->id }}', 'approve')"
                                                         title="Approve this record">
-                                                    <i class="mdi mdi-check"></i>
+                                                    <i class="ph ph-check"></i>
                                                 </button>
 
                                             @endif
@@ -447,7 +529,7 @@
                                                 data-bs-target="#deleteRecordModal"
                                                 onclick="setEventCategory('{{ $eventCategory->id }}', 'delete')"
                                                 title="Delete this record">
-                                                <i class="mdi mdi-delete"></i>
+                                                <i class="ph-bold ph-trash"></i>
                                             </button>
 
                                         @endif
@@ -563,7 +645,19 @@
                     <form action="{{ route('medal_records.store') }}" method="POST" onsubmit="disableSubmitButton(this)">
                         @csrf
                         <div class="mb-4">
+                            <label for="sport" class="form-label">Sport</label>
+                            <select name="sport_id" class="form-select" id="sport" onchange="filterEventsBySport(this)">
+                                <option value="">Select Sport</option>
+                                @foreach ($allSportsData as $sport)
+                                    <option value="{{ $sport->id }}">{{ $sport->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+
                             <label for="event" class="form-label">Event Category</label>
+
                             <select name="event_category_id" class="form-select" id="event" required onchange="handleEventChange(this)">
                                 <option value="">Select Event</option>
                                 @foreach ($events as $event)
@@ -596,7 +690,7 @@
                                         <span class="medal-badge medal-gold">Champion</span>
                                     </div>
                                     <div class="col-8">
-                                        <select name="champion_team_id" class="form-select" id="championTeam" required onchange="updateTeamSelections()">
+                                        <select name="champion_team_id" class="form-select" id="championTeam"  onchange="updateTeamSelections()">
                                             <option value="">Select Team</option>
                                             @foreach ($teams as $team)
                                                 <option value="{{ $team->id }}">{{ $team->name }}</option>
@@ -613,7 +707,7 @@
                                         <span class="medal-badge medal-silver">1st Runner Up</span>
                                     </div>
                                     <div class="col-8">
-                                        <select name="first_runner_up_team_id" class="form-select" id="firstRunnerUp" required onchange="updateTeamSelections()">
+                                        <select name="first_runner_up_team_id" class="form-select" id="firstRunnerUp" onchange="updateTeamSelections()">
                                             <option value="">Select Team</option>
                                             @foreach ($teams as $team)
                                                 <option value="{{ $team->id }}">{{ $team->name }}</option>
@@ -630,7 +724,7 @@
                                         <span class="medal-badge medal-bronze">2nd Runner Up</span>
                                     </div>
                                     <div class="col-8">
-                                        <select name="second_runner_up_team_id" class="form-select" id="secondRunnerUp" required onchange="updateTeamSelections()">
+                                        <select name="second_runner_up_team_id" class="form-select" id="secondRunnerUp" onchange="updateTeamSelections()">
                                             <option value="">Select Team</option>
                                             @foreach ($teams as $team)
                                                 <option value="{{ $team->id }}">{{ $team->name }}</option>
@@ -688,38 +782,30 @@
 
     <!-- JavaScript for handling team selections and double bronze -->
     <script>
-        function updateEventCategoryOptions() {
-            const selectElement = document.getElementById('event');
+        function filterEventsBySport(sportSelect) {
+            const selectedSportId = sportSelect.value;
+            const eventSelect = document.getElementById('event');
 
-            // Get all event categories that already have results
-            // This will be populated from your Blade template using the same logic
-            const eventsWithRecords = [];
+            // Reset event dropdown
+            eventSelect.innerHTML = '<option value="">Select Event</option>';
 
-            @foreach($sports as $sport)
-                @foreach($sport->eventCategories as $eventCategory)
-                    @php
-                        $eventRecords = $medalRecords->where('event_category_id', $eventCategory->id);
-                    @endphp
+            // If no sport is selected, return
+            if (!selectedSportId) return;
 
-                    @if($eventRecords->count() > 0)
-                        eventsWithRecords.push({{ $eventCategory->id }});
-                    @endif
-                @endforeach
-            @endforeach
-
-            // Remove or disable options for events that already have results
-            for (let i = selectElement.options.length - 1; i >= 0; i--) {
-                const optionValue = parseInt(selectElement.options[i].value);
-                if (optionValue && eventsWithRecords.includes(optionValue)) {
-                    // Option 1: Remove the option completely
-                    selectElement.remove(i);
-
-                    // Option 2: Disable the option and indicate why
-                    // selectElement.options[i].disabled = true;
-                    // selectElement.options[i].text = selectElement.options[i].text + ' (Results Exist)';
+            // Filter events based on selected sport
+            @foreach ($events as $event)
+                if ({{ $event->sport_id }} == selectedSportId) {
+                    const option = document.createElement('option');
+                    option.value = "{{ $event->id }}";
+                    option.setAttribute('data-double-bronze', "{{ $event->is_double_bronze }}");
+                    option.setAttribute('data-medal-count', "{{ $event->medal_count }}");
+                    option.textContent = "{{ $event->name }}";
+                    eventSelect.appendChild(option);
                 }
-            }
+            @endforeach
+            updateEventCategoryOptions()
         }
+
 
         document.getElementById('addRecordModal').addEventListener('shown.bs.modal', function() {
             resetTeamSelections();
@@ -746,7 +832,7 @@
 
             if (isDoubleBronze) {
                 secondBronzeDiv.style.display = 'block';
-                document.getElementById('secondRunnerUp2').setAttribute('required', 'required');
+                // document.getElementById('secondRunnerUp2').setAttribute('required', 'required');
             } else {
                 secondBronzeDiv.style.display = 'none';
                 document.getElementById('secondRunnerUp2').removeAttribute('required');
@@ -877,7 +963,7 @@
                                     <span class="medal-badge medal-gold">Champion</span>
                                 </div>
                                 <div class="col-8">
-                                    <select name="champion_team_id" class="form-select" id="edit_championTeam" required onchange="updateEditTeamSelections()">
+                                    <select name="champion_team_id" class="form-select" id="edit_championTeam" onchange="updateEditTeamSelections()">
                                         <option value="">Select Team</option>
                                         @foreach ($teams as $team)
                                             <option value="{{ $team->id }}">{{ $team->name }}</option>
@@ -894,7 +980,7 @@
                                     <span class="medal-badge medal-silver">1st Runner Up</span>
                                 </div>
                                 <div class="col-8">
-                                    <select name="first_runner_up_team_id" class="form-select" id="edit_firstRunnerUp" required onchange="updateEditTeamSelections()">
+                                    <select name="first_runner_up_team_id" class="form-select" id="edit_firstRunnerUp"  onchange="updateEditTeamSelections()">
                                         <option value="">Select Team</option>
                                         @foreach ($teams as $team)
                                             <option value="{{ $team->id }}">{{ $team->name }}</option>
@@ -911,7 +997,7 @@
                                     <span class="medal-badge medal-bronze">2nd Runner Up</span>
                                 </div>
                                 <div class="col-8">
-                                    <select name="second_runner_up_team_id" class="form-select" id="edit_secondRunnerUp" required onchange="updateEditTeamSelections()">
+                                    <select name="second_runner_up_team_id" class="form-select" id="edit_secondRunnerUp"  onchange="updateEditTeamSelections()">
                                         <option value="">Select Team</option>
                                         @foreach ($teams as $team)
                                             <option value="{{ $team->id }}">{{ $team->name }}</option>
@@ -970,7 +1056,7 @@
 
 <!-- Add this button to the header section near the top of your page, right after the d-flex align-items-center gap-3 div -->
 <button id="exportPDF" class="export-btn">
-    <i class="mdi mdi-file-pdf-outline me-1"></i> Export PDF
+    <i class="ph ph-file-pdf me-1"></i> <span class="d-none d-md-block ">Export PDF</span>
 </button>
 
 <!-- Progress Overlay and Dialog (Keep these) -->
@@ -1014,15 +1100,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Create Excel export button
     const exportBtnContainer = document.createElement('div');
     exportBtnContainer.style.position = 'fixed';
-    exportBtnContainer.style.bottom = '65px'; // Position much higher to avoid any existing buttons
-    exportBtnContainer.style.right = '1px';
-    exportBtnContainer.style.zIndex = '1000';
+    exportBtnContainer.style.bottom = '55px'; // Position much higher to avoid any existing buttons
+    exportBtnContainer.style.right = '0px';
+    exportBtnContainer.style.zIndex = '2';
 
     const exportExcelBtn = document.createElement('button');
     exportExcelBtn.id = 'exportExcel';
     exportExcelBtn.style.position = 'relative';
     exportExcelBtn.className = 'export-btn';
-    exportExcelBtn.innerHTML = '<i class="mdi mdi-microsoft-excel me-1"></i> Export Excel';
+    exportExcelBtn.innerHTML = '<i class="ph ph-file-xls me-1"></i> <span class="d-none d-md-block ">Export Excel</span>';
     exportExcelBtn.style.backgroundColor = '#217346'; // Excel green color
 
     // Don't modify other buttons, just position this one higher
@@ -1087,63 +1173,60 @@ document.addEventListener('DOMContentLoaded', function() {
                         const statusBadge = card.querySelector('.status-badge');
                         const status = statusBadge ? statusBadge.textContent.trim() : 'Unknown';
 
-                        // Get gold winner
-                        let goldTeam = '-', goldCount = '0', goldWeight = '0';
+                        // Get gold winner - with safe access
+                        // Get gold winner(s) - with safe access
+                        let goldTeams = '-', goldCount = '0', goldWeight = '0';
                         const goldBadge = card.querySelector('.medal-badge.medal-gold');
                         if (goldBadge) {
                             const goldPosition = goldBadge.closest('.medal-position');
                             if (goldPosition) {
-                                const teamEl = goldPosition.querySelector('.team-name');
-                                if (teamEl) goldTeam = teamEl.textContent.trim();
-
-                                const countEl = goldPosition.querySelector('#gold-count-value');
+                                const goldTeamElements = goldPosition.querySelectorAll('.team-name');
+                                if (goldTeamElements && goldTeamElements.length > 0) {
+                                    const teams = Array.from(goldTeamElements).map(el => el.textContent.trim());
+                                    goldTeams = teams.join(', ');
+                                }
+                                const countEl = goldPosition.querySelector('.gold-count-value');
                                 if (countEl) goldCount = countEl.textContent.trim();
-
-                                const weightEl = goldPosition.querySelector('#gold-weight-value');
+                                const weightEl = goldPosition.querySelector('.gold-weight-value');
                                 if (weightEl) goldWeight = weightEl.textContent.trim();
                             }
                         }
-
-                        // Get silver winner
-                        let silverTeam = '-', silverCount = '0', silverWeight = '0';
+                        // Get silver winner(s) - with safe access
+                        let silverTeams = '-', silverCount = '0', silverWeight = '0';
                         const silverBadge = card.querySelector('.medal-badge.medal-silver');
                         if (silverBadge) {
                             const silverPosition = silverBadge.closest('.medal-position');
                             if (silverPosition) {
-                                const teamEl = silverPosition.querySelector('.team-name');
-                                if (teamEl) silverTeam = teamEl.textContent.trim();
-
-                                const countEl = silverPosition.querySelector('#silver-count-value');
+                                const silverTeamElements = silverPosition.querySelectorAll('.team-name');
+                                if (silverTeamElements && silverTeamElements.length > 0) {
+                                    const teams = Array.from(silverTeamElements).map(el => el.textContent.trim());
+                                    silverTeams = teams.join(', ');
+                                }
+                                const countEl = silverPosition.querySelector('.silver-count-value');
                                 if (countEl) silverCount = countEl.textContent.trim();
-
-                                const weightEl = silverPosition.querySelector('#silver-weight-value');
+                                const weightEl = silverPosition.querySelector('.silver-weight-value');
                                 if (weightEl) silverWeight = weightEl.textContent.trim();
                             }
                         }
 
-                        // Get bronze winner(s)
-                        let bronzeTeams = [], bronzeCount = '0', bronzeWeight = '0';
-                        const bronzeBadge = card.querySelector('.medal-badge.medal-bronze');
-                        if (bronzeBadge) {
-                            const bronzePosition = bronzeBadge.closest('.medal-position');
-                            if (bronzePosition) {
-                                const bronzeTeamElements = bronzePosition.querySelectorAll('.team-name');
-                                if (bronzeTeamElements && bronzeTeamElements.length > 0) {
-                                    bronzeTeams = Array.from(bronzeTeamElements)
-                                        .map(el => el.textContent.trim())
-                                        .filter(text => text !== '-');
-                                }
-
-                                const countEl = bronzePosition.querySelector('.bronze-count-value');
-                                    if (countEl) bronzeCount = countEl.textContent.trim();
-
-                                const weightEl = bronzePosition.querySelector('.bronze-weight-value');
-                                if (weightEl) bronzeWeight = weightEl.textContent.trim();
-                            }
-                        }
-
                         // Combine bronze teams into a single string
-                        const bronzeTeamsStr = bronzeTeams.length > 0 ? bronzeTeams.join(', ') : '-';
+                        let bronzeTeams = '-', bronzeCount = '0', bronzeWeight = '0';
+                            const bronzeBadge = card.querySelector('.medal-badge.medal-bronze');
+                            if (bronzeBadge) {
+                                const bronzePosition = bronzeBadge.closest('.medal-position');
+                                if (bronzePosition) {
+                                    const bronzeTeamElements = bronzePosition.querySelectorAll('.team-name');
+                                    if (bronzeTeamElements && bronzeTeamElements.length > 0) {
+                                        const teams = Array.from(bronzeTeamElements).map(el => el.textContent.trim());
+                                        bronzeTeams = teams.join(', ');
+                                    }
+                                    const countEl = bronzePosition.querySelector('.bronze-count-value');
+                                    if (countEl) bronzeCount = countEl.textContent.trim();
+                                    const weightEl = bronzePosition.querySelector('.bronze-weight-value');
+                                    if (weightEl) bronzeWeight = weightEl.textContent.trim();
+                                }
+                            }
+
 
                         // Get participants count
                         let participants = '0';
@@ -1158,13 +1241,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         sportGroups[sportName].push({
                             eventName,
                             status,
-                            goldTeam,
+                            goldTeams,
                             goldCount,
                             goldWeight,
-                            silverTeam,
+                            silverTeams,
                             silverCount,
                             silverWeight,
-                            bronzeTeamsStr,
+                            bronzeTeams,
                             bronzeCount,
                             bronzeWeight,
                             participants
@@ -1271,13 +1354,13 @@ document.addEventListener('DOMContentLoaded', function() {
                             '',  // Indent under sport
                             event.eventName,
                             event.status,
-                            event.goldTeam,
+                            event.goldTeams,
                             event.goldCount,
                             event.goldWeight,
-                            event.silverTeam,
+                            event.silverTeams,
                             event.silverCount,
                             event.silverWeight,
-                            event.bronzeTeamsStr,
+                            event.bronzeTeams,
                             event.bronzeCount,
                             event.bronzeWeight,
                             event.participants
@@ -1590,7 +1673,7 @@ function filterSport() {
 
     // Update the dropdown button text
     const dropdownButton = document.getElementById('sportFilterDropdown');
-    dropdownButton.innerHTML = `<i class="mdi mdi-filter-outline me-1"></i> ${isAllSelected ? 'All Sports' : selectedSports.length + ' Selected'}`;
+    dropdownButton.innerHTML = `<i class="ph ph-funnel me-1"></i> ${isAllSelected ? 'All Sports' : selectedSports.length + ' Selected'}`;
 
     // Show/hide reset button
     document.getElementById('resetFilterBtn').style.display = isAllSelected ? 'none' : 'block';
@@ -1808,7 +1891,7 @@ function filterSport() {
 function updateSportFilterText() {
     const dropdownButton = document.getElementById('sportFilterDropdown');
     const isAllSelected = currentSportFilters.includes('all') || currentSportFilters.length === 0;
-    dropdownButton.innerHTML = `<i class="mdi mdi-filter-outline me-1"></i> ${isAllSelected ? 'All Sports' : currentSportFilters.length + ' Selected'}`;
+    dropdownButton.innerHTML = `<i class="ph ph-funnel me-1"></i> ${isAllSelected ? 'All Sports' : currentSportFilters.length + ' Selected'}`;
 }
 
 // Filter by posted status
@@ -1837,7 +1920,7 @@ function filterByPosted() {
 function updatePostedFilterText() {
     const dropdownButton = document.getElementById('postedFilterDropdown');
     const isAllSelected = currentPostedStatus.includes('all') || currentPostedStatus.length === 0;
-    dropdownButton.innerHTML = `<i class="mdi mdi-check-circle-outline me-1"></i> ${isAllSelected ? 'All Status' : currentPostedStatus.length + ' Selected'}`;
+    dropdownButton.innerHTML = `<i class="ph ph-check-circle me-1"></i> ${isAllSelected ? 'All Status' : currentPostedStatus.length + ' Selected'}`;
 }
 
 // Search events function
@@ -1921,7 +2004,7 @@ function filterCatRecords() {
 
     // Update the dropdown button text
     const dropdownButton = document.getElementById('eventCategoryFilterDropdown');
-    dropdownButton.innerHTML = `<i class="mdi mdi-filter-outline me-1"></i> ${isAllCategoriesSelected ? 'All Categories' : selectedEventCategories.length + ' Selected'}`;
+    dropdownButton.innerHTML = `<i class="ph ph-funnel me-1"></i> ${isAllCategoriesSelected ? 'All Categories' : selectedEventCategories.length + ' Selected'}`;
 
     // Get all medal cards
     const medalCards = document.querySelectorAll('.medal-card');
@@ -2125,40 +2208,40 @@ document.addEventListener('DOMContentLoaded', function() {
                             const status = statusBadge ? statusBadge.textContent.trim() : 'Unknown';
 
                             // Get gold winner - with safe access
-                            let goldTeam = '-', goldCount = '0', goldWeight = '0';
+                            // Get gold winner(s) - with safe access
+                            let goldTeams = '-', goldCount = '0', goldWeight = '0';
                             const goldBadge = card.querySelector('.medal-badge.medal-gold');
                             if (goldBadge) {
                                 const goldPosition = goldBadge.closest('.medal-position');
                                 if (goldPosition) {
-                                    const teamEl = goldPosition.querySelector('.team-name');
-                                    if (teamEl) goldTeam = teamEl.textContent.trim();
-
-                                    const countEl = goldPosition.querySelector('#gold-count-value');
+                                    const goldTeamElements = goldPosition.querySelectorAll('.team-name');
+                                    if (goldTeamElements && goldTeamElements.length > 0) {
+                                        const teams = Array.from(goldTeamElements).map(el => el.textContent.trim());
+                                        goldTeams = teams.join(', ');
+                                    }
+                                    const countEl = goldPosition.querySelector('.gold-count-value');
                                     if (countEl) goldCount = countEl.textContent.trim();
-
-                                    const weightEl = goldPosition.querySelector('#gold-weight-value');
+                                    const weightEl = goldPosition.querySelector('.gold-weight-value');
                                     if (weightEl) goldWeight = weightEl.textContent.trim();
                                 }
                             }
-
-                            // Get silver winner - with safe access
-                            let silverTeam = '-', silverCount = '0', silverWeight = '0';
+                            // Get silver winner(s) - with safe access
+                            let silverTeams = '-', silverCount = '0', silverWeight = '0';
                             const silverBadge = card.querySelector('.medal-badge.medal-silver');
                             if (silverBadge) {
                                 const silverPosition = silverBadge.closest('.medal-position');
                                 if (silverPosition) {
-                                    const teamEl = silverPosition.querySelector('.team-name');
-                                    if (teamEl) silverTeam = teamEl.textContent.trim();
-
-                                    const countEl =  silverPosition.querySelector('#silver-count-value');
+                                    const silverTeamElements = silverPosition.querySelectorAll('.team-name');
+                                    if (silverTeamElements && silverTeamElements.length > 0) {
+                                        const teams = Array.from(silverTeamElements).map(el => el.textContent.trim());
+                                        silverTeams = teams.join(', ');
+                                    }
+                                    const countEl = silverPosition.querySelector('.silver-count-value');
                                     if (countEl) silverCount = countEl.textContent.trim();
-
-                                    const weightEl =  silverPosition.querySelector('#silver-weight-value');
-                                    console.log(weightEl)
+                                    const weightEl = silverPosition.querySelector('.silver-weight-value');
                                     if (weightEl) silverWeight = weightEl.textContent.trim();
                                 }
                             }
-
                             // Get bronze winner(s) - with safe access
                             let bronzeTeams = '-', bronzeCount = '0', bronzeWeight = '0';
                             const bronzeBadge = card.querySelector('.medal-badge.medal-bronze');
@@ -2170,10 +2253,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                         const teams = Array.from(bronzeTeamElements).map(el => el.textContent.trim());
                                         bronzeTeams = teams.join(', ');
                                     }
-
                                     const countEl = bronzePosition.querySelector('.bronze-count-value');
                                     if (countEl) bronzeCount = countEl.textContent.trim();
-
                                     const weightEl = bronzePosition.querySelector('.bronze-weight-value');
                                     if (weightEl) bronzeWeight = weightEl.textContent.trim();
                                 }
@@ -2192,10 +2273,10 @@ document.addEventListener('DOMContentLoaded', function() {
                                 sportName,
                                 eventName,
                                 status,
-                                goldTeam,
+                                goldTeams,
                                 goldCount,
                                 goldWeight,
-                                silverTeam,
+                                silverTeams,
                                 silverCount,
                                 silverWeight,
                                 bronzeTeams,
@@ -2269,8 +2350,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         const tableData = sportGroups[sportName].map(item => [
                             item.eventName,
                             item.status,
-                            `${item.goldTeam} Count: (${item.goldCount}) Weight: (${item.goldWeight})`,
-                            `${item.silverTeam} Count: (${item.silverCount}) Weight: (${item.silverWeight})`,
+                            `${item.goldTeams} Count: (${item.goldCount}) Weight: (${item.goldWeight})`,
+                            `${item.silverTeams} Count: (${item.silverCount}) Weight: (${item.silverWeight})`,
                             `${item.bronzeTeams} Count: (${item.bronzeCount}) Weight: (${item.bronzeWeight})`,
                             item.participants
                         ]);

@@ -23,13 +23,13 @@
                                 {{ Auth::user()->name }}
                             </p>
                             <p style="font-size: 12px">
-                                {{ ucfirst(Auth::user()->role) }}
-                                @if(Auth::user()->role === 'tournament_director' && Auth::user()->sport)
+                                {{ ucwords(str_replace('_', ' ', Auth::user()->role)) }}
+                                @if((Auth::user()->role === 'tournament_director' || Auth::user()->role === 'assistant_director') && Auth::user()->sport)
                                     ({{ Auth::user()->sport->name }})
                                 @endif
                             </p>
                             </div>
-                            <i class="mdi mdi-chevron-down"></i>
+                            <i class="ph ph-caret-down"></i>
                        </div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end profile-dropdown ">
@@ -49,7 +49,7 @@
                         <form id="logout-form" method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="dropdown-item notify-item">
-                                <i class="mdi mdi-logout fs-16 align-middle"></i>
+                                <i class="ph ph-sign-out fs-16 align-middle"></i>
                                 <span>Logout</span>
                             </button>
                         </form>
