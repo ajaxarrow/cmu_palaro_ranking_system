@@ -384,7 +384,7 @@
                         @if(isset($medalTally[0]))
                         <div class="mobile-podium-card champion" data-aos="fade-up">
                             <div class="card-content">
-                                <div class="position-marker">Rank 1</div>
+                                <div class="position-marker">1st</div>
                                 <a href="{{ route('public.standings.details', $medalTally[0]['team_id']) }}">
 
                                 <div class="team-image-wrapper">
@@ -417,7 +417,7 @@
                         @if(isset($medalTally[1]))
                         <div class="mobile-podium-card silver" data-aos="fade-up" data-aos-delay="100">
                             <div class="card-content">
-                                <div class="position-marker">Rank 2</div>
+                                <div class="position-marker">2nd</div>
                                 <a href="{{ route('public.standings.details', $medalTally[1]['team_id']) }}">
                                 <div class="team-image-wrapper">
                                     <img src="{{ $medalTally[1]['team_image'] ? asset('storage/' . $medalTally[1]['team_image']) : Vite::asset('resources/images/05.webp') }}"
@@ -444,12 +444,12 @@
                             </div>
                         </div>
                         @endif
-sss
+
                         <!-- Second Runner Up Card -->
                         @if(isset($medalTally[2]))
                         <div class="mobile-podium-card bronze" data-aos="fade-up" data-aos-delay="200">
                             <div class="card-content">
-                                <div class="position-marker">Rank 3</div>
+                                <div class="position-marker">3rd</div>
                                 <div class="team-image-wrapper">
                                     <img src="{{ $medalTally[2]['team_image'] ? asset('storage/' . $medalTally[2]['team_image']) : Vite::asset('resources/images/05.webp') }}"
                                          alt="{{ $medalTally[2]['team'] }}"
