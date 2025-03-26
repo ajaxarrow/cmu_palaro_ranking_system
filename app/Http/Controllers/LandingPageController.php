@@ -250,22 +250,80 @@ class LandingPageController extends Controller
 
 // Add this code right before the return statement in the index() method
 // This will flatten the nested sports/events structure into a single array of events
-        $flattenedEvents = [];
+         $consolidatedEvents = [];
         foreach ($sportResults as $sport) {
             foreach ($sport['events'] as $event) {
-                $flattenedEvents[] = array_merge($event, [
-                    'sport_name' => $sport['name'],
-                    'sport_icon' => $sport['icon']
-                ]);
+                $eventName = $event['name'];
+                
+                // If event doesn't exist in consolidated events, create it
+                if (!isset($consolidatedEvents[$eventName])) {
+                    $consolidatedEvents[$eventName] = [
+                        'name' => $eventName,
+                        'sport_name' => $sport['name'],
+                        'sport_icon' => $sport['icon'],
+                        'gold_winners' => [],
+                        'silver_winners' => [],
+                        'bronze_winners' => [],
+                        'medal_records' => $event['medal_records']
+                    ];
+                }
+
+                // Consolidate gold winners
+                if ($event['gold_winner']) {
+                    // Check if this gold winner is already in the list
+                    $goldExists = false;
+                    foreach ($consolidatedEvents[$eventName]['gold_winners'] as $existingGold) {
+                        if ($existingGold['team_id'] === $event['gold_winner']['team_id']) {
+                            $goldExists = true;
+                            break;
+                        }
+                    }
+                    if (!$goldExists) {
+                        $consolidatedEvents[$eventName]['gold_winners'][] = $event['gold_winner'];
+                    }
+                }
+
+                // Consolidate silver winners
+                if ($event['silver_winner']) {
+                    // Check if this silver winner is already in the list
+                    $silverExists = false;
+                    foreach ($consolidatedEvents[$eventName]['silver_winners'] as $existingSilver) {
+                        if ($existingSilver['team_id'] === $event['silver_winner']['team_id']) {
+                            $silverExists = true;
+                            break;
+                        }
+                    }
+                    if (!$silverExists) {
+                        $consolidatedEvents[$eventName]['silver_winners'][] = $event['silver_winner'];
+                    }
+                }
+
+                // Consolidate bronze winners
+                foreach ($event['bronze_winners'] as $bronzeWinner) {
+                    // Check if this bronze winner is already in the list
+                    $bronzeExists = false;
+                    foreach ($consolidatedEvents[$eventName]['bronze_winners'] as $existingBronze) {
+                        if ($existingBronze['team_id'] === $bronzeWinner['team_id']) {
+                            $bronzeExists = true;
+                            break;
+                        }
+                    }
+                    if (!$bronzeExists) {
+                        $consolidatedEvents[$eventName]['bronze_winners'][] = $bronzeWinner;
+                    }
+                }
             }
         }
+
+        // Convert consolidated events to a flat array
+        $flattenedEvents = array_values($consolidatedEvents);
 
         return view('public.landing.index', [
             'results' => $results,
             'medalTally' => $medalTally,
             'overallTotal' => $overallTotal,
             'sportResults' => $sportResults,
-            'flattenedEvents' => $flattenedEvents,  // Add this line
+            'flattenedEvents' => $flattenedEvents,
             'Vite' => app(Vite::class)
         ]);
     }
