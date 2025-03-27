@@ -323,7 +323,7 @@
                                         @if(count($goldWinners) > 0)
                                         <div class="medal-position">
                                             <span class="medal-badge medal-gold">
-                                                <i class="ph ph-medal medal-icon"></i> 2nd Runner Up
+                                                <i class="ph ph-medal medal-icon"></i> Champion
                                             </span>
                                             @if(count($goldWinners) > 0)
                                                 @foreach($goldWinners as $goldWinner)
@@ -369,7 +369,7 @@
                                         @if(count($silverWinners) > 0)
                                         <div class="medal-position">
                                             <span class="medal-badge medal-silver">
-                                                <i class="ph ph-medal medal-icon"></i> 2nd Runner Up
+                                                <i class="ph ph-medal medal-icon"></i> 1st Runner Up
                                             </span>
                                             @if(count($silverWinners) > 0)
                                                 @foreach($silverWinners as $silverWinner)
