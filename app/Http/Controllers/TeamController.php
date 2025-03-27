@@ -118,11 +118,12 @@ class TeamController extends Controller
             $medalWeights = $record->eventCategory->medalWeightCategory;
 
             // Check if the event has double bronze rule
+            $originalBronzeWeight = $medalWeights->bronze_weight;
             $isDoubleBronze = $record->eventCategory->is_double_bronze;
             $bronzeTally = $record->bronze_tally;
 
             if ($isDoubleBronze && $bronzeTally > 0) {
-                $medalWeights->bronze_weight = $medalWeights->bronze_weight / 2;
+                $medalWeights->bronze_weight = $originalBronzeWeight / 2;
             }
 
             // Calculate weighted medal tallies
@@ -132,6 +133,7 @@ class TeamController extends Controller
             $totalWeight = $goldWeight + $silverWeight + $bronzeWeight;
             $totalMedals = $record->gold_tally + $record->silver_tally + $bronzeTally;
 
+            $medalWeights->bronze_weight = $originalBronzeWeight;
 
             // Organize data for the view
             $medalTally[$sportName]['events'][] = [
