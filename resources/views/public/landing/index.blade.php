@@ -246,7 +246,7 @@
                     <img class="hero-logo"  src="{{ Vite::asset('resources/images/palaroLogo.png') }}" alt=""  />
                     <span  class="block mt-8 bg-clip-text ">
 
-                    Lead Beyond Limits: Cultivate Global Mindset and Excellence Through Sports
+                    Lead Beyond Limits: Cultivating Global Mindset and Excellence Through Sports
 
                     </span>
                 </h1>
@@ -444,7 +444,6 @@
                             </div>
                         </div>
                         @endif
-sss
                         <!-- Second Runner Up Card -->
                         @if(isset($medalTally[2]))
                         <div class="mobile-podium-card bronze" data-aos="fade-up" data-aos-delay="200">
@@ -706,7 +705,7 @@ sss
                                 <div class="medal-tier gold-tier">
                                     <a href="{{ route('public.standings.details', $goldWinner['team_id']) }}">
                                         <div class="medal-header">
-                                            <div class="medal-icon gold">C</div>
+                                            <div class="medal-icon gold">G</div>
                                             <img
                                                 src="{{ $goldWinner['team_image'] ? asset('storage/' . $goldWinner['team_image']) : Vite::asset('resources/images/05.webp') }}"
                                                 alt="{{ $goldWinner['team_name'] }}"
@@ -725,7 +724,7 @@ sss
                                 <div class="medal-tier silver-tier">
                                     <a href="{{ route('public.standings.details', $silverWinner['team_id']) }}">
                                         <div class="medal-header">
-                                            <div class="medal-icon silver">1</div>
+                                            <div class="medal-icon silver">S</div>
                                             <img
                                                 src="{{ $silverWinner['team_image'] ? asset('storage/' . $silverWinner['team_image']) : Vite::asset('resources/images/05.webp') }}"
                                                 alt="{{ $silverWinner['team_name'] }}"
@@ -744,7 +743,7 @@ sss
                                 <div class="medal-tier bronze-tier">
                                     <a href="{{ route('public.standings.details', $bronzeWinner['team_id']) }}">
                                         <div class="medal-header">
-                                            <div class="medal-icon bronze">2</div>
+                                            <div class="medal-icon bronze">B</div>
                                             <img
                                                 src="{{ $bronzeWinner['team_image'] ? asset('storage/' . $bronzeWinner['team_image']) : Vite::asset('resources/images/05.webp') }}"
                                                 alt="{{ $bronzeWinner['team_name'] }}"
@@ -838,7 +837,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 Team Standings
                 <div class="w-20 h-1  mx-auto mt-4"></div>
             </h2>
-            
+
             <div class="grid grid-cols-1 gap-[40px]">
 
             @if(count($results) > 0)
@@ -1067,7 +1066,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="mx-auto px-4 text-center">
             <div class="mb-6">
             <img class="w-[200px] mx-auto mb-6"  src="{{ Vite::asset('resources/images/palaroLogo.png') }}" alt=""  />
-                <p class="text-gray-300">  Lead Beyond Limits: Cultivate Global Mindset and Excellence Through Sports</p>
+                <p class="text-gray-300">  Lead Beyond Limits: Cultivating Global Mindset and Excellence Through Sports</p>
             </div>
             <div class="text-sm text-gray-300">
                 <p>&copy; {{ date('Y') }} CMU Palaro 2025 All rights reserved.</p>
@@ -1222,6 +1221,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     size: 6
                 }
             },
+            colors: ['#E1C16E', '#1CA600', '#0084FC', '#FC5500', '#FC009F', '#FFD6BA', '#D4A5A5', '#9B59B6', '#3498DB', '#2ECC71'],
             xaxis: {
                 categories: ['Gold', 'Silver', 'Bronze', 'Total Medals', 'Points']
             },
@@ -1237,6 +1237,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 name: 'Total Points',
                 data: totalPoints
             }],
+
             chart: {
                 type: 'bar',
                 height: 300,
@@ -1253,7 +1254,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
             },
-            colors: ['#00491E'],
+            colors: ['#ffbf00'],
             dataLabels: {
                 enabled: true,
                 formatter: function(val) {
@@ -1264,6 +1265,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     colors: ['#333']
                 }
             },
+
             xaxis: {
                 categories: teams,
                 labels: {
