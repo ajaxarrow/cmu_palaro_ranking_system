@@ -21,7 +21,7 @@ Route::get('/', [LandingPageController::class, 'index'])->name('public.landing.i
 
 // Public team standings routes
 // Route::get('/standings', [PublicTeamController::class, 'index'])->name('public.standings');
-Route::get('/cmupalaro/standings/{id}', [PublicTeamController::class, 'show'])->name('public.standings.details');
+Route::get('/standings/{id}', [PublicTeamController::class, 'show'])->name('public.standings.details');
 // Route::get('/password/reset', [PasswordResetController::class, 'showResetForm'])->name('password.reset.form');
 // Route::post('/password/reset', [PasswordResetController::class, 'resetPassword'])->name('password.reset.process');
 
