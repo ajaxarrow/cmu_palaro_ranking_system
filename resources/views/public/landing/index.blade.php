@@ -267,8 +267,7 @@
                             <a href="{{ route('public.standings.details', $medalTally[1]['team_id']) }}">
 
                                 <div class="winner-image">
-                                    <img src="{{ $medalTally[1]['team_image'] ? asset('storage/' . $medalTally[1]['team_image']) : Vite::asset('resources/images/05.webp') }}"
-                                         alt="{{ $medalTally[1]['team'] }}"
+                                    <img src="{{ Vite::asset('resources/images/teams/' . str_replace(' ', '-', $medalTally[1]['team']) . '.png') }}"
                                          class="relative z-10">
                                     <div class="winner-badge silver">2nd</div>
                                 </div>
@@ -305,8 +304,7 @@
                                 <a href="{{ route('public.standings.details', $medalTally[0]['team_id']) }}">
 
                                 <div class="winner-image">
-                                    <img src="{{ $medalTally[0]['team_image'] ? asset('storage/' . $medalTally[0]['team_image']) : Vite::asset('resources/images/05.webp') }}"
-                                         alt="{{ $medalTally[0]['team'] }}"
+                                    <img src="{{ Vite::asset('resources/images/teams/' . str_replace(' ', '-', $medalTally[0]['team']) . '.png') }}"
                                          class="relative z-10">
                                     <div class="winner-badge gold">1st</div>
                                 </div>
@@ -344,7 +342,7 @@
                             <a href="{{ route('public.standings.details', $medalTally[2]['team_id']) }}">
 
                                 <div class="winner-image">
-                                    <img src="{{ $medalTally[2]['team_image'] ? asset('storage/' . $medalTally[2]['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                    <img src="{{ Vite::asset('resources/images/teams/' . str_replace(' ', '-', $medalTally[2]['team']) . '.png') }}"
                                          alt="{{ $medalTally[2]['team'] }}"
                                          class="relative z-10">
                                     <div class="winner-badge bronze">3rd</div>
@@ -388,7 +386,7 @@
                                 <a href="{{ route('public.standings.details', $medalTally[0]['team_id']) }}">
 
                                 <div class="team-image-wrapper">
-                                    <img src="{{ $medalTally[0]['team_image'] ? asset('storage/' . $medalTally[0]['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                    <img src="{{ Vite::asset('resources/images/teams/' . str_replace(' ', '-', $medalTally[0]['team']) . '.png') }}"
                                          alt="{{ $medalTally[0]['team'] }}"
                                          class="team-image">
                                     <div class="champion-crown mobile">👑</div>
@@ -420,7 +418,7 @@
                                 <div class="position-marker">Rank 2</div>
                                 <a href="{{ route('public.standings.details', $medalTally[1]['team_id']) }}">
                                 <div class="team-image-wrapper">
-                                    <img src="{{ $medalTally[1]['team_image'] ? asset('storage/' . $medalTally[1]['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                    <img src="{{ Vite::asset('resources/images/teams/' . str_replace(' ', '-', $medalTally[1]['team']) . '.png') }}"
                                          alt="{{ $medalTally[1]['team'] }}"
                                          class="team-image">
                                 </div>
@@ -450,7 +448,7 @@
                             <div class="card-content">
                                 <div class="position-marker">Rank 3</div>
                                 <div class="team-image-wrapper">
-                                    <img src="{{ $medalTally[2]['team_image'] ? asset('storage/' . $medalTally[2]['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                    <img src="{{ Vite::asset('resources/images/teams/' . str_replace(' ', '-', $medalTally[2]['team']) . '.png') }}"
                                          alt="{{ $medalTally[2]['team'] }}"
                                          class="team-image">
                                 </div>
@@ -707,7 +705,7 @@
                                         <div class="medal-header">
                                             <div class="medal-icon gold">G</div>
                                             <img
-                                                src="{{ $goldWinner['team_image'] ? asset('storage/' . $goldWinner['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                                src="{{ Vite::asset('resources/images/teams/' . str_replace(' ', '-', $goldWinner['team_name']) . '.png') }}"
                                                 alt="{{ $goldWinner['team_name'] }}"
                                                 class="h-[40px] w-[40px] mr-1"
                                                 crossorigin="anonymous"
@@ -726,7 +724,7 @@
                                         <div class="medal-header">
                                             <div class="medal-icon silver">S</div>
                                             <img
-                                                src="{{ $silverWinner['team_image'] ? asset('storage/' . $silverWinner['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                                src="{{ Vite::asset('resources/images/teams/' . str_replace(' ', '-', $silverWinner['team_name']) . '.png') }}"
                                                 alt="{{ $silverWinner['team_name'] }}"
                                                 class="h-[40px] w-[40px] mr-1"
                                                 crossorigin="anonymous"
@@ -745,7 +743,7 @@
                                         <div class="medal-header">
                                             <div class="medal-icon bronze">B</div>
                                             <img
-                                                src="{{ $bronzeWinner['team_image'] ? asset('storage/' . $bronzeWinner['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                                src="{{ Vite::asset('resources/images/teams/' . str_replace(' ', '-', $bronzeWinner['team_name']) . '.png') }}"
                                                 alt="{{ $bronzeWinner['team_name'] }}"
                                                 class="h-[40px] w-[40px] mr-1"
                                                 crossorigin="anonymous"
@@ -892,7 +890,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <a href="{{ route('public.standings.details', $team['team_id']) }}" >
 
                                     <img
-                                        src="{{ $team['team_image'] ? asset('storage/' . $team['team_image']) : Vite::asset('resources/images/05.webp') }}"
+                                        src="{{ Vite::asset('resources/images/teams/' . str_replace(' ', '-', $team['team']) . '.png') }}"
                                         alt="{{ $team['team'] }}"
                                         class="team-image"
                                         crossorigin="anonymous"
